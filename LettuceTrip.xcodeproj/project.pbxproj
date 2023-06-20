@@ -62,6 +62,11 @@
 		C4DBE89F2A41C0E3002987CB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4DBE89E2A41C0E3002987CB /* GoogleService-Info.plist */; };
 		C4DBE8A22A41C158002987CB /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = C4DBE8A12A41C158002987CB /* FirebaseFirestore */; };
 		C4DBE8A42A41C158002987CB /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C4DBE8A32A41C158002987CB /* FirebaseFirestoreSwift */; };
+		C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8A92A41D696002987CB /* UIStackView+Extension.swift */; };
+		C4DBE8AE2A41D696002987CB /* SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8AA2A41D696002987CB /* SelectionView.swift */; };
+		C4DBE8AF2A41D696002987CB /* SelectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8AB2A41D696002987CB /* SelectionViewDelegate.swift */; };
+		C4DBE8B02A41D696002987CB /* SelectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8AC2A41D696002987CB /* SelectionViewDataSource.swift */; };
+		C4DBE8B22A41DD83002987CB /* TripCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8B12A41DD83002987CB /* TripCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -118,6 +123,11 @@
 		C4DBE8972A41BD10002987CB /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		C4DBE89C2A41BD8C002987CB /* RatingStarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingStarView.swift; sourceTree = "<group>"; };
 		C4DBE89E2A41C0E3002987CB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C4DBE8A92A41D696002987CB /* UIStackView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
+		C4DBE8AA2A41D696002987CB /* SelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionView.swift; sourceTree = "<group>"; };
+		C4DBE8AB2A41D696002987CB /* SelectionViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionViewDelegate.swift; sourceTree = "<group>"; };
+		C4DBE8AC2A41D696002987CB /* SelectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionViewDataSource.swift; sourceTree = "<group>"; };
+		C4DBE8B12A41DD83002987CB /* TripCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +210,7 @@
 		C4DBE83A2A41B1A0002987CB /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				C4DBE8A82A41D679002987CB /* SelectionView */,
 				C4DBE8862A41BC47002987CB /* PlaceDetail */,
 				C4DBE83B2A41B1AD002987CB /* Home */,
 				C4DBE83C2A41B1B8002987CB /* Discover */,
@@ -231,6 +242,7 @@
 		C4DBE83D2A41B1C7002987CB /* MyTrip */ = {
 			isa = PBXGroup;
 			children = (
+				C4DBE8A72A41D639002987CB /* Views */,
 				C4DBE8362A41B194002987CB /* MyTripViewController.swift */,
 			);
 			path = MyTrip;
@@ -260,6 +272,7 @@
 				C4DBE84A2A41B350002987CB /* UICollectionView+Identifier.swift */,
 				C4DBE8952A41BD00002987CB /* UITableView+Identifier.swift */,
 				C4DBE8972A41BD10002987CB /* UIViewController+Alert.swift */,
+				C4DBE8A92A41D696002987CB /* UIStackView+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -314,16 +327,42 @@
 		C4DBE8862A41BC47002987CB /* PlaceDetail */ = {
 			isa = PBXGroup;
 			children = (
+				C4DBE8A62A41D4D7002987CB /* Views */,
 				C4DBE8872A41BC60002987CB /* PlaceDetailViewController.swift */,
+				C4DBE89C2A41BD8C002987CB /* RatingStarView.swift */,
+			);
+			path = PlaceDetail;
+			sourceTree = "<group>";
+		};
+		C4DBE8A62A41D4D7002987CB /* Views */ = {
+			isa = PBXGroup;
+			children = (
 				C4DBE8892A41BC7B002987CB /* PlaceInfoCell.swift */,
 				C4DBE88B2A41BC8F002987CB /* PlaceInfoCellViewModel.swift */,
 				C4DBE88D2A41BCAB002987CB /* PlaceAboutCell.swift */,
 				C4DBE88F2A41BCC3002987CB /* PlaceAboutCellViewModel.swift */,
 				C4DBE8912A41BCDC002987CB /* PlacePhotoHeaderView.swift */,
 				C4DBE8932A41BCED002987CB /* PlaceInfoHeaderView.swift */,
-				C4DBE89C2A41BD8C002987CB /* RatingStarView.swift */,
 			);
-			path = PlaceDetail;
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C4DBE8A72A41D639002987CB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C4DBE8B12A41DD83002987CB /* TripCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C4DBE8A82A41D679002987CB /* SelectionView */ = {
+			isa = PBXGroup;
+			children = (
+				C4DBE8AA2A41D696002987CB /* SelectionView.swift */,
+				C4DBE8AC2A41D696002987CB /* SelectionViewDataSource.swift */,
+				C4DBE8AB2A41D696002987CB /* SelectionViewDelegate.swift */,
+			);
+			path = SelectionView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -434,6 +473,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4DBE8B02A41D696002987CB /* SelectionViewDataSource.swift in Sources */,
 				C4DBE8392A41B19B002987CB /* ProfileViewController.swift in Sources */,
 				C4DBE88C2A41BC8F002987CB /* PlaceInfoCellViewModel.swift in Sources */,
 				C4DBE8852A41BC1B002987CB /* POILocationCardCell.swift in Sources */,
@@ -442,14 +482,17 @@
 				C4DBE8922A41BCDC002987CB /* PlacePhotoHeaderView.swift in Sources */,
 				C4DBE8802A41BBB9002987CB /* GoogleServiceManager.swift in Sources */,
 				C4DBE88E2A41BCAB002987CB /* PlaceAboutCell.swift in Sources */,
+				C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */,
 				C4DBE8372A41B194002987CB /* MyTripViewController.swift in Sources */,
 				C4DBE89D2A41BD8C002987CB /* RatingStarView.swift in Sources */,
 				C4DBE8482A41B329002987CB /* ItineraryCell.swift in Sources */,
 				C4DBE8442A41B2F7002987CB /* PopularCityCell.swift in Sources */,
 				C4DBE87D2A41BB81002987CB /* GMSError.swift in Sources */,
 				C4DBE8982A41BD10002987CB /* UIViewController+Alert.swift in Sources */,
+				C4DBE8AE2A41D696002987CB /* SelectionView.swift in Sources */,
 				C4DBE8252A41AF62002987CB /* HomeViewController.swift in Sources */,
 				C4DBE8352A41B18B002987CB /* DiscoverViewController.swift in Sources */,
+				C4DBE8B22A41DD83002987CB /* TripCell.swift in Sources */,
 				C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */,
 				C4DBE8902A41BCC3002987CB /* PlaceAboutCellViewModel.swift in Sources */,
 				C4DBE8462A41B312002987CB /* PopularCityHeaderView.swift in Sources */,
@@ -457,6 +500,7 @@
 				C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */,
 				C4DBE8822A41BC02002987CB /* SearchTextField.swift in Sources */,
 				C4DBE8962A41BD00002987CB /* UITableView+Identifier.swift in Sources */,
+				C4DBE8AF2A41D696002987CB /* SelectionViewDelegate.swift in Sources */,
 				C4DBE88A2A41BC7B002987CB /* PlaceInfoCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
