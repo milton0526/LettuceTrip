@@ -6,14 +6,37 @@
 //
 
 import UIKit
+import GoogleMaps
+import GooglePlaces
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    struct MapKeyInfo: Decodable {
+        let googleMapKey: String
+    }
+
+    private let mapKey: String? = {
+        guard let url = Bundle.main.url(forResource: "GoogleMapKey", withExtension: "plist") else {
+            return nil
+        }
+
+        do {
+            let data = try Data(contentsOf: url)
+            let result = try PropertyListDecoder().decode(MapKeyInfo.self, from: data)
+            return result.googleMapKey
+        } catch {
+            return nil
+        }
+    }()
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        if let mapKey = mapKey {
+            GMSServices.provideAPIKey(mapKey)
+            GMSPlacesClient.provideAPIKey(mapKey)
+        }
         return true
     }
 
