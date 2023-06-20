@@ -42,6 +42,8 @@
 		C4DBE8722A41B8F8002987CB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4DBE8712A41B8F8002987CB /* QuartzCore.framework */; };
 		C4DBE8742A41B901002987CB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4DBE8732A41B901002987CB /* SystemConfiguration.framework */; };
 		C4DBE8762A41B906002987CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4DBE8752A41B906002987CB /* UIKit.framework */; };
+		C4DBE8782A41BA53002987CB /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4DBE8772A41BA53002987CB /* GooglePlaces.xcframework */; };
+		C4DBE87A2A41BAA9002987CB /* GooglePlaces.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C4DBE8792A41BAA9002987CB /* GooglePlaces.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +83,8 @@
 		C4DBE8712A41B8F8002987CB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C4DBE8732A41B901002987CB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C4DBE8752A41B906002987CB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C4DBE8772A41BA53002987CB /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
+		C4DBE8792A41BAA9002987CB /* GooglePlaces.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlaces.bundle; path = "GooglePlaces.xcframework/ios-arm64/GooglePlaces.framework/Resources/GooglePlaces.bundle"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +111,7 @@
 				C4DBE8532A41B742002987CB /* GoogleMapsCore.xcframework in Frameworks */,
 				C4DBE8512A41B73B002987CB /* GoogleMaps.xcframework in Frameworks */,
 				C4DBE84F2A41B725002987CB /* GoogleMapsBase.xcframework in Frameworks */,
+				C4DBE8782A41BA53002987CB /* GooglePlaces.xcframework in Frameworks */,
 				C4DBE8412A41B288002987CB /* TinyConstraints in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -134,6 +139,7 @@
 		C4DBE81F2A41AF62002987CB /* LettuceTrip */ = {
 			isa = PBXGroup;
 			children = (
+				C4DBE8792A41BAA9002987CB /* GooglePlaces.bundle */,
 				C4DBE8542A41B83A002987CB /* GoogleMaps.bundle */,
 				C4DBE8202A41AF62002987CB /* AppDelegate.swift */,
 				C4DBE8222A41AF62002987CB /* SceneDelegate.swift */,
@@ -147,6 +153,7 @@
 				C4DBE84E2A41B725002987CB /* GoogleMapsBase.xcframework */,
 				C4DBE8502A41B73B002987CB /* GoogleMaps.xcframework */,
 				C4DBE8522A41B742002987CB /* GoogleMapsCore.xcframework */,
+				C4DBE8772A41BA53002987CB /* GooglePlaces.xcframework */,
 			);
 			path = LettuceTrip;
 			sourceTree = "<group>";
@@ -304,6 +311,7 @@
 				C4DBE82D2A41AF63002987CB /* LaunchScreen.storyboard in Resources */,
 				C4DBE82A2A41AF63002987CB /* Assets.xcassets in Resources */,
 				C4DBE8282A41AF62002987CB /* Main.storyboard in Resources */,
+				C4DBE87A2A41BAA9002987CB /* GooglePlaces.bundle in Resources */,
 				C4DBE8552A41B83A002987CB /* GoogleMaps.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -405,6 +413,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
