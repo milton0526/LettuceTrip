@@ -16,6 +16,11 @@
 		C4DBE8352A41B18B002987CB /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8342A41B18B002987CB /* DiscoverViewController.swift */; };
 		C4DBE8372A41B194002987CB /* MyTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8362A41B194002987CB /* MyTripViewController.swift */; };
 		C4DBE8392A41B19B002987CB /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8382A41B19B002987CB /* ProfileViewController.swift */; };
+		C4DBE8412A41B288002987CB /* TinyConstraints in Frameworks */ = {isa = PBXBuildFile; productRef = C4DBE8402A41B288002987CB /* TinyConstraints */; };
+		C4DBE8442A41B2F7002987CB /* PopularCityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8432A41B2F7002987CB /* PopularCityCell.swift */; };
+		C4DBE8462A41B312002987CB /* PopularCityHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8452A41B312002987CB /* PopularCityHeaderView.swift */; };
+		C4DBE8482A41B329002987CB /* ItineraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8472A41B329002987CB /* ItineraryCell.swift */; };
+		C4DBE84B2A41B350002987CB /* UICollectionView+Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE84A2A41B350002987CB /* UICollectionView+Identifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +35,10 @@
 		C4DBE8342A41B18B002987CB /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
 		C4DBE8362A41B194002987CB /* MyTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTripViewController.swift; sourceTree = "<group>"; };
 		C4DBE8382A41B19B002987CB /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		C4DBE8432A41B2F7002987CB /* PopularCityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularCityCell.swift; sourceTree = "<group>"; };
+		C4DBE8452A41B312002987CB /* PopularCityHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularCityHeaderView.swift; sourceTree = "<group>"; };
+		C4DBE8472A41B329002987CB /* ItineraryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryCell.swift; sourceTree = "<group>"; };
+		C4DBE84A2A41B350002987CB /* UICollectionView+Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Identifier.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4DBE8412A41B288002987CB /* TinyConstraints in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +78,7 @@
 				C4DBE8292A41AF63002987CB /* Assets.xcassets */,
 				C4DBE82B2A41AF63002987CB /* LaunchScreen.storyboard */,
 				C4DBE82E2A41AF63002987CB /* Info.plist */,
+				C4DBE8492A41B32F002987CB /* Extensions */,
 				C4DBE83A2A41B1A0002987CB /* Core */,
 			);
 			path = LettuceTrip;
@@ -88,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				C4DBE8242A41AF62002987CB /* HomeViewController.swift */,
+				C4DBE8422A41B2DC002987CB /* Views */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -116,6 +128,24 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		C4DBE8422A41B2DC002987CB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C4DBE8432A41B2F7002987CB /* PopularCityCell.swift */,
+				C4DBE8452A41B312002987CB /* PopularCityHeaderView.swift */,
+				C4DBE8472A41B329002987CB /* ItineraryCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C4DBE8492A41B32F002987CB /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C4DBE84A2A41B350002987CB /* UICollectionView+Identifier.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -132,6 +162,9 @@
 			dependencies = (
 			);
 			name = LettuceTrip;
+			packageProductDependencies = (
+				C4DBE8402A41B288002987CB /* TinyConstraints */,
+			);
 			productName = LettuceTrip;
 			productReference = C4DBE81D2A41AF62002987CB /* LettuceTrip.app */;
 			productType = "com.apple.product-type.application";
@@ -160,6 +193,9 @@
 				Base,
 			);
 			mainGroup = C4DBE8142A41AF62002987CB;
+			packageReferences = (
+				C4DBE83F2A41B288002987CB /* XCRemoteSwiftPackageReference "TinyConstraints" */,
+			);
 			productRefGroup = C4DBE81E2A41AF62002987CB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -188,10 +224,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4DBE8392A41B19B002987CB /* ProfileViewController.swift in Sources */,
+				C4DBE84B2A41B350002987CB /* UICollectionView+Identifier.swift in Sources */,
 				C4DBE8372A41B194002987CB /* MyTripViewController.swift in Sources */,
+				C4DBE8482A41B329002987CB /* ItineraryCell.swift in Sources */,
+				C4DBE8442A41B2F7002987CB /* PopularCityCell.swift in Sources */,
 				C4DBE8252A41AF62002987CB /* HomeViewController.swift in Sources */,
 				C4DBE8352A41B18B002987CB /* DiscoverViewController.swift in Sources */,
 				C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */,
+				C4DBE8462A41B312002987CB /* PopularCityHeaderView.swift in Sources */,
 				C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -420,6 +460,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C4DBE83F2A41B288002987CB /* XCRemoteSwiftPackageReference "TinyConstraints" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/roberthein/TinyConstraints.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C4DBE8402A41B288002987CB /* TinyConstraints */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DBE83F2A41B288002987CB /* XCRemoteSwiftPackageReference "TinyConstraints" */;
+			productName = TinyConstraints;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C4DBE8152A41AF62002987CB /* Project object */;
 }
