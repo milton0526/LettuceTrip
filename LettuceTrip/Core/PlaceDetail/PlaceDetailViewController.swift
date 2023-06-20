@@ -228,10 +228,10 @@ extension PlaceDetailViewController: UITableViewDataSource {
 }
 
 
-//#if canImport(SwiftUI) && DEBUG
-//import SwiftUI
+// #if canImport(SwiftUI) && DEBUG
+// import SwiftUI
 //
-//struct ViewControllerRepresentable: UIViewControllerRepresentable {
+// struct ViewControllerRepresentable: UIViewControllerRepresentable {
 //
 //    func makeUIViewController(context: Context) -> some UIViewController {
 //        return PlaceDetailViewController(placeID: "sfjhsk", name: "Brisbane")
@@ -239,13 +239,12 @@ extension PlaceDetailViewController: UITableViewDataSource {
 //
 //    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
 //    }
-//}
+// }
 //
-//struct ViewControllerPreview: PreviewProvider {
+// struct ViewControllerPreview: PreviewProvider {
 //    static var previews: some View {
 //        ViewControllerRepresentable()
 //    }
-//}
-//#endif
+// }
+// #endif
 //
-

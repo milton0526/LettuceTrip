@@ -26,4 +26,3 @@ class SearchTextField: UITextField {
         return CGRect(x: 16, y: centerY, width: imageSize, height: imageSize)
     }
 }
-

@@ -66,4 +66,3 @@ class POILocationCardCell: UICollectionViewCell {
         subtitleLabel.bottom(to: imageView)
     }
 }
-

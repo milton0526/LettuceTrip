@@ -36,4 +36,3 @@ class PlaceInfoHeaderView: UITableViewHeaderFooterView {
         titleLabel.text = title
     }
 }
-

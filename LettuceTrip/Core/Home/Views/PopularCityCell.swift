@@ -43,4 +43,3 @@ class PopularCityCollectionViewCell: UICollectionViewCell {
         titleLabel.edges(to: contentView, excluding: .top, insets: .uniform(16))
     }
 }
-

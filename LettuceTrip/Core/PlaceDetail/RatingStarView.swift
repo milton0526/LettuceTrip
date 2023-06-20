@@ -21,4 +21,3 @@ class RatingStarView: CosmosView {
         settings.starMargin = 1.5
     }
 }
-
