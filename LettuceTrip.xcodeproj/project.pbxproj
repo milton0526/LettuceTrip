@@ -9,21 +9,27 @@
 /* Begin PBXBuildFile section */
 		C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8202A41AF62002987CB /* AppDelegate.swift */; };
 		C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8222A41AF62002987CB /* SceneDelegate.swift */; };
-		C4DBE8252A41AF62002987CB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8242A41AF62002987CB /* ViewController.swift */; };
+		C4DBE8252A41AF62002987CB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8242A41AF62002987CB /* HomeViewController.swift */; };
 		C4DBE8282A41AF62002987CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4DBE8262A41AF62002987CB /* Main.storyboard */; };
 		C4DBE82A2A41AF63002987CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4DBE8292A41AF63002987CB /* Assets.xcassets */; };
 		C4DBE82D2A41AF63002987CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4DBE82B2A41AF63002987CB /* LaunchScreen.storyboard */; };
+		C4DBE8352A41B18B002987CB /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8342A41B18B002987CB /* DiscoverViewController.swift */; };
+		C4DBE8372A41B194002987CB /* MyTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8362A41B194002987CB /* MyTripViewController.swift */; };
+		C4DBE8392A41B19B002987CB /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8382A41B19B002987CB /* ProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		C4DBE81D2A41AF62002987CB /* LettuceTrip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LettuceTrip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4DBE8202A41AF62002987CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4DBE8222A41AF62002987CB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C4DBE8242A41AF62002987CB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C4DBE8242A41AF62002987CB /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C4DBE8272A41AF62002987CB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C4DBE8292A41AF63002987CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C4DBE82C2A41AF63002987CB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C4DBE82E2A41AF63002987CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C4DBE8342A41B18B002987CB /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
+		C4DBE8362A41B194002987CB /* MyTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTripViewController.swift; sourceTree = "<group>"; };
+		C4DBE8382A41B19B002987CB /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,13 +64,56 @@
 			children = (
 				C4DBE8202A41AF62002987CB /* AppDelegate.swift */,
 				C4DBE8222A41AF62002987CB /* SceneDelegate.swift */,
-				C4DBE8242A41AF62002987CB /* ViewController.swift */,
 				C4DBE8262A41AF62002987CB /* Main.storyboard */,
 				C4DBE8292A41AF63002987CB /* Assets.xcassets */,
 				C4DBE82B2A41AF63002987CB /* LaunchScreen.storyboard */,
 				C4DBE82E2A41AF63002987CB /* Info.plist */,
+				C4DBE83A2A41B1A0002987CB /* Core */,
 			);
 			path = LettuceTrip;
+			sourceTree = "<group>";
+		};
+		C4DBE83A2A41B1A0002987CB /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				C4DBE83B2A41B1AD002987CB /* Home */,
+				C4DBE83C2A41B1B8002987CB /* Discover */,
+				C4DBE83D2A41B1C7002987CB /* MyTrip */,
+				C4DBE83E2A41B1D5002987CB /* Profile */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		C4DBE83B2A41B1AD002987CB /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				C4DBE8242A41AF62002987CB /* HomeViewController.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		C4DBE83C2A41B1B8002987CB /* Discover */ = {
+			isa = PBXGroup;
+			children = (
+				C4DBE8342A41B18B002987CB /* DiscoverViewController.swift */,
+			);
+			path = Discover;
+			sourceTree = "<group>";
+		};
+		C4DBE83D2A41B1C7002987CB /* MyTrip */ = {
+			isa = PBXGroup;
+			children = (
+				C4DBE8362A41B194002987CB /* MyTripViewController.swift */,
+			);
+			path = MyTrip;
+			sourceTree = "<group>";
+		};
+		C4DBE83E2A41B1D5002987CB /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				C4DBE8382A41B19B002987CB /* ProfileViewController.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,7 +187,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4DBE8252A41AF62002987CB /* ViewController.swift in Sources */,
+				C4DBE8392A41B19B002987CB /* ProfileViewController.swift in Sources */,
+				C4DBE8372A41B194002987CB /* MyTripViewController.swift in Sources */,
+				C4DBE8252A41AF62002987CB /* HomeViewController.swift in Sources */,
+				C4DBE8352A41B18B002987CB /* DiscoverViewController.swift in Sources */,
 				C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */,
 				C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */,
 			);
