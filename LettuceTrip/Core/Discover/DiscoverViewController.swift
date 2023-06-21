@@ -14,12 +14,9 @@ class DiscoverViewController: UIViewController {
 
     var mapView: GMSMapView!
 
-    lazy var searchTextField: SearchTextField = {
-        let textField = SearchTextField()
-        textField.backgroundColor = .tertiarySystemBackground
+    lazy var searchTextField: RoundedTextField = {
+        let textField = RoundedTextField()
         textField.placeholder = String(localized: "Search places...")
-        textField.layer.cornerRadius = 24
-        textField.layer.masksToBounds = true
         textField.leftViewMode = .always
         textField.leftView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
         textField.delegate = self

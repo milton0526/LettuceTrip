@@ -46,7 +46,7 @@
 		C4DBE87A2A41BAA9002987CB /* GooglePlaces.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C4DBE8792A41BAA9002987CB /* GooglePlaces.bundle */; };
 		C4DBE87D2A41BB81002987CB /* GMSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE87C2A41BB81002987CB /* GMSError.swift */; };
 		C4DBE8802A41BBB9002987CB /* GoogleServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE87F2A41BBB9002987CB /* GoogleServiceManager.swift */; };
-		C4DBE8822A41BC02002987CB /* SearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8812A41BC02002987CB /* SearchTextField.swift */; };
+		C4DBE8822A41BC02002987CB /* RoundedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8812A41BC02002987CB /* RoundedTextField.swift */; };
 		C4DBE8852A41BC1B002987CB /* POILocationCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8842A41BC1B002987CB /* POILocationCardCell.swift */; };
 		C4DBE8882A41BC60002987CB /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8872A41BC60002987CB /* PlaceDetailViewController.swift */; };
 		C4DBE88A2A41BC7B002987CB /* PlaceInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8892A41BC7B002987CB /* PlaceInfoCell.swift */; };
@@ -67,6 +67,8 @@
 		C4DBE8AF2A41D696002987CB /* SelectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8AB2A41D696002987CB /* SelectionViewDelegate.swift */; };
 		C4DBE8B02A41D696002987CB /* SelectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8AC2A41D696002987CB /* SelectionViewDataSource.swift */; };
 		C4DBE8B22A41DD83002987CB /* TripCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8B12A41DD83002987CB /* TripCell.swift */; };
+		C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8B42A428797002987CB /* AddNewTripViewController.swift */; };
+		C4DBE8BD2A429921002987CB /* UILabel+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8BC2A429921002987CB /* UILabel+Style.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -110,7 +112,7 @@
 		C4DBE8792A41BAA9002987CB /* GooglePlaces.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlaces.bundle; path = "GooglePlaces.xcframework/ios-arm64/GooglePlaces.framework/Resources/GooglePlaces.bundle"; sourceTree = "<group>"; };
 		C4DBE87C2A41BB81002987CB /* GMSError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GMSError.swift; sourceTree = "<group>"; };
 		C4DBE87F2A41BBB9002987CB /* GoogleServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleServiceManager.swift; sourceTree = "<group>"; };
-		C4DBE8812A41BC02002987CB /* SearchTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTextField.swift; sourceTree = "<group>"; };
+		C4DBE8812A41BC02002987CB /* RoundedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedTextField.swift; sourceTree = "<group>"; };
 		C4DBE8842A41BC1B002987CB /* POILocationCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POILocationCardCell.swift; sourceTree = "<group>"; };
 		C4DBE8872A41BC60002987CB /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
 		C4DBE8892A41BC7B002987CB /* PlaceInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoCell.swift; sourceTree = "<group>"; };
@@ -128,6 +130,8 @@
 		C4DBE8AB2A41D696002987CB /* SelectionViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionViewDelegate.swift; sourceTree = "<group>"; };
 		C4DBE8AC2A41D696002987CB /* SelectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionViewDataSource.swift; sourceTree = "<group>"; };
 		C4DBE8B12A41DD83002987CB /* TripCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripCell.swift; sourceTree = "<group>"; };
+		C4DBE8B42A428797002987CB /* AddNewTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewTripViewController.swift; sourceTree = "<group>"; };
+		C4DBE8BC2A429921002987CB /* UILabel+Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Style.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,7 +238,7 @@
 			children = (
 				C4DBE8832A41BC0E002987CB /* Views */,
 				C4DBE8342A41B18B002987CB /* DiscoverViewController.swift */,
-				C4DBE8812A41BC02002987CB /* SearchTextField.swift */,
+				C4DBE8812A41BC02002987CB /* RoundedTextField.swift */,
 			);
 			path = Discover;
 			sourceTree = "<group>";
@@ -244,6 +248,7 @@
 			children = (
 				C4DBE8A72A41D639002987CB /* Views */,
 				C4DBE8362A41B194002987CB /* MyTripViewController.swift */,
+				C4DBE8B42A428797002987CB /* AddNewTripViewController.swift */,
 			);
 			path = MyTrip;
 			sourceTree = "<group>";
@@ -273,6 +278,7 @@
 				C4DBE8952A41BD00002987CB /* UITableView+Identifier.swift */,
 				C4DBE8972A41BD10002987CB /* UIViewController+Alert.swift */,
 				C4DBE8A92A41D696002987CB /* UIStackView+Extension.swift */,
+				C4DBE8BC2A429921002987CB /* UILabel+Style.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -481,6 +487,7 @@
 				C4DBE8942A41BCED002987CB /* PlaceInfoHeaderView.swift in Sources */,
 				C4DBE8922A41BCDC002987CB /* PlacePhotoHeaderView.swift in Sources */,
 				C4DBE8802A41BBB9002987CB /* GoogleServiceManager.swift in Sources */,
+				C4DBE8BD2A429921002987CB /* UILabel+Style.swift in Sources */,
 				C4DBE88E2A41BCAB002987CB /* PlaceAboutCell.swift in Sources */,
 				C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */,
 				C4DBE8372A41B194002987CB /* MyTripViewController.swift in Sources */,
@@ -498,9 +505,10 @@
 				C4DBE8462A41B312002987CB /* PopularCityHeaderView.swift in Sources */,
 				C4DBE8882A41BC60002987CB /* PlaceDetailViewController.swift in Sources */,
 				C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */,
-				C4DBE8822A41BC02002987CB /* SearchTextField.swift in Sources */,
+				C4DBE8822A41BC02002987CB /* RoundedTextField.swift in Sources */,
 				C4DBE8962A41BD00002987CB /* UITableView+Identifier.swift in Sources */,
 				C4DBE8AF2A41D696002987CB /* SelectionViewDelegate.swift in Sources */,
+				C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */,
 				C4DBE88A2A41BC7B002987CB /* PlaceInfoCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

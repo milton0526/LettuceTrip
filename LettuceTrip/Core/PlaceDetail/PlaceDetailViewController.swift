@@ -59,7 +59,8 @@ class PlaceDetailViewController: UIViewController {
         config.titleAlignment = .center
         config.cornerStyle = .capsule
 
-        let button = UIButton(configuration: config, primaryAction: addToTripButtonTapped())
+        let button = UIButton(configuration: config)
+        button.addTarget(self, action: #selector(addToTripButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -127,10 +128,8 @@ class PlaceDetailViewController: UIViewController {
         }
     }
 
-    private func addToTripButtonTapped() -> UIAction {
-        return UIAction { _ in
-            // Show trip list...
-        }
+    @objc func addToTripButtonTapped(_ sender: UIButton) {
+        // Show add to trip list
     }
 }
 

@@ -76,7 +76,9 @@ class MyTripViewController: UIViewController {
     }
 
     @objc func addTripButtonTapped(_ sender: UIButton) {
-        // pop new sheet
+        let addNewTripVC = AddNewTripViewController()
+        let navVC = UINavigationController(rootViewController: addNewTripVC)
+        present(navVC, animated: true)
     }
 }
 
