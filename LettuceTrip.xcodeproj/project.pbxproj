@@ -69,6 +69,7 @@
 		C4DBE8B22A41DD83002987CB /* TripCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8B12A41DD83002987CB /* TripCell.swift */; };
 		C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8B42A428797002987CB /* AddNewTripViewController.swift */; };
 		C4DBE8BD2A429921002987CB /* UILabel+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8BC2A429921002987CB /* UILabel+Style.swift */; };
+		C4DBE8C42A42B363002987CB /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C4DBE8C32A42B363002987CB /* IQKeyboardManagerSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -149,6 +150,7 @@
 				C4DBE8682A41B8D9002987CB /* ImageIO.framework in Frameworks */,
 				C4DBE8662A41B8D2002987CB /* GLKit.framework in Frameworks */,
 				C4DBE8642A41B8CC002987CB /* CoreText.framework in Frameworks */,
+				C4DBE8C42A42B363002987CB /* IQKeyboardManagerSwift in Frameworks */,
 				C4DBE89B2A41BD7B002987CB /* Cosmos in Frameworks */,
 				C4DBE8622A41B8C4002987CB /* CoreTelephony.framework in Frameworks */,
 				C4DBE8602A41B8BE002987CB /* CoreLocation.framework in Frameworks */,
@@ -393,6 +395,7 @@
 				C4DBE89A2A41BD7B002987CB /* Cosmos */,
 				C4DBE8A12A41C158002987CB /* FirebaseFirestore */,
 				C4DBE8A32A41C158002987CB /* FirebaseFirestoreSwift */,
+				C4DBE8C32A42B363002987CB /* IQKeyboardManagerSwift */,
 			);
 			productName = LettuceTrip;
 			productReference = C4DBE81D2A41AF62002987CB /* LettuceTrip.app */;
@@ -426,6 +429,7 @@
 				C4DBE83F2A41B288002987CB /* XCRemoteSwiftPackageReference "TinyConstraints" */,
 				C4DBE8992A41BD7B002987CB /* XCRemoteSwiftPackageReference "Cosmos" */,
 				C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				C4DBE8C22A42B363002987CB /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 			);
 			productRefGroup = C4DBE81E2A41AF62002987CB /* Products */;
 			projectDirPath = "";
@@ -768,6 +772,14 @@
 				minimumVersion = 10.0.0;
 			};
 		};
+		C4DBE8C22A42B363002987CB /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -790,6 +802,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		C4DBE8C32A42B363002987CB /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DBE8C22A42B363002987CB /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
