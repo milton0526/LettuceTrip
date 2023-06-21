@@ -93,4 +93,3 @@ class PlaceInfoCell: UITableViewCell {
         totalRatingLabel.text = String(model.totalUserRating)
     }
 }
-

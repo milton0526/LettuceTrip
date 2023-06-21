@@ -17,4 +17,3 @@ struct PlaceAboutCellViewModel {
         return businessStatus == 0 ? String(localized: "Opening") : String(localized: "Close")
     }
 }
-

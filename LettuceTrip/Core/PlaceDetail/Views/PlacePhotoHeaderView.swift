@@ -151,4 +151,3 @@ private class PlacePhotoCell: UICollectionViewCell {
         titleLabel.bottomToSuperview(offset: -16)
     }
 }
-

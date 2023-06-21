@@ -90,4 +90,3 @@ class PlaceAboutCell: UITableViewCell {
         linkLabel.text = urlString
     }
 }
-

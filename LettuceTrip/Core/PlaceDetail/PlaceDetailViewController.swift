@@ -59,7 +59,8 @@ class PlaceDetailViewController: UIViewController {
         config.titleAlignment = .center
         config.cornerStyle = .capsule
 
-        let button = UIButton(configuration: config, primaryAction: addToTripButtonTapped())
+        let button = UIButton(configuration: config)
+        button.addTarget(self, action: #selector(addToTripButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -127,10 +128,8 @@ class PlaceDetailViewController: UIViewController {
         }
     }
 
-    private func addToTripButtonTapped() -> UIAction {
-        return UIAction { _ in
-            // Show trip list...
-        }
+    @objc func addToTripButtonTapped(_ sender: UIButton) {
+        // Show add to trip list
     }
 }
 
@@ -228,10 +227,10 @@ extension PlaceDetailViewController: UITableViewDataSource {
 }
 
 
-//#if canImport(SwiftUI) && DEBUG
-//import SwiftUI
+// #if canImport(SwiftUI) && DEBUG
+// import SwiftUI
 //
-//struct ViewControllerRepresentable: UIViewControllerRepresentable {
+// struct ViewControllerRepresentable: UIViewControllerRepresentable {
 //
 //    func makeUIViewController(context: Context) -> some UIViewController {
 //        return PlaceDetailViewController(placeID: "sfjhsk", name: "Brisbane")
@@ -239,13 +238,12 @@ extension PlaceDetailViewController: UITableViewDataSource {
 //
 //    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
 //    }
-//}
+// }
 //
-//struct ViewControllerPreview: PreviewProvider {
+// struct ViewControllerPreview: PreviewProvider {
 //    static var previews: some View {
 //        ViewControllerRepresentable()
 //    }
-//}
-//#endif
+// }
+// #endif
 //
-
