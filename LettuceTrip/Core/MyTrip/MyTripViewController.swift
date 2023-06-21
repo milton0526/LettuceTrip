@@ -135,23 +135,3 @@ extension MyTripViewController: SelectionViewDataSource {
         return .systemFont(ofSize: 16, weight: .bold)
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct ViewControllerRepresentable: UIViewControllerRepresentable {
-
-    func makeUIViewController(context: Context) -> some UIViewController {
-        return MyTripViewController()
-    }
-
-    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-    }
-}
-
-struct ViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        ViewControllerRepresentable()
-    }
-}
-#endif

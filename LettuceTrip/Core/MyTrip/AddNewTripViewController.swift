@@ -7,6 +7,7 @@
 
 import UIKit
 import TinyConstraints
+import FirebaseFirestore
 
 class AddNewTripViewController: UIViewController {
 
@@ -118,8 +119,7 @@ class AddNewTripViewController: UIViewController {
     }
 
     @objc func saveTrip(_ sender: UIBarButtonItem) {
-        // Save to firebase
-
+        
         dismiss(animated: true)
     }
 }

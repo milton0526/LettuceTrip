@@ -70,6 +70,10 @@
 		C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8B42A428797002987CB /* AddNewTripViewController.swift */; };
 		C4DBE8BD2A429921002987CB /* UILabel+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8BC2A429921002987CB /* UILabel+Style.swift */; };
 		C4DBE8C42A42B363002987CB /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C4DBE8C32A42B363002987CB /* IQKeyboardManagerSwift */; };
+		C4DBE8C62A42D391002987CB /* FireStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C52A42D391002987CB /* FireStoreManager.swift */; };
+		C4DBE8C82A42D446002987CB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C72A42D446002987CB /* User.swift */; };
+		C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C92A42D49B002987CB /* Trip.swift */; };
+		C4DBE8CC2A42D79D002987CB /* ShareTrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CB2A42D79D002987CB /* ShareTrips.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -133,6 +137,10 @@
 		C4DBE8B12A41DD83002987CB /* TripCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripCell.swift; sourceTree = "<group>"; };
 		C4DBE8B42A428797002987CB /* AddNewTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewTripViewController.swift; sourceTree = "<group>"; };
 		C4DBE8BC2A429921002987CB /* UILabel+Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Style.swift"; sourceTree = "<group>"; };
+		C4DBE8C52A42D391002987CB /* FireStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreManager.swift; sourceTree = "<group>"; };
+		C4DBE8C72A42D446002987CB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		C4DBE8C92A42D49B002987CB /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
+		C4DBE8CB2A42D79D002987CB /* ShareTrips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTrips.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -312,6 +320,9 @@
 			isa = PBXGroup;
 			children = (
 				C4DBE87C2A41BB81002987CB /* GMSError.swift */,
+				C4DBE8C72A42D446002987CB /* User.swift */,
+				C4DBE8C92A42D49B002987CB /* Trip.swift */,
+				C4DBE8CB2A42D79D002987CB /* ShareTrips.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -320,6 +331,7 @@
 			isa = PBXGroup;
 			children = (
 				C4DBE87F2A41BBB9002987CB /* GoogleServiceManager.swift */,
+				C4DBE8C52A42D391002987CB /* FireStoreManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -514,6 +526,10 @@
 				C4DBE8AF2A41D696002987CB /* SelectionViewDelegate.swift in Sources */,
 				C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */,
 				C4DBE88A2A41BC7B002987CB /* PlaceInfoCell.swift in Sources */,
+				C4DBE8C62A42D391002987CB /* FireStoreManager.swift in Sources */,
+				C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */,
+				C4DBE8CC2A42D79D002987CB /* ShareTrips.swift in Sources */,
+				C4DBE8C82A42D446002987CB /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
