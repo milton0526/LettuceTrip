@@ -130,6 +130,8 @@ class PlaceDetailViewController: UIViewController {
 
     @objc func addToTripButtonTapped(_ sender: UIButton) {
         // Show add to trip list
+
+        
     }
 }
 

@@ -109,6 +109,9 @@ class MyTripViewController: UIViewController {
     }
 
     private func fetchUserTrips() {
+        upcomingTrips.removeAll(keepingCapacity: true)
+        closedTrips.removeAll(keepingCapacity: true)
+
         FireStoreManager.shared.fetchAllUserTrips { [weak self] result in
             switch result {
             case .success(let trips):
@@ -121,12 +124,15 @@ class MyTripViewController: UIViewController {
 
     private func filterByDate(trips: [Trip]) {
         trips.forEach { trip in
-            if trip.startDate < .now {
+            if trip.startDate < .distantPast {
                 closedTrips.append(trip)
             } else {
                 upcomingTrips.append(trip)
             }
         }
+
+        closedTrips.sort { $0.startDate > $1.startDate }
+        upcomingTrips.sort { $0.startDate > $1.startDate }
 
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
