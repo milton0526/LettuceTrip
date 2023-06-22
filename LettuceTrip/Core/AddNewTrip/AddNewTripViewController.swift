@@ -6,7 +6,9 @@
 //
 
 import UIKit
+import MapKit
 import TinyConstraints
+import FirebaseFirestore
 
 class AddNewTripViewController: UIViewController {
 
@@ -47,11 +49,13 @@ class AddNewTripViewController: UIViewController {
     lazy var destinationTextField: RoundedTextField = {
         let textField = RoundedTextField()
         textField.backgroundColor = .secondarySystemBackground
+        textField.delegate = self
         return textField
     }()
 
     lazy var durationTextField: RoundedTextField = {
         let textField = RoundedTextField()
+        textField.keyboardType = .numberPad
         textField.backgroundColor = .secondarySystemBackground
         return textField
     }()
@@ -65,6 +69,8 @@ class AddNewTripViewController: UIViewController {
         datePicker.preferredDatePickerStyle = .compact
         return datePicker
     }()
+
+    private var selectedCity: MKMapItem?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,14 +118,56 @@ class AddNewTripViewController: UIViewController {
         startTimeLabel.topToBottom(of: durationTextField, offset: 24)
         startTimeLabel.height(22)
         startTimeLabel.leadingToSuperview(offset: 16)
+        startTimeLabel.bottomToSuperview(offset: -16, relation: .equalOrGreater, priority: .defaultLow, usingSafeArea: true)
 
         datePicker.centerY(to: startTimeLabel)
         datePicker.trailingToSuperview(offset: 16)
+        datePicker.leading(to: startTimeLabel, offset: 16, relation: .equalOrGreater)
     }
 
     @objc func saveTrip(_ sender: UIBarButtonItem) {
-        // Save to firebase
+        guard
+            let tripName = tripNameTextField.text,
+            let destination = destinationTextField.text,
+            let duration = durationTextField.text,
+            !tripName.isEmpty,
+            !destination.isEmpty,
+            !duration.isEmpty,
+            let future = Double(duration),
+            let selectedCity = selectedCity,
+            let user = UserDefaults.standard.string(forKey: "userID")
+        else {
+            return
+        }
+
+        let startDate = datePicker.date
+        let endDate = startDate.addingTimeInterval(future * 86400)
+        let latitude = selectedCity.placemark.coordinate.latitude
+        let longitude = selectedCity.placemark.coordinate.longitude
+        let city = GeoPoint(latitude: latitude, longitude: longitude)
+
+        let trip = Trip(tripName: tripName, startDate: startDate, endDate: endDate, destination: city, members: [user])
+
+        // upload to firebase
+        FireStoreManager.shared.addDocument(at: .trips, data: trip)
 
         dismiss(animated: true)
+    }
+}
+
+// MARK: - UITextField Delegate
+extension AddNewTripViewController: UITextFieldDelegate {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if textField == destinationTextField {
+            let searchCityVC = SearchCityViewController()
+            searchCityVC.userSelectedCity = { [weak self] city in
+                self?.selectedCity = city
+                self?.destinationTextField.text = city.name
+                textField.resignFirstResponder()
+            }
+            navigationController?.pushViewController(searchCityVC, animated: true)
+            return false
+        }
+        return true
     }
 }

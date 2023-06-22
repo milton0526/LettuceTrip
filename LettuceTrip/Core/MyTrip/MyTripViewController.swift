@@ -10,6 +10,20 @@ import TinyConstraints
 
 class MyTripViewController: UIViewController {
 
+    enum Segment: CaseIterable {
+        case upcoming
+        case closed
+
+        var title: String {
+            switch self {
+            case .upcoming:
+                return String(localized: "Upcoming")
+            case .closed:
+                return String(localized: "Closed")
+            }
+        }
+    }
+
     lazy var selectionView: SelectionView = {
         let selectionView = SelectionView()
         selectionView.delegate = self
@@ -33,15 +47,19 @@ class MyTripViewController: UIViewController {
         return button
     }()
 
-    private var segmentTitles = [
-        String(localized: "Upcoming"),
-        String(localized: "Closed")
-    ]
+    private var upcomingTrips: [Trip] = []
+    private var closedTrips: [Trip] = []
+    private var currentSegment: Segment = .upcoming
 
     override func viewDidLoad() {
         super.viewDidLoad()
         customNavBar()
         setupUI()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        fetchUserTrips()
     }
 
     private func customNavBar() {
@@ -78,7 +96,47 @@ class MyTripViewController: UIViewController {
     @objc func addTripButtonTapped(_ sender: UIButton) {
         let addNewTripVC = AddNewTripViewController()
         let navVC = UINavigationController(rootViewController: addNewTripVC)
-        present(navVC, animated: true)
+        let viewHeight = view.frame.height
+        let detentsHeight = UISheetPresentationController.Detent.custom { _ in
+            viewHeight * 0.7
+        }
+        if let bottomSheet = navVC.sheetPresentationController {
+            bottomSheet.detents = [detentsHeight]
+            bottomSheet.preferredCornerRadius = 20
+            bottomSheet.prefersGrabberVisible = true
+            present(navVC, animated: true)
+        }
+    }
+
+    private func fetchUserTrips() {
+        upcomingTrips.removeAll(keepingCapacity: true)
+        closedTrips.removeAll(keepingCapacity: true)
+
+        FireStoreManager.shared.fetchAllUserTrips { [weak self] result in
+            switch result {
+            case .success(let trips):
+                self?.filterByDate(trips: trips)
+            case .failure(let error):
+                self?.showAlertToUser(error: error)
+            }
+        }
+    }
+
+    private func filterByDate(trips: [Trip]) {
+        trips.forEach { trip in
+            if trip.startDate < .distantPast {
+                closedTrips.append(trip)
+            } else {
+                upcomingTrips.append(trip)
+            }
+        }
+
+        closedTrips.sort { $0.startDate > $1.startDate }
+        upcomingTrips.sort { $0.startDate > $1.startDate }
+
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
     }
 }
 
@@ -89,14 +147,16 @@ extension MyTripViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        print("Clicked")
     }
 }
 
 // MARK: - UITableView DataSource
 extension MyTripViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        currentSegment == .upcoming
+        ? upcomingTrips.count
+        : closedTrips.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -104,8 +164,11 @@ extension MyTripViewController: UITableViewDataSource {
             fatalError("Failed to dequeue trip cell")
         }
 
-        tripCell.titleLabel.text = "Australia"
-        tripCell.subtitleLabel.text = "8/14 - 8/21"
+        let trip = currentSegment == .upcoming
+        ? upcomingTrips[indexPath.row]
+        : closedTrips[indexPath.row]
+
+        tripCell.config(with: trip)
         return tripCell
     }
 }
@@ -114,6 +177,8 @@ extension MyTripViewController: UITableViewDataSource {
 extension MyTripViewController: SelectionViewDelegate {
     func didSelectedButton(_ selectionView: SelectionView, at index: Int) {
         // change collection view dataSource then update snapshot
+        currentSegment = index == 0 ? .upcoming : .closed
+        tableView.reloadData()
     }
 }
 
@@ -124,7 +189,7 @@ extension MyTripViewController: SelectionViewDataSource {
     }
 
     func selectionView(_ selectionView: SelectionView, titleForButtonAt index: Int) -> String? {
-        return segmentTitles[index]
+        return Segment.allCases[index].title
     }
 
     func colorForSelectedButton(_ selectionView: SelectionView) -> UIColor? {
@@ -135,23 +200,3 @@ extension MyTripViewController: SelectionViewDataSource {
         return .systemFont(ofSize: 16, weight: .bold)
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct ViewControllerRepresentable: UIViewControllerRepresentable {
-
-    func makeUIViewController(context: Context) -> some UIViewController {
-        return MyTripViewController()
-    }
-
-    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-    }
-}
-
-struct ViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        ViewControllerRepresentable()
-    }
-}
-#endif

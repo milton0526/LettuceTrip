@@ -11,7 +11,8 @@ import TinyConstraints
 class TripCell: UITableViewCell {
 
     lazy var photoImageView: UIImageView = {
-        let imageView = UIImageView(image: .init(named: "placeholder2"))
+        let randomIndex = Int.random(in: 0...4)
+        let imageView = UIImageView(image: .init(named: "placeholder\(randomIndex)"))
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 24
@@ -23,6 +24,8 @@ class TripCell: UITableViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .heavy)
         label.textColor = .white
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.1
         label.sizeToFit()
         return label
     }()
@@ -31,12 +34,15 @@ class TripCell: UITableViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18, weight: .bold)
         label.textColor = .white
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.1
         label.sizeToFit()
         return label
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.selectionStyle = .none
         setupViews()
     }
 
@@ -52,11 +58,21 @@ class TripCell: UITableViewCell {
         photoImageView.edgesToSuperview(excluding: .bottom, insets: .uniform(16))
         photoImageView.bottomToSuperview()
 
-        titleLabel.leadingToSuperview(offset: 16)
-        titleLabel.bottomToSuperview(offset: -16)
+        titleLabel.leadingToSuperview(offset: 16, relation: .equalOrGreater)
+        titleLabel.trailingToSuperview(offset: 16)
+        titleLabel.bottomToTop(of: subtitleLabel, offset: -8)
+        titleLabel.height(25)
 
-        subtitleLabel.bottom(to: titleLabel)
+        subtitleLabel.bottomToSuperview(offset: -8)
         subtitleLabel.trailingToSuperview(offset: 16)
-        subtitleLabel.leadingToTrailing(of: titleLabel, offset: 16, relation: .equalOrGreater)
+        subtitleLabel.leadingToSuperview(offset: 16, relation: .equalOrGreater)
+        subtitleLabel.height(25)
+    }
+
+    func config(with trip: Trip) {
+        titleLabel.text = trip.tripName
+        let fromDate = trip.startDate.formatted(date: .numeric, time: .omitted)
+        let toDate = trip.endDate.formatted(date: .numeric, time: .omitted)
+        subtitleLabel.text = fromDate + " - " + toDate
     }
 }
