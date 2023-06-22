@@ -18,9 +18,15 @@ class FireStoreManager {
         case users
         case trips
         case shareTrips
+        case chatRoom
+        case places
     }
 
     private let database = Firestore.firestore()
+
+    var userID: String? {
+        UserDefaults.standard.string(forKey: "userID")
+    }
 
     func addDocument(at collection: CollectionRef, data: Encodable) {
         let ref = database.collection(collection.rawValue)
@@ -46,11 +52,37 @@ class FireStoreManager {
         }
     }
 
+    func fetchAllUserTrips(completion: @escaping (Result<[Trip], Error>) -> Void) {
+        guard let userID = userID else { return }
+        let ref = database.collection(CollectionRef.trips.rawValue)
+        var trips: [Trip] = []
+
+        ref
+            .whereField("members", arrayContains: userID)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error getting user trips. \(error.localizedDescription)")
+                    completion(.success([]))
+                } else {
+                    guard let snapshot = snapshot else { return }
+                    snapshot.documents.forEach { document in
+                        do {
+                            let result = try document.data(as: Trip.self)
+                            trips.append(result)
+                        } catch {
+                            completion(.failure(error))
+                        }
+                    }
+                    completion(.success(trips))
+                }
+            }
+    }
+
     func fetchTripChatRoom(id: String, completion: @escaping (Result<[ChatRoom], Error>) -> Void) {
-        let ref = database.collection("trips")
+        let ref = database.collection(CollectionRef.trips.rawValue)
         var chatRoom: [ChatRoom] = []
 
-        ref.document(id).collection("chatRoom").getDocuments { snapshot, error in
+        ref.document(id).collection(CollectionRef.chatRoom.rawValue).getDocuments { snapshot, error in
             if let error = error {
                 print("Error getting documents")
                 completion(.failure(error))
@@ -70,10 +102,10 @@ class FireStoreManager {
     }
 
     func fetchTripPlaces(id: String, completion: @escaping (Result<[Place], Error>) -> Void) {
-        let ref = database.collection("trips")
+        let ref = database.collection(CollectionRef.trips.rawValue)
         var chatRoom: [Place] = []
 
-        ref.document(id).collection("places").getDocuments { snapshot, error in
+        ref.document(id).collection(CollectionRef.places.rawValue).getDocuments { snapshot, error in
             if let error = error {
                 print("Error getting documents")
                 completion(.failure(error))

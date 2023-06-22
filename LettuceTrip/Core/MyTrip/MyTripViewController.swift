@@ -10,6 +10,20 @@ import TinyConstraints
 
 class MyTripViewController: UIViewController {
 
+    enum Segment: CaseIterable {
+        case upcoming
+        case closed
+
+        var title: String {
+            switch self {
+            case .upcoming:
+                return String(localized: "Upcoming")
+            case .closed:
+                return String(localized: "Closed")
+            }
+        }
+    }
+
     lazy var selectionView: SelectionView = {
         let selectionView = SelectionView()
         selectionView.delegate = self
@@ -33,15 +47,19 @@ class MyTripViewController: UIViewController {
         return button
     }()
 
-    private var segmentTitles = [
-        String(localized: "Upcoming"),
-        String(localized: "Closed")
-    ]
+    private var upcomingTrips: [Trip] = []
+    private var closedTrips: [Trip] = []
+    private var currentSegment: Segment = .upcoming
 
     override func viewDidLoad() {
         super.viewDidLoad()
         customNavBar()
         setupUI()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        fetchUserTrips()
     }
 
     private func customNavBar() {
@@ -89,6 +107,31 @@ class MyTripViewController: UIViewController {
             present(navVC, animated: true)
         }
     }
+
+    private func fetchUserTrips() {
+        FireStoreManager.shared.fetchAllUserTrips { [weak self] result in
+            switch result {
+            case .success(let trips):
+                self?.filterByDate(trips: trips)
+            case .failure(let error):
+                self?.showAlertToUser(error: error)
+            }
+        }
+    }
+
+    private func filterByDate(trips: [Trip]) {
+        trips.forEach { trip in
+            if trip.startDate < .now {
+                closedTrips.append(trip)
+            } else {
+                upcomingTrips.append(trip)
+            }
+        }
+
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
+    }
 }
 
 // MARK: - UITableView Delegate
@@ -98,14 +141,16 @@ extension MyTripViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        print("Clicked")
     }
 }
 
 // MARK: - UITableView DataSource
 extension MyTripViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        currentSegment == .upcoming
+        ? upcomingTrips.count
+        : closedTrips.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -113,8 +158,11 @@ extension MyTripViewController: UITableViewDataSource {
             fatalError("Failed to dequeue trip cell")
         }
 
-        tripCell.titleLabel.text = "Australia"
-        tripCell.subtitleLabel.text = "8/14 - 8/21"
+        let trip = currentSegment == .upcoming
+        ? upcomingTrips[indexPath.row]
+        : closedTrips[indexPath.row]
+
+        tripCell.config(with: trip)
         return tripCell
     }
 }
@@ -123,6 +171,8 @@ extension MyTripViewController: UITableViewDataSource {
 extension MyTripViewController: SelectionViewDelegate {
     func didSelectedButton(_ selectionView: SelectionView, at index: Int) {
         // change collection view dataSource then update snapshot
+        currentSegment = index == 0 ? .upcoming : .closed
+        tableView.reloadData()
     }
 }
 
@@ -133,7 +183,7 @@ extension MyTripViewController: SelectionViewDataSource {
     }
 
     func selectionView(_ selectionView: SelectionView, titleForButtonAt index: Int) -> String? {
-        return segmentTitles[index]
+        return Segment.allCases[index].title
     }
 
     func colorForSelectedButton(_ selectionView: SelectionView) -> UIColor? {
