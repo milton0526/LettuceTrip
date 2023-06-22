@@ -129,9 +129,65 @@ class PlaceDetailViewController: UIViewController {
     }
 
     @objc func addToTripButtonTapped(_ sender: UIButton) {
-        // Show add to trip list
+        // fetch firebase to check if user have trip list
+        FireStoreManager.shared.fetchAllUserTrips { [weak self] result in
+            switch result {
+            case .success(let trips):
+                self?.showActionSheet(form: trips)
+            case .failure(let error):
+                self?.showAlertToUser(error: error)
+            }
+        }
+    }
 
-        
+    private func showActionSheet(form trips: [Trip]) {
+        let place = Place(placeID: placeID)
+
+        let actionSheet = UIAlertController(
+            title: String(localized: "Add this place into trip"),
+            message: nil,
+            preferredStyle: .actionSheet)
+
+        if trips.isEmpty {
+            let action = UIAlertAction(title: "Create new trip!", style: .default) { [weak self] _ in
+                self?.showAddNewTripVC()
+            }
+            actionSheet.addAction(action)
+        } else {
+            trips
+                .filter { $0.endDate > .distantPast }
+                .sorted { $0.startDate > $1.startDate }
+                .forEach { trip in
+                    let action = UIAlertAction(
+                        title: trip.tripName,
+                        style: .default) { _ in
+                            FireStoreManager.shared.addPlace(place, to: trip)
+                    }
+                    actionSheet.addAction(action)
+                }
+        }
+
+        let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
+        actionSheet.addAction(cancel)
+
+        DispatchQueue.main.async { [weak self] in
+            self?.present(actionSheet, animated: true)
+        }
+    }
+
+    private func showAddNewTripVC() {
+        let addNewTripVC = AddNewTripViewController()
+        let navVC = UINavigationController(rootViewController: addNewTripVC)
+        let viewHeight = view.frame.height
+        let detentsHeight = UISheetPresentationController.Detent.custom { _ in
+            viewHeight * 0.7
+        }
+        if let bottomSheet = navVC.sheetPresentationController {
+            bottomSheet.detents = [detentsHeight]
+            bottomSheet.preferredCornerRadius = 20
+            bottomSheet.prefersGrabberVisible = true
+            self.present(navVC, animated: true)
+        }
     }
 }
 

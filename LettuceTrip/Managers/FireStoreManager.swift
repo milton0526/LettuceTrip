@@ -39,6 +39,18 @@ class FireStoreManager {
         }
     }
 
+    func addPlace(_ place: Place, to trip: Trip) {
+        guard let tripID = trip.id else { return }
+        let ref = database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.places.rawValue)
+
+        do {
+            try ref.addDocument(from: place)
+            print("Successfully add new place at tripID: \(tripID)")
+        } catch {
+            print("Failed to add new place at tripID: \(tripID)")
+        }
+    }
+
     func getDocument<T: Decodable>(from collection: CollectionRef, docId: String, dataType: T.Type) {
         let ref = database.collection(collection.rawValue)
 
