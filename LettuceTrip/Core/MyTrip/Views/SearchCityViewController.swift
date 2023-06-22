@@ -58,10 +58,8 @@ class SearchCityViewController: UIViewController {
     private func configSearchController() {
         let searchControl = UISearchController()
         searchControl.searchBar.placeholder = String(localized: "Search city to travel...")
-        searchControl.delegate = self
         searchControl.searchBar.delegate = self
         searchControl.hidesNavigationBarDuringPresentation = false
-        //searchControl.searchResultsUpdater = suggestionController
         navigationItem.searchController = searchControl
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
@@ -106,10 +104,6 @@ class SearchCityViewController: UIViewController {
     }
 
     private func search(using searchRequest: MKLocalSearch.Request) {
-        // Confine the map search area to an area around the user's current location.
-        //searchRequest.region = searchRegion
-
-        // Include only point-of-interest results. This excludes results based on address matches.
         searchRequest.resultTypes = .address
 
         localSearch = MKLocalSearch(request: searchRequest)
@@ -120,11 +114,6 @@ class SearchCityViewController: UIViewController {
             }
 
             self.searchResult = response?.mapItems
-
-            // This view controller sets the map view's region in `prepareForSegue` based on the search response's bounding region.
-//            if let updatedRegion = response?.boundingRegion {
-//                self.searchRegion = updatedRegion
-//            }
         }
     }
 }
@@ -159,13 +148,5 @@ extension SearchCityViewController: UISearchBarDelegate {
         // Because the user didn't select a row with a suggested completion, run the search with the query text in
         // the search field.
         search(for: searchBar.text)
-    }
-}
-
-extension SearchCityViewController: UISearchControllerDelegate {
-    func willPresentSearchController(_ searchController: UISearchController) {
-//
-//        // Send the selection in the search controller back to this controller to dismiss the search controller.
-//        suggestionController.collectionView.delegate = self
     }
 }

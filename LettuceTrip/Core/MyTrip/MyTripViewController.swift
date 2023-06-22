@@ -83,9 +83,8 @@ class MyTripViewController: UIViewController {
             viewHeight * 0.7
         }
         if let bottomSheet = navVC.sheetPresentationController {
-            let height = view.frame.height * 0.6
-            bottomSheet.preferredCornerRadius = 20
             bottomSheet.detents = [detentsHeight]
+            bottomSheet.preferredCornerRadius = 20
             bottomSheet.prefersGrabberVisible = true
             present(navVC, animated: true)
         }
