@@ -230,6 +230,7 @@
 		C4DBE83A2A41B1A0002987CB /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				C4DBE8D52A43FDD0002987CB /* AddNewTrip */,
 				C4DBE8A82A41D679002987CB /* SelectionView */,
 				C4DBE8862A41BC47002987CB /* PlaceDetail */,
 				C4DBE83B2A41B1AD002987CB /* Home */,
@@ -264,7 +265,6 @@
 			children = (
 				C4DBE8A72A41D639002987CB /* Views */,
 				C4DBE8362A41B194002987CB /* MyTripViewController.swift */,
-				C4DBE8B42A428797002987CB /* AddNewTripViewController.swift */,
 			);
 			path = MyTrip;
 			sourceTree = "<group>";
@@ -379,7 +379,6 @@
 			isa = PBXGroup;
 			children = (
 				C4DBE8B12A41DD83002987CB /* TripCell.swift */,
-				C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -392,6 +391,15 @@
 				C4DBE8AB2A41D696002987CB /* SelectionViewDelegate.swift */,
 			);
 			path = SelectionView;
+			sourceTree = "<group>";
+		};
+		C4DBE8D52A43FDD0002987CB /* AddNewTrip */ = {
+			isa = PBXGroup;
+			children = (
+				C4DBE8B42A428797002987CB /* AddNewTripViewController.swift */,
+				C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */,
+			);
+			path = AddNewTrip;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

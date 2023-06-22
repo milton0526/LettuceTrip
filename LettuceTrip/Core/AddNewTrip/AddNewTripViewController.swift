@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MapKit
 import TinyConstraints
 import FirebaseFirestore
 
@@ -54,6 +55,7 @@ class AddNewTripViewController: UIViewController {
 
     lazy var durationTextField: RoundedTextField = {
         let textField = RoundedTextField()
+        textField.keyboardType = .numberPad
         textField.backgroundColor = .secondarySystemBackground
         return textField
     }()
@@ -67,6 +69,8 @@ class AddNewTripViewController: UIViewController {
         datePicker.preferredDatePickerStyle = .compact
         return datePicker
     }()
+
+    private var selectedCity: MKMapItem?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,16 +133,23 @@ class AddNewTripViewController: UIViewController {
             !tripName.isEmpty,
             !destination.isEmpty,
             !duration.isEmpty,
-            let future = Double(duration)
+            let future = Double(duration),
+            let selectedCity = selectedCity,
+            let user = UserDefaults.standard.string(forKey: "userID")
         else {
             return
         }
 
         let startDate = datePicker.date
         let endDate = startDate.addingTimeInterval(future * 86400)
+        let latitude = selectedCity.placemark.coordinate.latitude
+        let longitude = selectedCity.placemark.coordinate.longitude
+        let city = GeoPoint(latitude: latitude, longitude: longitude)
 
-        // let trip = Trip(tripName: tripName, startDate: , endDate: T##Date, destination: T##GeoPoint, members: [])
+        let trip = Trip(tripName: tripName, startDate: startDate, endDate: endDate, destination: city, members: [user])
 
+        // upload to firebase
+        FireStoreManager.shared.addDocument(at: .trips, data: trip)
 
         dismiss(animated: true)
     }
@@ -149,6 +160,11 @@ extension AddNewTripViewController: UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField == destinationTextField {
             let searchCityVC = SearchCityViewController()
+            searchCityVC.userSelectedCity = { [weak self] city in
+                self?.selectedCity = city
+                self?.destinationTextField.text = city.name
+                textField.resignFirstResponder()
+            }
             navigationController?.pushViewController(searchCityVC, animated: true)
             return false
         }

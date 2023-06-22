@@ -24,20 +24,19 @@ class FireStoreManager {
 
     func addDocument(at collection: CollectionRef, data: Encodable) {
         let ref = database.collection(collection.rawValue)
-        let id = ref.document().documentID
 
         do {
-            try ref.document(id).setData(from: data)
+            try ref.addDocument(from: data)
             print("Successfully add new document at collection: \(collection.rawValue)")
         } catch {
             print("Failed to add new doc in Firebase collection: \(collection.rawValue)")
         }
     }
 
-    func getDocument<T: Decodable>(from collection: CollectionRef, id: String, dataType: T.Type) {
+    func getDocument<T: Decodable>(from collection: CollectionRef, docId: String, dataType: T.Type) {
         let ref = database.collection(collection.rawValue)
 
-        ref.document(id).getDocument(as: dataType) { result in
+        ref.document(docId).getDocument(as: dataType) { result in
             switch result {
             case .success(let trip):
                 print("Successfully get trip data: \(trip)")

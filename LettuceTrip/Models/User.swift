@@ -12,5 +12,4 @@ struct User: Codable {
     @DocumentID var id: String?
     var name: String
     let email: String
-    var trips: [Trip]
 }

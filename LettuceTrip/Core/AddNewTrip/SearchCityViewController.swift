@@ -23,8 +23,6 @@ class SearchCityViewController: UIViewController {
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, MKMapItem>!
 
-    var searchRegion = MKCoordinateRegion(MKMapRect.world)
-
     private var localSearch: MKLocalSearch? {
         willSet {
             // Clear the results and cancel the currently running local search before starting a new search.
@@ -40,6 +38,8 @@ class SearchCityViewController: UIViewController {
             }
         }
     }
+
+    var userSelectedCity: ((MKMapItem) -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,6 +123,11 @@ extension SearchCityViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        if let searchResult = searchResult {
+            let city = searchResult[indexPath.item]
+            userSelectedCity?(city)
+            navigationController?.popViewController(animated: true)
+        }
     }
 }
 
