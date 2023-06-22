@@ -44,7 +44,7 @@
 		C4DBE8762A41B906002987CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4DBE8752A41B906002987CB /* UIKit.framework */; };
 		C4DBE8782A41BA53002987CB /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4DBE8772A41BA53002987CB /* GooglePlaces.xcframework */; };
 		C4DBE87A2A41BAA9002987CB /* GooglePlaces.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C4DBE8792A41BAA9002987CB /* GooglePlaces.bundle */; };
-		C4DBE87D2A41BB81002987CB /* GMSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE87C2A41BB81002987CB /* GMSError.swift */; };
+		C4DBE87D2A41BB81002987CB /* LTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE87C2A41BB81002987CB /* LTError.swift */; };
 		C4DBE8802A41BBB9002987CB /* GoogleServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE87F2A41BBB9002987CB /* GoogleServiceManager.swift */; };
 		C4DBE8822A41BC02002987CB /* RoundedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8812A41BC02002987CB /* RoundedTextField.swift */; };
 		C4DBE8852A41BC1B002987CB /* POILocationCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8842A41BC1B002987CB /* POILocationCardCell.swift */; };
@@ -74,6 +74,9 @@
 		C4DBE8C82A42D446002987CB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C72A42D446002987CB /* User.swift */; };
 		C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C92A42D49B002987CB /* Trip.swift */; };
 		C4DBE8CC2A42D79D002987CB /* ShareTrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CB2A42D79D002987CB /* ShareTrips.swift */; };
+		C4DBE8CE2A4306BB002987CB /* SearchCityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */; };
+		C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CF2A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift */; };
+		C4DBE8D22A43E116002987CB /* MKPlaceMark+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8D12A43E116002987CB /* MKPlaceMark+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -115,7 +118,7 @@
 		C4DBE8752A41B906002987CB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C4DBE8772A41BA53002987CB /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
 		C4DBE8792A41BAA9002987CB /* GooglePlaces.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlaces.bundle; path = "GooglePlaces.xcframework/ios-arm64/GooglePlaces.framework/Resources/GooglePlaces.bundle"; sourceTree = "<group>"; };
-		C4DBE87C2A41BB81002987CB /* GMSError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GMSError.swift; sourceTree = "<group>"; };
+		C4DBE87C2A41BB81002987CB /* LTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LTError.swift; sourceTree = "<group>"; };
 		C4DBE87F2A41BBB9002987CB /* GoogleServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleServiceManager.swift; sourceTree = "<group>"; };
 		C4DBE8812A41BC02002987CB /* RoundedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedTextField.swift; sourceTree = "<group>"; };
 		C4DBE8842A41BC1B002987CB /* POILocationCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POILocationCardCell.swift; sourceTree = "<group>"; };
@@ -141,6 +144,9 @@
 		C4DBE8C72A42D446002987CB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C4DBE8C92A42D49B002987CB /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 		C4DBE8CB2A42D79D002987CB /* ShareTrips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTrips.swift; sourceTree = "<group>"; };
+		C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCityViewController.swift; sourceTree = "<group>"; };
+		C4DBE8CF2A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPointOfInterestCategory+Extension.swift"; sourceTree = "<group>"; };
+		C4DBE8D12A43E116002987CB /* MKPlaceMark+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPlaceMark+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -289,6 +295,8 @@
 				C4DBE8972A41BD10002987CB /* UIViewController+Alert.swift */,
 				C4DBE8A92A41D696002987CB /* UIStackView+Extension.swift */,
 				C4DBE8BC2A429921002987CB /* UILabel+Style.swift */,
+				C4DBE8CF2A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift */,
+				C4DBE8D12A43E116002987CB /* MKPlaceMark+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -319,7 +327,7 @@
 		C4DBE87B2A41BB68002987CB /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C4DBE87C2A41BB81002987CB /* GMSError.swift */,
+				C4DBE87C2A41BB81002987CB /* LTError.swift */,
 				C4DBE8C72A42D446002987CB /* User.swift */,
 				C4DBE8C92A42D49B002987CB /* Trip.swift */,
 				C4DBE8CB2A42D79D002987CB /* ShareTrips.swift */,
@@ -371,6 +379,7 @@
 			isa = PBXGroup;
 			children = (
 				C4DBE8B12A41DD83002987CB /* TripCell.swift */,
+				C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -498,6 +507,7 @@
 				C4DBE8B02A41D696002987CB /* SelectionViewDataSource.swift in Sources */,
 				C4DBE8392A41B19B002987CB /* ProfileViewController.swift in Sources */,
 				C4DBE88C2A41BC8F002987CB /* PlaceInfoCellViewModel.swift in Sources */,
+				C4DBE8CE2A4306BB002987CB /* SearchCityViewController.swift in Sources */,
 				C4DBE8852A41BC1B002987CB /* POILocationCardCell.swift in Sources */,
 				C4DBE84B2A41B350002987CB /* UICollectionView+Identifier.swift in Sources */,
 				C4DBE8942A41BCED002987CB /* PlaceInfoHeaderView.swift in Sources */,
@@ -506,11 +516,12 @@
 				C4DBE8BD2A429921002987CB /* UILabel+Style.swift in Sources */,
 				C4DBE88E2A41BCAB002987CB /* PlaceAboutCell.swift in Sources */,
 				C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */,
+				C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */,
 				C4DBE8372A41B194002987CB /* MyTripViewController.swift in Sources */,
 				C4DBE89D2A41BD8C002987CB /* RatingStarView.swift in Sources */,
 				C4DBE8482A41B329002987CB /* ItineraryCell.swift in Sources */,
 				C4DBE8442A41B2F7002987CB /* PopularCityCell.swift in Sources */,
-				C4DBE87D2A41BB81002987CB /* GMSError.swift in Sources */,
+				C4DBE87D2A41BB81002987CB /* LTError.swift in Sources */,
 				C4DBE8982A41BD10002987CB /* UIViewController+Alert.swift in Sources */,
 				C4DBE8AE2A41D696002987CB /* SelectionView.swift in Sources */,
 				C4DBE8252A41AF62002987CB /* HomeViewController.swift in Sources */,
@@ -529,6 +540,7 @@
 				C4DBE8C62A42D391002987CB /* FireStoreManager.swift in Sources */,
 				C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */,
 				C4DBE8CC2A42D79D002987CB /* ShareTrips.swift in Sources */,
+				C4DBE8D22A43E116002987CB /* MKPlaceMark+Extension.swift in Sources */,
 				C4DBE8C82A42D446002987CB /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

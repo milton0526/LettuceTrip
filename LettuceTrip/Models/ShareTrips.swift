@@ -10,10 +10,6 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 struct ShareTrips: Codable {
-    let id: String
+    @DocumentID var id: String?
     let tripID: String
-
-    var ref: String {
-        "trips/\(id)"
-    }
 }
