@@ -10,7 +10,7 @@ import MapKit
 
 extension MKPointOfInterestCategory {
 
-    static let travelPointsOfInterest: [MKPointOfInterestCategory] = [.bakery, .brewery, .cafe, .restaurant, .winery, .hotel]
+    static let travelPointsOfInterest: [MKPointOfInterestCategory] = [.bakery, .brewery, .cafe, .restaurant, .winery, .hotel, .nightlife, .nationalPark, .museum, .store, .beach, .zoo]
     static let defaultPointOfInterestSymbolName = "mappin.and.ellipse"
 
     var symbolName: String {
