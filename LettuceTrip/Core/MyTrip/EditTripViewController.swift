@@ -12,6 +12,7 @@ class EditTripViewController: UIViewController {
 
     enum Section {
         case unarranged
+        case calendar
         case inOrder
     }
 
@@ -20,6 +21,7 @@ class EditTripViewController: UIViewController {
         collectionView.delegate = self
         collectionView.register(PopularCityCollectionViewCell.self, forCellWithReuseIdentifier: PopularCityCollectionViewCell.identifier)
         collectionView.register(ArrangePlaceCell.self, forCellWithReuseIdentifier: ArrangePlaceCell.identifier)
+        collectionView.register(CalendarCell.self, forCellWithReuseIdentifier: CalendarCell.identifier)
         collectionView.register(
             PopularCityHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -65,22 +67,24 @@ class EditTripViewController: UIViewController {
             let sectionType = self.dataSource.snapshot().sectionIdentifiers[section]
             switch sectionType {
             case .unarranged:
-                return self.configUnarrangedLayout()
+                return self.configUnarrangedSectionLayout()
+            case .calendar:
+                return self.configCalendarSectionLayout()
             case .inOrder:
-                return self.configInOrderLayout()
+                return self.configInOrderSectionLayout()
             }
         }
     }
 
-    private func configUnarrangedLayout() -> NSCollectionLayoutSection {
+    private func configUnarrangedSectionLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(160),
-            heightDimension: .absolute(220))
+            widthDimension: .absolute(100),
+            heightDimension: .absolute(125))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
@@ -100,7 +104,7 @@ class EditTripViewController: UIViewController {
         return section
     }
 
-    private func configInOrderLayout() -> NSCollectionLayoutSection {
+    private func configInOrderSectionLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0))
@@ -115,6 +119,25 @@ class EditTripViewController: UIViewController {
         section.interGroupSpacing = 12
         section.contentInsets = .init(top: 8, leading: 16, bottom: 8, trailing: 16)
 
+        return section
+    }
+
+    private func configCalendarSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .absolute(44),
+            heightDimension: .absolute(60))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 12
+        section.contentInsets = .init(top: 8, leading: 16, bottom: 8, trailing: 16)
+        section.orthogonalScrollingBehavior = .continuous
+
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .absolute(50))
@@ -122,7 +145,6 @@ class EditTripViewController: UIViewController {
             layoutSize: headerSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .topLeading)
-        header.pinToVisibleBounds = true
         section.boundarySupplementaryItems = [header]
 
         return section
@@ -143,6 +165,17 @@ class EditTripViewController: UIViewController {
                 }
 
                 return cityCell
+
+            case .calendar:
+                guard let calendarCell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: CalendarCell.identifier,
+                    for: indexPath) as? CalendarCell
+                else {
+                    fatalError("Failed to dequeue cityCell")
+                }
+
+                return calendarCell
+
             case .inOrder:
                 guard let arrangeCell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: ArrangePlaceCell.identifier,
@@ -171,8 +204,10 @@ class EditTripViewController: UIViewController {
             switch section {
             case .unarranged:
                 headerView.titleLabel.text = "Not arrange"
-            case .inOrder:
+            case .calendar:
                 headerView.titleLabel.text = "In order"
+            case .inOrder:
+                return nil
             }
             return headerView
         }
@@ -181,8 +216,9 @@ class EditTripViewController: UIViewController {
     private func updateSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
 
-        snapshot.appendSections([.unarranged, .inOrder])
+        snapshot.appendSections([.unarranged, .calendar, .inOrder])
         snapshot.appendItems(Array(1...20), toSection: .unarranged)
+        snapshot.appendItems(Array(41...55), toSection: .calendar)
         snapshot.appendItems(Array(21...40), toSection: .inOrder)
 
         dataSource.apply(snapshot)
