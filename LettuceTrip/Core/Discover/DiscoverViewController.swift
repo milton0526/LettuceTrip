@@ -39,6 +39,7 @@ class DiscoverViewController: UIViewController {
     }()
 
     lazy var locationService = LocationService()
+    lazy var fqService = FQService()
 
     private var dataSource: UICollectionViewDiffableDataSource<Int, MKMapItem>!
     private var locationObservation: NSKeyValueObservation?
@@ -74,8 +75,9 @@ class DiscoverViewController: UIViewController {
 
         // Modify the location as updates come in.
         locationObservation = locationService.observe(\.currentLocation, options: [.new]) { _, change in
-            guard let value = change.newValue,
-                  let location = value
+            guard
+                let value = change.newValue,
+                let location = value
             else { return }
 
             self.currentLocation = location
@@ -144,6 +146,8 @@ class DiscoverViewController: UIViewController {
 extension DiscoverViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+
+        fqService.placeSearch()
 
 //        let place = likelyPlaces[indexPath.item]
 //

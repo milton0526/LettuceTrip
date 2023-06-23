@@ -67,4 +67,3 @@ extension LocationService: CLLocationManagerDelegate {
         print("locationManager error: \(error.localizedDescription)")
     }
 }
-
