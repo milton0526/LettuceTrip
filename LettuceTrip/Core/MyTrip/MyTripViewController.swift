@@ -68,15 +68,15 @@ class MyTripViewController: UIViewController {
         welcomeView.font = .systemFont(ofSize: 22, weight: .bold)
         welcomeView.textColor = .label
 
-        let userImageView = UIImageView(frame: CGRect(origin: .zero, size: CGSize(width: 30, height: 30)))
-        userImageView.image = UIImage(systemName: "ellipsis.circle")
-        userImageView.contentMode = .scaleAspectFit
-        userImageView.clipsToBounds = true
-        userImageView.layer.cornerRadius = 20
-        userImageView.layer.masksToBounds = true
+        let editIconImageView = UIImageView(frame: CGRect(origin: .zero, size: CGSize(width: 30, height: 30)))
+        editIconImageView.image = UIImage(systemName: "ellipsis.circle")
+        editIconImageView.contentMode = .scaleAspectFit
+        editIconImageView.clipsToBounds = true
+        editIconImageView.layer.cornerRadius = 20
+        editIconImageView.layer.masksToBounds = true
 
         let leftBarItem = UIBarButtonItem(customView: welcomeView)
-        let rightBarItem = UIBarButtonItem(customView: userImageView)
+        let rightBarItem = UIBarButtonItem(customView: editIconImageView)
         navigationItem.leftBarButtonItem = leftBarItem
         navigationItem.rightBarButtonItem = rightBarItem
     }
@@ -147,7 +147,8 @@ extension MyTripViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Clicked")
+        let editVC = EditTripViewController()
+        navigationController?.pushViewController(editVC, animated: true)
     }
 }
 
