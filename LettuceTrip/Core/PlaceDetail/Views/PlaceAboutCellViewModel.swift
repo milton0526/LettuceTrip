@@ -8,12 +8,7 @@
 import Foundation
 
 struct PlaceAboutCellViewModel {
-
-    let businessStatus: Int
-    let openingHours: [String]
-    let website: URL?
-
-    var isOpening: String {
-        return businessStatus == 0 ? String(localized: "Opening") : String(localized: "Close")
-    }
+    let businessStatus: Bool?
+    let openingHours: String
+    let website: String?
 }

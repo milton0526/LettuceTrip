@@ -13,6 +13,7 @@ struct FQResponse: Decodable {
 
 struct FQPlace: Decodable {
     let id: String
+    let location: Location
     let description: String?
     let hours: Hours?
     let photos: [Photo]?
@@ -22,7 +23,16 @@ struct FQPlace: Decodable {
 
     enum CodingKeys: String, CodingKey {
         case id = "fsq_id"
-        case description, hours, photos, rating, tel, website
+        case location, description, hours, photos, rating, tel, website
+    }
+}
+
+// MARK: - Location
+struct Location: Decodable {
+    let address: String
+
+    enum CodingKeys: String, CodingKey {
+        case address = "formatted_address"
     }
 }
 
@@ -30,7 +40,7 @@ struct FQPlace: Decodable {
 struct Hours: Decodable {
     let display: String
     let openNow: Bool
-    let regular: [Regular]
+    let regular: [Regular]?
 
     enum CodingKeys: String, CodingKey {
         case openNow = "open_now"

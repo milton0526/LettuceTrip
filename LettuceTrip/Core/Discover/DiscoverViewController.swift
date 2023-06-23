@@ -11,11 +11,16 @@ import TinyConstraints
 
 class DiscoverViewController: UIViewController {
 
+    private enum AnnotationReuseID: String {
+        case featureAnnotation
+    }
+
     lazy var mapView: MKMapView = {
         let map = MKMapView()
         map.showsUserLocation = true
         map.delegate = self
         map.showsCompass = false
+        map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: AnnotationReuseID.featureAnnotation.rawValue)
         return map
     }()
 
@@ -39,8 +44,6 @@ class DiscoverViewController: UIViewController {
     }()
 
     lazy var locationService = LocationService()
-    lazy var fqService = FQService()
-
     private var dataSource: UICollectionViewDiffableDataSource<Int, MKMapItem>!
     private var locationObservation: NSKeyValueObservation?
     private var currentLocation: CLLocation? {
@@ -140,6 +143,33 @@ class DiscoverViewController: UIViewController {
         snapshot.appendItems([MKMapItem()])
         dataSource.apply(snapshot)
     }
+
+    private func setupPOIAnnotation(_ annotation: MKMapFeatureAnnotation) -> MKAnnotationView? {
+        let markerAnnotationView = mapView.dequeueReusableAnnotationView(
+            withIdentifier: AnnotationReuseID.featureAnnotation.rawValue,
+            for: annotation)
+        if let markerAnnotationView = markerAnnotationView as? MKMarkerAnnotationView {
+
+            markerAnnotationView.animatesWhenAdded = true
+            markerAnnotationView.canShowCallout = true
+
+            let infoButton = UIButton(type: .detailDisclosure)
+            markerAnnotationView.rightCalloutAccessoryView = infoButton
+
+            if let tappedFeatureColor = annotation.iconStyle?.backgroundColor,
+                let image = annotation.iconStyle?.image {
+
+                markerAnnotationView.markerTintColor = tappedFeatureColor
+                infoButton.tintColor = tappedFeatureColor
+
+                let imageView = UIImageView(image: image.withTintColor(tappedFeatureColor, renderingMode: .alwaysOriginal))
+                imageView.bounds = CGRect(origin: .zero, size: CGSize(width: 50, height: 50))
+                markerAnnotationView.leftCalloutAccessoryView = imageView
+            }
+        }
+
+        return markerAnnotationView
+    }
 }
 
 // MARK: - CollectionView Delegate
@@ -147,7 +177,7 @@ extension DiscoverViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        fqService.placeSearch()
+//        fqService.placeSearch()
 
 //        let place = likelyPlaces[indexPath.item]
 //
@@ -180,11 +210,26 @@ extension DiscoverViewController: UITextFieldDelegate {
 }
 
 // MARK: - MapView Delegate
+
 extension DiscoverViewController: MKMapViewDelegate {
-    // Tells the delegate when the region the map view is displaying changes.
-    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard let annotation = annotation as? MKMapFeatureAnnotation else {
+            return nil
+        }
+        return setupPOIAnnotation(annotation)
     }
 
-    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        guard
+            let annotation = view.annotation,
+            annotation.isKind(of: MKMapFeatureAnnotation.self),
+            let title = annotation.title,
+            let placeName = title
+        else {
+            return
+        }
+
+        let detailVC = PlaceDetailViewController(name: placeName, location: annotation.coordinate)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }

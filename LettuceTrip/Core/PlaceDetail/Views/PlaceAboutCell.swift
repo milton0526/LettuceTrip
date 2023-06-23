@@ -31,6 +31,7 @@ class PlaceAboutCell: UITableViewCell {
         label.textColor = .label
         label.font = .boldSystemFont(ofSize: 18)
         label.sizeToFit()
+        label.text = String(localized: "Website")
         return label
     }()
 
@@ -71,7 +72,8 @@ class PlaceAboutCell: UITableViewCell {
     }
 
     func config(with model: PlaceAboutCellViewModel) {
-        if model.businessStatus == 1 {
+
+        if model.businessStatus == true {
             statusLabel.text = String(localized: "Opening now")
             statusLabel.textColor = .systemGreen
         } else {
@@ -79,14 +81,7 @@ class PlaceAboutCell: UITableViewCell {
             statusLabel.textColor = .systemRed
         }
 
-        openingHourLabel.text = model.openingHours.joined(separator: "\n")
-
-        guard let urlString = model.website?.absoluteString else {
-            websiteLabel.isHidden = true
-            linkLabel.isHidden = true
-            return
-        }
-        websiteLabel.text = String(localized: "Website")
-        linkLabel.text = urlString
+        openingHourLabel.text = model.openingHours
+        linkLabel.text = model.website ?? ""
     }
 }

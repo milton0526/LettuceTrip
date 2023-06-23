@@ -7,10 +7,8 @@
 
 import Foundation
 
-struct PlaceInfoCellViewModel: Identifiable {
-    let id: String
+struct PlaceInfoCellViewModel {
     let name: String
     let address: String
-    let rating: Float
-    let totalUserRating: UInt
+    let rating: Double
 }

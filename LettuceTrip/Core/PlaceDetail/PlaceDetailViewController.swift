@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import GooglePlaces
+import MapKit
 import TinyConstraints
 
 class PlaceDetailViewController: UIViewController {
@@ -28,10 +28,10 @@ class PlaceDetailViewController: UIViewController {
         }
     }
 
-    let placeID: String
     let name: String
-    private var place: GMSPlace?
-    private var googleService: GooglePlaceServiceType!
+    let location: CLLocationCoordinate2D
+
+    private var place: FQPlace?
 
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -64,9 +64,11 @@ class PlaceDetailViewController: UIViewController {
         return button
     }()
 
-    init(placeID: String, name: String) {
-        self.placeID = placeID
+    private let fqService = FQService()
+
+    init(name: String, location: CLLocationCoordinate2D) {
         self.name = name
+        self.location = location
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -79,14 +81,10 @@ class PlaceDetailViewController: UIViewController {
         navigationController?.isNavigationBarHidden = false
         title = name
         view.backgroundColor = .systemBackground
-        googleService = GooglePlaceService()
         setupUI()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         fetchDetails()
     }
+
 
     private func setupUI() {
         view.addSubview(tableView)
@@ -100,32 +98,21 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private func fetchDetails() {
-        googleService.fetchPlaceDetail(by: placeID) { [weak self] result in
-            switch result {
-            case .success(let place):
-                self?.place = place
-
-                DispatchQueue.main.async { [weak self] in
-                    self?.tableView.reloadData()
-                }
-
-            case .failure(let error):
-                self?.showAlertToUser(error: error)
-            }
-        }
-    }
-
-    private func fetchPhotos() {
-        if let firstPhoto = place?.photos?.first {
-            googleService.fetchPlacePhoto(with: firstPhoto) { [weak self] result in
+        fqService.placeSearch(name: name, coordinate: location) { [weak self] result in
+            DispatchQueue.main.async {
                 switch result {
-                case .success(let (image, attributions)):
-                    break
+                case .success(let place):
+                    self?.place = place
+                    self?.tableView.reloadData()
                 case .failure(let error):
                     self?.showAlertToUser(error: error)
                 }
             }
         }
+    }
+
+    private func fetchPhotos() {
+        // SDWebImage
     }
 
     @objc func addToTripButtonTapped(_ sender: UIButton) {
@@ -141,7 +128,7 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private func showActionSheet(form trips: [Trip]) {
-        let place = Place(placeID: placeID)
+        let place = Place(name: name, location: .init(latitude: location.latitude, longitude: location.longitude))
 
         let actionSheet = UIAlertController(
             title: String(localized: "Add this place into trip"),
@@ -257,11 +244,9 @@ extension PlaceDetailViewController: UITableViewDataSource {
             }
 
             let info = PlaceInfoCellViewModel(
-                id: placeID,
-                name: place.name ?? "",
-                address: place.formattedAddress ?? "",
-                rating: place.rating,
-                totalUserRating: place.userRatingsTotal)
+                name: name,
+                address: place.location.address,
+                rating: place.rating ?? 0)
             infoCell.config(with: info)
             return infoCell
 
@@ -271,8 +256,8 @@ extension PlaceDetailViewController: UITableViewDataSource {
             }
 
             let about = PlaceAboutCellViewModel(
-                businessStatus: place.businessStatus.rawValue,
-                openingHours: place.openingHours?.weekdayText ?? [],
+                businessStatus: place.hours?.openNow,
+                openingHours: place.hours?.display ?? "",
                 website: place.website)
 
             aboutCell.config(with: about)
@@ -283,25 +268,3 @@ extension PlaceDetailViewController: UITableViewDataSource {
         }
     }
 }
-
-
-// #if canImport(SwiftUI) && DEBUG
-// import SwiftUI
-//
-// struct ViewControllerRepresentable: UIViewControllerRepresentable {
-//
-//    func makeUIViewController(context: Context) -> some UIViewController {
-//        return PlaceDetailViewController(placeID: "sfjhsk", name: "Brisbane")
-//    }
-//
-//    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-//    }
-// }
-//
-// struct ViewControllerPreview: PreviewProvider {
-//    static var previews: some View {
-//        ViewControllerRepresentable()
-//    }
-// }
-// #endif
-//
