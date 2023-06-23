@@ -42,7 +42,7 @@ class FQService {
         let latitude = "-27.467313"
         let longitude = "153.026154"
 
-        let urlString = "https://api.foursquare.com/v3/places/search?query=\(placeName ?? "")&ll=\(latitude)%2C\(longitude)&fields=description%2Cphotos%2Ctel%2Cwebsite%2Chours%2Crating%2Cfeatures&sort=POPULARITY&limit=1"
+        let urlString = "https://api.foursquare.com/v3/places/search?query=\(placeName ?? "")&ll=\(latitude)%2C\(longitude)&fields=fsq_id%2Cdescription%2Cphotos%2Ctel%2Cwebsite%2Chours%2Crating%2Cfeatures&sort=POPULARITY&limit=1"
 
         guard let url = URL(string: urlString) else { return }
 
@@ -68,7 +68,7 @@ class FQService {
             }
 
             do {
-                let result = try JSONSerialization.jsonObject(with: data)
+                let result = try JSONDecoder().decode(FQResponse.self, from: data)
                 print(result)
             } catch {
                 print("Decode error: \(error.localizedDescription)")
