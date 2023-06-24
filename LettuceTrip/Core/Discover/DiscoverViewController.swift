@@ -121,7 +121,7 @@ class DiscoverViewController: UIViewController {
     }
 
     private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: poiCollectionView) { collectionView, indexPath, place in
+        dataSource = UICollectionViewDiffableDataSource(collectionView: poiCollectionView) { collectionView, indexPath, _ in
             guard let cardCell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: POILocationCardCell.identifier,
                 for: indexPath) as? POILocationCardCell
