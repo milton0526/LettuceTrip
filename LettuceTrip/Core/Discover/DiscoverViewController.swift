@@ -44,7 +44,11 @@ class DiscoverViewController: UIViewController {
     }()
 
     lazy var locationService = LocationService()
-    private var dataSource: UICollectionViewDiffableDataSource<Int, MKMapItem>!
+    private var searchCompleter: MKLocalSearchCompleter?
+    private var searchRegion = MKCoordinateRegion(MKMapRect.world)
+    private var currentPlacemark: CLPlacemark?
+
+    private var dataSource: UICollectionViewDiffableDataSource<Int, MKLocalSearchCompletion>!
     private var locationObservation: NSKeyValueObservation?
     private var currentLocation: CLLocation? {
         didSet {
@@ -55,14 +59,22 @@ class DiscoverViewController: UIViewController {
         }
     }
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
         locationService.requestLocation()
         configMapView()
         setupUI()
         configureDataSource()
-        updateSnapshot()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        startProvidingCompletions()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        stopProvidingCompletions()
     }
 
     private func configMapView() {
@@ -121,7 +133,7 @@ class DiscoverViewController: UIViewController {
     }
 
     private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: poiCollectionView) { collectionView, indexPath, _ in
+        dataSource = UICollectionViewDiffableDataSource(collectionView: poiCollectionView) { collectionView, indexPath, item in
             guard let cardCell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: POILocationCardCell.identifier,
                 for: indexPath) as? POILocationCardCell
@@ -129,17 +141,16 @@ class DiscoverViewController: UIViewController {
                 fatalError("Failed to dequeue POILocationCardCell")
             }
 
-            // cardCell.titleLabel.text = place.name
-            // cardCell.subtitleLabel.text = place.description
+            cardCell.titleLabel.text = item.title
+            cardCell.subtitleLabel.text = item.subtitle
             return cardCell
         }
     }
 
-    private func updateSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, MKMapItem>()
-
+    private func updateSnapshot(_ result: [MKLocalSearchCompletion]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, MKLocalSearchCompletion>()
         snapshot.appendSections([0])
-        snapshot.appendItems([MKMapItem()])
+        snapshot.appendItems(result)
         dataSource.apply(snapshot)
     }
 
@@ -175,36 +186,22 @@ class DiscoverViewController: UIViewController {
 extension DiscoverViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-
-//        fqService.placeSearch()
-
-//        let place = likelyPlaces[indexPath.item]
-//
-//        guard
-//            let id = place.placeID,
-//            let name = place.name
-//        else {
-//            return
-//        }
-//        let detailVC = PlaceDetailViewController(placeID: id, name: name)
-//        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 
 // MARK: - TextField Delegate
 extension DiscoverViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard
             let text = textField.text,
             !text.isEmpty
         else {
+            updateSnapshot([])
             return
         }
+
+        searchCompleter?.queryFragment = text
     }
 }
 
@@ -230,5 +227,44 @@ extension DiscoverViewController: MKMapViewDelegate {
 
         let detailVC = PlaceDetailViewController(name: placeName, location: annotation.coordinate)
         navigationController?.pushViewController(detailVC, animated: true)
+    }
+}
+
+extension DiscoverViewController {
+
+    private func startProvidingCompletions() {
+        searchCompleter = MKLocalSearchCompleter()
+        searchCompleter?.delegate = self
+        searchCompleter?.region = searchRegion
+
+        // Only include matches for travel-related points of interest, and exclude address-based results.
+        searchCompleter?.resultTypes = .pointOfInterest
+        searchCompleter?.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
+    }
+
+    private func stopProvidingCompletions() {
+        searchCompleter = nil
+    }
+
+    func updatePlacemark(_ placemark: CLPlacemark?, boundingRegion: MKCoordinateRegion) {
+        currentPlacemark = placemark
+        searchCompleter?.region = searchRegion
+    }
+}
+
+extension DiscoverViewController: MKLocalSearchCompleterDelegate {
+
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        // As the user types, new completion suggestions continuously return to this method.
+        // Refresh the UI with the new results.
+        let results = completer.results
+        updateSnapshot(results)
+    }
+
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        // Handle any errors that `MKLocalSearchCompleter` returns.
+        if let error = error as NSError? {
+            print("MKLocalSearchCompleter encountered an error: \(error.localizedDescription). The query fragment is: \"\(completer.queryFragment)\"")
+        }
     }
 }
