@@ -63,7 +63,7 @@ class PlaceInfoCell: UITableViewCell {
     }
 
     private func setupViews() {
-        [iconImageView, addressLabel, titleLabel, totalRatingLabel, ratingView].forEach { contentView.addSubview($0) }
+        [iconImageView, addressLabel, titleLabel, ratingView].forEach { contentView.addSubview($0) }
 
         iconImageView.size(CGSize(width: 20, height: 20))
         iconImageView.topToSuperview(offset: 24)
@@ -81,15 +81,14 @@ class PlaceInfoCell: UITableViewCell {
         ratingView.leading(to: iconImageView)
         ratingView.width(min: 80)
         ratingView.bottomToSuperview(offset: -8)
-
-        totalRatingLabel.centerY(to: ratingView)
-        totalRatingLabel.leadingToTrailing(of: ratingView, offset: 8)
+//
+//        totalRatingLabel.centerY(to: ratingView)
+//        totalRatingLabel.leadingToTrailing(of: ratingView, offset: 8)
     }
 
     func config(with model: PlaceInfoCellViewModel) {
         addressLabel.text = model.address
         titleLabel.text = model.name
-        ratingView.rating = Double(model.rating)
-        totalRatingLabel.text = String(model.totalUserRating)
+        ratingView.rating = model.rating / 2.0
     }
 }

@@ -26,6 +26,7 @@ struct Message: Codable, Hashable {
 
 struct Place: Codable {
     @DocumentID var id: String?
-    let placeID: String
+    let name: String
+    let location: GeoPoint
     var arrangedTime: Date?
 }

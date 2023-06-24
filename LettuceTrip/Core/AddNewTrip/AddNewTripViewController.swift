@@ -84,9 +84,11 @@ class AddNewTripViewController: UIViewController {
         let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveTrip))
         navigationItem.rightBarButtonItem = saveButton
 
-        [tripNameLabel, tripNameTextField, destinationLabel, destinationTextField, startTimeLabel, datePicker, durationLabel, durationTextField].forEach {
-            view.addSubview($0)
-        }
+        let subviews = [
+            tripNameLabel, tripNameTextField, destinationLabel, destinationTextField, startTimeLabel, datePicker, durationLabel, durationTextField
+        ]
+
+        subviews.forEach { view.addSubview($0) }
 
         tripNameLabel.edgesToSuperview(excluding: .bottom, insets: .uniform(16), usingSafeArea: true)
         tripNameLabel.height(22)

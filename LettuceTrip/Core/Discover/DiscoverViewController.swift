@@ -6,13 +6,25 @@
 //
 
 import UIKit
-import GoogleMaps
-import GooglePlaces
+import MapKit
 import TinyConstraints
 
 class DiscoverViewController: UIViewController {
 
-    var mapView: GMSMapView!
+    private enum AnnotationReuseID: String {
+        case featureAnnotation
+    }
+
+    lazy var mapView: MKMapView = {
+        let map = MKMapView()
+        map.showsUserLocation = true
+        map.delegate = self
+        map.showsCompass = false
+        map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: AnnotationReuseID.featureAnnotation.rawValue)
+        return map
+    }()
+
+    lazy var compass = MKCompassButton(mapView: mapView)
 
     lazy var searchTextField: RoundedTextField = {
         let textField = RoundedTextField()
@@ -31,66 +43,62 @@ class DiscoverViewController: UIViewController {
         return collectionView
     }()
 
-    private var dataSource: UICollectionViewDiffableDataSource<Int, GMSPlace>!
-
-    var locationManager: CLLocationManager!
-    var currentLocation: CLLocation?
-    var placesClient: GMSPlacesClient!
-    let defaultLocation = CLLocation(latitude: -33.869405, longitude: 151.199)
-    var zoomLevel: Float = 13.0
-    var likelyPlaces: [GMSPlace] = [] {
+    lazy var locationService = LocationService()
+    private var dataSource: UICollectionViewDiffableDataSource<Int, MKMapItem>!
+    private var locationObservation: NSKeyValueObservation?
+    private var currentLocation: CLLocation? {
         didSet {
-            print("Likely Places count: \(likelyPlaces.count)")
+            guard let currentLocation else { return }
+
+            let mapRegion = MKCoordinateRegion(center: currentLocation.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+            mapView.setRegion(mapRegion, animated: true)
         }
     }
-    var selectedPlace: GMSPlace?
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configLocationServices()
+        locationService.requestLocation()
         configMapView()
         setupUI()
         configureDataSource()
         updateSnapshot()
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        locationManager.stopUpdatingLocation()
-    }
-
-    private func configLocationServices() {
-        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        locationManager.distanceFilter = kCLLocationAccuracyHundredMeters
-        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        locationManager.pausesLocationUpdatesAutomatically = true
-        locationManager.allowsBackgroundLocationUpdates = false
-
-        placesClient = GMSPlacesClient.shared()
-    }
-
     private func configMapView() {
-        GMSServices.setMetalRendererEnabled(true)
-        let camera = GMSCameraPosition.camera(
-            withLatitude: defaultLocation.coordinate.latitude,
-            longitude: defaultLocation.coordinate.longitude,
-            zoom: zoomLevel)
-        mapView = GMSMapView.map(withFrame: .zero, camera: camera)
-        mapView.settings.myLocationButton = true
-        mapView.isMyLocationEnabled = true
-        mapView.isHidden = true
+        mapView.selectableMapFeatures = [.pointsOfInterest]
+
+        let mapConfiguration = MKStandardMapConfiguration()
+        mapConfiguration.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
+
+        mapView.preferredConfiguration = mapConfiguration
+
+        // Set a default location.
+        currentLocation = locationService.currentLocation
+
+        // Modify the location as updates come in.
+        locationObservation = locationService.observe(\.currentLocation, options: [.new]) { _, change in
+            guard
+                let value = change.newValue,
+                let location = value
+            else { return }
+
+            self.currentLocation = location
+        }
     }
 
     private func setupUI() {
         navigationController?.isNavigationBarHidden = true
-        [mapView, searchTextField, poiCollectionView].forEach { view.addSubview($0) }
+        [mapView, searchTextField, compass, poiCollectionView].forEach { view.addSubview($0) }
 
         mapView.edgesToSuperview(excluding: .bottom)
         mapView.bottomToSuperview(usingSafeArea: true)
 
         searchTextField.height(50)
         searchTextField.edgesToSuperview(excluding: .bottom, insets: .top(24) + .left(16) + .right(16), usingSafeArea: true)
+
+        compass.trailingToSuperview(offset: 16)
+        compass.topToBottom(of: searchTextField, offset: 16)
 
         poiCollectionView.backgroundColor = .clear
         poiCollectionView.height(120)
@@ -112,23 +120,6 @@ class DiscoverViewController: UIViewController {
         return UICollectionViewCompositionalLayout(section: section)
     }
 
-    private func showLocationAccessAlert(message: String) {
-        let alert = UIAlertController(
-            title: String(localized: "Location Service Denied!"),
-            message: message,
-            preferredStyle: .alert)
-        let openSettings = UIAlertAction(title: String(localized: "Settings"), style: .default) { _ in
-            if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-                UIApplication.shared.open(settingsURL)
-            }
-        }
-
-        let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
-        alert.addAction(openSettings)
-        alert.addAction(cancel)
-        present(alert, animated: true)
-    }
-
     private func configureDataSource() {
         dataSource = UICollectionViewDiffableDataSource(collectionView: poiCollectionView) { collectionView, indexPath, place in
             guard let cardCell = collectionView.dequeueReusableCell(
@@ -138,48 +129,46 @@ class DiscoverViewController: UIViewController {
                 fatalError("Failed to dequeue POILocationCardCell")
             }
 
-            cardCell.titleLabel.text = place.name
-            cardCell.subtitleLabel.text = place.description
+//            cardCell.titleLabel.text = place.name
+//            cardCell.subtitleLabel.text = place.description
 
             return cardCell
         }
     }
 
     private func updateSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, GMSPlace>()
+        var snapshot = NSDiffableDataSourceSnapshot<Int, MKMapItem>()
 
         snapshot.appendSections([0])
-        snapshot.appendItems(likelyPlaces)
+        snapshot.appendItems([MKMapItem()])
         dataSource.apply(snapshot)
     }
 
-    private func listLikelyPlaces() {
-        // Clean up from previous sessions.
-        likelyPlaces.removeAll()
+    private func setupPOIAnnotation(_ annotation: MKMapFeatureAnnotation) -> MKAnnotationView? {
+        let markerAnnotationView = mapView.dequeueReusableAnnotationView(
+            withIdentifier: AnnotationReuseID.featureAnnotation.rawValue,
+            for: annotation)
+        if let markerAnnotationView = markerAnnotationView as? MKMarkerAnnotationView {
 
-        let placeFields: GMSPlaceField = [.name, .coordinate, .placeID]
-        placesClient.findPlaceLikelihoodsFromCurrentLocation(withPlaceFields: placeFields) { placeLikelihoods, error in
-            guard error == nil else {
-                // TODO: Handle the error.
-                print("Current Place error: \(error?.localizedDescription ?? "")")
-                return
-            }
+            markerAnnotationView.animatesWhenAdded = true
+            markerAnnotationView.canShowCallout = true
 
-            guard let placeLikelihoods = placeLikelihoods else {
-                print("No places found.")
-                return
-            }
+            let infoButton = UIButton(type: .detailDisclosure)
+            markerAnnotationView.rightCalloutAccessoryView = infoButton
 
-            // Get likely places and add to the list.
-            for likelihood in placeLikelihoods {
-                let place = likelihood.place
-                self.likelyPlaces.append(place)
-            }
+            if let tappedFeatureColor = annotation.iconStyle?.backgroundColor,
+                let image = annotation.iconStyle?.image {
 
-            DispatchQueue.main.async { [weak self] in
-                self?.updateSnapshot()
+                markerAnnotationView.markerTintColor = tappedFeatureColor
+                infoButton.tintColor = tappedFeatureColor
+
+                let imageView = UIImageView(image: image.withTintColor(tappedFeatureColor, renderingMode: .alwaysOriginal))
+                imageView.bounds = CGRect(origin: .zero, size: CGSize(width: 50, height: 50))
+                markerAnnotationView.leftCalloutAccessoryView = imageView
             }
         }
+
+        return markerAnnotationView
     }
 }
 
@@ -188,16 +177,18 @@ extension DiscoverViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        let place = likelyPlaces[indexPath.item]
+//        fqService.placeSearch()
 
-        guard
-            let id = place.placeID,
-            let name = place.name
-        else {
-            return
-        }
-        let detailVC = PlaceDetailViewController(placeID: id, name: name)
-        navigationController?.pushViewController(detailVC, animated: true)
+//        let place = likelyPlaces[indexPath.item]
+//
+//        guard
+//            let id = place.placeID,
+//            let name = place.name
+//        else {
+//            return
+//        }
+//        let detailVC = PlaceDetailViewController(placeID: id, name: name)
+//        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 
@@ -218,47 +209,27 @@ extension DiscoverViewController: UITextFieldDelegate {
     }
 }
 
-// MARK: - CLLocationManager Delegate
-extension DiscoverViewController: CLLocationManagerDelegate {
-    // Handle incoming location events.
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        currentLocation = location
+// MARK: - MapView Delegate
 
-        let camera = GMSCameraPosition.camera(
-            withLatitude: location.coordinate.latitude,
-            longitude: location.coordinate.longitude,
-            zoom: zoomLevel)
-
-        if mapView.isHidden {
-            mapView.isHidden = false
-            mapView.camera = camera
-        } else {
-            mapView.animate(to: camera)
+extension DiscoverViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard let annotation = annotation as? MKMapFeatureAnnotation else {
+            return nil
         }
-
-        listLikelyPlaces()
+        return setupPOIAnnotation(annotation)
     }
 
-    // Handle authorization for the location manager.
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        switch status {
-        case .restricted, .denied:
-            mapView.isHidden = false
-            let message = String(localized: "Enable location service to give you better experience while using app.")
-            showLocationAccessAlert(message: message)
-        case .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
-        case .authorizedWhenInUse, .authorizedAlways:
-            locationManager.startUpdatingLocation()
-        @unknown default:
-            fatalError("Unknown location manager authorization.")
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        guard
+            let annotation = view.annotation,
+            annotation.isKind(of: MKMapFeatureAnnotation.self),
+            let title = annotation.title,
+            let placeName = title
+        else {
+            return
         }
-    }
 
-    // Handle location manager errors.
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        locationManager.stopUpdatingLocation()
-        print("Error: \(error)")
+        let detailVC = PlaceDetailViewController(name: placeName, location: annotation.coordinate)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
