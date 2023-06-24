@@ -104,7 +104,7 @@ class MyTripViewController: UIViewController {
         upcomingTrips.removeAll(keepingCapacity: true)
         closedTrips.removeAll(keepingCapacity: true)
 
-        FireStoreManager.shared.fetchAllUserTrips { [weak self] result in
+        FireStoreService.shared.fetchAllUserTrips { [weak self] result in
             switch result {
             case .success(let trips):
                 self?.filterByDate(trips: trips)

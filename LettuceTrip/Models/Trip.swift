@@ -19,9 +19,10 @@ struct Trip: Codable {
 }
 
 struct Message: Codable, Hashable {
-    let id: String
+    @DocumentID var id: String?
     let userID: String
     var message: String
+    @ServerTimestamp var sendTime: Date?
 }
 
 struct Place: Codable {

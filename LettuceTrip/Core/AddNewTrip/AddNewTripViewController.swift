@@ -147,7 +147,7 @@ class AddNewTripViewController: UIViewController {
         let trip = Trip(tripName: tripName, startDate: startDate, endDate: endDate, destination: city, members: [user])
 
         // upload to firebase
-        FireStoreManager.shared.addDocument(at: .trips, data: trip)
+        FireStoreService.shared.addDocument(at: .trips, data: trip)
 
         dismiss(animated: true)
     }

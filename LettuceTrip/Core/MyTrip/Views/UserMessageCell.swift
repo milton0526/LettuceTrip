@@ -40,6 +40,14 @@ class UserMessageCell: UICollectionViewCell {
         return stackView
     }()
 
+    lazy var timeLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 10, weight: .light)
+        label.textColor = .label
+        label.sizeToFit()
+        return label
+    }()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -59,8 +67,18 @@ class UserMessageCell: UICollectionViewCell {
         stackView.addArrangedSubview(imageView)
 
         contentView.addSubview(stackView)
+        contentView.addSubview(timeLabel)
         stackView.verticalToSuperview(insets: .vertical(10))
         stackView.trailingToSuperview(offset: 12)
         stackView.widthToSuperview(multiplier: 0.6)
+
+        timeLabel.trailingToLeading(of: stackView, offset: -8)
+        timeLabel.height(14)
+        timeLabel.bottom(to: stackView)
+    }
+
+    func config(with message: Message) {
+        textView.text = message.message
+        timeLabel.text = message.sendTime?.formatted(date: .omitted, time: .shortened)
     }
 }

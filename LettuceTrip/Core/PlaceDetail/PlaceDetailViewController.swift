@@ -116,7 +116,7 @@ class PlaceDetailViewController: UIViewController {
 
     @objc func addToTripButtonTapped(_ sender: UIButton) {
         // fetch firebase to check if user have trip list
-        FireStoreManager.shared.fetchAllUserTrips { [weak self] result in
+        FireStoreService.shared.fetchAllUserTrips { [weak self] result in
             switch result {
             case .success(let trips):
                 self?.showActionSheet(form: trips)
@@ -147,7 +147,7 @@ class PlaceDetailViewController: UIViewController {
                     let action = UIAlertAction(
                         title: trip.tripName,
                         style: .default) { _ in
-                            FireStoreManager.shared.addPlace(place, to: trip)
+                            FireStoreService.shared.addPlace(place, to: trip)
                     }
                     actionSheet.addAction(action)
                 }

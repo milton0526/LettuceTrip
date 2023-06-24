@@ -18,8 +18,8 @@
 		C42F51CA2A45E2AB00023305 /* CirclePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51C92A45E2AB00023305 /* CirclePlaceCell.swift */; };
 		C42F51CC2A46989600023305 /* UserMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51CB2A46989600023305 /* UserMessageCell.swift */; };
 		C42F51CE2A469E7200023305 /* FriendMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51CD2A469E7200023305 /* FriendMessageCell.swift */; };
-		C42F51D02A46A28300023305 /* ChatRoomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51CF2A46A28300023305 /* ChatRoomHeaderView.swift */; };
 		C42F51D22A46ADDB00023305 /* UINavigationBar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */; };
+		C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */; };
 		C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8202A41AF62002987CB /* AppDelegate.swift */; };
 		C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8222A41AF62002987CB /* SceneDelegate.swift */; };
 		C4DBE8252A41AF62002987CB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8242A41AF62002987CB /* HomeViewController.swift */; };
@@ -59,7 +59,7 @@
 		C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8B42A428797002987CB /* AddNewTripViewController.swift */; };
 		C4DBE8BD2A429921002987CB /* UILabel+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8BC2A429921002987CB /* UILabel+Style.swift */; };
 		C4DBE8C42A42B363002987CB /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C4DBE8C32A42B363002987CB /* IQKeyboardManagerSwift */; };
-		C4DBE8C62A42D391002987CB /* FireStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C52A42D391002987CB /* FireStoreManager.swift */; };
+		C4DBE8C62A42D391002987CB /* FireStoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C52A42D391002987CB /* FireStoreService.swift */; };
 		C4DBE8C82A42D446002987CB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C72A42D446002987CB /* User.swift */; };
 		C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C92A42D49B002987CB /* Trip.swift */; };
 		C4DBE8CC2A42D79D002987CB /* ShareTrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CB2A42D79D002987CB /* ShareTrips.swift */; };
@@ -80,8 +80,8 @@
 		C42F51C92A45E2AB00023305 /* CirclePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclePlaceCell.swift; sourceTree = "<group>"; };
 		C42F51CB2A46989600023305 /* UserMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageCell.swift; sourceTree = "<group>"; };
 		C42F51CD2A469E7200023305 /* FriendMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendMessageCell.swift; sourceTree = "<group>"; };
-		C42F51CF2A46A28300023305 /* ChatRoomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomHeaderView.swift; sourceTree = "<group>"; };
 		C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Extension.swift"; sourceTree = "<group>"; };
+		C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomPlacesView.swift; sourceTree = "<group>"; };
 		C4DBE81D2A41AF62002987CB /* LettuceTrip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LettuceTrip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4DBE8202A41AF62002987CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4DBE8222A41AF62002987CB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -134,7 +134,7 @@
 		C4DBE8B12A41DD83002987CB /* TripCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripCell.swift; sourceTree = "<group>"; };
 		C4DBE8B42A428797002987CB /* AddNewTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewTripViewController.swift; sourceTree = "<group>"; };
 		C4DBE8BC2A429921002987CB /* UILabel+Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Style.swift"; sourceTree = "<group>"; };
-		C4DBE8C52A42D391002987CB /* FireStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreManager.swift; sourceTree = "<group>"; };
+		C4DBE8C52A42D391002987CB /* FireStoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreService.swift; sourceTree = "<group>"; };
 		C4DBE8C72A42D446002987CB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C4DBE8C92A42D49B002987CB /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 		C4DBE8CB2A42D79D002987CB /* ShareTrips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTrips.swift; sourceTree = "<group>"; };
@@ -188,7 +188,7 @@
 				C42F51B32A45669400023305 /* FQKey.plist */,
 				C4DBE89E2A41C0E3002987CB /* GoogleService-Info.plist */,
 				C4DBE8492A41B32F002987CB /* Extensions */,
-				C4DBE87E2A41BB9C002987CB /* Managers */,
+				C4DBE87E2A41BB9C002987CB /* Services */,
 				C4DBE87B2A41BB68002987CB /* Models */,
 				C4DBE83A2A41B1A0002987CB /* Core */,
 			);
@@ -307,14 +307,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		C4DBE87E2A41BB9C002987CB /* Managers */ = {
+		C4DBE87E2A41BB9C002987CB /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				C4DBE8C52A42D391002987CB /* FireStoreManager.swift */,
+				C4DBE8C52A42D391002987CB /* FireStoreService.swift */,
 				C42F51AF2A454D5F00023305 /* LocationService.swift */,
 				C42F51B12A45664600023305 /* FQService.swift */,
 			);
-			path = Managers;
+			path = Services;
 			sourceTree = "<group>";
 		};
 		C4DBE8832A41BC0E002987CB /* Views */ = {
@@ -357,7 +357,7 @@
 				C42F51C92A45E2AB00023305 /* CirclePlaceCell.swift */,
 				C42F51CB2A46989600023305 /* UserMessageCell.swift */,
 				C42F51CD2A469E7200023305 /* FriendMessageCell.swift */,
-				C42F51CF2A46A28300023305 /* ChatRoomHeaderView.swift */,
+				C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -500,6 +500,7 @@
 				C4DBE8922A41BCDC002987CB /* PlacePhotoHeaderView.swift in Sources */,
 				C4DBE8BD2A429921002987CB /* UILabel+Style.swift in Sources */,
 				C42F51CE2A469E7200023305 /* FriendMessageCell.swift in Sources */,
+				C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */,
 				C4DBE88E2A41BCAB002987CB /* PlaceAboutCell.swift in Sources */,
 				C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */,
 				C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */,
@@ -509,7 +510,6 @@
 				C4DBE8482A41B329002987CB /* ItineraryCell.swift in Sources */,
 				C4DBE8442A41B2F7002987CB /* PopularCityCell.swift in Sources */,
 				C4DBE87D2A41BB81002987CB /* LTError.swift in Sources */,
-				C42F51D02A46A28300023305 /* ChatRoomHeaderView.swift in Sources */,
 				C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */,
 				C42F51B62A4574D900023305 /* FQResponse.swift in Sources */,
 				C42F51B22A45664600023305 /* FQService.swift in Sources */,
@@ -532,7 +532,7 @@
 				C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */,
 				C42F51C62A45BD1D00023305 /* ChatRoomViewController.swift in Sources */,
 				C4DBE88A2A41BC7B002987CB /* PlaceInfoCell.swift in Sources */,
-				C4DBE8C62A42D391002987CB /* FireStoreManager.swift in Sources */,
+				C4DBE8C62A42D391002987CB /* FireStoreService.swift in Sources */,
 				C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */,
 				C4DBE8CC2A42D79D002987CB /* ShareTrips.swift in Sources */,
 				C4DBE8D22A43E116002987CB /* MKPlaceMark+Extension.swift in Sources */,

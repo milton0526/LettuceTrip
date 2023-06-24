@@ -6,21 +6,19 @@
 //
 
 import UIKit
+import FirebaseFirestore
 import TinyConstraints
 
 class ChatRoomViewController: UIViewController {
 
     enum Section {
-        case message
+        case main
     }
+
+    lazy var placesView = ChatRoomPlacesView()
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        collectionView.delegate = self
-        collectionView.register(
-            ChatRoomHeaderView.self,
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: String(describing: ChatRoomHeaderView.self))
         collectionView.register(UserMessageCell.self, forCellWithReuseIdentifier: UserMessageCell.identifier)
         collectionView.register(FriendMessageCell.self, forCellWithReuseIdentifier: FriendMessageCell.identifier)
         return collectionView
@@ -28,7 +26,6 @@ class ChatRoomViewController: UIViewController {
 
     lazy var inputTextField: RoundedTextField = {
         let textField = RoundedTextField()
-        textField.delegate = self
         textField.backgroundColor = .secondarySystemBackground
         textField.placeholder = "Start typing..."
         return textField
@@ -41,7 +38,15 @@ class ChatRoomViewController: UIViewController {
         return button
     }()
 
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Int>!
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Message>!
+
+    private var chatMessages: [Message] = [] {
+        didSet {
+            print("Append new message: \(chatMessages.count)")
+        }
+    }
+    private var listener: ListenerRegistration?
+    private var isFirstLoading = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +56,18 @@ class ChatRoomViewController: UIViewController {
         configBackButton()
         configureDataSource()
         updateSnapshot()
+
+        // Testing use
+        placesView.items = Array(repeating: 10, count: 10)
+
+        fetchMessages()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        chatMessages.removeAll()
+        listener?.remove()
+        listener = nil
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -73,6 +90,15 @@ class ChatRoomViewController: UIViewController {
 
     @objc func sendMessage(_ sender: UIButton) {
         // send message to firebase and listen to update view
+        guard
+            let text = inputTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+            !text.isEmpty
+        else {
+            return
+        }
+
+        FireStoreService.shared.sendMessage(with: text)
+        inputTextField.text = ""
     }
 
     private func configBackButton() {
@@ -86,9 +112,13 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func setupUI() {
-        [collectionView, inputTextField, sendButton].forEach { view.addSubview($0) }
+        [placesView, collectionView, inputTextField, sendButton].forEach { view.addSubview($0) }
 
-        collectionView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
+        placesView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
+        placesView.height(100)
+
+        collectionView.topToBottom(of: placesView, offset: 8)
+        collectionView.horizontalToSuperview()
         collectionView.bottomToTop(of: inputTextField, offset: -8)
 
         sendButton.centerY(to: inputTextField)
@@ -116,66 +146,67 @@ class ChatRoomViewController: UIViewController {
         section.interGroupSpacing = 4
         section.contentInsets = .init(top: 0, leading: 0, bottom: 8, trailing: 0)
 
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(100))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .topLeading)
-        header.pinToVisibleBounds = true
-        section.boundarySupplementaryItems = [header]
-
         return UICollectionViewCompositionalLayout(section: section)
     }
 
     private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, _ in
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, message in
             guard
-                let userMesCell = collectionView.dequeueReusableCell(
+                let self = self,
+                let userMSGCell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: UserMessageCell.identifier,
                     for: indexPath) as? UserMessageCell,
-                let friMesCell = collectionView.dequeueReusableCell(
+                let friendMSGCell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: FriendMessageCell.identifier,
                     for: indexPath) as? FriendMessageCell
             else {
                 fatalError("Failed to dequeue cityCell")
             }
 
-            return userMesCell
-        }
-
-        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath -> UICollectionReusableView? in
-            guard let chatHeaderView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: String(describing: ChatRoomHeaderView.self),
-                for: indexPath) as? ChatRoomHeaderView
-            else {
-                return nil
+            guard let userID = UserDefaults.standard.string(forKey: "userID") else {
+                fatalError("No user login.")
             }
 
-            chatHeaderView.items = Array(repeating: 10, count: 10)
-            return chatHeaderView
+            let message = self.chatMessages[indexPath.row]
+
+            if message.userID == userID {
+                userMSGCell.config(with: message)
+                return userMSGCell
+            } else {
+                friendMSGCell.config(with: message)
+                return friendMSGCell
+            }
         }
     }
 
     private func updateSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
-
-        snapshot.appendSections([.message])
-        snapshot.appendItems(Array(21...40), toSection: .message)
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Message>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(chatMessages)
         dataSource.apply(snapshot)
+
+        if !chatMessages.isEmpty {
+            let indexPath = IndexPath(item: chatMessages.count - 1, section: 0)
+            collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+        }
     }
-}
 
-// MARK: - UICollectionView Delegate
-extension ChatRoomViewController: UICollectionViewDelegate {
-}
+    private func fetchMessages() {
+        listener = FireStoreService.shared.addListenerToChatRoom { [weak self] result in
+            guard let self = self else { return }
 
-// MARK: - UITextField Delegate
-extension ChatRoomViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
+            switch result {
+            case .success(let message):
+                guard let message = message else { break }
+                self.chatMessages.append(message)
+
+                DispatchQueue.main.async {
+                    self.updateSnapshot()
+                }
+
+            case .failure(let error):
+                self.showAlertToUser(error: error)
+            }
+        }
     }
 }

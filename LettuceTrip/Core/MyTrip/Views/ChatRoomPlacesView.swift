@@ -1,16 +1,15 @@
 //
-//  ChatRoomHeaderView.swift
+//  ChatRoomPlacesCollectionView.swift
 //  LettuceTrip
 //
 //  Created by Milton Liu on 2023/6/24.
 //
 
 import UIKit
-import TinyConstraints
 
-class ChatRoomHeaderView: UICollectionReusableView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+class ChatRoomPlacesView: UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
-    var items: [Int] = [] {
+    var items: [Int] = [1, 2] {
         didSet {
             collectionView.reloadData()
         }
