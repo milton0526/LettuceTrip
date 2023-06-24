@@ -68,17 +68,9 @@ class MyTripViewController: UIViewController {
         welcomeView.font = .systemFont(ofSize: 22, weight: .bold)
         welcomeView.textColor = .label
 
-        let editIconImageView = UIImageView(frame: CGRect(origin: .zero, size: CGSize(width: 30, height: 30)))
-        editIconImageView.image = UIImage(systemName: "ellipsis.circle")
-        editIconImageView.contentMode = .scaleAspectFit
-        editIconImageView.clipsToBounds = true
-        editIconImageView.layer.cornerRadius = 20
-        editIconImageView.layer.masksToBounds = true
-
         let leftBarItem = UIBarButtonItem(customView: welcomeView)
-        let rightBarItem = UIBarButtonItem(customView: editIconImageView)
         navigationItem.leftBarButtonItem = leftBarItem
-        navigationItem.rightBarButtonItem = rightBarItem
+        navigationItem.rightBarButtonItem = editButtonItem
     }
 
     private func setupUI() {

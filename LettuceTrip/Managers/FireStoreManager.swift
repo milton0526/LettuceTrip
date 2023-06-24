@@ -90,9 +90,9 @@ class FireStoreManager {
             }
     }
 
-    func fetchTripChatRoom(id: String, completion: @escaping (Result<[ChatRoom], Error>) -> Void) {
+    func fetchTripChatRoom(id: String, completion: @escaping (Result<[Message], Error>) -> Void) {
         let ref = database.collection(CollectionRef.trips.rawValue)
-        var chatRoom: [ChatRoom] = []
+        var chatRoom: [Message] = []
 
         ref.document(id).collection(CollectionRef.chatRoom.rawValue).getDocuments { snapshot, error in
             if let error = error {
@@ -102,7 +102,7 @@ class FireStoreManager {
                 guard let snapshot = snapshot else { return }
                 snapshot.documents.forEach { document in
                     do {
-                        let result = try document.data(as: ChatRoom.self)
+                        let result = try document.data(as: Message.self)
                         chatRoom.append(result)
                     } catch {
                         completion(.failure(error))

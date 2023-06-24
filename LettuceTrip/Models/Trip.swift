@@ -18,8 +18,8 @@ struct Trip: Codable {
     var members: [String]
 }
 
-struct ChatRoom: Codable {
-    @DocumentID var id: String?
+struct Message: Codable, Hashable {
+    let id: String
     let userID: String
     var message: String
 }

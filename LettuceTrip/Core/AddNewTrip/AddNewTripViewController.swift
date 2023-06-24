@@ -81,11 +81,7 @@ class AddNewTripViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = String(localized: "Create trip")
 
-        let saveButton = UIBarButtonItem(
-            title: String(localized: "Save"),
-            style: .plain,
-            target: self,
-            action: #selector(saveTrip))
+        let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveTrip))
         navigationItem.rightBarButtonItem = saveButton
 
         [tripNameLabel, tripNameTextField, destinationLabel, destinationTextField, startTimeLabel, datePicker, durationLabel, durationTextField].forEach {

@@ -36,7 +36,6 @@ class PlaceDetailViewController: UIViewController {
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.backgroundColor = .systemBackground
-        tableView.contentInsetAdjustmentBehavior = .never
         tableView.allowsSelection = false
         tableView.delegate = self
         tableView.dataSource = self
@@ -283,25 +282,3 @@ extension PlaceDetailViewController: UITableViewDataSource {
         }
     }
 }
-
-
-// #if canImport(SwiftUI) && DEBUG
-// import SwiftUI
-//
-// struct ViewControllerRepresentable: UIViewControllerRepresentable {
-//
-//    func makeUIViewController(context: Context) -> some UIViewController {
-//        return PlaceDetailViewController(placeID: "sfjhsk", name: "Brisbane")
-//    }
-//
-//    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-//    }
-// }
-//
-// struct ViewControllerPreview: PreviewProvider {
-//    static var previews: some View {
-//        ViewControllerRepresentable()
-//    }
-// }
-// #endif
-//

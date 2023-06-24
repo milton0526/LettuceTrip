@@ -49,15 +49,15 @@ class EditTripViewController: UIViewController {
     private func customNavBar() {
         title = String(localized: "Planning")
 
-        let groupImageView = UIImageView(frame: CGRect(origin: .zero, size: CGSize(width: 30, height: 30)))
-        groupImageView.image = UIImage(systemName: "person.2")
-        groupImageView.contentMode = .scaleAspectFit
-        groupImageView.clipsToBounds = true
-        groupImageView.layer.cornerRadius = 20
-        groupImageView.layer.masksToBounds = true
+        let chatRoomButton = UIBarButtonItem(image: UIImage(systemName: "person.2"), style: .plain, target: self, action: #selector(openChatRoom))
+        navigationItem.rightBarButtonItem = chatRoomButton
+    }
 
-        let rightBarItem = UIBarButtonItem(customView: groupImageView)
-        navigationItem.rightBarButtonItem = rightBarItem
+    @objc func openChatRoom(_ sender: UIButton) {
+        let chatVC = ChatRoomViewController()
+        let nav = UINavigationController(rootViewController: chatVC)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
@@ -88,7 +88,7 @@ class EditTripViewController: UIViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
+        section.orthogonalScrollingBehavior = .continuous
         section.interGroupSpacing = 12
         section.contentInsets = .init(top: 8, leading: 16, bottom: 8, trailing: 16)
 
