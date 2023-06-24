@@ -20,6 +20,7 @@
 		C42F51CE2A469E7200023305 /* FriendMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51CD2A469E7200023305 /* FriendMessageCell.swift */; };
 		C42F51D22A46ADDB00023305 /* UINavigationBar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */; };
 		C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */; };
+		C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */; };
 		C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8202A41AF62002987CB /* AppDelegate.swift */; };
 		C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8222A41AF62002987CB /* SceneDelegate.swift */; };
 		C4DBE8252A41AF62002987CB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8242A41AF62002987CB /* HomeViewController.swift */; };
@@ -152,6 +153,7 @@
 				C4DBE89B2A41BD7B002987CB /* Cosmos in Frameworks */,
 				C4DBE8A22A41C158002987CB /* FirebaseFirestore in Frameworks */,
 				C4DBE8412A41B288002987CB /* TinyConstraints in Frameworks */,
+				C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */,
 				C4DBE8A42A41C158002987CB /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -404,6 +406,7 @@
 				C4DBE8A12A41C158002987CB /* FirebaseFirestore */,
 				C4DBE8A32A41C158002987CB /* FirebaseFirestoreSwift */,
 				C4DBE8C32A42B363002987CB /* IQKeyboardManagerSwift */,
+				C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */,
 			);
 			productName = LettuceTrip;
 			productReference = C4DBE81D2A41AF62002987CB /* LettuceTrip.app */;
@@ -438,6 +441,7 @@
 				C4DBE8992A41BD7B002987CB /* XCRemoteSwiftPackageReference "Cosmos" */,
 				C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				C4DBE8C22A42B363002987CB /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 			);
 			productRefGroup = C4DBE81E2A41AF62002987CB /* Products */;
 			projectDirPath = "";
@@ -770,6 +774,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JonasGessner/JGProgressHUD.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		C4DBE83F2A41B288002987CB /* XCRemoteSwiftPackageReference "TinyConstraints" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/roberthein/TinyConstraints.git";
@@ -805,6 +817,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */;
+			productName = JGProgressHUD;
+		};
 		C4DBE8402A41B288002987CB /* TinyConstraints */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C4DBE83F2A41B288002987CB /* XCRemoteSwiftPackageReference "TinyConstraints" */;
