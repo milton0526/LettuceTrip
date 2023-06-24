@@ -131,7 +131,7 @@ class HomeViewController: UIViewController {
             alignment: .topLeading)
         header.pinToVisibleBounds = true
         section.boundarySupplementaryItems = [header]
-        
+
         return section
     }
 

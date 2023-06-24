@@ -129,9 +129,8 @@ class DiscoverViewController: UIViewController {
                 fatalError("Failed to dequeue POILocationCardCell")
             }
 
-//            cardCell.titleLabel.text = place.name
-//            cardCell.subtitleLabel.text = place.description
-
+            // cardCell.titleLabel.text = place.name
+            // cardCell.subtitleLabel.text = place.description
             return cardCell
         }
     }

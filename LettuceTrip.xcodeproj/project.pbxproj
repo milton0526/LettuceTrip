@@ -7,20 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C42F51B02A454D5F00023305 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51AF2A454D5F00023305 /* LocationService.swift */; };
+		C42F51B22A45664600023305 /* FQService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B12A45664600023305 /* FQService.swift */; };
+		C42F51B42A45669400023305 /* FQKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C42F51B32A45669400023305 /* FQKey.plist */; };
+		C42F51B62A4574D900023305 /* FQResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B52A4574D900023305 /* FQResponse.swift */; };
 		C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B72A45936800023305 /* EditTripViewController.swift */; };
 		C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */; };
 		C42F51C42A45B60C00023305 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51C32A45B60C00023305 /* CalendarCell.swift */; };
 		C42F51C62A45BD1D00023305 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51C52A45BD1D00023305 /* ChatRoomViewController.swift */; };
-		C42F51C82A45C51800023305 /* SectionBackgroundDecorationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51C72A45C51800023305 /* SectionBackgroundDecorationView.swift */; };
 		C42F51CA2A45E2AB00023305 /* CirclePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51C92A45E2AB00023305 /* CirclePlaceCell.swift */; };
 		C42F51CC2A46989600023305 /* UserMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51CB2A46989600023305 /* UserMessageCell.swift */; };
 		C42F51CE2A469E7200023305 /* FriendMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51CD2A469E7200023305 /* FriendMessageCell.swift */; };
 		C42F51D02A46A28300023305 /* ChatRoomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51CF2A46A28300023305 /* ChatRoomHeaderView.swift */; };
 		C42F51D22A46ADDB00023305 /* UINavigationBar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */; };
-		C42F51B02A454D5F00023305 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51AF2A454D5F00023305 /* LocationService.swift */; };
-		C42F51B22A45664600023305 /* FQService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B12A45664600023305 /* FQService.swift */; };
-		C42F51B42A45669400023305 /* FQKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C42F51B32A45669400023305 /* FQKey.plist */; };
-		C42F51B62A4574D900023305 /* FQResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B52A4574D900023305 /* FQResponse.swift */; };
 		C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8202A41AF62002987CB /* AppDelegate.swift */; };
 		C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8222A41AF62002987CB /* SceneDelegate.swift */; };
 		C4DBE8252A41AF62002987CB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8242A41AF62002987CB /* HomeViewController.swift */; };
@@ -70,20 +69,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C42F51AF2A454D5F00023305 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		C42F51B12A45664600023305 /* FQService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FQService.swift; sourceTree = "<group>"; };
+		C42F51B32A45669400023305 /* FQKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = FQKey.plist; sourceTree = "<group>"; };
+		C42F51B52A4574D900023305 /* FQResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FQResponse.swift; sourceTree = "<group>"; };
 		C42F51B72A45936800023305 /* EditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
 		C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceCell.swift; sourceTree = "<group>"; };
 		C42F51C32A45B60C00023305 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		C42F51C52A45BD1D00023305 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
-		C42F51C72A45C51800023305 /* SectionBackgroundDecorationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionBackgroundDecorationView.swift; sourceTree = "<group>"; };
 		C42F51C92A45E2AB00023305 /* CirclePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclePlaceCell.swift; sourceTree = "<group>"; };
 		C42F51CB2A46989600023305 /* UserMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageCell.swift; sourceTree = "<group>"; };
 		C42F51CD2A469E7200023305 /* FriendMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendMessageCell.swift; sourceTree = "<group>"; };
 		C42F51CF2A46A28300023305 /* ChatRoomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomHeaderView.swift; sourceTree = "<group>"; };
 		C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Extension.swift"; sourceTree = "<group>"; };
-		C42F51AF2A454D5F00023305 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
-		C42F51B12A45664600023305 /* FQService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FQService.swift; sourceTree = "<group>"; };
-		C42F51B32A45669400023305 /* FQKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = FQKey.plist; sourceTree = "<group>"; };
-		C42F51B52A4574D900023305 /* FQResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FQResponse.swift; sourceTree = "<group>"; };
 		C4DBE81D2A41AF62002987CB /* LettuceTrip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LettuceTrip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4DBE8202A41AF62002987CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4DBE8222A41AF62002987CB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -356,7 +354,6 @@
 				C4DBE8B12A41DD83002987CB /* TripCell.swift */,
 				C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */,
 				C42F51C32A45B60C00023305 /* CalendarCell.swift */,
-				C42F51C72A45C51800023305 /* SectionBackgroundDecorationView.swift */,
 				C42F51C92A45E2AB00023305 /* CirclePlaceCell.swift */,
 				C42F51CB2A46989600023305 /* UserMessageCell.swift */,
 				C42F51CD2A469E7200023305 /* FriendMessageCell.swift */,
@@ -506,20 +503,16 @@
 				C4DBE88E2A41BCAB002987CB /* PlaceAboutCell.swift in Sources */,
 				C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */,
 				C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */,
-				C42F51C82A45C51800023305 /* SectionBackgroundDecorationView.swift in Sources */,
 				C42F51C42A45B60C00023305 /* CalendarCell.swift in Sources */,
 				C4DBE8372A41B194002987CB /* MyTripViewController.swift in Sources */,
 				C4DBE89D2A41BD8C002987CB /* RatingStarView.swift in Sources */,
 				C4DBE8482A41B329002987CB /* ItineraryCell.swift in Sources */,
 				C4DBE8442A41B2F7002987CB /* PopularCityCell.swift in Sources */,
 				C4DBE87D2A41BB81002987CB /* LTError.swift in Sources */,
-<<<<<<< HEAD
 				C42F51D02A46A28300023305 /* ChatRoomHeaderView.swift in Sources */,
 				C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */,
-=======
 				C42F51B62A4574D900023305 /* FQResponse.swift in Sources */,
 				C42F51B22A45664600023305 /* FQService.swift in Sources */,
->>>>>>> feature/change_discover_map
 				C4DBE8982A41BD10002987CB /* UIViewController+Alert.swift in Sources */,
 				C4DBE8AE2A41D696002987CB /* SelectionView.swift in Sources */,
 				C4DBE8252A41AF62002987CB /* HomeViewController.swift in Sources */,

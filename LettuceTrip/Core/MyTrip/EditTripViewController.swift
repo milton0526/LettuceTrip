@@ -188,6 +188,10 @@ class EditTripViewController: UIViewController {
             }
         }
 
+        configSupplementaryView()
+    }
+
+    private func configSupplementaryView() {
         dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath -> UICollectionReusableView? in
             guard let self = self else { return nil }
             guard let headerView = collectionView.dequeueReusableSupplementaryView(

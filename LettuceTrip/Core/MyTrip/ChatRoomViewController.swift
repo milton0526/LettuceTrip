@@ -130,7 +130,7 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, _ in
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, _ in
             guard
                 let userMesCell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: UserMessageCell.identifier,
