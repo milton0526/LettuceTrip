@@ -11,16 +11,14 @@ import TinyConstraints
 class ChatRoomViewController: UIViewController {
 
     enum Section {
-        case message
+        case main
     }
+
+    lazy var placesView = ChatRoomPlacesView()
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.delegate = self
-        collectionView.register(
-            ChatRoomHeaderView.self,
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: String(describing: ChatRoomHeaderView.self))
         collectionView.register(UserMessageCell.self, forCellWithReuseIdentifier: UserMessageCell.identifier)
         collectionView.register(FriendMessageCell.self, forCellWithReuseIdentifier: FriendMessageCell.identifier)
         return collectionView
@@ -51,6 +49,8 @@ class ChatRoomViewController: UIViewController {
         configBackButton()
         configureDataSource()
         updateSnapshot()
+
+        placesView.items = Array(repeating: 10, count: 10)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -86,9 +86,13 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func setupUI() {
-        [collectionView, inputTextField, sendButton].forEach { view.addSubview($0) }
+        [placesView, collectionView, inputTextField, sendButton].forEach { view.addSubview($0) }
 
-        collectionView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
+        placesView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
+        placesView.height(100)
+
+        collectionView.topToBottom(of: placesView, offset: 8)
+        collectionView.horizontalToSuperview()
         collectionView.bottomToTop(of: inputTextField, offset: -8)
 
         sendButton.centerY(to: inputTextField)
@@ -116,16 +120,6 @@ class ChatRoomViewController: UIViewController {
         section.interGroupSpacing = 4
         section.contentInsets = .init(top: 0, leading: 0, bottom: 8, trailing: 0)
 
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(100))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .topLeading)
-        header.pinToVisibleBounds = true
-        section.boundarySupplementaryItems = [header]
-
         return UICollectionViewCompositionalLayout(section: section)
     }
 
@@ -144,26 +138,13 @@ class ChatRoomViewController: UIViewController {
 
             return userMesCell
         }
-
-        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath -> UICollectionReusableView? in
-            guard let chatHeaderView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: String(describing: ChatRoomHeaderView.self),
-                for: indexPath) as? ChatRoomHeaderView
-            else {
-                return nil
-            }
-
-            chatHeaderView.items = Array(repeating: 10, count: 10)
-            return chatHeaderView
-        }
     }
 
     private func updateSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
 
-        snapshot.appendSections([.message])
-        snapshot.appendItems(Array(21...40), toSection: .message)
+        snapshot.appendSections([.main])
+        snapshot.appendItems(Array(21...40), toSection: .main)
         dataSource.apply(snapshot)
     }
 }
