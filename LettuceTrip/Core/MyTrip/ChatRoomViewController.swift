@@ -184,6 +184,11 @@ class ChatRoomViewController: UIViewController {
         snapshot.appendSections([.main])
         snapshot.appendItems(chatMessages)
         dataSource.apply(snapshot)
+
+        if !chatMessages.isEmpty {
+            let indexPath = IndexPath(item: chatMessages.count - 1, section: 0)
+            collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+        }
     }
 
     private func fetchMessages() {
