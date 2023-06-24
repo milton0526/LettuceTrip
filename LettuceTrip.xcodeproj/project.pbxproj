@@ -70,7 +70,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-<<<<<<< HEAD
 		C42F51B72A45936800023305 /* EditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
 		C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceCell.swift; sourceTree = "<group>"; };
 		C42F51C32A45B60C00023305 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
@@ -81,12 +80,10 @@
 		C42F51CD2A469E7200023305 /* FriendMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendMessageCell.swift; sourceTree = "<group>"; };
 		C42F51CF2A46A28300023305 /* ChatRoomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomHeaderView.swift; sourceTree = "<group>"; };
 		C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Extension.swift"; sourceTree = "<group>"; };
-=======
 		C42F51AF2A454D5F00023305 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		C42F51B12A45664600023305 /* FQService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FQService.swift; sourceTree = "<group>"; };
 		C42F51B32A45669400023305 /* FQKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = FQKey.plist; sourceTree = "<group>"; };
 		C42F51B52A4574D900023305 /* FQResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FQResponse.swift; sourceTree = "<group>"; };
->>>>>>> feature/change_discover_map
 		C4DBE81D2A41AF62002987CB /* LettuceTrip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LettuceTrip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4DBE8202A41AF62002987CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4DBE8222A41AF62002987CB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
