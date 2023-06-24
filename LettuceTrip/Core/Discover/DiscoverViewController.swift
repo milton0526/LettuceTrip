@@ -46,7 +46,6 @@ class DiscoverViewController: UIViewController {
     lazy var locationService = LocationService()
     private var searchCompleter: MKLocalSearchCompleter?
     private var searchRegion = MKCoordinateRegion(MKMapRect.world)
-    private var currentPlacemark: CLPlacemark?
 
     private var dataSource: UICollectionViewDiffableDataSource<Int, MKLocalSearchCompletion>!
     private var locationObservation: NSKeyValueObservation?
@@ -244,11 +243,6 @@ extension DiscoverViewController {
 
     private func stopProvidingCompletions() {
         searchCompleter = nil
-    }
-
-    func updatePlacemark(_ placemark: CLPlacemark?, boundingRegion: MKCoordinateRegion) {
-        currentPlacemark = placemark
-        searchCompleter?.region = searchRegion
     }
 }
 
