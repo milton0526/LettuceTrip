@@ -179,7 +179,7 @@ class ChatRoomViewController: UIViewController {
         }
     }
 
-    private func updateSnapshot(isEmpty: Bool = false) {
+    private func updateSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Message>()
         snapshot.appendSections([.main])
         snapshot.appendItems(chatMessages)
