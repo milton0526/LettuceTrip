@@ -1,5 +1,5 @@
 //
-//  FireStoreManager.swift
+//  FireStoreService.swift
 //  LettuceTrip
 //
 //  Created by Milton Liu on 2023/6/21.
@@ -8,9 +8,9 @@
 import Foundation
 import FirebaseFirestore
 
-class FireStoreManager {
+class FireStoreService {
 
-    static let shared = FireStoreManager()
+    static let shared = FireStoreService()
 
     private init() { }
 
@@ -48,6 +48,19 @@ class FireStoreManager {
             print("Successfully add new place at tripID: \(tripID)")
         } catch {
             print("Failed to add new place at tripID: \(tripID)")
+        }
+    }
+
+    func sendMessage(with message: String, in tripID: String = "uxd7ge3gIVMnBu2jvJBs") {
+        guard let userID = userID else { return }
+        let ref = database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.chatRoom.rawValue)
+        let sendMessage = Message(userID: userID, message: message)
+
+        do {
+            try ref.addDocument(from: sendMessage)
+            print("Successfully add new message at tripID: \(tripID)")
+        } catch {
+            print("Failed to add new message at tripID: \(tripID)")
         }
     }
 
@@ -135,4 +148,47 @@ class FireStoreManager {
             }
         }
     }
+
+    func addListenerToChatRoom(by tripID: String = "uxd7ge3gIVMnBu2jvJBs", completion: @escaping (Result<Message?, Error>) -> Void) -> ListenerRegistration {
+        let ref = database.collection(CollectionRef.trips.rawValue)
+
+        let listener = ref
+            .document(tripID)
+            .collection(CollectionRef.chatRoom.rawValue)
+            .order(by: "sendTime")
+            .addSnapshotListener { snapshot, error in
+                if let error = error {
+                    print("Error getting documents")
+                    completion(.failure(error))
+                } else {
+                    guard let snapshot = snapshot else { return }
+
+                    snapshot.documentChanges.forEach { diff in
+                        switch diff.type {
+                        case .added:
+                            let message = try? diff.document.data(as: Message.self)
+                            completion(.success(message))
+                        default:
+                            break
+                        }
+                    }
+                }
+            }
+        return listener
+    }
+
+//    func checkChatRoomExist(by tripID: String = "") {
+//        let ref = database.collection(CollectionRef.trips.rawValue)
+//
+//        ref.document("uxd7ge3gIVMnBu2jvJBs").collection(CollectionRef.chatRoom.rawValue)
+//            .limit(to: 1)
+//            .getDocuments { querySnapshot, error in
+//                if let error = error {
+//                    print("Error check ChatRoom Exis.t")
+//                }
+//
+//
+//            }
+//
+//    }
 }

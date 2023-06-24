@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 import TinyConstraints
 
 class ChatRoomViewController: UIViewController {
@@ -18,7 +19,6 @@ class ChatRoomViewController: UIViewController {
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        collectionView.delegate = self
         collectionView.register(UserMessageCell.self, forCellWithReuseIdentifier: UserMessageCell.identifier)
         collectionView.register(FriendMessageCell.self, forCellWithReuseIdentifier: FriendMessageCell.identifier)
         return collectionView
@@ -26,7 +26,6 @@ class ChatRoomViewController: UIViewController {
 
     lazy var inputTextField: RoundedTextField = {
         let textField = RoundedTextField()
-        textField.delegate = self
         textField.backgroundColor = .secondarySystemBackground
         textField.placeholder = "Start typing..."
         return textField
@@ -39,7 +38,15 @@ class ChatRoomViewController: UIViewController {
         return button
     }()
 
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Int>!
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Message>!
+
+    private var chatMessages: [Message] = [] {
+        didSet {
+            print("Append new message: \(chatMessages.count)")
+        }
+    }
+    private var listener: ListenerRegistration?
+    private var isFirstLoading = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +57,17 @@ class ChatRoomViewController: UIViewController {
         configureDataSource()
         updateSnapshot()
 
+        // Testing use
         placesView.items = Array(repeating: 10, count: 10)
+
+        fetchMessages()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        chatMessages.removeAll()
+        listener?.remove()
+        listener = nil
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -73,6 +90,14 @@ class ChatRoomViewController: UIViewController {
 
     @objc func sendMessage(_ sender: UIButton) {
         // send message to firebase and listen to update view
+        guard
+            let text = inputTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+            !text.isEmpty
+        else {
+            return
+        }
+
+        FireStoreService.shared.sendMessage(with: text)
     }
 
     private func configBackButton() {
@@ -124,39 +149,48 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, _ in
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, message in
             guard
-                let userMesCell = collectionView.dequeueReusableCell(
+                let userMSGCell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: UserMessageCell.identifier,
                     for: indexPath) as? UserMessageCell,
-                let friMesCell = collectionView.dequeueReusableCell(
+                let friendMSGCell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: FriendMessageCell.identifier,
                     for: indexPath) as? FriendMessageCell
             else {
                 fatalError("Failed to dequeue cityCell")
             }
 
-            return userMesCell
+            
+
+            userMSGCell.textView.text = message.message
+            return userMSGCell
         }
     }
 
-    private func updateSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
-
+    private func updateSnapshot(isEmpty: Bool = false) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Message>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(Array(21...40), toSection: .main)
+        snapshot.appendItems(chatMessages)
         dataSource.apply(snapshot)
     }
-}
 
-// MARK: - UICollectionView Delegate
-extension ChatRoomViewController: UICollectionViewDelegate {
-}
+    private func fetchMessages() {
+        listener = FireStoreService.shared.addListenerToChatRoom { [weak self] result in
+            guard let self = self else { return }
 
-// MARK: - UITextField Delegate
-extension ChatRoomViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
+            switch result {
+            case .success(let message):
+                guard let message = message else { break }
+                self.chatMessages.append(message)
+
+                DispatchQueue.main.async {
+                    self.updateSnapshot()
+                }
+
+            case .failure(let error):
+                self.showAlertToUser(error: error)
+            }
+        }
     }
 }

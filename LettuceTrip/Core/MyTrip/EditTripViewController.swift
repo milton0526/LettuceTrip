@@ -54,6 +54,10 @@ class EditTripViewController: UIViewController {
     }
 
     @objc func openChatRoom(_ sender: UIButton) {
+        // Check if room exist in FireStore
+
+        
+
         let chatVC = ChatRoomViewController()
         let nav = UINavigationController(rootViewController: chatVC)
         nav.modalPresentationStyle = .fullScreen
