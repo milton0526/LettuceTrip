@@ -69,9 +69,14 @@ class ScheduleView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         }
 
         let schedule = schedules[indexPath.item]
-
         calendarCell.dayLabel.text = String(describing: schedule.day)
         calendarCell.weekLabel.text = schedule.weekday
+
+        if indexPath.item == 0 {
+            calendarCell.isSelected = true
+        } else {
+            calendarCell.isSelected = false
+        }
 
         return calendarCell
     }

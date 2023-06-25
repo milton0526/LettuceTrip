@@ -60,6 +60,11 @@ class EditTripViewController: UIViewController {
         updateSnapshot()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        scheduleView.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .centeredVertically)
+    }
+
     private func setupUI() {
         view.addSubview(imageView)
         view.addSubview(scheduleView)

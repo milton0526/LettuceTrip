@@ -121,6 +121,8 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
     // MARK: CollectionView Delegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+
         let place = places[indexPath.item]
         print(place.name)
         // Show edit options such as arrange time and memo
