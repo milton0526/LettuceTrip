@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MapKit
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
@@ -31,5 +32,6 @@ struct Place: Codable, Hashable {
     let name: String
     let location: GeoPoint
     let iconImage: Data
+    var isArrange: Bool
     var arrangedTime: Date?
 }

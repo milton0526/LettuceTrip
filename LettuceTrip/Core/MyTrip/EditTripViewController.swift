@@ -101,7 +101,8 @@ class EditTripViewController: UIViewController {
     }
 
     @objc func openEditList(_ sender: UIBarButtonItem) {
-        print("Open edit list view")
+        let wishVC = WishListViewController(trip: trip)
+        navigationController?.pushViewController(wishVC, animated: true)
     }
 
     private func convertDateToDisplay() -> [Schedule] {
@@ -163,7 +164,6 @@ class EditTripViewController: UIViewController {
         snapshot.appendSections([.main])
 
         snapshot.appendItems(Array(1...20))
-
         dataSource.apply(snapshot)
     }
 }

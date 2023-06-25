@@ -46,7 +46,6 @@ class ChatRoomViewController: UIViewController {
         }
     }
     private var listener: ListenerRegistration?
-    private var isFirstLoading = true
 
     override func viewDidLoad() {
         super.viewDidLoad()

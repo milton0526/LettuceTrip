@@ -40,6 +40,7 @@ class ScheduleView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
 
     // MARK: - Delegate method
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Schedule cell clicked.")
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

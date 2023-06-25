@@ -126,27 +126,34 @@ class FireStoreService {
         }
     }
 
-    func fetchTripPlaces(tripId: String, completion: @escaping (Result<[Place], Error>) -> Void) {
+    func addListenerInTripPlaces(tripId: String, completion: @escaping (Result<Place?, Error>) -> Void) -> ListenerRegistration {
         let ref = database.collection(CollectionRef.trips.rawValue)
-        var places: [Place] = []
 
-        ref.document(tripId).collection(CollectionRef.places.rawValue).getDocuments { snapshot, error in
-            if let error = error {
-                print("Error getting documents")
-                completion(.failure(error))
-            } else {
-                guard let snapshot = snapshot else { return }
-                snapshot.documents.forEach { document in
-                    do {
-                        let result = try document.data(as: Place.self)
-                        places.append(result)
-                    } catch {
-                        completion(.failure(error))
+        let listener = ref
+            .document(tripId)
+            .collection(CollectionRef.places.rawValue)
+            .whereField("isArrange", isEqualTo: false)
+            .addSnapshotListener { snapshot, error in
+                if let error = error {
+                    print("Error getting documents")
+                    completion(.failure(error))
+                } else {
+                    guard let snapshot = snapshot else { return }
+
+                    snapshot.documentChanges.forEach { diff in
+                        switch diff.type {
+                        case .added:
+                            let place = try? diff.document.data(as: Place.self)
+                            completion(.success(place))
+
+                        case .modified, .removed:
+                            // remove from view then add to arrange section
+                            break
+                        }
                     }
                 }
-                completion(.success(places))
             }
-        }
+        return listener
     }
 
     func addListenerToChatRoom(by tripID: String = "uxd7ge3gIVMnBu2jvJBs", completion: @escaping (Result<Message?, Error>) -> Void) -> ListenerRegistration {
@@ -176,19 +183,4 @@ class FireStoreService {
             }
         return listener
     }
-
-//    func checkChatRoomExist(by tripID: String = "") {
-//        let ref = database.collection(CollectionRef.trips.rawValue)
-//
-//        ref.document("uxd7ge3gIVMnBu2jvJBs").collection(CollectionRef.chatRoom.rawValue)
-//            .limit(to: 1)
-//            .getDocuments { querySnapshot, error in
-//                if let error = error {
-//                    print("Error check ChatRoom Exis.t")
-//                }
-//
-//
-//            }
-//
-//    }
 }

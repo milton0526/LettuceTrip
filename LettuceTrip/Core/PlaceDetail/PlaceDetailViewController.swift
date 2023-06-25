@@ -141,7 +141,8 @@ class PlaceDetailViewController: UIViewController {
             location: .init(
                 latitude: location.latitude,
                 longitude: location.longitude),
-            iconImage: icon)
+            iconImage: icon,
+            isArrange: false)
 
         let actionSheet = UIAlertController(
             title: String(localized: "Add this place into trip"),
