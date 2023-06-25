@@ -14,6 +14,7 @@ struct Trip: Codable {
     var tripName: String
     var startDate: Date
     var endDate: Date
+    var duration: Int
     var destination: GeoPoint
     var members: [String]
 }
@@ -25,9 +26,10 @@ struct Message: Codable, Hashable {
     @ServerTimestamp var sendTime: Date?
 }
 
-struct Place: Codable {
+struct Place: Codable, Hashable {
     @DocumentID var id: String?
     let name: String
     let location: GeoPoint
+    let iconImage: Data
     var arrangedTime: Date?
 }

@@ -126,11 +126,11 @@ class FireStoreService {
         }
     }
 
-    func fetchTripPlaces(id: String, completion: @escaping (Result<[Place], Error>) -> Void) {
+    func fetchTripPlaces(tripId: String, completion: @escaping (Result<[Place], Error>) -> Void) {
         let ref = database.collection(CollectionRef.trips.rawValue)
-        var chatRoom: [Place] = []
+        var places: [Place] = []
 
-        ref.document(id).collection(CollectionRef.places.rawValue).getDocuments { snapshot, error in
+        ref.document(tripId).collection(CollectionRef.places.rawValue).getDocuments { snapshot, error in
             if let error = error {
                 print("Error getting documents")
                 completion(.failure(error))
@@ -139,12 +139,12 @@ class FireStoreService {
                 snapshot.documents.forEach { document in
                     do {
                         let result = try document.data(as: Place.self)
-                        chatRoom.append(result)
+                        places.append(result)
                     } catch {
                         completion(.failure(error))
                     }
                 }
-                completion(.success(chatRoom))
+                completion(.success(places))
             }
         }
     }

@@ -10,22 +10,41 @@ import TinyConstraints
 
 class EditTripViewController: UIViewController {
 
-    enum Section {
-        case unarranged
-        case calendar
-        case inOrder
+    let trip: Trip
+
+    init(trip: Trip) {
+        self.trip = trip
+        super.init(nibName: nil, bundle: nil)
     }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    enum Section {
+        case main
+    }
+
+    struct Schedule {
+        let day: Int
+        let weekday: String
+    }
+
+    lazy var imageView: UIImageView = {
+        let imageView = UIImageView(image: .init(named: "placeholder2"))
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 34
+        imageView.layer.masksToBounds = true
+        return imageView
+    }()
+
+    lazy var scheduleView = ScheduleView()
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.delegate = self
-        collectionView.register(PopularCityCollectionViewCell.self, forCellWithReuseIdentifier: PopularCityCollectionViewCell.identifier)
         collectionView.register(ArrangePlaceCell.self, forCellWithReuseIdentifier: ArrangePlaceCell.identifier)
-        collectionView.register(CalendarCell.self, forCellWithReuseIdentifier: CalendarCell.identifier)
-        collectionView.register(
-            PopularCityHeaderView.self,
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: PopularCityHeaderView.identifier)
         return collectionView
     }()
 
@@ -36,24 +55,44 @@ class EditTripViewController: UIViewController {
         view.backgroundColor = .systemBackground
         customNavBar()
         setupUI()
+        scheduleView.schedules = convertDateToDisplay()
         configureDataSource()
         updateSnapshot()
     }
 
     private func setupUI() {
+        view.addSubview(imageView)
+        view.addSubview(scheduleView)
         view.addSubview(collectionView)
-        collectionView.edgesToSuperview(usingSafeArea: true)
-        customNavBar()
+
+        imageView.edgesToSuperview(excluding: .bottom, insets: .top(8) + .horizontal(16), usingSafeArea: true)
+        imageView.height(120)
+
+        scheduleView.topToBottom(of: imageView)
+        scheduleView.horizontalToSuperview(insets: .horizontal(16))
+        scheduleView.height(80)
+
+        collectionView.topToBottom(of: scheduleView)
+        collectionView.edgesToSuperview(excluding: .top, usingSafeArea: true)
     }
 
     private func customNavBar() {
-        title = String(localized: "Planning")
+        title = trip.tripName
 
-        let chatRoomButton = UIBarButtonItem(image: UIImage(systemName: "person.2"), style: .plain, target: self, action: #selector(openChatRoom))
-        navigationItem.rightBarButtonItem = chatRoomButton
+        let chatRoomButton = UIBarButtonItem(
+            image: UIImage(systemName: "person.2"),
+            style: .plain,
+            target: self,
+            action: #selector(openChatRoom))
+        let editListButton = UIBarButtonItem(
+            image: UIImage(systemName: "list.bullet.clipboard"),
+            style: .plain,
+            target: self,
+            action: #selector(openEditList))
+        navigationItem.rightBarButtonItems = [chatRoomButton, editListButton]
     }
 
-    @objc func openChatRoom(_ sender: UIButton) {
+    @objc func openChatRoom(_ sender: UIBarButtonItem) {
         // Check if room exist in FireStore
         let chatVC = ChatRoomViewController()
         let nav = UINavigationController(rootViewController: chatVC)
@@ -61,51 +100,34 @@ class EditTripViewController: UIViewController {
         present(nav, animated: true)
     }
 
-    private func createLayout() -> UICollectionViewCompositionalLayout {
-        return UICollectionViewCompositionalLayout { [weak self] section, _ in
-            guard let self = self else { fatalError("Failed to create layout") }
+    @objc func openEditList(_ sender: UIBarButtonItem) {
+        print("Open edit list view")
+    }
 
-            let sectionType = self.dataSource.snapshot().sectionIdentifiers[section]
-            switch sectionType {
-            case .unarranged:
-                return self.configUnarrangedSectionLayout()
-            case .calendar:
-                return self.configCalendarSectionLayout()
-            case .inOrder:
-                return self.configInOrderSectionLayout()
+    private func convertDateToDisplay() -> [Schedule] {
+        let dayRange = 0...trip.duration
+        let travelDays = dayRange.map { range in
+            // swiftlint: disable force_unwrapping
+            Calendar.current.date(byAdding: .day, value: range, to: trip.startDate)!
+            // swiftlint: enable force_unwrapping
+        }
+
+        let schedule = travelDays.map { date in
+            let component = Calendar.current.dateComponents([.day, .weekday], from: date)
+
+            if let day = component.day, let weekday = component.weekday {
+                let weekDaySymbol = Calendar.current.shortWeekdaySymbols[weekday - 1]
+
+                return Schedule(day: day, weekday: weekDaySymbol)
+            } else {
+                return Schedule(day: 0, weekday: "")
             }
         }
+
+        return schedule
     }
 
-    private func configUnarrangedSectionLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(100),
-            heightDimension: .absolute(125))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuous
-        section.interGroupSpacing = 12
-        section.contentInsets = .init(top: 8, leading: 16, bottom: 8, trailing: 16)
-
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(50))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .topLeading)
-        section.boundarySupplementaryItems = [header]
-
-        return section
-    }
-
-    private func configInOrderSectionLayout() -> NSCollectionLayoutSection {
+    private func createLayout() -> UICollectionViewCompositionalLayout {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0))
@@ -120,111 +142,27 @@ class EditTripViewController: UIViewController {
         section.interGroupSpacing = 12
         section.contentInsets = .init(top: 8, leading: 16, bottom: 8, trailing: 16)
 
-        return section
-    }
-
-    private func configCalendarSectionLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(44),
-            heightDimension: .absolute(60))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-        let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 12
-        section.contentInsets = .init(top: 8, leading: 16, bottom: 8, trailing: 16)
-        section.orthogonalScrollingBehavior = .continuous
-
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(50))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .topLeading)
-        section.boundarySupplementaryItems = [header]
-
-        return section
+        return UICollectionViewCompositionalLayout(section: section)
     }
 
     private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, _ in
-            guard let self = self else { return UICollectionViewCell() }
-            let section = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
-
-            switch section {
-            case .unarranged:
-                guard let cityCell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: PopularCityCollectionViewCell.identifier,
-                    for: indexPath) as? PopularCityCollectionViewCell
-                else {
-                    fatalError("Failed to dequeue cityCell")
-                }
-
-                return cityCell
-
-            case .calendar:
-                guard let calendarCell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: CalendarCell.identifier,
-                    for: indexPath) as? CalendarCell
-                else {
-                    fatalError("Failed to dequeue cityCell")
-                }
-
-                return calendarCell
-
-            case .inOrder:
-                guard let arrangeCell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: ArrangePlaceCell.identifier,
-                    for: indexPath) as? ArrangePlaceCell
-                else {
-                    fatalError("Failed to dequeue cityCell")
-                }
-
-                return arrangeCell
-            }
-        }
-
-        configSupplementaryView()
-    }
-
-    private func configSupplementaryView() {
-        dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath -> UICollectionReusableView? in
-            guard let self = self else { return nil }
-            guard let headerView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: PopularCityHeaderView.identifier,
-                for: indexPath) as? PopularCityHeaderView
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, item in
+            guard let arrangeCell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ArrangePlaceCell.identifier,
+                for: indexPath) as? ArrangePlaceCell
             else {
-                return nil
+                fatalError("Failed to dequeue cityCell")
             }
 
-            headerView.titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
-            let section = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
-
-            switch section {
-            case .unarranged:
-                headerView.titleLabel.text = "Not arrange"
-            case .calendar:
-                headerView.titleLabel.text = "In order"
-            case .inOrder:
-                return nil
-            }
-            return headerView
+            return arrangeCell
         }
     }
 
     private func updateSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
+        snapshot.appendSections([.main])
 
-        snapshot.appendSections([.unarranged, .calendar, .inOrder])
-        snapshot.appendItems(Array(1...20), toSection: .unarranged)
-        snapshot.appendItems(Array(41...55), toSection: .calendar)
-        snapshot.appendItems(Array(21...40), toSection: .inOrder)
+        snapshot.appendItems(Array(1...20))
 
         dataSource.apply(snapshot)
     }

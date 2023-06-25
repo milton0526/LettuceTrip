@@ -217,14 +217,13 @@ extension DiscoverViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         guard
             let annotation = view.annotation,
-            annotation.isKind(of: MKMapFeatureAnnotation.self),
-            let title = annotation.title,
-            let placeName = title
+            let featureAnnotation = annotation as? MKMapFeatureAnnotation
         else {
+            print("Failed to cast as MKMapFeatureAnnotation")
             return
         }
 
-        let detailVC = PlaceDetailViewController(name: placeName, location: annotation.coordinate)
+        let detailVC = PlaceDetailViewController(place: featureAnnotation)
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }

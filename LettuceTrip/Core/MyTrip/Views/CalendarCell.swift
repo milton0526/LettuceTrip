@@ -22,7 +22,6 @@ class CalendarCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 14)
         label.textColor = .white
-        label.text = "Mo"
         return label
     }()
 
@@ -30,7 +29,6 @@ class CalendarCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 14)
         label.textColor = .white
-        label.text = "15"
         return label
     }()
 
