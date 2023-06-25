@@ -124,7 +124,9 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         let place = places[indexPath.item]
-        print(place.name)
-        // Show edit options such as arrange time and memo
+
+        let arrangeVC = ArrangePlaceViewController()
+        arrangeVC.place = place
+        navigationController?.pushViewController(arrangeVC, animated: true)
     }
 }

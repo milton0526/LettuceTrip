@@ -34,4 +34,8 @@ struct Place: Codable, Hashable {
     let iconImage: Data
     var isArrange: Bool
     var arrangedTime: Date?
+
+    var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
+    }
 }
