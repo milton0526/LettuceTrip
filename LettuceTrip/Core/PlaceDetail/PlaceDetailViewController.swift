@@ -144,7 +144,9 @@ class PlaceDetailViewController: UIViewController {
                         title: trip.tripName,
                         style: .default) { [weak self] _ in
                             guard let self = self else { return }
-                            FireStoreService.shared.updatePlace(self.place, to: trip)
+                            FireStoreService.shared.updatePlace(self.place, to: trip) { _ in
+                                // tell user if this place add to trip list
+                            }
                     }
                     actionSheet.addAction(action)
                 }

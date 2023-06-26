@@ -7,9 +7,13 @@
 
 import UIKit
 
+protocol ScheduleViewDelegate: AnyObject {
+    func didSelectedDate(_ view: ScheduleView, selectedDate: Date)
+}
+
 class ScheduleView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
 
-    var schedules: [EditTripViewController.Schedule] = [] {
+    var schedules: [Date] = [] {
         didSet {
             collectionView.reloadData()
         }
@@ -27,6 +31,8 @@ class ScheduleView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         return collectionView
     }()
 
+    weak var delegate: ScheduleViewDelegate?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .systemBackground
@@ -40,7 +46,8 @@ class ScheduleView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
 
     // MARK: - Delegate method
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Schedule cell clicked.")
+        let selectedDate = schedules[indexPath.item]
+        delegate?.didSelectedDate(self, selectedDate: selectedDate)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -68,7 +75,7 @@ class ScheduleView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
             fatalError("Failed to dequeue cityCell")
         }
 
-        let schedule = schedules[indexPath.item]
+        let schedule = schedules[indexPath.item].displayDate()
         calendarCell.dayLabel.text = String(describing: schedule.day)
         calendarCell.weekLabel.text = schedule.weekday
 

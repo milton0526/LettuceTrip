@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 import TinyConstraints
 
 class EditTripViewController: UIViewController {
@@ -23,11 +24,6 @@ class EditTripViewController: UIViewController {
 
     enum Section {
         case main
-    }
-
-    struct Schedule {
-        let day: Int
-        let weekday: String
     }
 
     lazy var imageView: UIImageView = {
@@ -48,7 +44,10 @@ class EditTripViewController: UIViewController {
         return collectionView
     }()
 
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Int>!
+    private var listener: ListenerRegistration?
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Place>!
+    private var places: [Place] = []
+    private var filterPlaces: [Place] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,13 +55,20 @@ class EditTripViewController: UIViewController {
         customNavBar()
         setupUI()
         scheduleView.schedules = convertDateToDisplay()
+        scheduleView.delegate = self
         configureDataSource()
-        updateSnapshot()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         scheduleView.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .centeredVertically)
+        fetchPlaces()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        listener?.remove()
+        listener = nil
     }
 
     private func setupUI() {
@@ -81,6 +87,27 @@ class EditTripViewController: UIViewController {
         collectionView.edgesToSuperview(excluding: .top, usingSafeArea: true)
     }
 
+    private func fetchPlaces() {
+        guard let tripID = trip.id else { return }
+        places.removeAll(keepingCapacity: true)
+
+        listener = FireStoreService.shared.addListenerInTripPlaces(tripId: tripID, isArrange: true) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let place):
+                guard let place = place else { return }
+                self.places.append(place)
+
+                DispatchQueue.main.async {
+                    self.updateSnapshot(by: self.trip.startDate)
+                }
+            case .failure(let error):
+                self.showAlertToUser(error: error)
+            }
+        }
+    }
+
     private func customNavBar() {
         title = trip.tripName
 
@@ -93,7 +120,7 @@ class EditTripViewController: UIViewController {
             image: UIImage(systemName: "list.bullet.clipboard"),
             style: .plain,
             target: self,
-            action: #selector(openEditList))
+            action: #selector(openWishList))
         navigationItem.rightBarButtonItems = [chatRoomButton, editListButton]
     }
 
@@ -105,32 +132,22 @@ class EditTripViewController: UIViewController {
         present(nav, animated: true)
     }
 
-    @objc func openEditList(_ sender: UIBarButtonItem) {
+    @objc func openWishList(_ sender: UIBarButtonItem) {
         let wishVC = WishListViewController(trip: trip)
         navigationController?.pushViewController(wishVC, animated: true)
     }
 
-    private func convertDateToDisplay() -> [Schedule] {
+    private func convertDateToDisplay() -> [Date] {
         let dayRange = 0...trip.duration
-        let travelDays = dayRange.map { range in
-            // swiftlint: disable force_unwrapping
-            Calendar.current.date(byAdding: .day, value: range, to: trip.startDate)!
-            // swiftlint: enable force_unwrapping
-        }
-
-        let schedule = travelDays.map { date in
-            let component = Calendar.current.dateComponents([.day, .weekday], from: date)
-
-            if let day = component.day, let weekday = component.weekday {
-                let weekDaySymbol = Calendar.current.shortWeekdaySymbols[weekday - 1]
-
-                return Schedule(day: day, weekday: weekDaySymbol)
+        let travelDays = dayRange.map { range -> Date in
+            if let components = Calendar.current.date(byAdding: .day, value: range, to: trip.startDate)?.resetHourAndMinute() {
+                return components
             } else {
-                return Schedule(day: 0, weekday: "")
+                return Date()
             }
         }
 
-        return schedule
+        return travelDays
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
@@ -160,15 +177,19 @@ class EditTripViewController: UIViewController {
                 fatalError("Failed to dequeue cityCell")
             }
 
+            arrangeCell.config(with: item)
             return arrangeCell
         }
     }
 
-    private func updateSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
+    private func updateSnapshot(by date: Date) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Place>()
         snapshot.appendSections([.main])
 
-        snapshot.appendItems(Array(1...20))
+        let filterResults = places.filter { $0.arrangedTime?.resetHourAndMinute() == date.resetHourAndMinute() }
+        filterPlaces = filterResults.sorted { $0.arrangedTime! < $1.arrangedTime! }
+
+        snapshot.appendItems(filterPlaces)
         dataSource.apply(snapshot)
     }
 }
@@ -176,5 +197,12 @@ class EditTripViewController: UIViewController {
 // MARK: - CollectionView Delegate
 extension EditTripViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    }
+}
+
+// MARK: - ScheduleView Delegate
+extension EditTripViewController: ScheduleViewDelegate {
+    func didSelectedDate(_ view: ScheduleView, selectedDate: Date) {
+        updateSnapshot(by: selectedDate)
     }
 }

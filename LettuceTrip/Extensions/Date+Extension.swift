@@ -18,5 +18,14 @@ extension Date {
         return calendar.date(from: components)
     }
 
-    
+    func displayDate() -> (day: Int, weekday: String) {
+        let component = Calendar.current.dateComponents([.day, .weekday], from: self)
+
+        if let day = component.day, let weekday = component.weekday {
+            let weekDaySymbol = Calendar.current.shortWeekdaySymbols[weekday - 1]
+            return (day, weekDaySymbol)
+        } else {
+            return (0, "")
+        }
+    }
 }

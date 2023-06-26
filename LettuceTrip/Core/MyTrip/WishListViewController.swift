@@ -48,8 +48,7 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         fetchPlaces()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    deinit {
         listener?.remove()
         listener = nil
     }
@@ -76,13 +75,14 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         guard let tripID = trip.id else { return }
         places.removeAll(keepingCapacity: true)
 
-        listener = FireStoreService.shared.addListenerInTripPlaces(tripId: tripID) { [weak self] result in
+        listener = FireStoreService.shared.addListenerInTripPlaces(tripId: tripID, isArrange: false) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
             case .success(let place):
-                guard let place = place else { return }
-                self.places.append(place)
+                if let place = place {
+                    self.places.append(place)
+                }
 
                 DispatchQueue.main.async {
                     self.updateSnapshot()

@@ -88,8 +88,15 @@ class ArrangePlaceViewController: UIViewController {
         place.memo = arrangement.memo
 
         // Update fireStore document
-        FireStoreService.shared.updatePlace(place, to: trip, update: true)
-        navigationController?.popViewController(animated: true)
+        FireStoreService.shared.updatePlace(place, to: trip, update: true) { [weak self] state in
+            guard let self = self else { return }
+            if state {
+                self.navigationController?.popViewController(animated: true)
+            } else {
+                // Show error message to user.
+            }
+        }
+
     }
 
     private func setupUI() {

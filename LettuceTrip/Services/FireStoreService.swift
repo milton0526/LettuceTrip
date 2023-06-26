@@ -39,7 +39,7 @@ class FireStoreService {
         }
     }
 
-    func updatePlace(_ place: Place, to trip: Trip, update: Bool = false) {
+    func updatePlace(_ place: Place, to trip: Trip, update: Bool = false, completion: @escaping (Bool) -> Void) {
         guard let tripID = trip.id else { return }
         let ref = database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.places.rawValue)
 
@@ -50,8 +50,10 @@ class FireStoreService {
             } else {
                 try ref.addDocument(from: place)
             }
+            completion(true)
             print("Successfully add new place at tripID: \(tripID)")
         } catch {
+            completion(false)
             print("Failed to add new place at tripID: \(tripID)")
         }
     }
@@ -108,13 +110,13 @@ class FireStoreService {
             }
     }
 
-    func addListenerInTripPlaces(tripId: String, completion: @escaping (Result<Place?, Error>) -> Void) -> ListenerRegistration {
+    func addListenerInTripPlaces(tripId: String, isArrange: Bool = true, completion: @escaping (Result<Place?, Error>) -> Void) -> ListenerRegistration {
         let ref = database.collection(CollectionRef.trips.rawValue)
 
         let listener = ref
             .document(tripId)
             .collection(CollectionRef.places.rawValue)
-            .whereField("isArrange", isEqualTo: false)
+            .whereField("isArrange", isEqualTo: isArrange)
             .addSnapshotListener { snapshot, error in
                 if let error = error {
                     print("Error getting documents")
@@ -128,7 +130,7 @@ class FireStoreService {
                             let place = try? diff.document.data(as: Place.self)
                             completion(.success(place))
                         case .modified, .removed:
-                            print("Something has been modify.")
+                            completion(.success(nil))
                         }
                     }
                 }

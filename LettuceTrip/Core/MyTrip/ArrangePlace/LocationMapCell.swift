@@ -31,7 +31,7 @@ class LocationMapCell: UITableViewCell {
     }
 
     func config(with place: Place) {
-        let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: place.coordinate))
+        // let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: place.coordinate))
         let region = MKCoordinateRegion(
             center: place.coordinate,
             latitudinalMeters: 1000,

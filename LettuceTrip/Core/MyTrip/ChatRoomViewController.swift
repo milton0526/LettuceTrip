@@ -64,7 +64,6 @@ class ChatRoomViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        chatMessages.removeAll()
         listener?.remove()
         listener = nil
     }
