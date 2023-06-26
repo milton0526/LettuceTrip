@@ -70,7 +70,7 @@ class ArrangePlaceCell: UICollectionViewCell {
         lineView.centerYToSuperview()
 
         toTimeLabel.topToBottom(of: lineView, offset: 8)
-        toTimeLabel.leading(to: fromTimeLabel)
+        toTimeLabel.centerX(to: fromTimeLabel)
         toTimeLabel.bottomToSuperview(offset: -8)
 
         placeLabel.centerYToSuperview()
