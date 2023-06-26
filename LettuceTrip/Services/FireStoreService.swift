@@ -39,12 +39,17 @@ class FireStoreService {
         }
     }
 
-    func addPlace(_ place: Place, to trip: Trip) {
+    func updatePlace(_ place: Place, to trip: Trip, update: Bool = false) {
         guard let tripID = trip.id else { return }
         let ref = database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.places.rawValue)
 
         do {
-            try ref.addDocument(from: place)
+            if update {
+                guard let placeID = place.id else { return }
+                try ref.document(placeID).setData(from: place, merge: true)
+            } else {
+                try ref.addDocument(from: place)
+            }
             print("Successfully add new place at tripID: \(tripID)")
         } catch {
             print("Failed to add new place at tripID: \(tripID)")
@@ -103,29 +108,6 @@ class FireStoreService {
             }
     }
 
-    func fetchTripChatRoom(id: String, completion: @escaping (Result<[Message], Error>) -> Void) {
-        let ref = database.collection(CollectionRef.trips.rawValue)
-        var chatRoom: [Message] = []
-
-        ref.document(id).collection(CollectionRef.chatRoom.rawValue).getDocuments { snapshot, error in
-            if let error = error {
-                print("Error getting documents")
-                completion(.failure(error))
-            } else {
-                guard let snapshot = snapshot else { return }
-                snapshot.documents.forEach { document in
-                    do {
-                        let result = try document.data(as: Message.self)
-                        chatRoom.append(result)
-                    } catch {
-                        completion(.failure(error))
-                    }
-                }
-                completion(.success(chatRoom))
-            }
-        }
-    }
-
     func addListenerInTripPlaces(tripId: String, completion: @escaping (Result<Place?, Error>) -> Void) -> ListenerRegistration {
         let ref = database.collection(CollectionRef.trips.rawValue)
 
@@ -145,10 +127,8 @@ class FireStoreService {
                         case .added:
                             let place = try? diff.document.data(as: Place.self)
                             completion(.success(place))
-
                         case .modified, .removed:
-                            // remove from view then add to arrange section
-                            break
+                            print("Something has been modify.")
                         }
                     }
                 }

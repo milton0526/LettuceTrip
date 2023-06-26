@@ -26,7 +26,6 @@ class FriendMessageCell: UICollectionViewCell {
         textView.textContainerInset = .init(top: 8, left: 8, bottom: 8, right: 8)
         textView.layer.cornerRadius = 12
         textView.layer.masksToBounds = true
-        textView.text = "你覺得我們是好朋友嗎？\n我認為你想太多了吧🤣"
         return textView
     }()
 

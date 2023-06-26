@@ -28,7 +28,7 @@ class PlaceDetailViewController: UIViewController {
         }
     }
 
-    let place: MKMapFeatureAnnotation
+    let place: Place
     private var fqPlaceDetail: FQPlace?
 
     lazy var tableView: UITableView = {
@@ -63,7 +63,7 @@ class PlaceDetailViewController: UIViewController {
 
     private let fqService = FQService()
 
-    init(place: MKMapFeatureAnnotation) {
+    init(place: Place) {
         self.place = place
         super.init(nibName: nil, bundle: nil)
     }
@@ -75,7 +75,7 @@ class PlaceDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden = false
-        title = place.title
+        title = place.name
         view.backgroundColor = .systemBackground
         setupUI()
         // fetchDetails()
@@ -94,9 +94,7 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private func fetchDetails() {
-        guard let name = place.title else { return }
-
-        fqService.placeSearch(name: name, coordinate: place.coordinate) { [weak self] result in
+        fqService.placeSearch(name: place.name, coordinate: place.coordinate) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let place):
@@ -126,23 +124,6 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private func showActionSheet(form trips: [Trip]) {
-        guard
-            let name = place.title,
-            let image = place.iconStyle?.image,
-            let icon = image.pngData()
-        else {
-            return
-        }
-
-        let location = place.coordinate
-
-        let place = Place(
-            name: name,
-            location: .init(
-                latitude: location.latitude,
-                longitude: location.longitude),
-            iconImage: icon,
-            isArrange: false)
 
         let actionSheet = UIAlertController(
             title: String(localized: "Add this place into trip"),
@@ -161,8 +142,9 @@ class PlaceDetailViewController: UIViewController {
                 .forEach { trip in
                     let action = UIAlertAction(
                         title: trip.tripName,
-                        style: .default) { _ in
-                            FireStoreService.shared.addPlace(place, to: trip)
+                        style: .default) { [weak self] _ in
+                            guard let self = self else { return }
+                            FireStoreService.shared.updatePlace(self.place, to: trip)
                     }
                     actionSheet.addAction(action)
                 }
@@ -246,7 +228,6 @@ extension PlaceDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
             let section = Section(rawValue: indexPath.section),
-            let name = place.title,
             let fqPlace = fqPlaceDetail
         else {
             return UITableViewCell()
@@ -259,7 +240,7 @@ extension PlaceDetailViewController: UITableViewDataSource {
             }
 
             let info = PlaceInfoCellViewModel(
-                name: name,
+                name: place.name,
                 address: fqPlace.location.address,
                 rating: fqPlace.rating ?? 0)
             infoCell.config(with: info)

@@ -10,7 +10,9 @@ import TinyConstraints
 
 class ArrangePlaceViewController: UIViewController {
 
+    var trip: Trip?
     var place: Place?
+    var editMode = true
 
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -61,11 +63,40 @@ class ArrangePlaceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        title = place?.name
+
+        let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(savePlace))
+        navigationItem.rightBarButtonItem = saveButton
         setupUI()
     }
 
+    @objc func savePlace(_ sender: UIBarButtonItem) {
+        guard
+            let trip = trip,
+            var place = place
+        else {
+            return
+        }
+
+        let indexPath = IndexPath(row: 1, section: 0)
+
+        guard let cell = tableView.cellForRow(at: indexPath) as? ArrangePlaceDetailCell else { return }
+        let arrangement = cell.passData()
+        place.isArrange = true
+        place.arrangedTime = arrangement.arrangedTime
+        place.duration = arrangement.duration
+        place.memo = arrangement.memo
+
+        // Update fireStore document
+        FireStoreService.shared.updatePlace(place, to: trip, update: true)
+        navigationController?.popViewController(animated: true)
+    }
+
     private func setupUI() {
-        stackView.addArrangedSubview(navigateButton)
+        if !editMode {
+            stackView.addArrangedSubview(navigateButton)
+        }
+
         stackView.addArrangedSubview(moreDetailButton)
 
         view.addSubview(tableView)
@@ -116,6 +147,10 @@ extension ArrangePlaceViewController: UITableViewDataSource {
                 for: indexPath) as? ArrangePlaceDetailCell
             else {
                 fatalError("Failed to dequeue map cell.")
+            }
+
+            if let trip = trip {
+                detailCell.config(with: trip)
             }
 
             return detailCell

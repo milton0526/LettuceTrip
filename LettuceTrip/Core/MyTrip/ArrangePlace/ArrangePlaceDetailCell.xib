@@ -32,6 +32,9 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="zjH-r4-P46"/>
                                 </constraints>
+                                <connections>
+                                    <action selector="fromDatePickerChanged:" destination="KGk-i7-Jjw" eventType="valueChanged" id="fy5-Qh-JTT"/>
+                                </connections>
                             </datePicker>
                         </subviews>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
@@ -86,13 +89,12 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="R4f-Lh-RQv">
-                                <rect key="frame" x="12" y="36" width="268" height="160"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="R4f-Lh-RQv">
+                                <rect key="frame" x="12" y="36" width="259.33333333333331" height="160"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="160" id="Kb7-ch-ub6"/>
                                 </constraints>
-                                <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -101,6 +103,7 @@
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="R4f-Lh-RQv" firstAttribute="top" secondItem="WVG-UB-x6W" secondAttribute="bottom" constant="8" id="Tsk-ma-rZf"/>
+                            <constraint firstItem="R4f-Lh-RQv" firstAttribute="width" secondItem="Iti-sS-LyR" secondAttribute="width" multiplier="0.9" id="qjh-ak-2yg"/>
                         </constraints>
                         <directionalEdgeInsets key="directionalLayoutMargins" top="8" leading="12" bottom="4" trailing="8"/>
                         <userDefinedRuntimeAttributes>
@@ -125,6 +128,11 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="fromDatePicker" destination="RB0-dT-lZX" id="aLR-Qa-YjC"/>
+                <outlet property="memoTextView" destination="R4f-Lh-RQv" id="pk7-nu-qUx"/>
+                <outlet property="toDatePicker" destination="JTS-aU-aFA" id="cFn-6W-Ezt"/>
+            </connections>
             <point key="canvasLocation" x="109.9236641221374" y="157.04225352112678"/>
         </tableViewCell>
     </objects>

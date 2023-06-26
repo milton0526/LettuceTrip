@@ -223,7 +223,25 @@ extension DiscoverViewController: MKMapViewDelegate {
             return
         }
 
-        let detailVC = PlaceDetailViewController(place: featureAnnotation)
+        guard
+            let name = featureAnnotation.title,
+            let image = featureAnnotation.iconStyle?.image,
+            let icon = image.pngData()
+        else {
+            return
+        }
+
+        let location = featureAnnotation.coordinate
+
+        let place = Place(
+            name: name,
+            location: .init(
+                latitude: location.latitude,
+                longitude: location.longitude),
+            iconImage: icon,
+            isArrange: false)
+
+        let detailVC = PlaceDetailViewController(place: place)
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }

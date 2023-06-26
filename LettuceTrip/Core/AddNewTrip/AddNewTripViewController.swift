@@ -136,10 +136,11 @@ class AddNewTripViewController: UIViewController {
         }
 
         // Duration need to subtract by 1, because the first is not calculate
-        let startDate = datePicker.date
+        let startDate = datePicker.date.resetHourAndMinute()
         guard
             let duration = Int(durationField),
             duration > 0,
+            let startDate = startDate,
             let endDate = Calendar.current.date(byAdding: .day, value: duration - 1, to: startDate),
             let selectedCity = selectedCity,
             let user = UserDefaults.standard.string(forKey: "userID")

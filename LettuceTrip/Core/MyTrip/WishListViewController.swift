@@ -41,6 +41,10 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         title = String(localized: "Wish List")
         setupUI()
         configDataSource()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchPlaces()
     }
 
@@ -70,6 +74,7 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
 
     private func fetchPlaces() {
         guard let tripID = trip.id else { return }
+        places.removeAll(keepingCapacity: true)
 
         listener = FireStoreService.shared.addListenerInTripPlaces(tripId: tripID) { [weak self] result in
             guard let self = self else { return }
@@ -126,6 +131,7 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         let place = places[indexPath.item]
 
         let arrangeVC = ArrangePlaceViewController()
+        arrangeVC.trip = trip
         arrangeVC.place = place
         navigationController?.pushViewController(arrangeVC, animated: true)
     }
