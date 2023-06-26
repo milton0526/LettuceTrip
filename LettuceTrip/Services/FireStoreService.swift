@@ -39,14 +39,21 @@ class FireStoreService {
         }
     }
 
-    func addPlace(_ place: Place, to trip: Trip) {
+    func updatePlace(_ place: Place, to trip: Trip, update: Bool = false, completion: @escaping (Bool) -> Void) {
         guard let tripID = trip.id else { return }
         let ref = database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.places.rawValue)
 
         do {
-            try ref.addDocument(from: place)
+            if update {
+                guard let placeID = place.id else { return }
+                try ref.document(placeID).setData(from: place, merge: true)
+            } else {
+                try ref.addDocument(from: place)
+            }
+            completion(true)
             print("Successfully add new place at tripID: \(tripID)")
         } catch {
+            completion(false)
             print("Failed to add new place at tripID: \(tripID)")
         }
     }
@@ -103,50 +110,32 @@ class FireStoreService {
             }
     }
 
-    func fetchTripChatRoom(id: String, completion: @escaping (Result<[Message], Error>) -> Void) {
+    func addListenerInTripPlaces(tripId: String, isArrange: Bool = true, completion: @escaping (Result<Place?, Error>) -> Void) -> ListenerRegistration {
         let ref = database.collection(CollectionRef.trips.rawValue)
-        var chatRoom: [Message] = []
 
-        ref.document(id).collection(CollectionRef.chatRoom.rawValue).getDocuments { snapshot, error in
-            if let error = error {
-                print("Error getting documents")
-                completion(.failure(error))
-            } else {
-                guard let snapshot = snapshot else { return }
-                snapshot.documents.forEach { document in
-                    do {
-                        let result = try document.data(as: Message.self)
-                        chatRoom.append(result)
-                    } catch {
-                        completion(.failure(error))
+        let listener = ref
+            .document(tripId)
+            .collection(CollectionRef.places.rawValue)
+            .whereField("isArrange", isEqualTo: isArrange)
+            .addSnapshotListener { snapshot, error in
+                if let error = error {
+                    print("Error getting documents")
+                    completion(.failure(error))
+                } else {
+                    guard let snapshot = snapshot else { return }
+
+                    snapshot.documentChanges.forEach { diff in
+                        switch diff.type {
+                        case .added:
+                            let place = try? diff.document.data(as: Place.self)
+                            completion(.success(place))
+                        case .modified, .removed:
+                            completion(.success(nil))
+                        }
                     }
                 }
-                completion(.success(chatRoom))
             }
-        }
-    }
-
-    func fetchTripPlaces(id: String, completion: @escaping (Result<[Place], Error>) -> Void) {
-        let ref = database.collection(CollectionRef.trips.rawValue)
-        var chatRoom: [Place] = []
-
-        ref.document(id).collection(CollectionRef.places.rawValue).getDocuments { snapshot, error in
-            if let error = error {
-                print("Error getting documents")
-                completion(.failure(error))
-            } else {
-                guard let snapshot = snapshot else { return }
-                snapshot.documents.forEach { document in
-                    do {
-                        let result = try document.data(as: Place.self)
-                        chatRoom.append(result)
-                    } catch {
-                        completion(.failure(error))
-                    }
-                }
-                completion(.success(chatRoom))
-            }
-        }
+        return listener
     }
 
     func addListenerToChatRoom(by tripID: String = "uxd7ge3gIVMnBu2jvJBs", completion: @escaping (Result<Message?, Error>) -> Void) -> ListenerRegistration {
@@ -176,19 +165,4 @@ class FireStoreService {
             }
         return listener
     }
-
-//    func checkChatRoomExist(by tripID: String = "") {
-//        let ref = database.collection(CollectionRef.trips.rawValue)
-//
-//        ref.document("uxd7ge3gIVMnBu2jvJBs").collection(CollectionRef.chatRoom.rawValue)
-//            .limit(to: 1)
-//            .getDocuments { querySnapshot, error in
-//                if let error = error {
-//                    print("Error check ChatRoom Exis.t")
-//                }
-//
-//
-//            }
-//
-//    }
 }

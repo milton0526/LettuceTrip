@@ -139,7 +139,11 @@ extension MyTripViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let editVC = EditTripViewController()
+        let trip = currentSegment == .upcoming
+        ? upcomingTrips[indexPath.row]
+        : closedTrips[indexPath.row]
+
+        let editVC = EditTripViewController(trip: trip)
         navigationController?.pushViewController(editVC, animated: true)
     }
 }

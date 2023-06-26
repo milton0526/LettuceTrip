@@ -46,7 +46,6 @@ class ChatRoomViewController: UIViewController {
         }
     }
     private var listener: ListenerRegistration?
-    private var isFirstLoading = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,7 +64,6 @@ class ChatRoomViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        chatMessages.removeAll()
         listener?.remove()
         listener = nil
     }
@@ -150,9 +148,8 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, message in
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, message in
             guard
-                let self = self,
                 let userMSGCell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: UserMessageCell.identifier,
                     for: indexPath) as? UserMessageCell,
@@ -166,8 +163,6 @@ class ChatRoomViewController: UIViewController {
             guard let userID = UserDefaults.standard.string(forKey: "userID") else {
                 fatalError("No user login.")
             }
-
-            let message = self.chatMessages[indexPath.row]
 
             if message.userID == userID {
                 userMSGCell.config(with: message)

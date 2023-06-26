@@ -127,24 +127,32 @@ class AddNewTripViewController: UIViewController {
         guard
             let tripName = tripNameTextField.text,
             let destination = destinationTextField.text,
-            let duration = durationTextField.text,
+            let durationField = durationTextField.text,
             !tripName.isEmpty,
             !destination.isEmpty,
-            !duration.isEmpty,
-            let future = Double(duration),
+            !durationField.isEmpty
+        else {
+            return
+        }
+
+        // Duration need to subtract by 1, because the first is not calculate
+        let startDate = datePicker.date.resetHourAndMinute()
+        guard
+            let duration = Int(durationField),
+            duration > 0,
+            let startDate = startDate,
+            let endDate = Calendar.current.date(byAdding: .day, value: duration - 1, to: startDate),
             let selectedCity = selectedCity,
             let user = UserDefaults.standard.string(forKey: "userID")
         else {
             return
         }
 
-        let startDate = datePicker.date
-        let endDate = startDate.addingTimeInterval(future * 86400)
         let latitude = selectedCity.placemark.coordinate.latitude
         let longitude = selectedCity.placemark.coordinate.longitude
         let city = GeoPoint(latitude: latitude, longitude: longitude)
 
-        let trip = Trip(tripName: tripName, startDate: startDate, endDate: endDate, destination: city, members: [user])
+        let trip = Trip(tripName: tripName, startDate: startDate, endDate: endDate, duration: duration - 1, destination: city, members: [user])
 
         // upload to firebase
         FireStoreService.shared.addDocument(at: .trips, data: trip)

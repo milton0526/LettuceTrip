@@ -28,10 +28,8 @@ class PlaceDetailViewController: UIViewController {
         }
     }
 
-    let name: String
-    let location: CLLocationCoordinate2D
-
-    private var place: FQPlace?
+    let place: Place
+    private var fqPlaceDetail: FQPlace?
 
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -65,9 +63,8 @@ class PlaceDetailViewController: UIViewController {
 
     private let fqService = FQService()
 
-    init(name: String, location: CLLocationCoordinate2D) {
-        self.name = name
-        self.location = location
+    init(place: Place) {
+        self.place = place
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -78,10 +75,10 @@ class PlaceDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden = false
-        title = name
+        title = place.name
         view.backgroundColor = .systemBackground
         setupUI()
-        fetchDetails()
+        // fetchDetails()
     }
 
 
@@ -97,11 +94,11 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private func fetchDetails() {
-        fqService.placeSearch(name: name, coordinate: location) { [weak self] result in
+        fqService.placeSearch(name: place.name, coordinate: place.coordinate) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let place):
-                    self?.place = place
+                    self?.fqPlaceDetail = place
                     self?.tableView.reloadData()
                 case .failure(let error):
                     self?.showAlertToUser(error: error)
@@ -127,7 +124,6 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private func showActionSheet(form trips: [Trip]) {
-        let place = Place(name: name, location: .init(latitude: location.latitude, longitude: location.longitude))
 
         let actionSheet = UIAlertController(
             title: String(localized: "Add this place into trip"),
@@ -146,8 +142,11 @@ class PlaceDetailViewController: UIViewController {
                 .forEach { trip in
                     let action = UIAlertAction(
                         title: trip.tripName,
-                        style: .default) { _ in
-                            FireStoreService.shared.addPlace(place, to: trip)
+                        style: .default) { [weak self] _ in
+                            guard let self = self else { return }
+                            FireStoreService.shared.updatePlace(self.place, to: trip) { _ in
+                                // tell user if this place add to trip list
+                            }
                     }
                     actionSheet.addAction(action)
                 }
@@ -231,7 +230,7 @@ extension PlaceDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
             let section = Section(rawValue: indexPath.section),
-            let place = place
+            let fqPlace = fqPlaceDetail
         else {
             return UITableViewCell()
         }
@@ -243,9 +242,9 @@ extension PlaceDetailViewController: UITableViewDataSource {
             }
 
             let info = PlaceInfoCellViewModel(
-                name: name,
-                address: place.location.address,
-                rating: place.rating ?? 0)
+                name: place.name,
+                address: fqPlace.location.address,
+                rating: fqPlace.rating ?? 0)
             infoCell.config(with: info)
             return infoCell
 
@@ -255,9 +254,9 @@ extension PlaceDetailViewController: UITableViewDataSource {
             }
 
             let about = PlaceAboutCellViewModel(
-                businessStatus: place.hours?.openNow,
-                openingHours: place.hours?.display ?? "",
-                website: place.website)
+                businessStatus: fqPlace.hours?.openNow,
+                openingHours: fqPlace.hours?.display ?? "",
+                website: fqPlace.website)
 
             aboutCell.config(with: about)
 

@@ -10,6 +10,14 @@ import TinyConstraints
 
 class CalendarCell: UICollectionViewCell {
 
+    override var isSelected: Bool {
+        didSet {
+            stackView.backgroundColor = isSelected ? .tintColor : .secondarySystemBackground
+            weekLabel.textColor = isSelected ? .white : .systemGray
+            dayLabel.textColor = isSelected ? .white : .systemGray
+        }
+    }
+
     lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -21,16 +29,12 @@ class CalendarCell: UICollectionViewCell {
     lazy var weekLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 14)
-        label.textColor = .white
-        label.text = "Mo"
         return label
     }()
 
     lazy var dayLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 14)
-        label.textColor = .white
-        label.text = "15"
         return label
     }()
 
@@ -43,10 +47,14 @@ class CalendarCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        isSelected = false
+    }
+
     private func setupViews() {
         stackView.addArrangedSubview(weekLabel)
         stackView.addArrangedSubview(dayLabel)
-        stackView.backgroundColor = .systemTeal
         stackView.layer.cornerRadius = 10
         stackView.layer.masksToBounds = true
 

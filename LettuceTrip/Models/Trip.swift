@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MapKit
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
@@ -14,6 +15,7 @@ struct Trip: Codable {
     var tripName: String
     var startDate: Date
     var endDate: Date
+    var duration: Int
     var destination: GeoPoint
     var members: [String]
 }
@@ -25,9 +27,23 @@ struct Message: Codable, Hashable {
     @ServerTimestamp var sendTime: Date?
 }
 
-struct Place: Codable {
+struct Place: Codable, Hashable {
     @DocumentID var id: String?
     let name: String
     let location: GeoPoint
+    let iconImage: Data
+    var isArrange: Bool
     var arrangedTime: Date?
+    var duration: Double?
+    var memo: String?
+
+    var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
+    }
+}
+
+struct PlaceArrangement {
+    var arrangedTime: Date
+    var duration: Double
+    var memo: String
 }

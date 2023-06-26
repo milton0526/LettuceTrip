@@ -12,39 +12,28 @@ class ArrangePlaceCell: UICollectionViewCell {
 
     lazy var fromTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "9:00 am"
         label.font = .systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .systemGray
+        label.textColor = .label
         return label
     }()
 
     lazy var toTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "11:00 am"
         label.font = .systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .systemGray
+        label.textColor = .label
         return label
     }()
 
     lazy var placeLabel: UILabel = {
         let label = UILabel()
-        label.text = "Milano Park"
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textColor = .label
-        return label
-    }()
-
-    lazy var locationLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Sant Paulo, Milan, Italy"
-        label.font = .systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .systemGray
+        label.numberOfLines = 2
         return label
     }()
 
     lazy var iconImageView: UIImageView = {
-        let imageView = UIImageView(image: .init(systemName: "mappin.and.ellipse"))
-        imageView.tintColor = .label
+        let imageView = UIImageView(image: .init(systemName: "mappin.and.ellipse")?.withTintColor(.tintColor))
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -68,7 +57,7 @@ class ArrangePlaceCell: UICollectionViewCell {
     }
 
     private func setupViews() {
-        let subviews = [fromTimeLabel, toTimeLabel, lineView, placeLabel, locationLabel, iconImageView]
+        let subviews = [fromTimeLabel, toTimeLabel, lineView, placeLabel, iconImageView]
         subviews.forEach { contentView.addSubview($0) }
 
         fromTimeLabel.topToSuperview(offset: 8)
@@ -84,16 +73,22 @@ class ArrangePlaceCell: UICollectionViewCell {
         toTimeLabel.leading(to: fromTimeLabel)
         toTimeLabel.bottomToSuperview(offset: -8)
 
-        placeLabel.topToSuperview(offset: 12)
+        placeLabel.centerYToSuperview()
         placeLabel.leadingToTrailing(of: fromTimeLabel, offset: 24)
-        placeLabel.trailingToSuperview(offset: 16, relation: .equalOrGreater)
+        placeLabel.widthToSuperview(multiplier: 0.5)
 
-        iconImageView.leading(to: placeLabel)
-        iconImageView.size(.init(width: 10, height: 10))
-        iconImageView.bottomToSuperview(offset: -12)
+        iconImageView.size(.init(width: 35, height: 35))
+        iconImageView.centerYToSuperview()
+        iconImageView.trailingToSuperview(offset: 16)
+    }
 
-        locationLabel.centerY(to: iconImageView)
-        locationLabel.leadingToTrailing(of: iconImageView, offset: 8)
-        locationLabel.trailingToSuperview(offset: 16, relation: .equalOrGreater)
+    func config(with place: Place) {
+        guard let duration = place.duration else { return }
+        let toTime = place.arrangedTime?.addingTimeInterval(duration)
+
+        fromTimeLabel.text = place.arrangedTime?.formatted(date: .omitted, time: .shortened)
+        toTimeLabel.text = toTime?.formatted(date: .omitted, time: .shortened)
+        placeLabel.text = place.name
+        iconImageView.image = UIImage(data: place.iconImage)?.withTintColor(.tintColor)
     }
 }

@@ -6,54 +6,125 @@
 //
 
 import UIKit
+import FirebaseFirestore
 import TinyConstraints
 
 class EditTripViewController: UIViewController {
 
-    enum Section {
-        case unarranged
-        case calendar
-        case inOrder
+    let trip: Trip
+
+    init(trip: Trip) {
+        self.trip = trip
+        super.init(nibName: nil, bundle: nil)
     }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    enum Section {
+        case main
+    }
+
+    lazy var imageView: UIImageView = {
+        let imageView = UIImageView(image: .init(named: "placeholder2"))
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 34
+        imageView.layer.masksToBounds = true
+        return imageView
+    }()
+
+    lazy var scheduleView = ScheduleView()
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.delegate = self
-        collectionView.register(PopularCityCollectionViewCell.self, forCellWithReuseIdentifier: PopularCityCollectionViewCell.identifier)
         collectionView.register(ArrangePlaceCell.self, forCellWithReuseIdentifier: ArrangePlaceCell.identifier)
-        collectionView.register(CalendarCell.self, forCellWithReuseIdentifier: CalendarCell.identifier)
-        collectionView.register(
-            PopularCityHeaderView.self,
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: PopularCityHeaderView.identifier)
         return collectionView
     }()
 
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Int>!
+    private var listener: ListenerRegistration?
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Place>!
+    private var places: [Place] = []
+    private var filterPlaces: [Place] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         customNavBar()
         setupUI()
+        scheduleView.schedules = convertDateToDisplay()
+        scheduleView.delegate = self
         configureDataSource()
-        updateSnapshot()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        scheduleView.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .centeredVertically)
+        fetchPlaces()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        listener?.remove()
+        listener = nil
     }
 
     private func setupUI() {
+        view.addSubview(imageView)
+        view.addSubview(scheduleView)
         view.addSubview(collectionView)
-        collectionView.edgesToSuperview(usingSafeArea: true)
-        customNavBar()
+
+        imageView.edgesToSuperview(excluding: .bottom, insets: .top(8) + .horizontal(16), usingSafeArea: true)
+        imageView.height(120)
+
+        scheduleView.topToBottom(of: imageView)
+        scheduleView.horizontalToSuperview(insets: .horizontal(16))
+        scheduleView.height(80)
+
+        collectionView.topToBottom(of: scheduleView)
+        collectionView.edgesToSuperview(excluding: .top, usingSafeArea: true)
+    }
+
+    private func fetchPlaces() {
+        guard let tripID = trip.id else { return }
+        places.removeAll(keepingCapacity: true)
+
+        listener = FireStoreService.shared.addListenerInTripPlaces(tripId: tripID, isArrange: true) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let place):
+                guard let place = place else { return }
+                self.places.append(place)
+
+                DispatchQueue.main.async {
+                    self.updateSnapshot(by: self.trip.startDate)
+                }
+            case .failure(let error):
+                self.showAlertToUser(error: error)
+            }
+        }
     }
 
     private func customNavBar() {
-        title = String(localized: "Planning")
+        title = trip.tripName
 
-        let chatRoomButton = UIBarButtonItem(image: UIImage(systemName: "person.2"), style: .plain, target: self, action: #selector(openChatRoom))
-        navigationItem.rightBarButtonItem = chatRoomButton
+        let chatRoomButton = UIBarButtonItem(
+            image: UIImage(systemName: "person.2"),
+            style: .plain,
+            target: self,
+            action: #selector(openChatRoom))
+        let editListButton = UIBarButtonItem(
+            image: UIImage(systemName: "list.bullet.clipboard"),
+            style: .plain,
+            target: self,
+            action: #selector(openWishList))
+        navigationItem.rightBarButtonItems = [chatRoomButton, editListButton]
     }
 
-    @objc func openChatRoom(_ sender: UIButton) {
+    @objc func openChatRoom(_ sender: UIBarButtonItem) {
         // Check if room exist in FireStore
         let chatVC = ChatRoomViewController()
         let nav = UINavigationController(rootViewController: chatVC)
@@ -61,51 +132,25 @@ class EditTripViewController: UIViewController {
         present(nav, animated: true)
     }
 
-    private func createLayout() -> UICollectionViewCompositionalLayout {
-        return UICollectionViewCompositionalLayout { [weak self] section, _ in
-            guard let self = self else { fatalError("Failed to create layout") }
+    @objc func openWishList(_ sender: UIBarButtonItem) {
+        let wishVC = WishListViewController(trip: trip)
+        navigationController?.pushViewController(wishVC, animated: true)
+    }
 
-            let sectionType = self.dataSource.snapshot().sectionIdentifiers[section]
-            switch sectionType {
-            case .unarranged:
-                return self.configUnarrangedSectionLayout()
-            case .calendar:
-                return self.configCalendarSectionLayout()
-            case .inOrder:
-                return self.configInOrderSectionLayout()
+    private func convertDateToDisplay() -> [Date] {
+        let dayRange = 0...trip.duration
+        let travelDays = dayRange.map { range -> Date in
+            if let components = Calendar.current.date(byAdding: .day, value: range, to: trip.startDate)?.resetHourAndMinute() {
+                return components
+            } else {
+                return Date()
             }
         }
+
+        return travelDays
     }
 
-    private func configUnarrangedSectionLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(100),
-            heightDimension: .absolute(125))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuous
-        section.interGroupSpacing = 12
-        section.contentInsets = .init(top: 8, leading: 16, bottom: 8, trailing: 16)
-
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(50))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .topLeading)
-        section.boundarySupplementaryItems = [header]
-
-        return section
-    }
-
-    private func configInOrderSectionLayout() -> NSCollectionLayoutSection {
+    private func createLayout() -> UICollectionViewCompositionalLayout {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0))
@@ -120,112 +165,31 @@ class EditTripViewController: UIViewController {
         section.interGroupSpacing = 12
         section.contentInsets = .init(top: 8, leading: 16, bottom: 8, trailing: 16)
 
-        return section
-    }
-
-    private func configCalendarSectionLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(44),
-            heightDimension: .absolute(60))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-        let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 12
-        section.contentInsets = .init(top: 8, leading: 16, bottom: 8, trailing: 16)
-        section.orthogonalScrollingBehavior = .continuous
-
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(50))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .topLeading)
-        section.boundarySupplementaryItems = [header]
-
-        return section
+        return UICollectionViewCompositionalLayout(section: section)
     }
 
     private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, _ in
-            guard let self = self else { return UICollectionViewCell() }
-            let section = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
-
-            switch section {
-            case .unarranged:
-                guard let cityCell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: PopularCityCollectionViewCell.identifier,
-                    for: indexPath) as? PopularCityCollectionViewCell
-                else {
-                    fatalError("Failed to dequeue cityCell")
-                }
-
-                return cityCell
-
-            case .calendar:
-                guard let calendarCell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: CalendarCell.identifier,
-                    for: indexPath) as? CalendarCell
-                else {
-                    fatalError("Failed to dequeue cityCell")
-                }
-
-                return calendarCell
-
-            case .inOrder:
-                guard let arrangeCell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: ArrangePlaceCell.identifier,
-                    for: indexPath) as? ArrangePlaceCell
-                else {
-                    fatalError("Failed to dequeue cityCell")
-                }
-
-                return arrangeCell
-            }
-        }
-
-        configSupplementaryView()
-    }
-
-    private func configSupplementaryView() {
-        dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath -> UICollectionReusableView? in
-            guard let self = self else { return nil }
-            guard let headerView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: PopularCityHeaderView.identifier,
-                for: indexPath) as? PopularCityHeaderView
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, item in
+            guard let arrangeCell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ArrangePlaceCell.identifier,
+                for: indexPath) as? ArrangePlaceCell
             else {
-                return nil
+                fatalError("Failed to dequeue cityCell")
             }
 
-            headerView.titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
-            let section = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
-
-            switch section {
-            case .unarranged:
-                headerView.titleLabel.text = "Not arrange"
-            case .calendar:
-                headerView.titleLabel.text = "In order"
-            case .inOrder:
-                return nil
-            }
-            return headerView
+            arrangeCell.config(with: item)
+            return arrangeCell
         }
     }
 
-    private func updateSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
+    private func updateSnapshot(by date: Date) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Place>()
+        snapshot.appendSections([.main])
 
-        snapshot.appendSections([.unarranged, .calendar, .inOrder])
-        snapshot.appendItems(Array(1...20), toSection: .unarranged)
-        snapshot.appendItems(Array(41...55), toSection: .calendar)
-        snapshot.appendItems(Array(21...40), toSection: .inOrder)
+        let filterResults = places.filter { $0.arrangedTime?.resetHourAndMinute() == date.resetHourAndMinute() }
+        filterPlaces = filterResults.sorted { $0.arrangedTime! < $1.arrangedTime! }
 
+        snapshot.appendItems(filterPlaces)
         dataSource.apply(snapshot)
     }
 }
@@ -233,5 +197,12 @@ class EditTripViewController: UIViewController {
 // MARK: - CollectionView Delegate
 extension EditTripViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    }
+}
+
+// MARK: - ScheduleView Delegate
+extension EditTripViewController: ScheduleViewDelegate {
+    func didSelectedDate(_ view: ScheduleView, selectedDate: Date) {
+        updateSnapshot(by: selectedDate)
     }
 }
