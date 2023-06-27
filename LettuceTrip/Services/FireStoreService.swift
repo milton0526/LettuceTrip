@@ -90,14 +90,14 @@ class FireStoreService {
         }
     }
 
-    func getDocument<T: Decodable>(from collection: CollectionRef, docId: String, dataType: T.Type, completion: @escaping (Result<Void, Error>) -> Void) {
+    func getDocument<T: Decodable>(from collection: CollectionRef, docId: String, dataType: T.Type, completion: @escaping (Result<T, Error>) -> Void) {
         let ref = database.collection(collection.rawValue)
 
         ref.document(docId).getDocument(as: dataType) { result in
             switch result {
-            case .success(let trip):
-                completion(.success(()))
-                print("Successfully get trip data: \(trip)")
+            case .success(let data):
+                completion(.success(data))
+                print("Successfully get trip data: \(data)")
             case .failure(let error):
                 completion(.failure(error))
                 print("Failed get trip data: \(error)")
@@ -105,7 +105,31 @@ class FireStoreService {
         }
     }
 
-    func fetchAllUserTrips(completion: @escaping (Result<[Trip], Error>) -> Void) -> ListenerRegistration? {
+    func fetchAllUserTrips(completion: @escaping (Result<[Trip], Error>) -> Void) {
+        guard let userID = currentUser else { return }
+        let ref = database.collection(CollectionRef.trips.rawValue)
+        var trips: [Trip] = []
+
+        ref
+            .whereField("members", arrayContains: userID)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error getting user trips. \(error.localizedDescription)")
+                    completion(.failure(error))
+                } else {
+                    guard let snapshot = snapshot else { return }
+                    snapshot.documents.forEach { doc in
+
+                        if let trip = try? doc.data(as: Trip.self) {
+                            trips.append(trip)
+                        }
+                    }
+                    completion(.success(trips))
+                }
+            }
+    }
+
+    func addListenerToAllUserTrips(completion: @escaping (Result<[Trip], Error>) -> Void) -> ListenerRegistration? {
         guard let userID = currentUser else { return nil }
         let ref = database.collection(CollectionRef.trips.rawValue)
         var trips: [Trip] = []

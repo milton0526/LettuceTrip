@@ -61,4 +61,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
+
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let firstURL = URLContexts.first?.url else { return }
+
+        let urlComponents = URLComponents(string: firstURL.absoluteString)
+        guard let query = urlComponents?.query else { return }
+
+        if let topVC = window?.topViewController {
+            let alert = UIAlertController(title: "Some one invite your to this trip", message: nil, preferredStyle: .alert)
+            let accept = UIAlertAction(title: "Accept", style: .default)
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+            alert.addAction(accept)
+            alert.addAction(cancel)
+            topVC.present(alert, animated: true)
+        }
+    }
+}
+
+extension UIWindow {
+    var topViewController: UIViewController? {
+        if var topVC = rootViewController {
+            while let viewController = topVC.presentedViewController {
+                topVC = viewController
+            }
+            return topVC
+        } else {
+            return nil
+        }
+    }
 }

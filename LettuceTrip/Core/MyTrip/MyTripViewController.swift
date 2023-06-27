@@ -109,7 +109,7 @@ class MyTripViewController: UIViewController {
     }
 
     private func fetchUserTrips() {
-        listener = FireStoreService.shared.fetchAllUserTrips { [weak self] result in
+        listener = FireStoreService.shared.addListenerToAllUserTrips { [weak self] result in
             self?.upcomingTrips.removeAll(keepingCapacity: true)
             self?.closedTrips.removeAll(keepingCapacity: true)
 

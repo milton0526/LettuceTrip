@@ -81,7 +81,6 @@ class PlaceDetailViewController: UIViewController {
         // fetchDetails()
     }
 
-
     private func setupUI() {
         view.addSubview(tableView)
         view.addSubview(addToTripButton)
