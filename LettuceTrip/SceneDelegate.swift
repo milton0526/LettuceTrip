@@ -6,18 +6,29 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var viewController: UIViewController?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
-        UserDefaults.standard.setValue("7tiud4VU1xMwgcevo04r", forKey: "userID")
+        if FireStoreService.shared.currentUser == nil {
+            let signInVC = SignInViewController()
+            viewController = signInVC
+        } else {
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let mainVC = storyBoard.instantiateViewController(withIdentifier: "TabBarController")
+            viewController = mainVC
+        }
 
+        window?.rootViewController = viewController
+        window?.makeKeyAndVisible()
         // swiftlint: disable unused_optional_binding
         guard let _ = (scene as? UIWindowScene) else { return }
         // swiftlint: enable unused_optional_binding

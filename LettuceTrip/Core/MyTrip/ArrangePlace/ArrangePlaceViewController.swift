@@ -96,7 +96,6 @@ class ArrangePlaceViewController: UIViewController {
                 // Show error message to user.
             }
         }
-
     }
 
     private func setupUI() {

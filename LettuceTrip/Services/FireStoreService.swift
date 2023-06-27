@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
+import FirebaseAuth
 
 class FireStoreService {
 
@@ -24,8 +25,20 @@ class FireStoreService {
 
     private let database = Firestore.firestore()
 
-    var userID: String? {
-        UserDefaults.standard.string(forKey: "userID")
+    var currentUser: String? {
+        Auth.auth().currentUser?.uid
+    }
+
+    func setUser(id: String, user: User, completion: @escaping (Result<User, Error>) -> Void) {
+        let ref = database.collection(CollectionRef.users.rawValue)
+
+        do {
+            try ref.document(id).setData(from: user)
+            completion(.success(user))
+        } catch {
+            print("Failed to add new user to Firebase")
+            completion(.failure(error))
+        }
     }
 
     func addDocument(at collection: CollectionRef, data: Encodable) {
@@ -59,7 +72,7 @@ class FireStoreService {
     }
 
     func sendMessage(with message: String, in tripID: String = "uxd7ge3gIVMnBu2jvJBs") {
-        guard let userID = userID else { return }
+        guard let userID = currentUser else { return }
         let ref = database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.chatRoom.rawValue)
         let sendMessage = Message(userID: userID, message: message)
 
@@ -85,7 +98,7 @@ class FireStoreService {
     }
 
     func fetchAllUserTrips(completion: @escaping (Result<[Trip], Error>) -> Void) {
-        guard let userID = userID else { return }
+        guard let userID = currentUser else { return }
         let ref = database.collection(CollectionRef.trips.rawValue)
         var trips: [Trip] = []
 
