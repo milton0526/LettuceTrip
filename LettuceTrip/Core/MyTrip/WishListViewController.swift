@@ -80,9 +80,7 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
 
             switch result {
             case .success(let place):
-                if let place = place {
-                    self.places.append(place)
-                }
+                self.places = place
 
                 DispatchQueue.main.async {
                     self.updateSnapshot()

@@ -9,7 +9,7 @@ import UIKit
 
 class ChatRoomPlacesView: UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
-    var items: [Int] = [1, 2] {
+    var places: [Place] = [] {
         didSet {
             collectionView.reloadData()
         }
@@ -56,7 +56,7 @@ class ChatRoomPlacesView: UIView, UICollectionViewDelegateFlowLayout, UICollecti
 
     // MARK: - DataSource method
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        items.count
+        places.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -67,7 +67,10 @@ class ChatRoomPlacesView: UIView, UICollectionViewDelegateFlowLayout, UICollecti
             fatalError("Failed to dequeue cityCell")
         }
 
-        // let items = places[indexPath.item]
+        let place = places[indexPath.item]
+        placeCell.titleLabel.text = place.name
+        placeCell.iconImageView.image = UIImage(data: place.iconImage)?.withTintColor(.tintColor)
+
         return placeCell
     }
 }

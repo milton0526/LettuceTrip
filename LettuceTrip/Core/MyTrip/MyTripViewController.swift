@@ -7,6 +7,7 @@
 
 import UIKit
 import TinyConstraints
+import FirebaseFirestore
 
 class MyTripViewController: UIViewController {
 
@@ -47,6 +48,7 @@ class MyTripViewController: UIViewController {
         return button
     }()
 
+    private var listener: ListenerRegistration?
     private var upcomingTrips: [Trip] = []
     private var closedTrips: [Trip] = []
     private var currentSegment: Segment = .upcoming
@@ -57,9 +59,15 @@ class MyTripViewController: UIViewController {
         setupUI()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchUserTrips()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        listener?.remove()
+        listener = nil
     }
 
     private func customNavBar() {
@@ -78,7 +86,7 @@ class MyTripViewController: UIViewController {
         selectionView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
 
         tableView.topToBottom(of: selectionView)
-        tableView.edgesToSuperview(excluding: .top)
+        tableView.edgesToSuperview(excluding: .top, usingSafeArea: true)
 
         addTripButton.size(CGSize(width: 60, height: 60))
         addTripButton.trailingToSuperview(offset: 12)
@@ -101,10 +109,10 @@ class MyTripViewController: UIViewController {
     }
 
     private func fetchUserTrips() {
-        upcomingTrips.removeAll(keepingCapacity: true)
-        closedTrips.removeAll(keepingCapacity: true)
+        listener = FireStoreService.shared.addListenerToAllUserTrips { [weak self] result in
+            self?.upcomingTrips.removeAll(keepingCapacity: true)
+            self?.closedTrips.removeAll(keepingCapacity: true)
 
-        FireStoreService.shared.fetchAllUserTrips { [weak self] result in
             switch result {
             case .success(let trips):
                 self?.filterByDate(trips: trips)
@@ -124,7 +132,7 @@ class MyTripViewController: UIViewController {
         }
 
         closedTrips.sort { $0.startDate > $1.startDate }
-        upcomingTrips.sort { $0.startDate > $1.startDate }
+        upcomingTrips.sort { $0.startDate < $1.startDate }
 
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()

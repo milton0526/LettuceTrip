@@ -11,6 +11,8 @@ import TinyConstraints
 
 class ChatRoomViewController: UIViewController {
 
+    var trip: Trip?
+
     enum Section {
         case main
     }
@@ -40,12 +42,11 @@ class ChatRoomViewController: UIViewController {
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, Message>!
 
-    private var chatMessages: [Message] = [] {
-        didSet {
-            print("Append new message: \(chatMessages.count)")
-        }
-    }
-    private var listener: ListenerRegistration?
+    private var chatMessages: [Message] = []
+    private var places: [Place] = []
+
+    private var messageListener: ListenerRegistration?
+    private var placeListener: ListenerRegistration?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,18 +55,17 @@ class ChatRoomViewController: UIViewController {
         setupUI()
         configBackButton()
         configureDataSource()
-        updateSnapshot()
-
-        // Testing use
-        placesView.items = Array(repeating: 10, count: 10)
 
         fetchMessages()
+        fetchPlaces()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        listener?.remove()
-        listener = nil
+        messageListener?.remove()
+        placeListener?.remove()
+        messageListener = nil
+        placeListener = nil
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -89,14 +89,23 @@ class ChatRoomViewController: UIViewController {
     @objc func sendMessage(_ sender: UIButton) {
         // send message to firebase and listen to update view
         guard
+            let tripID = trip?.id,
             let text = inputTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
             !text.isEmpty
         else {
             return
         }
 
-        FireStoreService.shared.sendMessage(with: text)
-        inputTextField.text = ""
+        FireStoreService.shared.sendMessage(with: text, in: tripID) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self?.inputTextField.text = ""
+                case .failure(let error):
+                    self?.showAlertToUser(error: error)
+                }
+            }
+        }
     }
 
     private func configBackButton() {
@@ -160,11 +169,11 @@ class ChatRoomViewController: UIViewController {
                 fatalError("Failed to dequeue cityCell")
             }
 
-            guard let userID = UserDefaults.standard.string(forKey: "userID") else {
+            guard let currentUser = FireStoreService.shared.currentUser else {
                 fatalError("No user login.")
             }
 
-            if message.userID == userID {
+            if message.userID == currentUser {
                 userMSGCell.config(with: message)
                 return userMSGCell
             } else {
@@ -187,18 +196,39 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func fetchMessages() {
-        listener = FireStoreService.shared.addListenerToChatRoom { [weak self] result in
+        guard let tripID = trip?.id else { return }
+
+        messageListener = FireStoreService.shared.addListenerToChatRoom(by: tripID) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
-            case .success(let message):
-                guard let message = message else { break }
-                self.chatMessages.append(message)
+            case .success(let messages):
+                self.chatMessages = messages
 
                 DispatchQueue.main.async {
                     self.updateSnapshot()
                 }
 
+            case .failure(let error):
+                self.showAlertToUser(error: error)
+            }
+        }
+    }
+
+    private func fetchPlaces() {
+        guard let tripID = trip?.id else { return }
+        places.removeAll(keepingCapacity: true)
+
+        placeListener = FireStoreService.shared.addListenerInTripPlaces(tripId: tripID, isArrange: false) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let place):
+                self.places = place
+
+                DispatchQueue.main.async {
+                    self.placesView.places = self.places
+                }
             case .failure(let error):
                 self.showAlertToUser(error: error)
             }

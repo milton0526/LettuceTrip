@@ -43,13 +43,15 @@ class FireStoreService {
         }
     }
 
-    func addDocument(at collection: CollectionRef, data: Encodable) {
+    func addDocument(at collection: CollectionRef, data: Encodable, completion: @escaping (Result<Void, Error>) -> Void) {
         let ref = database.collection(collection.rawValue)
 
         do {
             try ref.addDocument(from: data)
+            completion(.success(()))
             print("Successfully add new document at collection: \(collection.rawValue)")
         } catch {
+            completion(.failure(error))
             print("Failed to add new doc in Firebase collection: \(collection.rawValue)")
         }
     }
@@ -73,27 +75,31 @@ class FireStoreService {
         }
     }
 
-    func sendMessage(with message: String, in tripID: String = "uxd7ge3gIVMnBu2jvJBs") {
+    func sendMessage(with message: String, in tripID: String, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let userID = currentUser else { return }
         let ref = database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.chatRoom.rawValue)
         let sendMessage = Message(userID: userID, message: message)
 
         do {
             try ref.addDocument(from: sendMessage)
+            completion(.success(()))
             print("Successfully add new message at tripID: \(tripID)")
         } catch {
+            completion(.failure(error))
             print("Failed to add new message at tripID: \(tripID)")
         }
     }
 
-    func getDocument<T: Decodable>(from collection: CollectionRef, docId: String, dataType: T.Type) {
+    func getDocument<T: Decodable>(from collection: CollectionRef, docId: String, dataType: T.Type, completion: @escaping (Result<T, Error>) -> Void) {
         let ref = database.collection(collection.rawValue)
 
         ref.document(docId).getDocument(as: dataType) { result in
             switch result {
-            case .success(let trip):
-                print("Successfully get trip data: \(trip)")
+            case .success(let data):
+                completion(.success(data))
+                print("Successfully get trip data: \(data)")
             case .failure(let error):
+                completion(.failure(error))
                 print("Failed get trip data: \(error)")
             }
         }
@@ -109,15 +115,13 @@ class FireStoreService {
             .getDocuments { snapshot, error in
                 if let error = error {
                     print("Error getting user trips. \(error.localizedDescription)")
-                    completion(.success([]))
+                    completion(.failure(error))
                 } else {
                     guard let snapshot = snapshot else { return }
-                    snapshot.documents.forEach { document in
-                        do {
-                            let result = try document.data(as: Trip.self)
-                            trips.append(result)
-                        } catch {
-                            completion(.failure(error))
+                    snapshot.documents.forEach { doc in
+
+                        if let trip = try? doc.data(as: Trip.self) {
+                            trips.append(trip)
                         }
                     }
                     completion(.success(trips))
@@ -125,8 +129,42 @@ class FireStoreService {
             }
     }
 
-    func addListenerInTripPlaces(tripId: String, isArrange: Bool = true, completion: @escaping (Result<Place?, Error>) -> Void) -> ListenerRegistration {
+    func addListenerToAllUserTrips(completion: @escaping (Result<[Trip], Error>) -> Void) -> ListenerRegistration? {
+        guard let userID = currentUser else { return nil }
         let ref = database.collection(CollectionRef.trips.rawValue)
+        var trips: [Trip] = []
+
+        let listener = ref
+            .whereField("members", arrayContains: userID)
+            .addSnapshotListener { snapshot, error in
+                if let error = error {
+                    print("Error getting user trips. \(error.localizedDescription)")
+                    completion(.success([]))
+                } else {
+                    guard let snapshot = snapshot else { return }
+
+                    snapshot.documentChanges.forEach { diff in
+                        switch diff.type {
+                        case .added:
+                            if let trip = try? diff.document.data(as: Trip.self) {
+                                trips.append(trip)
+                            }
+
+                        case .modified, .removed:
+                            // remove trip maybe cause issue
+                            completion(.success([]))
+                        }
+                    }
+                    completion(.success(trips))
+                }
+            }
+
+        return listener
+    }
+
+    func addListenerInTripPlaces(tripId: String, isArrange: Bool = true, completion: @escaping (Result<[Place], Error>) -> Void) -> ListenerRegistration {
+        let ref = database.collection(CollectionRef.trips.rawValue)
+        var places: [Place] = []
 
         let listener = ref
             .document(tripId)
@@ -142,19 +180,24 @@ class FireStoreService {
                     snapshot.documentChanges.forEach { diff in
                         switch diff.type {
                         case .added:
-                            let place = try? diff.document.data(as: Place.self)
-                            completion(.success(place))
+                            if let place = try? diff.document.data(as: Place.self) {
+                                places.append(place)
+                            }
+
                         case .modified, .removed:
-                            completion(.success(nil))
+                            completion(.success([]))
                         }
                     }
+
+                    completion(.success(places))
                 }
             }
         return listener
     }
 
-    func addListenerToChatRoom(by tripID: String = "uxd7ge3gIVMnBu2jvJBs", completion: @escaping (Result<Message?, Error>) -> Void) -> ListenerRegistration {
+    func addListenerToChatRoom(by tripID: String, completion: @escaping (Result<[Message], Error>) -> Void) -> ListenerRegistration {
         let ref = database.collection(CollectionRef.trips.rawValue)
+        var messages: [Message] = []
 
         let listener = ref
             .document(tripID)
@@ -170,12 +213,14 @@ class FireStoreService {
                     snapshot.documentChanges.forEach { diff in
                         switch diff.type {
                         case .added:
-                            let message = try? diff.document.data(as: Message.self)
-                            completion(.success(message))
+                            if let message = try? diff.document.data(as: Message.self) {
+                                messages.append(message)
+                            }
                         default:
                             break
                         }
                     }
+                    completion(.success(messages))
                 }
             }
         return listener

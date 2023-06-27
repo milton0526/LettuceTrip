@@ -96,8 +96,7 @@ class EditTripViewController: UIViewController {
 
             switch result {
             case .success(let place):
-                guard let place = place else { return }
-                self.places.append(place)
+                self.places = place
 
                 DispatchQueue.main.async {
                     self.updateSnapshot(by: self.trip.startDate)
@@ -121,12 +120,18 @@ class EditTripViewController: UIViewController {
             style: .plain,
             target: self,
             action: #selector(openWishList))
-        navigationItem.rightBarButtonItems = [chatRoomButton, editListButton]
+        let shareButton = UIBarButtonItem(
+            image: UIImage(systemName: "square.and.arrow.up"),
+            style: .plain,
+            target: self,
+            action: #selector(shareWithFriends))
+        navigationItem.rightBarButtonItems = [chatRoomButton, editListButton, shareButton]
     }
 
     @objc func openChatRoom(_ sender: UIBarButtonItem) {
         // Check if room exist in FireStore
         let chatVC = ChatRoomViewController()
+        chatVC.trip = trip
         let nav = UINavigationController(rootViewController: chatVC)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)
@@ -135,6 +140,15 @@ class EditTripViewController: UIViewController {
     @objc func openWishList(_ sender: UIBarButtonItem) {
         let wishVC = WishListViewController(trip: trip)
         navigationController?.pushViewController(wishVC, animated: true)
+    }
+
+    @objc func shareWithFriends(_ sender: UIBarButtonItem) {
+        guard let tripID = trip.id else { return }
+
+        if let shareURL = URL(string: "lettuceTrip.app.shareLink://invite/trip?\(tripID)") {
+            let activityVC = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+            present(activityVC, animated: true)
+        }
     }
 
     private func convertDateToDisplay() -> [Date] {
