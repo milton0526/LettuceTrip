@@ -96,8 +96,7 @@ class EditTripViewController: UIViewController {
 
             switch result {
             case .success(let place):
-                guard let place = place else { return }
-                self.places.append(place)
+                self.places = place
 
                 DispatchQueue.main.async {
                     self.updateSnapshot(by: self.trip.startDate)
@@ -127,6 +126,7 @@ class EditTripViewController: UIViewController {
     @objc func openChatRoom(_ sender: UIBarButtonItem) {
         // Check if room exist in FireStore
         let chatVC = ChatRoomViewController()
+        chatVC.trip = trip
         let nav = UINavigationController(rootViewController: chatVC)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)

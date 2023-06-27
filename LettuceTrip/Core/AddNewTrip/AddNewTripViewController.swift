@@ -143,7 +143,7 @@ class AddNewTripViewController: UIViewController {
             let startDate = startDate,
             let endDate = Calendar.current.date(byAdding: .day, value: duration - 1, to: startDate),
             let selectedCity = selectedCity,
-            let user = UserDefaults.standard.string(forKey: "userID")
+            let user = FireStoreService.shared.currentUser
         else {
             return
         }
@@ -155,9 +155,17 @@ class AddNewTripViewController: UIViewController {
         let trip = Trip(tripName: tripName, startDate: startDate, endDate: endDate, duration: duration - 1, destination: city, members: [user])
 
         // upload to firebase
-        FireStoreService.shared.addDocument(at: .trips, data: trip)
+        FireStoreService.shared.addDocument(at: .trips, data: trip) { [weak self] result in
 
-        dismiss(animated: true)
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self?.dismiss(animated: true)
+                case .failure(let error):
+                    self?.showAlertToUser(error: error)
+                }
+            }
+        }
     }
 }
 
