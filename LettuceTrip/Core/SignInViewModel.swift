@@ -77,7 +77,7 @@ extension SignInViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCon
                 // User is signed in to Firebase with Apple.
                 let user = User(id: userID, name: userName, email: email)
 
-                FireStoreService.shared.setUser(id: userID, user: user) { result in
+                FireStoreService.shared.createUser(id: userID, user: user) { result in
                     DispatchQueue.main.async {
                         switch result {
                         case .success:

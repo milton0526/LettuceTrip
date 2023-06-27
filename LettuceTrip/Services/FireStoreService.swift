@@ -26,10 +26,12 @@ class FireStoreService {
     private let database = Firestore.firestore()
 
     var currentUser: String? {
-        Auth.auth().currentUser?.uid
+        // Test user id
+        "U3K16S3A8vduG71uXhEq6GDkStg2"
+        // Auth.auth().currentUser?.uid
     }
 
-    func setUser(id: String, user: User, completion: @escaping (Result<User, Error>) -> Void) {
+    func createUser(id: String, user: User, completion: @escaping (Result<User, Error>) -> Void) {
         let ref = database.collection(CollectionRef.users.rawValue)
 
         do {
