@@ -73,7 +73,6 @@
 		C4DBE8C62A42D391002987CB /* FireStoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C52A42D391002987CB /* FireStoreService.swift */; };
 		C4DBE8C82A42D446002987CB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C72A42D446002987CB /* User.swift */; };
 		C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C92A42D49B002987CB /* Trip.swift */; };
-		C4DBE8CC2A42D79D002987CB /* ShareTrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CB2A42D79D002987CB /* ShareTrips.swift */; };
 		C4DBE8CE2A4306BB002987CB /* SearchCityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */; };
 		C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CF2A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift */; };
 		C4DBE8D22A43E116002987CB /* MKPlaceMark+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8D12A43E116002987CB /* MKPlaceMark+Extension.swift */; };
@@ -142,7 +141,6 @@
 		C4DBE8C52A42D391002987CB /* FireStoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreService.swift; sourceTree = "<group>"; };
 		C4DBE8C72A42D446002987CB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C4DBE8C92A42D49B002987CB /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
-		C4DBE8CB2A42D79D002987CB /* ShareTrips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTrips.swift; sourceTree = "<group>"; };
 		C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCityViewController.swift; sourceTree = "<group>"; };
 		C4DBE8CF2A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPointOfInterestCategory+Extension.swift"; sourceTree = "<group>"; };
 		C4DBE8D12A43E116002987CB /* MKPlaceMark+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPlaceMark+Extension.swift"; sourceTree = "<group>"; };
@@ -308,7 +306,6 @@
 				C4DBE87C2A41BB81002987CB /* LTError.swift */,
 				C4DBE8C72A42D446002987CB /* User.swift */,
 				C4DBE8C92A42D49B002987CB /* Trip.swift */,
-				C4DBE8CB2A42D79D002987CB /* ShareTrips.swift */,
 				C42F51B52A4574D900023305 /* FQResponse.swift */,
 			);
 			path = Models;
@@ -555,7 +552,6 @@
 				C4DBE8C62A42D391002987CB /* FireStoreService.swift in Sources */,
 				C4CC0C042A48465300E03758 /* ArrangePlaceViewController.swift in Sources */,
 				C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */,
-				C4DBE8CC2A42D79D002987CB /* ShareTrips.swift in Sources */,
 				C4DBE8D22A43E116002987CB /* MKPlaceMark+Extension.swift in Sources */,
 				C4DBE8C82A42D446002987CB /* User.swift in Sources */,
 				C42F51B02A454D5F00023305 /* LocationService.swift in Sources */,

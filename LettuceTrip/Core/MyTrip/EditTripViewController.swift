@@ -150,18 +150,15 @@ class EditTripViewController: UIViewController {
             message: nil,
             preferredStyle: .actionSheet)
 
-        let shareToCommunity = UIAlertAction(title: String(localized: "Community"), style: .default) { _ in
+        let shareToCommunity = UIAlertAction(title: String(localized: "Community"), style: .default) { [weak self] _ in
             // share to home page
-            let shareTrip = ShareTrips(tripID: tripID)
-            FireStoreService.shared.addDocument(at: .shareTrips, data: shareTrip) { result in
+            guard let self = self else { return }
+            var trip = self.trip
+            trip.isPublic = true
 
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success:
-                        print("Show success indicator view")
-                    case .failure(let error):
-                        self.showAlertToUser(error: error)
-                    }
+            FireStoreService.shared.updateTrip(trip: trip) { error in
+                if let error = error {
+                    self.showAlertToUser(error: error)
                 }
             }
         }
@@ -231,8 +228,9 @@ class EditTripViewController: UIViewController {
         snapshot.appendSections([.main])
 
         let filterResults = places.filter { $0.arrangedTime?.resetHourAndMinute() == date.resetHourAndMinute() }
+        // swiftlint: disable force_unwrapping
         filterPlaces = filterResults.sorted { $0.arrangedTime! < $1.arrangedTime! }
-
+        // swiftlint: enable force_unwrapping
         snapshot.appendItems(filterPlaces)
         dataSource.apply(snapshot)
     }

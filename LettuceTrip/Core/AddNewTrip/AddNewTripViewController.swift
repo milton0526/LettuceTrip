@@ -152,7 +152,14 @@ class AddNewTripViewController: UIViewController {
         let longitude = selectedCity.placemark.coordinate.longitude
         let city = GeoPoint(latitude: latitude, longitude: longitude)
 
-        let trip = Trip(tripName: tripName, startDate: startDate, endDate: endDate, duration: duration - 1, destination: city, members: [user])
+        let trip = Trip(
+            tripName: tripName,
+            startDate: startDate,
+            endDate: endDate,
+            duration: duration - 1,
+            destination: city,
+            members: [user],
+            isPublic: false)
 
         // upload to firebase
         FireStoreService.shared.addDocument(at: .trips, data: trip) { [weak self] result in

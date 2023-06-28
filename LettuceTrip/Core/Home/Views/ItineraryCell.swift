@@ -103,4 +103,12 @@ class ItineraryCollectionViewCell: UICollectionViewCell {
         timeLabel.trailingToSuperview(offset: 8)
         timeLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
+
+    func config(with trip: Trip) {
+        userNameLabel.text = trip.members.first
+        tripNameLabel.text = trip.tripName
+        timeLabel.text = trip.startDate.formatted(date: .numeric, time: .omitted)
+
+        // Need to use dispatch group to fetch user data
+    }
 }
