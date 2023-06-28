@@ -10,6 +10,7 @@ import FirebaseFirestoreSwift
 
 struct User: Codable {
     let id: String
-    var name: String
+    let name: String
     let email: String
+    var image: Data?
 }

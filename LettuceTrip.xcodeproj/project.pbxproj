@@ -26,6 +26,8 @@
 		C45413472A4A803E000D0685 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C45413462A4A803E000D0685 /* FirebaseAuth */; };
 		C454134B2A4A8871000D0685 /* FirebaseAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134A2A4A8871000D0685 /* FirebaseAuthHelper.swift */; };
 		C454134D2A4A9937000D0685 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134C2A4A9937000D0685 /* SignInViewModel.swift */; };
+		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
+		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
 		C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */; };
 		C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */; };
 		C4CC0BFE2A481E0100E03758 /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BFD2A481E0100E03758 /* ScheduleView.swift */; };
@@ -98,6 +100,8 @@
 		C45413432A4A7FF0000D0685 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		C454134A2A4A8871000D0685 /* FirebaseAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthHelper.swift; sourceTree = "<group>"; };
 		C454134C2A4A9937000D0685 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
+		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
+		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomPlacesView.swift; sourceTree = "<group>"; };
 		C4CC0BFD2A481E0100E03758 /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
 		C4CC0BFF2A48255B00E03758 /* WishListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListViewController.swift; sourceTree = "<group>"; };
@@ -271,6 +275,7 @@
 			isa = PBXGroup;
 			children = (
 				C4DBE8382A41B19B002987CB /* ProfileViewController.swift */,
+				C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -307,6 +312,7 @@
 				C4DBE8C72A42D446002987CB /* User.swift */,
 				C4DBE8C92A42D49B002987CB /* Trip.swift */,
 				C42F51B52A4574D900023305 /* FQResponse.swift */,
+				C48E488F2A4C2A3D00949E08 /* SettingModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -507,12 +513,14 @@
 				C4DBE8CE2A4306BB002987CB /* SearchCityViewController.swift in Sources */,
 				C4DBE8852A41BC1B002987CB /* POILocationCardCell.swift in Sources */,
 				C4DBE84B2A41B350002987CB /* UICollectionView+Identifier.swift in Sources */,
+				C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */,
 				C4DBE8942A41BCED002987CB /* PlaceInfoHeaderView.swift in Sources */,
 				C4DBE8922A41BCDC002987CB /* PlacePhotoHeaderView.swift in Sources */,
 				C4DBE8BD2A429921002987CB /* UILabel+Style.swift in Sources */,
 				C42F51CE2A469E7200023305 /* FriendMessageCell.swift in Sources */,
 				C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */,
 				C4DBE88E2A41BCAB002987CB /* PlaceAboutCell.swift in Sources */,
+				C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */,
 				C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */,
 				C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */,
 				C42F51C42A45B60C00023305 /* CalendarCell.swift in Sources */,

@@ -27,8 +27,19 @@ class FireStoreService {
 
     var currentUser: String? {
         // Test user id
-        "xlyR2EUkqm8yhkRXiIRQ"
-        // Auth.auth().currentUser?.uid
+        // "xlyR2EUkqm8yhkRXiIRQ"
+        Auth.auth().currentUser?.uid
+    }
+
+    func signOut(completion: @escaping (Error?) -> Void) {
+        let firebaseAuth = Auth.auth()
+        do {
+            try firebaseAuth.signOut()
+            completion(nil)
+        } catch {
+            completion(error)
+            print("Error signing out: \(error.localizedDescription)")
+        }
     }
 
     func createUser(id: String, user: User, completion: @escaping (Result<User, Error>) -> Void) {
@@ -159,6 +170,7 @@ class FireStoreService {
             .getDocuments { snapshot, error in
                 if let error = error {
                     print("Error getting Share trips")
+                    completion(.failure(error))
                 } else {
                     guard let snapshot = snapshot else { return }
                     snapshot.documents.forEach { doc in
