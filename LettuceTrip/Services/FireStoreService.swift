@@ -27,7 +27,7 @@ class FireStoreService {
 
     var currentUser: String? {
         // Test user id
-        "U3K16S3A8vduG71uXhEq6GDkStg2"
+        "xlyR2EUkqm8yhkRXiIRQ"
         // Auth.auth().currentUser?.uid
     }
 
@@ -72,6 +72,16 @@ class FireStoreService {
         } catch {
             completion(false)
             print("Failed to add new place at tripID: \(tripID)")
+        }
+    }
+
+    func updateMembers(userID: String, at tripID: String, completion: @escaping (Error?) -> Void) {
+        let ref = database.collection(CollectionRef.trips.rawValue).document(tripID)
+
+        ref.updateData([
+            "members": FieldValue.arrayUnion([userID])
+        ]) { error in
+            completion(error)
         }
     }
 

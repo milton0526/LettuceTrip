@@ -124,7 +124,7 @@ class EditTripViewController: UIViewController {
             image: UIImage(systemName: "square.and.arrow.up"),
             style: .plain,
             target: self,
-            action: #selector(shareWithFriends))
+            action: #selector(shareTrip))
         navigationItem.rightBarButtonItems = [chatRoomButton, editListButton, shareButton]
     }
 
@@ -142,13 +142,43 @@ class EditTripViewController: UIViewController {
         navigationController?.pushViewController(wishVC, animated: true)
     }
 
-    @objc func shareWithFriends(_ sender: UIBarButtonItem) {
+    @objc func shareTrip(_ sender: UIBarButtonItem) {
         guard let tripID = trip.id else { return }
 
-        if let shareURL = URL(string: "lettuceTrip.app.shareLink://invite/trip?\(tripID)") {
-            let activityVC = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
-            present(activityVC, animated: true)
+        let actionSheet = UIAlertController(
+            title: String(localized: "Share this trip to..."),
+            message: nil,
+            preferredStyle: .actionSheet)
+
+        let shareToCommunity = UIAlertAction(title: String(localized: "Community"), style: .default) { _ in
+            // share to home page
+            let shareTrip = ShareTrips(tripID: tripID)
+            FireStoreService.shared.addDocument(at: .shareTrips, data: shareTrip) { result in
+
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        print("Show success indicator view")
+                    case .failure(let error):
+                        self.showAlertToUser(error: error)
+                    }
+                }
+            }
         }
+
+        let shareLinkToFriend = UIAlertAction(title: String(localized: "Invite your friends"), style: .default) { [weak self] _ in
+            if let shareURL = URL(string: "lettuceTrip.app.shareLink://invite/trip?\(tripID)") {
+                let activityVC = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+                self?.present(activityVC, animated: true)
+            }
+        }
+
+        let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
+
+        actionSheet.addAction(shareToCommunity)
+        actionSheet.addAction(shareLinkToFriend)
+        actionSheet.addAction(cancel)
+        present(actionSheet, animated: true)
     }
 
     private func convertDateToDisplay() -> [Date] {
