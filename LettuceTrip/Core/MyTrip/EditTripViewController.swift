@@ -40,6 +40,8 @@ class EditTripViewController: UIViewController {
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.delegate = self
+        collectionView.dragDelegate = self
+        collectionView.dropDelegate = self
         collectionView.register(ArrangePlaceCell.self, forCellWithReuseIdentifier: ArrangePlaceCell.identifier)
         return collectionView
     }()
@@ -239,6 +241,79 @@ class EditTripViewController: UIViewController {
 // MARK: - CollectionView Delegate
 extension EditTripViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    }
+}
+
+
+// MARK: - CollectionView Drag Delegate
+extension EditTripViewController: UICollectionViewDragDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
+    }
+
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let placeItem = String(filterPlaces[indexPath.item].arrangedTime?.ISO8601Format() ?? "")
+        let itemProvider = NSItemProvider(object: placeItem as NSString)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = placeItem
+        return [dragItem]
+    }
+}
+
+
+// MARK: - CollectionView Drop Delegate
+extension EditTripViewController: UICollectionViewDropDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        if collectionView.hasActiveDrag {
+            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        }
+
+        return UICollectionViewDropProposal(operation: .forbidden)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidEnd session: UIDropSession) {
+    }
+
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        var destinationIndexPath: IndexPath
+        if let indexPath = coordinator.destinationIndexPath {
+            destinationIndexPath = indexPath
+        } else {
+            let items = dataSource.snapshot().numberOfItems(inSection: .main)
+            destinationIndexPath = IndexPath(item: items - 1, section: 0)
+        }
+
+        if coordinator.proposal.operation == .move {
+            moveItem(coordinator: coordinator, destinationIndexPath: destinationIndexPath, collectionView: collectionView)
+        }
+    }
+
+    private func moveItem(coordinator: UICollectionViewDropCoordinator, destinationIndexPath: IndexPath, collectionView: UICollectionView) {
+        if let dragItem = coordinator.items.first,
+            let sourceIndexPath = dragItem.sourceIndexPath {
+
+            collectionView.performBatchUpdates {
+                for item in coordinator.items {
+                    let placeTime = item.dragItem.localObject as? String
+                    let formatter = ISO8601DateFormatter()
+
+                    if let dateString = placeTime,
+                        let date = formatter.date(from: dateString) {
+
+                        var sourceItem = filterPlaces[sourceIndexPath.item]
+                        var destinationItem = filterPlaces[destinationIndexPath.item]
+
+                        sourceItem.arrangedTime = destinationItem.arrangedTime
+                        destinationItem.arrangedTime = date
+
+                        FireStoreService.shared.batchUpdate(at: trip, from: sourceItem, to: destinationItem) {
+                            print("Ha Ha, that's some easy.")
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
