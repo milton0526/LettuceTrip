@@ -50,6 +50,7 @@ class EditTripViewController: UIViewController {
     private var dataSource: UICollectionViewDiffableDataSource<Section, Place>!
     private var places: [Place] = []
     private var filterPlaces: [Place] = []
+    private lazy var currentSelectedDate = trip.startDate
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,7 +102,7 @@ class EditTripViewController: UIViewController {
                 self.places = place
 
                 DispatchQueue.main.async {
-                    self.updateSnapshot(by: self.trip.startDate)
+                    self.updateSnapshot(by: self.currentSelectedDate)
                 }
             case .failure(let error):
                 self.showAlertToUser(error: error)
@@ -234,7 +235,7 @@ class EditTripViewController: UIViewController {
         filterPlaces = filterResults.sorted { $0.arrangedTime! < $1.arrangedTime! }
         // swiftlint: enable force_unwrapping
         snapshot.appendItems(filterPlaces)
-        dataSource.apply(snapshot)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
 
@@ -320,6 +321,7 @@ extension EditTripViewController: UICollectionViewDropDelegate {
 // MARK: - ScheduleView Delegate
 extension EditTripViewController: ScheduleViewDelegate {
     func didSelectedDate(_ view: ScheduleView, selectedDate: Date) {
+        currentSelectedDate = selectedDate
         updateSnapshot(by: selectedDate)
     }
 }
