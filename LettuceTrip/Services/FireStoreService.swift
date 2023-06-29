@@ -27,8 +27,19 @@ class FireStoreService {
 
     var currentUser: String? {
         // Test user id
-        "U3K16S3A8vduG71uXhEq6GDkStg2"
-        // Auth.auth().currentUser?.uid
+        // "xlyR2EUkqm8yhkRXiIRQ"
+        Auth.auth().currentUser?.uid
+    }
+
+    func signOut(completion: @escaping (Error?) -> Void) {
+        let firebaseAuth = Auth.auth()
+        do {
+            try firebaseAuth.signOut()
+            completion(nil)
+        } catch {
+            completion(error)
+            print("Error signing out: \(error.localizedDescription)")
+        }
     }
 
     func createUser(id: String, user: User, completion: @escaping (Result<User, Error>) -> Void) {
@@ -75,6 +86,30 @@ class FireStoreService {
         }
     }
 
+    func updateMembers(userID: String, at tripID: String, completion: @escaping (Error?) -> Void) {
+        let ref = database.collection(CollectionRef.trips.rawValue).document(tripID)
+
+        ref.updateData([
+            "members": FieldValue.arrayUnion([userID])
+        ]) { error in
+            completion(error)
+        }
+    }
+
+    func updateTrip(trip: Trip, completion: @escaping (Error?) -> Void) {
+        guard let tripID = trip.id else { return }
+
+        let ref = database.collection(CollectionRef.trips.rawValue).document(tripID)
+
+        do {
+            try ref.setData(from: trip, merge: true)
+            completion(nil)
+        } catch {
+            print("Error update trip state")
+            completion(error)
+        }
+    }
+
     func sendMessage(with message: String, in tripID: String, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let userID = currentUser else { return }
         let ref = database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.chatRoom.rawValue)
@@ -90,19 +125,62 @@ class FireStoreService {
         }
     }
 
-    func getDocument<T: Decodable>(from collection: CollectionRef, docId: String, dataType: T.Type, completion: @escaping (Result<T, Error>) -> Void) {
+    func getAllDocuments<T: Decodable>(from collection: CollectionRef, completion: @escaping (Result<[T], Error>) -> Void) {
         let ref = database.collection(collection.rawValue)
+        var results: [T] = []
 
-        ref.document(docId).getDocument(as: dataType) { result in
-            switch result {
-            case .success(let data):
-                completion(.success(data))
-                print("Successfully get trip data: \(data)")
-            case .failure(let error):
+        ref.getDocuments { snapshot, error in
+            if let error = error {
+                print("Error get all documents in \(collection.rawValue)")
                 completion(.failure(error))
-                print("Failed get trip data: \(error)")
+            } else {
+                guard let snapshot = snapshot else { return }
+
+                snapshot.documents.forEach { doc in
+                    if let data = try? doc.data(as: T.self) {
+                        results.append(data)
+                    }
+                }
+                completion(.success(results))
             }
         }
+    }
+
+    func getUserData(completion: @escaping (Result<User, Error>) -> Void) {
+        guard let currentUser = currentUser else { return }
+        let ref = database.collection(CollectionRef.users.rawValue)
+
+        ref.document(currentUser).getDocument(as: User.self) { result in
+            switch result {
+            case .success(let user):
+                completion(.success(user))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
+    func fetchShareTrips(completion: @escaping (Result<[Trip], Error>) -> Void) {
+        let ref = database.collection(CollectionRef.trips.rawValue)
+        var trips: [Trip] = []
+
+        ref
+            .whereField("isPublic", isEqualTo: true)
+            .limit(to: 10)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error getting Share trips")
+                    completion(.failure(error))
+                } else {
+                    guard let snapshot = snapshot else { return }
+                    snapshot.documents.forEach { doc in
+                        if let trip = try? doc.data(as: Trip.self) {
+                            trips.append(trip)
+                        }
+                    }
+                    completion(.success(trips))
+                }
+            }
     }
 
     func fetchAllUserTrips(completion: @escaping (Result<[Trip], Error>) -> Void) {

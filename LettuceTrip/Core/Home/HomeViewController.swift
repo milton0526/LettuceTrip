@@ -11,48 +11,45 @@ import TinyConstraints
 class HomeViewController: UIViewController {
 
     enum Section {
-        case popularCity
-        case itinerary
+        case main
     }
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.delegate = self
         collectionView.register(
-            PopularCityCollectionViewCell.self,
-            forCellWithReuseIdentifier: PopularCityCollectionViewCell.identifier)
-        collectionView.register(
             ItineraryCollectionViewCell.self,
             forCellWithReuseIdentifier: ItineraryCollectionViewCell.identifier)
         collectionView.register(
-            PopularCityHeaderView.self,
+            ItineraryHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: PopularCityHeaderView.identifier)
+            withReuseIdentifier: ItineraryHeaderView.identifier)
         return collectionView
     }()
 
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Int>!
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Trip>!
+    private var shareTrips: [Trip] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         configureDataSource()
-        updateSnapshot()
+        fetchData()
     }
 
     private func setupUI() {
         view.addSubview(collectionView)
         collectionView.edgesToSuperview(usingSafeArea: true)
-        customNavBar()
     }
 
-    private func customNavBar() {
+    private func customNavBar(user: User) {
+
         let welcomeView = UILabel()
-        welcomeView.text = String(localized: "Hi👋 Milton!")
+        welcomeView.text = String(localized: "Hi👋 \(user.name)")
         welcomeView.font = .systemFont(ofSize: 20, weight: .bold)
         welcomeView.textColor = .label
 
-        let userImageView = UIImageView(frame: CGRect(origin: .zero, size: CGSize(width: 40, height: 40)))
+        let userImageView = UIImageView(frame: CGRect(origin: .zero, size: CGSize(width: 32, height: 32)))
         userImageView.image = UIImage(systemName: "person.circle")
         userImageView.contentMode = .scaleAspectFit
         userImageView.clipsToBounds = true
@@ -66,48 +63,6 @@ class HomeViewController: UIViewController {
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        return UICollectionViewCompositionalLayout { [weak self] section, _ in
-            guard let self = self else { fatalError("Failed to create layout") }
-
-            let sectionType = self.dataSource.snapshot().sectionIdentifiers[section]
-            switch sectionType {
-            case .popularCity:
-                return self.configPopularSectionLayout()
-            case .itinerary:
-                return self.configItineraryLayout()
-            }
-        }
-    }
-
-    private func configPopularSectionLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(160),
-            heightDimension: .absolute(220))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
-        section.interGroupSpacing = 12
-        section.contentInsets = .init(top: 8, leading: 16, bottom: 8, trailing: 16)
-
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(50))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .topLeading)
-        section.boundarySupplementaryItems = [header]
-
-        return section
-    }
-
-    private func configItineraryLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0))
@@ -115,7 +70,7 @@ class HomeViewController: UIViewController {
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(68))
+            heightDimension: .estimated(200))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
@@ -132,66 +87,71 @@ class HomeViewController: UIViewController {
         header.pinToVisibleBounds = true
         section.boundarySupplementaryItems = [header]
 
-        return section
+        return UICollectionViewCompositionalLayout(section: section)
     }
 
     private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, _ in
-            guard let self = self else { return UICollectionViewCell() }
-            let section = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
-
-            switch section {
-            case .popularCity:
-                guard let cityCell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: PopularCityCollectionViewCell.identifier,
-                    for: indexPath) as? PopularCityCollectionViewCell
-                else {
-                    fatalError("Failed to dequeue cityCell")
-                }
-
-                return cityCell
-            case .itinerary:
-                guard let itineraryCell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: ItineraryCollectionViewCell.identifier,
-                    for: indexPath) as? ItineraryCollectionViewCell
-                else {
-                    fatalError("Failed to dequeue cityCell")
-                }
-
-                return itineraryCell
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, item in
+            guard let itineraryCell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ItineraryCollectionViewCell.identifier,
+                for: indexPath) as? ItineraryCollectionViewCell
+            else {
+                fatalError("Failed to dequeue cityCell")
             }
+
+            itineraryCell.config(with: item)
+            return itineraryCell
         }
 
-        dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath -> UICollectionReusableView? in
-            guard let self = self else { return nil }
-
+        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath -> UICollectionReusableView? in
             guard let headerView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
-                withReuseIdentifier: PopularCityHeaderView.identifier,
-                for: indexPath) as? PopularCityHeaderView
+                withReuseIdentifier: ItineraryHeaderView.identifier,
+                for: indexPath) as? ItineraryHeaderView
             else {
                 return nil
             }
 
-            let section = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
-
-            switch section {
-            case .popularCity:
-                headerView.titleLabel.text = "Discover popular cities"
-            case .itinerary:
-                headerView.titleLabel.text = "Other's Itinerary"
-            }
+            headerView.titleLabel.text = "Discover other's journey!"
             return headerView
         }
     }
 
+    private func fetchData() {
+
+        // dispatch group
+        FireStoreService.shared.getUserData { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let user):
+                DispatchQueue.main.async {
+                    self.customNavBar(user: user)
+                }
+            case .failure(let error):
+                self.showAlertToUser(error: error)
+            }
+        }
+
+        FireStoreService.shared.fetchShareTrips { [weak self] result in
+
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let trips):
+                    self?.shareTrips = trips
+                    self?.updateSnapshot()
+                case .failure(let error):
+                    self?.showAlertToUser(error: error)
+                }
+            }
+        }
+    }
+
     private func updateSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Trip>()
 
-        snapshot.appendSections([.popularCity, .itinerary])
-        snapshot.appendItems(Array(1...20), toSection: .popularCity)
-        snapshot.appendItems(Array(21...40), toSection: .itinerary)
-
+        snapshot.appendSections([.main])
+        snapshot.appendItems(shareTrips)
         dataSource.apply(snapshot)
     }
 }

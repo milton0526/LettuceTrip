@@ -8,8 +8,8 @@
 import UIKit
 import TinyConstraints
 
-class PopularCityHeaderView: UICollectionReusableView {
-    static let identifier = String(describing: PopularCityHeaderView.self)
+class ItineraryHeaderView: UICollectionReusableView {
+    static let identifier = String(describing: ItineraryHeaderView.self)
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()

@@ -10,7 +10,7 @@ import MapKit
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-struct Trip: Codable {
+struct Trip: Codable, Hashable {
     @DocumentID var id: String?
     var tripName: String
     var startDate: Date
@@ -18,6 +18,7 @@ struct Trip: Codable {
     var duration: Int
     var destination: GeoPoint
     var members: [String]
+    var isPublic: Bool
 }
 
 struct Message: Codable, Hashable {

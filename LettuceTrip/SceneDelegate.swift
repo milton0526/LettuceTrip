@@ -66,11 +66,31 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let firstURL = URLContexts.first?.url else { return }
 
         let urlComponents = URLComponents(string: firstURL.absoluteString)
-        guard let query = urlComponents?.query else { return }
+        guard
+            let query = urlComponents?.query,
+            let userID = FireStoreService.shared.currentUser
+        else {
+
+            // show alert to let user sign in
+            return
+        }
 
         if let topVC = window?.topViewController {
-            let alert = UIAlertController(title: "Some one invite your to this trip", message: nil, preferredStyle: .alert)
-            let accept = UIAlertAction(title: "Accept", style: .default)
+            let alert = UIAlertController(
+                title: String(localized: "Some one invite your to edit this trip"),
+                message: nil,
+                preferredStyle: .alert)
+
+            let accept = UIAlertAction(title: "Accept", style: .default) { _ in
+                FireStoreService.shared.updateMembers(userID: userID, at: query) { error in
+                    if error == nil {
+                        print("Success add this trip")
+                    } else {
+                        print("Failed to add this trip into your list.")
+                    }
+                }
+            }
+
             let cancel = UIAlertAction(title: "Cancel", style: .cancel)
             alert.addAction(accept)
             alert.addAction(cancel)

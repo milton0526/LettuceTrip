@@ -100,6 +100,7 @@ class ChatRoomViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success:
+                    self?.inputTextField.resignFirstResponder()
                     self?.inputTextField.text = ""
                 case .failure(let error):
                     self?.showAlertToUser(error: error)
