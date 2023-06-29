@@ -5,7 +5,6 @@
 //  Created by Milton Liu on 2023/6/27.
 //
 
-import UIKit
 import AuthenticationServices
 import FirebaseAuth
 

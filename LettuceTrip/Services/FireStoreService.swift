@@ -294,6 +294,12 @@ class FireStoreService {
                             if let message = try? diff.document.data(as: Message.self) {
                                 messages.append(message)
                             }
+                        case .modified:
+                            if let modifiedMSG = try? diff.document.data(as: Message.self) {
+                                if let index = messages.firstIndex(where: { $0.id == modifiedMSG.id }) {
+                                    messages[index].sendTime = modifiedMSG.sendTime
+                                }
+                            }
                         default:
                             break
                         }
