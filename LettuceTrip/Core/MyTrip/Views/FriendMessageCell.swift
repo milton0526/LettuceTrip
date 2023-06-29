@@ -68,7 +68,7 @@ class FriendMessageCell: UICollectionViewCell {
         contentView.addSubview(timeLabel)
         stackView.verticalToSuperview(insets: .vertical(10))
         stackView.leadingToSuperview(offset: 12)
-        stackView.widthToSuperview(multiplier: 0.6)
+        stackView.widthToSuperview(multiplier: 0.6, relation: .equalOrLess)
 
         timeLabel.leadingToTrailing(of: stackView, offset: 8)
         timeLabel.height(14)
