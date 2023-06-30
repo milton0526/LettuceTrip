@@ -256,6 +256,14 @@ class EditTripViewController: UIViewController {
 // MARK: - CollectionView Delegate
 extension EditTripViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let place = filterPlaces[indexPath.item]
+
+        let arrangeVC = ArrangePlaceViewController()
+        arrangeVC.trip = trip
+        arrangeVC.place = place
+        arrangeVC.editMode = false
+
+        navigationController?.pushViewController(arrangeVC, animated: true)
     }
 }
 
@@ -344,6 +352,8 @@ extension EditTripViewController: ScheduleViewDelegate {
 extension EditTripViewController: PHPickerViewControllerDelegate {
 
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+
         let itemProviders = results.map(\.itemProvider)
         if let itemProvider = itemProviders.first, itemProvider.canLoadObject(ofClass: UIImage.self) {
             itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
@@ -357,14 +367,12 @@ extension EditTripViewController: PHPickerViewControllerDelegate {
 
                 // Update imageView first
                 DispatchQueue.main.async {
+                    self.imageView.image = image
+                    self.trip.image = imageData
 
-                    picker.dismiss(animated: true) {
-                        self.imageView.image = image
-                        self.trip.image = imageData
-                        FireStoreService.shared.updateTrip(trip: self.trip) { error in
-                            if let error = error {
-                                self.showAlertToUser(error: error)
-                            }
+                    FireStoreService.shared.updateTrip(trip: self.trip) { error in
+                        if let error = error {
+                            self.showAlertToUser(error: error)
                         }
                     }
                 }
