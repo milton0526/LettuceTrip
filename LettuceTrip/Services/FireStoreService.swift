@@ -257,8 +257,11 @@ class FireStoreService {
                             }
 
                         case .modified, .removed:
-                            // remove trip maybe cause issue
-                            completion(.success([]))
+                            if let modifyTrip = try? diff.document.data(as: Trip.self) {
+                                if let index = trips.firstIndex(where: { $0.id == modifyTrip.id }) {
+                                    trips[index].image = modifyTrip.image
+                                }
+                            }
                         }
                     }
                     completion(.success(trips))

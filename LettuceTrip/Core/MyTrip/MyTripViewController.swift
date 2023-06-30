@@ -66,8 +66,8 @@ class MyTripViewController: UIViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        listener?.remove()
-        listener = nil
+//        listener?.remove()
+//        listener = nil
     }
 
     private func customNavBar() {

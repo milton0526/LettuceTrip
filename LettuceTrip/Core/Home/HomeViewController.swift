@@ -38,28 +38,9 @@ class HomeViewController: UIViewController {
     }
 
     private func setupUI() {
+        navigationItem.title = String(localized: "Discover")
         view.addSubview(collectionView)
         collectionView.edgesToSuperview(usingSafeArea: true)
-    }
-
-    private func customNavBar(user: User) {
-
-        let welcomeView = UILabel()
-        welcomeView.text = String(localized: "Hi👋 \(user.name)")
-        welcomeView.font = .systemFont(ofSize: 20, weight: .bold)
-        welcomeView.textColor = .label
-
-        let userImageView = UIImageView(frame: CGRect(origin: .zero, size: CGSize(width: 32, height: 32)))
-        userImageView.image = UIImage(systemName: "person.circle")
-        userImageView.contentMode = .scaleAspectFit
-        userImageView.clipsToBounds = true
-        userImageView.layer.cornerRadius = 20
-        userImageView.layer.masksToBounds = true
-
-        let leftBarItem = UIBarButtonItem(customView: welcomeView)
-        let rightBarItem = UIBarButtonItem(customView: userImageView)
-        navigationItem.leftBarButtonItem = leftBarItem
-        navigationItem.rightBarButtonItem = rightBarItem
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
@@ -77,16 +58,6 @@ class HomeViewController: UIViewController {
         section.interGroupSpacing = 12
         section.contentInsets = .init(top: 8, leading: 16, bottom: 8, trailing: 16)
 
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(50))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .topLeading)
-        header.pinToVisibleBounds = true
-        section.boundarySupplementaryItems = [header]
-
         return UICollectionViewCompositionalLayout(section: section)
     }
 
@@ -102,36 +73,9 @@ class HomeViewController: UIViewController {
             itineraryCell.config(with: item)
             return itineraryCell
         }
-
-        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath -> UICollectionReusableView? in
-            guard let headerView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: ItineraryHeaderView.identifier,
-                for: indexPath) as? ItineraryHeaderView
-            else {
-                return nil
-            }
-
-            headerView.titleLabel.text = "Discover other's journey!"
-            return headerView
-        }
     }
 
     private func fetchData() {
-
-        // dispatch group
-        FireStoreService.shared.getUserData { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let user):
-                DispatchQueue.main.async {
-                    self.customNavBar(user: user)
-                }
-            case .failure(let error):
-                self.showAlertToUser(error: error)
-            }
-        }
 
         FireStoreService.shared.fetchShareTrips { [weak self] result in
 
@@ -160,5 +104,7 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+
+        let trip = shareTrips[indexPath.item]
     }
 }

@@ -8,10 +8,11 @@
 import UIKit
 import FirebaseFirestore
 import TinyConstraints
+import PhotosUI
 
 class EditTripViewController: UIViewController {
 
-    let trip: Trip
+    var trip: Trip
 
     init(trip: Trip) {
         self.trip = trip
@@ -27,11 +28,14 @@ class EditTripViewController: UIViewController {
     }
 
     lazy var imageView: UIImageView = {
-        let imageView = UIImageView(image: .init(named: "placeholder2"))
+        let imageView = UIImageView(image: UIImage(data: trip.image))
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 34
         imageView.layer.masksToBounds = true
+        imageView.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(pickImage))
+        imageView.addGestureRecognizer(tapGesture)
         return imageView
     }()
 
@@ -181,6 +185,14 @@ class EditTripViewController: UIViewController {
         present(actionSheet, animated: true)
     }
 
+    @objc func pickImage(_ gesture: UIGestureRecognizer) {
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+
     private func convertDateToDisplay() -> [Date] {
         let dayRange = 0...trip.duration
         let travelDays = dayRange.map { range -> Date in
@@ -325,5 +337,38 @@ extension EditTripViewController: ScheduleViewDelegate {
     func didSelectedDate(_ view: ScheduleView, selectedDate: Date) {
         currentSelectedDate = selectedDate
         updateSnapshot(by: selectedDate)
+    }
+}
+
+// MARK: - PHPickerController Delegate
+extension EditTripViewController: PHPickerViewControllerDelegate {
+
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        let itemProviders = results.map(\.itemProvider)
+        if let itemProvider = itemProviders.first, itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                guard
+                    let self = self,
+                    let image = image as? UIImage,
+                    let imageData = image.jpegData(compressionQuality: 0.1)
+                else {
+                    return
+                }
+
+                // Update imageView first
+                DispatchQueue.main.async {
+
+                    picker.dismiss(animated: true) {
+                        self.imageView.image = image
+                        self.trip.image = imageData
+                        FireStoreService.shared.updateTrip(trip: self.trip) { error in
+                            if let error = error {
+                                self.showAlertToUser(error: error)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
