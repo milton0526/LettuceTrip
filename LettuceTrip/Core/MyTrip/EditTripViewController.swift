@@ -235,7 +235,9 @@ class EditTripViewController: UIViewController {
         filterPlaces = filterResults.sorted { $0.arrangedTime! < $1.arrangedTime! }
         // swiftlint: enable force_unwrapping
         snapshot.appendItems(filterPlaces)
-        dataSource.apply(snapshot, animatingDifferences: false)
+
+        // use snapshot reload method to avoid weird animation
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 }
 
