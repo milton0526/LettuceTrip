@@ -17,11 +17,28 @@ class ArrangePlaceDetailCell: UITableViewCell {
         super.awakeFromNib()
     }
 
-    func config(with trip: Trip) {
+    func config(with trip: Trip, place: Place, isArrange: Bool = false) {
         [fromDatePicker, toDatePicker].forEach { picker in
             picker?.minimumDate = trip.startDate
             picker?.maximumDate = trip.endDate
-            picker?.date = trip.startDate
+        }
+
+        if isArrange {
+
+            guard
+                let arrangedTime = place.arrangedTime,
+                let duration = place.duration
+            else {
+                return
+            }
+
+            fromDatePicker.date = arrangedTime
+            let toDate = arrangedTime.addingTimeInterval(duration)
+            toDatePicker.date = toDate
+            memoTextView.text = place.memo
+        } else {
+            fromDatePicker.date = trip.startDate
+            toDatePicker.date = trip.startDate
         }
     }
 

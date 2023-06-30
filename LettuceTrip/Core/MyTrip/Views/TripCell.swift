@@ -11,8 +11,7 @@ import TinyConstraints
 class TripCell: UITableViewCell {
 
     lazy var photoImageView: UIImageView = {
-        let randomIndex = Int.random(in: 0...4)
-        let imageView = UIImageView(image: .init(named: "placeholder\(randomIndex)"))
+        let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 24
@@ -71,6 +70,7 @@ class TripCell: UITableViewCell {
 
     func config(with trip: Trip) {
         titleLabel.text = trip.tripName
+        photoImageView.image = UIImage(data: trip.image)
         let fromDate = trip.startDate.formatted(date: .numeric, time: .omitted)
         let toDate = trip.endDate.formatted(date: .numeric, time: .omitted)
         subtitleLabel.text = fromDate + " - " + toDate

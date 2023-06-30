@@ -8,10 +8,11 @@
 import UIKit
 import FirebaseFirestore
 import TinyConstraints
+import PhotosUI
 
 class EditTripViewController: UIViewController {
 
-    let trip: Trip
+    var trip: Trip
 
     init(trip: Trip) {
         self.trip = trip
@@ -27,11 +28,14 @@ class EditTripViewController: UIViewController {
     }
 
     lazy var imageView: UIImageView = {
-        let imageView = UIImageView(image: .init(named: "placeholder2"))
+        let imageView = UIImageView(image: UIImage(data: trip.image))
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 34
         imageView.layer.masksToBounds = true
+        imageView.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(pickImage))
+        imageView.addGestureRecognizer(tapGesture)
         return imageView
     }()
 
@@ -40,6 +44,8 @@ class EditTripViewController: UIViewController {
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.delegate = self
+        collectionView.dragDelegate = self
+        collectionView.dropDelegate = self
         collectionView.register(ArrangePlaceCell.self, forCellWithReuseIdentifier: ArrangePlaceCell.identifier)
         return collectionView
     }()
@@ -48,6 +54,7 @@ class EditTripViewController: UIViewController {
     private var dataSource: UICollectionViewDiffableDataSource<Section, Place>!
     private var places: [Place] = []
     private var filterPlaces: [Place] = []
+    private lazy var currentSelectedDate = trip.startDate
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,7 +106,7 @@ class EditTripViewController: UIViewController {
                 self.places = place
 
                 DispatchQueue.main.async {
-                    self.updateSnapshot(by: self.trip.startDate)
+                    self.updateSnapshot(by: self.currentSelectedDate)
                 }
             case .failure(let error):
                 self.showAlertToUser(error: error)
@@ -178,6 +185,14 @@ class EditTripViewController: UIViewController {
         present(actionSheet, animated: true)
     }
 
+    @objc func pickImage(_ gesture: UIGestureRecognizer) {
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+
     private func convertDateToDisplay() -> [Date] {
         let dayRange = 0...trip.duration
         let travelDays = dayRange.map { range -> Date in
@@ -232,19 +247,136 @@ class EditTripViewController: UIViewController {
         filterPlaces = filterResults.sorted { $0.arrangedTime! < $1.arrangedTime! }
         // swiftlint: enable force_unwrapping
         snapshot.appendItems(filterPlaces)
-        dataSource.apply(snapshot)
+
+        // use snapshot reload method to avoid weird animation
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 }
 
 // MARK: - CollectionView Delegate
 extension EditTripViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let place = filterPlaces[indexPath.item]
+
+        let arrangeVC = ArrangePlaceViewController()
+        arrangeVC.trip = trip
+        arrangeVC.place = place
+        arrangeVC.editMode = false
+
+        navigationController?.pushViewController(arrangeVC, animated: true)
+    }
+}
+
+
+// MARK: - CollectionView Drag Delegate
+extension EditTripViewController: UICollectionViewDragDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
+    }
+
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let placeItem = String(filterPlaces[indexPath.item].arrangedTime?.ISO8601Format() ?? "")
+        let itemProvider = NSItemProvider(object: placeItem as NSString)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = placeItem
+        return [dragItem]
+    }
+}
+
+
+// MARK: - CollectionView Drop Delegate
+extension EditTripViewController: UICollectionViewDropDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        if collectionView.hasActiveDrag {
+            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        }
+
+        return UICollectionViewDropProposal(operation: .forbidden)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidEnd session: UIDropSession) {
+    }
+
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        var destinationIndexPath: IndexPath
+        if let indexPath = coordinator.destinationIndexPath {
+            destinationIndexPath = indexPath
+        } else {
+            let items = dataSource.snapshot().numberOfItems(inSection: .main)
+            destinationIndexPath = IndexPath(item: items - 1, section: 0)
+        }
+
+        if coordinator.proposal.operation == .move {
+            moveItem(coordinator: coordinator, destinationIndexPath: destinationIndexPath, collectionView: collectionView)
+        }
+    }
+
+    private func moveItem(coordinator: UICollectionViewDropCoordinator, destinationIndexPath: IndexPath, collectionView: UICollectionView) {
+        if let dragItem = coordinator.items.first,
+            let sourceIndexPath = dragItem.sourceIndexPath {
+
+            collectionView.performBatchUpdates {
+                for item in coordinator.items {
+                    let placeTime = item.dragItem.localObject as? String
+                    let formatter = ISO8601DateFormatter()
+
+                    if let dateString = placeTime,
+                        let date = formatter.date(from: dateString) {
+
+                        var sourceItem = filterPlaces[sourceIndexPath.item]
+                        var destinationItem = filterPlaces[destinationIndexPath.item]
+
+                        sourceItem.arrangedTime = destinationItem.arrangedTime
+                        destinationItem.arrangedTime = date
+
+                        FireStoreService.shared.batchUpdate(at: trip, from: sourceItem, to: destinationItem) {
+                            print("Ha Ha, that's some easy.")
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
 // MARK: - ScheduleView Delegate
 extension EditTripViewController: ScheduleViewDelegate {
     func didSelectedDate(_ view: ScheduleView, selectedDate: Date) {
+        currentSelectedDate = selectedDate
         updateSnapshot(by: selectedDate)
+    }
+}
+
+// MARK: - PHPickerController Delegate
+extension EditTripViewController: PHPickerViewControllerDelegate {
+
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+
+        let itemProviders = results.map(\.itemProvider)
+        if let itemProvider = itemProviders.first, itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                guard
+                    let self = self,
+                    let image = image as? UIImage,
+                    let imageData = image.jpegData(compressionQuality: 0.1)
+                else {
+                    return
+                }
+
+                // Update imageView first
+                DispatchQueue.main.async {
+                    self.imageView.image = image
+                    self.trip.image = imageData
+
+                    FireStoreService.shared.updateTrip(trip: self.trip) { error in
+                        if let error = error {
+                            self.showAlertToUser(error: error)
+                        }
+                    }
+                }
+            }
+        }
     }
 }

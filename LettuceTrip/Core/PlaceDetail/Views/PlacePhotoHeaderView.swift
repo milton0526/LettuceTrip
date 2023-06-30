@@ -28,15 +28,15 @@ class PlacePhotoHeaderView: UITableViewHeaderFooterView {
     lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.currentPage = 0
-        pageControl.numberOfPages = 5
         pageControl.currentPageIndicatorTintColor = .white
         pageControl.pageIndicatorTintColor = .black
         pageControl.addTarget(self, action: #selector(changePage), for: .valueChanged)
         return pageControl
     }()
 
-    var numberOfImages = 1 {
+    var photos: [Photo] = [] {
         didSet {
+            pageControl.numberOfPages = photos.count
             DispatchQueue.main.async { [weak self] in
                 self?.collectionView.reloadData()
             }
@@ -45,7 +45,6 @@ class PlacePhotoHeaderView: UITableViewHeaderFooterView {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = .red
         setupView()
     }
 
@@ -95,7 +94,7 @@ extension PlacePhotoHeaderView: UICollectionViewDelegateFlowLayout {
 // MARK: - UICollectionView DataSource
 extension PlacePhotoHeaderView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        photos.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -107,10 +106,11 @@ extension PlacePhotoHeaderView: UICollectionViewDataSource {
             fatalError("Failed to dequeue PlacePhotoCell")
         }
 
-        let item = indexPath.item
+        if let url = photos[indexPath.item].url {
+            photoCell.imageView.setImage(with: url)
+        }
 
-        photoCell.imageView.image = UIImage(named: "placeholder\(item)")
-        photoCell.titleLabel.text = "Photo \(indexPath.item)"
+        photoCell.titleLabel.text = "Foursquare"
         return photoCell
     }
 }

@@ -14,7 +14,6 @@ class PlaceDetailViewController: UIViewController {
     enum Section: Int {
         case photos
         case about
-        case location
 
         var title: String? {
             switch self {
@@ -22,8 +21,6 @@ class PlaceDetailViewController: UIViewController {
                 return nil
             case .about:
                 return String(localized: "About")
-            case .location:
-                return String(localized: "Location")
             }
         }
     }
@@ -78,7 +75,7 @@ class PlaceDetailViewController: UIViewController {
         title = place.name
         view.backgroundColor = .systemBackground
         setupUI()
-        // fetchDetails()
+        fetchDetails()
     }
 
     private func setupUI() {
@@ -104,10 +101,6 @@ class PlaceDetailViewController: UIViewController {
                 }
             }
         }
-    }
-
-    private func fetchPhotos() {
-        // SDWebImage
     }
 
     @objc func addToTripButtonTapped(_ sender: UIButton) {
@@ -201,6 +194,7 @@ extension PlaceDetailViewController: UITableViewDelegate {
                 print("Photo header view dequeue failed")
                 return nil
             }
+            photoHeaderView.photos = fqPlaceDetail?.photos ?? []
             return photoHeaderView
         default:
             if let title = sectionType.title {
@@ -219,7 +213,7 @@ extension PlaceDetailViewController: UITableViewDelegate {
 // MARK: - UITableView DataSource
 extension PlaceDetailViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        3
+        2
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -242,7 +236,7 @@ extension PlaceDetailViewController: UITableViewDataSource {
 
             let info = PlaceInfoCellViewModel(
                 name: place.name,
-                address: fqPlace.location.address,
+                address: fqPlace.location?.address ?? "No address",
                 rating: fqPlace.rating ?? 0)
             infoCell.config(with: info)
             return infoCell
@@ -260,8 +254,6 @@ extension PlaceDetailViewController: UITableViewDataSource {
             aboutCell.config(with: about)
 
             return aboutCell
-        case .location:
-            return UITableViewCell()
         }
     }
 }

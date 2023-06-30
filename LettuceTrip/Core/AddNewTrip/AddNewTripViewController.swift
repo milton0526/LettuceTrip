@@ -143,7 +143,8 @@ class AddNewTripViewController: UIViewController {
             let startDate = startDate,
             let endDate = Calendar.current.date(byAdding: .day, value: duration - 1, to: startDate),
             let selectedCity = selectedCity,
-            let user = FireStoreService.shared.currentUser
+            let user = FireStoreService.shared.currentUser,
+            let imageData = UIImage(named: "placeholder")?.jpegData(compressionQuality: 0.1)
         else {
             return
         }
@@ -154,6 +155,7 @@ class AddNewTripViewController: UIViewController {
 
         let trip = Trip(
             tripName: tripName,
+            image: imageData,
             startDate: startDate,
             endDate: endDate,
             duration: duration - 1,

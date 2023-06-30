@@ -39,7 +39,7 @@ class FQService {
         let latitude = String(describing: coordinate.latitude)
         let longitude = String(describing: coordinate.longitude)
 
-        let urlString = "https://api.foursquare.com/v3/places/search?query=\(placeName)&ll=\(latitude)%2C\(longitude)&fields=fsq_id%2Clocation%2Cdescription%2Cphotos%2Ctel%2Cwebsite%2Chours%2Crating%2Cfeatures&sort=POPULARITY&limit=1"
+        let urlString = "https://api.foursquare.com/v3/places/search?query=\(placeName)&ll=\(latitude)%2C\(longitude)&radius=500&fields=fsq_id%2Clocation%2Cdescription%2Cphotos%2Ctel%2Cwebsite%2Chours%2Crating%2Cfeatures&sort=RATING&limit=1"
 
         guard let url = URL(string: urlString) else { return }
 

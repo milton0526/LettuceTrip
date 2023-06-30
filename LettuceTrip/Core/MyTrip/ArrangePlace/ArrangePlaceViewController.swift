@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MapKit
 import TinyConstraints
 
 class ArrangePlaceViewController: UIViewController {
@@ -117,9 +118,18 @@ class ArrangePlaceViewController: UIViewController {
     }
 
     @objc func openAppleMap(_ sender: UIButton) {
+        guard let place = place else { return }
+
+        let placeMark = MKPlacemark(coordinate: place.coordinate)
+        let mapItem = MKMapItem(placemark: placeMark)
+        mapItem.name = place.name
+        mapItem.openInMaps()
     }
 
     @objc func showDetail(_ sender: UIButton) {
+        guard let place = place else { return }
+        let detailVC = PlaceDetailViewController(place: place)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 
@@ -134,6 +144,12 @@ extension ArrangePlaceViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard
+            let trip = trip,
+            let place = place
+        else {
+            return UITableViewCell()
+        }
 
         switch indexPath.row {
         case 0:
@@ -141,10 +157,7 @@ extension ArrangePlaceViewController: UITableViewDataSource {
                 fatalError("Failed to dequeue map cell.")
             }
 
-            if let place = place {
-                mapCell.config(with: place)
-            }
-
+            mapCell.config(with: place)
             return mapCell
 
         default:
@@ -155,10 +168,11 @@ extension ArrangePlaceViewController: UITableViewDataSource {
                 fatalError("Failed to dequeue map cell.")
             }
 
-            if let trip = trip {
-                detailCell.config(with: trip)
+            if editMode {
+                detailCell.config(with: trip, place: place)
+            } else {
+                detailCell.config(with: trip, place: place, isArrange: true)
             }
-
             return detailCell
         }
     }

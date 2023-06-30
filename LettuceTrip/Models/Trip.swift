@@ -13,6 +13,7 @@ import FirebaseFirestoreSwift
 struct Trip: Codable, Hashable {
     @DocumentID var id: String?
     var tripName: String
+    var image: Data
     var startDate: Date
     var endDate: Date
     var duration: Int

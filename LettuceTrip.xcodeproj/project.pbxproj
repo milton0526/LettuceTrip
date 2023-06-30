@@ -28,6 +28,9 @@
 		C454134D2A4A9937000D0685 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134C2A4A9937000D0685 /* SignInViewModel.swift */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
+		C4CBD4242A4E92F5009108C6 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = C4CBD4232A4E92F5009108C6 /* FirebaseMessaging */; };
+		C4CBD4272A4EC6BA009108C6 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C4CBD4262A4EC6BA009108C6 /* SDWebImage */; };
+		C4CBD4292A4EC7D4009108C6 /* UIImageView+SDWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD4282A4EC7D4009108C6 /* UIImageView+SDWebImage.swift */; };
 		C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */; };
 		C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */; };
 		C4CC0BFE2A481E0100E03758 /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BFD2A481E0100E03758 /* ScheduleView.swift */; };
@@ -102,6 +105,7 @@
 		C454134C2A4A9937000D0685 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
+		C4CBD4282A4EC7D4009108C6 /* UIImageView+SDWebImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+SDWebImage.swift"; sourceTree = "<group>"; };
 		C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomPlacesView.swift; sourceTree = "<group>"; };
 		C4CC0BFD2A481E0100E03758 /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
 		C4CC0BFF2A48255B00E03758 /* WishListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListViewController.swift; sourceTree = "<group>"; };
@@ -155,11 +159,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4CBD4242A4E92F5009108C6 /* FirebaseMessaging in Frameworks */,
 				C4DBE8C42A42B363002987CB /* IQKeyboardManagerSwift in Frameworks */,
 				C4DBE89B2A41BD7B002987CB /* Cosmos in Frameworks */,
 				C4DBE8A22A41C158002987CB /* FirebaseFirestore in Frameworks */,
 				C4DBE8412A41B288002987CB /* TinyConstraints in Frameworks */,
 				C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */,
+				C4CBD4272A4EC6BA009108C6 /* SDWebImage in Frameworks */,
 				C45413472A4A803E000D0685 /* FirebaseAuth in Frameworks */,
 				C4DBE8A42A41C158002987CB /* FirebaseFirestoreSwift in Frameworks */,
 			);
@@ -301,6 +307,7 @@
 				C4DBE8D12A43E116002987CB /* MKPlaceMark+Extension.swift */,
 				C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */,
 				C45413402A497145000D0685 /* Date+Extension.swift */,
+				C4CBD4282A4EC7D4009108C6 /* UIImageView+SDWebImage.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -418,6 +425,8 @@
 				C4DBE8C32A42B363002987CB /* IQKeyboardManagerSwift */,
 				C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */,
 				C45413462A4A803E000D0685 /* FirebaseAuth */,
+				C4CBD4232A4E92F5009108C6 /* FirebaseMessaging */,
+				C4CBD4262A4EC6BA009108C6 /* SDWebImage */,
 			);
 			productName = LettuceTrip;
 			productReference = C4DBE81D2A41AF62002987CB /* LettuceTrip.app */;
@@ -453,6 +462,7 @@
 				C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				C4DBE8C22A42B363002987CB /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
+				C4CBD4252A4EC6BA009108C6 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
 			productRefGroup = C4DBE81E2A41AF62002987CB /* Products */;
 			projectDirPath = "";
@@ -551,6 +561,7 @@
 				C4CC0C002A48255B00E03758 /* WishListViewController.swift in Sources */,
 				C4DBE8822A41BC02002987CB /* RoundedTextField.swift in Sources */,
 				C4DBE8962A41BD00002987CB /* UITableView+Identifier.swift in Sources */,
+				C4CBD4292A4EC7D4009108C6 /* UIImageView+SDWebImage.swift in Sources */,
 				C4DBE8AF2A41D696002987CB /* SelectionViewDelegate.swift in Sources */,
 				C42F51CA2A45E2AB00023305 /* CirclePlaceCell.swift in Sources */,
 				C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */,
@@ -797,6 +808,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		C4CBD4252A4EC6BA009108C6 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JonasGessner/JGProgressHUD.git";
@@ -844,6 +863,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		C4CBD4232A4E92F5009108C6 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		C4CBD4262A4EC6BA009108C6 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4CBD4252A4EC6BA009108C6 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
 		};
 		C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;

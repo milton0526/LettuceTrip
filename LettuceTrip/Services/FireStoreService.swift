@@ -27,8 +27,8 @@ class FireStoreService {
 
     var currentUser: String? {
         // Test user id
-        // "xlyR2EUkqm8yhkRXiIRQ"
-        Auth.auth().currentUser?.uid
+        "U3K16S3A8vduG71uXhEq6GDkStg2"
+        // Auth.auth().currentUser?.uid
     }
 
     func signOut(completion: @escaping (Error?) -> Void) {
@@ -83,6 +83,34 @@ class FireStoreService {
         } catch {
             completion(false)
             print("Failed to add new place at tripID: \(tripID)")
+        }
+    }
+
+    func batchUpdate(at trip: Trip, from source: Place, to destination: Place, completion: @escaping () -> Void) {
+        guard
+            let tripID = trip.id,
+            let sourceID = source.id,
+            let destinationID = destination.id
+        else {
+            return
+        }
+
+        let batch = database.batch()
+        let baseRef = database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.places.rawValue)
+
+        do {
+            try batch.setData(from: source, forDocument: baseRef.document(sourceID), merge: true)
+            try batch.setData(from: destination, forDocument: baseRef.document(destinationID), merge: true)
+        } catch {
+            print("Error set batch update items: \(error.localizedDescription)")
+        }
+
+        batch.commit { error in
+            if let error = error {
+                print("Error to commit batch: \(error.localizedDescription)")
+            } else {
+                print("Successfully update batch.")
+            }
         }
     }
 
@@ -229,8 +257,11 @@ class FireStoreService {
                             }
 
                         case .modified, .removed:
-                            // remove trip maybe cause issue
-                            completion(.success([]))
+                            if let modifyTrip = try? diff.document.data(as: Trip.self) {
+                                if let index = trips.firstIndex(where: { $0.id == modifyTrip.id }) {
+                                    trips[index].image = modifyTrip.image
+                                }
+                            }
                         }
                     }
                     completion(.success(trips))
@@ -263,7 +294,11 @@ class FireStoreService {
                             }
 
                         case .modified, .removed:
-                            completion(.success([]))
+                            if let modifiedPlace = try? diff.document.data(as: Place.self) {
+                                if let index = places.firstIndex(where: { $0.id == modifiedPlace.id }) {
+                                    places[index].arrangedTime = modifiedPlace.arrangedTime
+                                }
+                            }
                         }
                     }
 

@@ -82,6 +82,6 @@ class PlaceAboutCell: UITableViewCell {
         }
 
         openingHourLabel.text = model.openingHours
-        linkLabel.text = model.website ?? ""
+        linkLabel.text = model.website ?? "This place not provide website."
     }
 }
