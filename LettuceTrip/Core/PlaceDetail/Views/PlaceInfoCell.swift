@@ -81,9 +81,6 @@ class PlaceInfoCell: UITableViewCell {
         ratingView.leading(to: iconImageView)
         ratingView.width(min: 80)
         ratingView.bottomToSuperview(offset: -8)
-//
-//        totalRatingLabel.centerY(to: ratingView)
-//        totalRatingLabel.leadingToTrailing(of: ratingView, offset: 8)
     }
 
     func config(with model: PlaceInfoCellViewModel) {

@@ -17,7 +17,7 @@ class RatingStarView: CosmosView {
         settings.emptyBorderColor = .systemTeal
         settings.filledBorderColor = .systemTeal
         settings.emptyBorderWidth = 1.5
-        settings.starSize = 15
+        settings.starSize = 25
         settings.starMargin = 1.5
     }
 }

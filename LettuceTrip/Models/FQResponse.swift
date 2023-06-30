@@ -12,8 +12,8 @@ struct FQResponse: Decodable {
 }
 
 struct FQPlace: Decodable {
-    let id: String
-    let location: Location
+    let id: String?
+    let location: Location?
     let description: String?
     let hours: Hours?
     let photos: [Photo]?
@@ -38,7 +38,7 @@ struct Location: Decodable {
 
 // MARK: - Hours
 struct Hours: Decodable {
-    let display: String
+    let display: String?
     let openNow: Bool
     let regular: [Regular]?
 
@@ -61,7 +61,7 @@ struct Photo: Decodable {
     let prefix: String
     let suffix: String
 
-    var url: String {
-        prefix + "800x600" + suffix
+    var url: URL? {
+        URL(string: prefix + "800x600" + suffix)
     }
 }

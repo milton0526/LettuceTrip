@@ -127,6 +127,9 @@ class ArrangePlaceViewController: UIViewController {
     }
 
     @objc func showDetail(_ sender: UIButton) {
+        guard let place = place else { return }
+        let detailVC = PlaceDetailViewController(place: place)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 
