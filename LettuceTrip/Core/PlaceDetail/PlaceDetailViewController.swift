@@ -9,6 +9,7 @@ import UIKit
 import MapKit
 import TinyConstraints
 import Combine
+import GooglePlaces
 
 class PlaceDetailViewController: UIViewController {
 
@@ -27,9 +28,15 @@ class PlaceDetailViewController: UIViewController {
     }
 
     let place: Place
-    private var fqPlaceDetail: FQPlace?
 
-    private var gPlaceID: String?
+    private var gmsPlace: GMSPlace? {
+        didSet {
+            guard let photos = gmsPlace?.photos else { return }
+            fetchPhotos(photos: photos)
+        }
+    }
+
+    private var placePhotos: [GPlacePhoto] = []
     private var cancellable = Set<AnyCancellable>()
 
     lazy var tableView: UITableView = {
@@ -62,8 +69,7 @@ class PlaceDetailViewController: UIViewController {
         return button
     }()
 
-    private let fqService = FQService()
-    let apiService = GPlaceAPI()
+    private let apiService = GPlaceAPI()
 
     init(place: Place) {
         self.place = place
@@ -80,15 +86,7 @@ class PlaceDetailViewController: UIViewController {
         title = place.name
         view.backgroundColor = .systemBackground
         setupUI()
-
-        apiService.findPlaceFromText(place.name, location: place.coordinate) { result in
-            switch result {
-            case .success(let success):
-                print(success ?? "No place id")
-            case .failure(let failure):
-                print(failure.localizedDescription)
-            }
-        }
+        fetchDetails()
     }
 
     private func setupUI() {
@@ -103,16 +101,39 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private func fetchDetails() {
-        fqService.placeSearch(name: place.name, coordinate: place.coordinate) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let place):
-                    self?.fqPlaceDetail = place
-                    self?.tableView.reloadData()
-                case .failure(let error):
-                    self?.showAlertToUser(error: error)
+        apiService
+            .findPlaceFromText(place.name, location: place.coordinate)
+            .compactMap(\.candidates.first?.placeID)
+            .flatMap(apiService.fetchPlace)
+            .sink(receiveCompletion: { _ in
+                print("Success get GMSPlace")
+            }, receiveValue: { [weak self] place in
+                self?.gmsPlace = place
+            })
+            .store(in: &cancellable)
+    }
+
+    private func fetchPhotos(photos: [GMSPlacePhotoMetadata]) {
+        let photoIndices = photos.count > 3 ? 3 : photos.count
+
+        var counter = 1
+
+        for index in 0..<photoIndices {
+            let attributions = String(describing: photos[0].attributions)
+            apiService.fetchPhotos(metaData: photos[index])
+                .receive(on: DispatchQueue.main)
+                .sink { _ in
+                    print("Success get GMSImage")
+                } receiveValue: { [weak self] image in
+                    let place = GPlacePhoto(attribution: attributions, image: image)
+                    self?.placePhotos.append(place)
+                    if counter == photoIndices {
+                        self?.tableView.reloadData()
+                    } else {
+                        counter += 1
+                    }
                 }
-            }
+                .store(in: &cancellable)
         }
     }
 
@@ -207,7 +228,7 @@ extension PlaceDetailViewController: UITableViewDelegate {
                 print("Photo header view dequeue failed")
                 return nil
             }
-            photoHeaderView.photos = fqPlaceDetail?.photos ?? []
+            photoHeaderView.photos = placePhotos
             return photoHeaderView
         default:
             if let title = sectionType.title {
@@ -236,7 +257,7 @@ extension PlaceDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
             let section = Section(rawValue: indexPath.section),
-            let fqPlace = fqPlaceDetail
+            let gmsPlace = gmsPlace
         else {
             return UITableViewCell()
         }
@@ -248,9 +269,9 @@ extension PlaceDetailViewController: UITableViewDataSource {
             }
 
             let info = PlaceInfoCellViewModel(
-                name: place.name,
-                address: fqPlace.location?.address ?? "No address",
-                rating: fqPlace.rating ?? 0)
+                name: gmsPlace.name ?? "No name",
+                address: gmsPlace.formattedAddress ?? "No address",
+                rating: gmsPlace.rating)
             infoCell.config(with: info)
             return infoCell
 
@@ -260,9 +281,8 @@ extension PlaceDetailViewController: UITableViewDataSource {
             }
 
             let about = PlaceAboutCellViewModel(
-                businessStatus: fqPlace.hours?.openNow,
-                openingHours: fqPlace.hours?.display ?? "",
-                website: fqPlace.website)
+                openingHours: gmsPlace.openingHours?.weekdayText ?? [],
+                website: gmsPlace.website?.absoluteString)
 
             aboutCell.config(with: about)
 

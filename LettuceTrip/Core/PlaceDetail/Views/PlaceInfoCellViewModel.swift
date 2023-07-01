@@ -10,5 +10,5 @@ import Foundation
 struct PlaceInfoCellViewModel {
     let name: String
     let address: String
-    let rating: Double
+    let rating: Float
 }

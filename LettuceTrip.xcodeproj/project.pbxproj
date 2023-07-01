@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		C42F51B02A454D5F00023305 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51AF2A454D5F00023305 /* LocationService.swift */; };
-		C42F51B22A45664600023305 /* FQService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B12A45664600023305 /* FQService.swift */; };
-		C42F51B42A45669400023305 /* FQKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C42F51B32A45669400023305 /* FQKey.plist */; };
-		C42F51B62A4574D900023305 /* FQResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B52A4574D900023305 /* FQResponse.swift */; };
 		C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B72A45936800023305 /* EditTripViewController.swift */; };
 		C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */; };
 		C42F51C42A45B60C00023305 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51C32A45B60C00023305 /* CalendarCell.swift */; };
@@ -28,8 +25,6 @@
 		C454134D2A4A9937000D0685 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134C2A4A9937000D0685 /* SignInViewModel.swift */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
-		C4CBD4272A4EC6BA009108C6 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C4CBD4262A4EC6BA009108C6 /* SDWebImage */; };
-		C4CBD4292A4EC7D4009108C6 /* UIImageView+SDWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD4282A4EC7D4009108C6 /* UIImageView+SDWebImage.swift */; };
 		C4CBD42D2A4FD097009108C6 /* GPlaceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */; };
 		C4CBD42F2A4FD122009108C6 /* GPlaceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */; };
 		C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */; };
@@ -96,9 +91,6 @@
 
 /* Begin PBXFileReference section */
 		C42F51AF2A454D5F00023305 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
-		C42F51B12A45664600023305 /* FQService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FQService.swift; sourceTree = "<group>"; };
-		C42F51B32A45669400023305 /* FQKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = FQKey.plist; sourceTree = "<group>"; };
-		C42F51B52A4574D900023305 /* FQResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FQResponse.swift; sourceTree = "<group>"; };
 		C42F51B72A45936800023305 /* EditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
 		C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceCell.swift; sourceTree = "<group>"; };
 		C42F51C32A45B60C00023305 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
@@ -116,7 +108,6 @@
 		C454134C2A4A9937000D0685 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
-		C4CBD4282A4EC7D4009108C6 /* UIImageView+SDWebImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+SDWebImage.swift"; sourceTree = "<group>"; };
 		C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPlaceResponse.swift; sourceTree = "<group>"; };
 		C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPlaceAPI.swift; sourceTree = "<group>"; };
 		C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = GPlaceAPIKey.plist; sourceTree = "<group>"; };
@@ -193,7 +184,6 @@
 				C4DBE8A22A41C158002987CB /* FirebaseFirestore in Frameworks */,
 				C4DBE8412A41B288002987CB /* TinyConstraints in Frameworks */,
 				C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */,
-				C4CBD4272A4EC6BA009108C6 /* SDWebImage in Frameworks */,
 				C45413472A4A803E000D0685 /* FirebaseAuth in Frameworks */,
 				C4CBD4332A4FE95A009108C6 /* GooglePlaces.xcframework in Frameworks */,
 				C4DBE8A42A41C158002987CB /* FirebaseFirestoreSwift in Frameworks */,
@@ -254,7 +244,6 @@
 				C4DBE8292A41AF63002987CB /* Assets.xcassets */,
 				C4DBE82B2A41AF63002987CB /* LaunchScreen.storyboard */,
 				C4DBE82E2A41AF63002987CB /* Info.plist */,
-				C42F51B32A45669400023305 /* FQKey.plist */,
 				C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */,
 				C4DBE89E2A41C0E3002987CB /* GoogleService-Info.plist */,
 				C4CBD4322A4FE95A009108C6 /* GooglePlaces.xcframework */,
@@ -345,7 +334,6 @@
 				C4DBE8D12A43E116002987CB /* MKPlaceMark+Extension.swift */,
 				C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */,
 				C45413402A497145000D0685 /* Date+Extension.swift */,
-				C4CBD4282A4EC7D4009108C6 /* UIImageView+SDWebImage.swift */,
 				C4CBD4422A4FECA2009108C6 /* GMSPlace+Combine.swift */,
 			);
 			path = Extensions;
@@ -357,7 +345,6 @@
 				C4DBE87C2A41BB81002987CB /* LTError.swift */,
 				C4DBE8C72A42D446002987CB /* User.swift */,
 				C4DBE8C92A42D49B002987CB /* Trip.swift */,
-				C42F51B52A4574D900023305 /* FQResponse.swift */,
 				C48E488F2A4C2A3D00949E08 /* SettingModel.swift */,
 				C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */,
 			);
@@ -369,7 +356,6 @@
 			children = (
 				C4DBE8C52A42D391002987CB /* FireStoreService.swift */,
 				C42F51AF2A454D5F00023305 /* LocationService.swift */,
-				C42F51B12A45664600023305 /* FQService.swift */,
 				C454134A2A4A8871000D0685 /* FirebaseAuthHelper.swift */,
 				C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */,
 			);
@@ -466,7 +452,6 @@
 				C4DBE8C32A42B363002987CB /* IQKeyboardManagerSwift */,
 				C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */,
 				C45413462A4A803E000D0685 /* FirebaseAuth */,
-				C4CBD4262A4EC6BA009108C6 /* SDWebImage */,
 			);
 			productName = LettuceTrip;
 			productReference = C4DBE81D2A41AF62002987CB /* LettuceTrip.app */;
@@ -522,7 +507,6 @@
 				C4DBE82D2A41AF63002987CB /* LaunchScreen.storyboard in Resources */,
 				C4DBE82A2A41AF63002987CB /* Assets.xcassets in Resources */,
 				C4DBE8282A41AF62002987CB /* Main.storyboard in Resources */,
-				C42F51B42A45669400023305 /* FQKey.plist in Resources */,
 				C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */,
 				C4DBE89F2A41C0E3002987CB /* GoogleService-Info.plist in Resources */,
 				C454133F2A48920D000D0685 /* ArrangePlaceDetailCell.xib in Resources */,
@@ -586,9 +570,7 @@
 				C4DBE87D2A41BB81002987CB /* LTError.swift in Sources */,
 				C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */,
 				C454134D2A4A9937000D0685 /* SignInViewModel.swift in Sources */,
-				C42F51B62A4574D900023305 /* FQResponse.swift in Sources */,
 				C4CC0C082A48499200E03758 /* LocationMapCell.swift in Sources */,
-				C42F51B22A45664600023305 /* FQService.swift in Sources */,
 				C4DBE8982A41BD10002987CB /* UIViewController+Alert.swift in Sources */,
 				C4DBE8AE2A41D696002987CB /* SelectionView.swift in Sources */,
 				C45413442A4A7FF0000D0685 /* SignInViewController.swift in Sources */,
@@ -606,7 +588,6 @@
 				C4CC0C002A48255B00E03758 /* WishListViewController.swift in Sources */,
 				C4DBE8822A41BC02002987CB /* RoundedTextField.swift in Sources */,
 				C4DBE8962A41BD00002987CB /* UITableView+Identifier.swift in Sources */,
-				C4CBD4292A4EC7D4009108C6 /* UIImageView+SDWebImage.swift in Sources */,
 				C4DBE8AF2A41D696002987CB /* SelectionViewDelegate.swift in Sources */,
 				C42F51CA2A45E2AB00023305 /* CirclePlaceCell.swift in Sources */,
 				C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */,
@@ -910,11 +891,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
-		};
-		C4CBD4262A4EC6BA009108C6 /* SDWebImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C4CBD4252A4EC6BA009108C6 /* XCRemoteSwiftPackageReference "SDWebImage" */;
-			productName = SDWebImage;
 		};
 		C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;

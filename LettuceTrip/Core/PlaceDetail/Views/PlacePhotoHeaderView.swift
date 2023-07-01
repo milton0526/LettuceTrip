@@ -34,7 +34,7 @@ class PlacePhotoHeaderView: UITableViewHeaderFooterView {
         return pageControl
     }()
 
-    var photos: [Photo] = [] {
+    var photos: [GPlacePhoto] = [] {
         didSet {
             pageControl.numberOfPages = photos.count
             DispatchQueue.main.async { [weak self] in
@@ -106,11 +106,11 @@ extension PlacePhotoHeaderView: UICollectionViewDataSource {
             fatalError("Failed to dequeue PlacePhotoCell")
         }
 
-        if let url = photos[indexPath.item].url {
-            photoCell.imageView.setImage(with: url)
-        }
+        let photo = photos[indexPath.item]
 
-        photoCell.titleLabel.text = "Foursquare"
+        photoCell.titleLabel.text = photo.attribution ?? ""
+        photoCell.imageView.image = photo.image
+
         return photoCell
     }
 }

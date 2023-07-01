@@ -5,7 +5,7 @@
 //  Created by Milton Liu on 2023/7/1.
 //
 
-import Foundation
+import UIKit
 
 struct GPlaceResponse: Decodable {
     let candidates: [Candidate]
@@ -18,4 +18,9 @@ struct Candidate: Decodable {
     enum CodingKeys: String, CodingKey {
         case placeID = "place_id"
     }
+}
+
+struct GPlacePhoto {
+    var attribution: String?
+    let image: UIImage
 }
