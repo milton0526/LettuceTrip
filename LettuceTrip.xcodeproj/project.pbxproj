@@ -28,7 +28,6 @@
 		C454134D2A4A9937000D0685 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134C2A4A9937000D0685 /* SignInViewModel.swift */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
-		C4CBD4242A4E92F5009108C6 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = C4CBD4232A4E92F5009108C6 /* FirebaseMessaging */; };
 		C4CBD4272A4EC6BA009108C6 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C4CBD4262A4EC6BA009108C6 /* SDWebImage */; };
 		C4CBD4292A4EC7D4009108C6 /* UIImageView+SDWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD4282A4EC7D4009108C6 /* UIImageView+SDWebImage.swift */; };
 		C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */; };
@@ -159,7 +158,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4CBD4242A4E92F5009108C6 /* FirebaseMessaging in Frameworks */,
 				C4DBE8C42A42B363002987CB /* IQKeyboardManagerSwift in Frameworks */,
 				C4DBE89B2A41BD7B002987CB /* Cosmos in Frameworks */,
 				C4DBE8A22A41C158002987CB /* FirebaseFirestore in Frameworks */,
@@ -425,7 +423,6 @@
 				C4DBE8C32A42B363002987CB /* IQKeyboardManagerSwift */,
 				C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */,
 				C45413462A4A803E000D0685 /* FirebaseAuth */,
-				C4CBD4232A4E92F5009108C6 /* FirebaseMessaging */,
 				C4CBD4262A4EC6BA009108C6 /* SDWebImage */,
 			);
 			productName = LettuceTrip;
@@ -863,11 +860,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
-		};
-		C4CBD4232A4E92F5009108C6 /* FirebaseMessaging */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseMessaging;
 		};
 		C4CBD4262A4EC6BA009108C6 /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;
