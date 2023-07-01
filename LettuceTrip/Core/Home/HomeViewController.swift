@@ -105,6 +105,6 @@ extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        let trip = shareTrips[indexPath.item]
+        // let trip = shareTrips[indexPath.item]
     }
 }

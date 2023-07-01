@@ -86,6 +86,6 @@ class PlaceInfoCell: UITableViewCell {
     func config(with model: PlaceInfoCellViewModel) {
         addressLabel.text = model.address
         titleLabel.text = model.name
-        ratingView.rating = model.rating / 2.0
+        ratingView.rating = Double(model.rating)
     }
 }

@@ -188,7 +188,7 @@ class ChatRoomViewController: UIViewController {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Message>()
         snapshot.appendSections([.main])
         snapshot.appendItems(chatMessages)
-        dataSource.apply(snapshot)
+        dataSource.apply(snapshot, animatingDifferences: false)
 
         if !chatMessages.isEmpty {
             let indexPath = IndexPath(item: chatMessages.count - 1, section: 0)

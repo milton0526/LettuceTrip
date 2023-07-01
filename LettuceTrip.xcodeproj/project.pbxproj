@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		C42F51B02A454D5F00023305 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51AF2A454D5F00023305 /* LocationService.swift */; };
-		C42F51B22A45664600023305 /* FQService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B12A45664600023305 /* FQService.swift */; };
-		C42F51B42A45669400023305 /* FQKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C42F51B32A45669400023305 /* FQKey.plist */; };
-		C42F51B62A4574D900023305 /* FQResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B52A4574D900023305 /* FQResponse.swift */; };
 		C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B72A45936800023305 /* EditTripViewController.swift */; };
 		C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */; };
 		C42F51C42A45B60C00023305 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51C32A45B60C00023305 /* CalendarCell.swift */; };
@@ -28,8 +25,18 @@
 		C454134D2A4A9937000D0685 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134C2A4A9937000D0685 /* SignInViewModel.swift */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
-		C4CBD4272A4EC6BA009108C6 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C4CBD4262A4EC6BA009108C6 /* SDWebImage */; };
-		C4CBD4292A4EC7D4009108C6 /* UIImageView+SDWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD4282A4EC7D4009108C6 /* UIImageView+SDWebImage.swift */; };
+		C4CBD42D2A4FD097009108C6 /* GPlaceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */; };
+		C4CBD42F2A4FD122009108C6 /* GPlaceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */; };
+		C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */; };
+		C4CBD4332A4FE95A009108C6 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CBD4322A4FE95A009108C6 /* GooglePlaces.xcframework */; };
+		C4CBD4352A4FE9C9009108C6 /* GooglePlaces.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C4CBD4342A4FE9C9009108C6 /* GooglePlaces.bundle */; };
+		C4CBD4372A4FE9ED009108C6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CBD4362A4FE9ED009108C6 /* CoreGraphics.framework */; };
+		C4CBD4392A4FE9F3009108C6 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CBD4382A4FE9F3009108C6 /* CoreLocation.framework */; };
+		C4CBD43B2A4FE9FD009108C6 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CBD43A2A4FE9FD009108C6 /* libc++.tbd */; };
+		C4CBD43D2A4FEA04009108C6 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CBD43C2A4FEA04009108C6 /* libz.tbd */; };
+		C4CBD43F2A4FEA0B009108C6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CBD43E2A4FEA0B009108C6 /* QuartzCore.framework */; };
+		C4CBD4412A4FEA11009108C6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CBD4402A4FEA11009108C6 /* UIKit.framework */; };
+		C4CBD4432A4FECA2009108C6 /* GMSPlace+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD4422A4FECA2009108C6 /* GMSPlace+Combine.swift */; };
 		C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */; };
 		C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */; };
 		C4CC0BFE2A481E0100E03758 /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BFD2A481E0100E03758 /* ScheduleView.swift */; };
@@ -84,9 +91,6 @@
 
 /* Begin PBXFileReference section */
 		C42F51AF2A454D5F00023305 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
-		C42F51B12A45664600023305 /* FQService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FQService.swift; sourceTree = "<group>"; };
-		C42F51B32A45669400023305 /* FQKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = FQKey.plist; sourceTree = "<group>"; };
-		C42F51B52A4574D900023305 /* FQResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FQResponse.swift; sourceTree = "<group>"; };
 		C42F51B72A45936800023305 /* EditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
 		C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceCell.swift; sourceTree = "<group>"; };
 		C42F51C32A45B60C00023305 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
@@ -104,7 +108,18 @@
 		C454134C2A4A9937000D0685 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
-		C4CBD4282A4EC7D4009108C6 /* UIImageView+SDWebImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+SDWebImage.swift"; sourceTree = "<group>"; };
+		C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPlaceResponse.swift; sourceTree = "<group>"; };
+		C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPlaceAPI.swift; sourceTree = "<group>"; };
+		C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = GPlaceAPIKey.plist; sourceTree = "<group>"; };
+		C4CBD4322A4FE95A009108C6 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
+		C4CBD4342A4FE9C9009108C6 /* GooglePlaces.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlaces.bundle; path = "../../../../Downloads/GooglePlaces-8.0.0/Frameworks/GooglePlaces.xcframework/ios-arm64/GooglePlaces.framework/Resources/GooglePlaces.bundle"; sourceTree = "<group>"; };
+		C4CBD4362A4FE9ED009108C6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C4CBD4382A4FE9F3009108C6 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C4CBD43A2A4FE9FD009108C6 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		C4CBD43C2A4FEA04009108C6 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		C4CBD43E2A4FEA0B009108C6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C4CBD4402A4FEA11009108C6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C4CBD4422A4FECA2009108C6 /* GMSPlace+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GMSPlace+Combine.swift"; sourceTree = "<group>"; };
 		C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomPlacesView.swift; sourceTree = "<group>"; };
 		C4CC0BFD2A481E0100E03758 /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
 		C4CC0BFF2A48255B00E03758 /* WishListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListViewController.swift; sourceTree = "<group>"; };
@@ -158,13 +173,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4CBD4412A4FEA11009108C6 /* UIKit.framework in Frameworks */,
+				C4CBD43F2A4FEA0B009108C6 /* QuartzCore.framework in Frameworks */,
+				C4CBD43D2A4FEA04009108C6 /* libz.tbd in Frameworks */,
+				C4CBD43B2A4FE9FD009108C6 /* libc++.tbd in Frameworks */,
+				C4CBD4392A4FE9F3009108C6 /* CoreLocation.framework in Frameworks */,
+				C4CBD4372A4FE9ED009108C6 /* CoreGraphics.framework in Frameworks */,
 				C4DBE8C42A42B363002987CB /* IQKeyboardManagerSwift in Frameworks */,
 				C4DBE89B2A41BD7B002987CB /* Cosmos in Frameworks */,
 				C4DBE8A22A41C158002987CB /* FirebaseFirestore in Frameworks */,
 				C4DBE8412A41B288002987CB /* TinyConstraints in Frameworks */,
 				C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */,
-				C4CBD4272A4EC6BA009108C6 /* SDWebImage in Frameworks */,
 				C45413472A4A803E000D0685 /* FirebaseAuth in Frameworks */,
+				C4CBD4332A4FE95A009108C6 /* GooglePlaces.xcframework in Frameworks */,
 				C4DBE8A42A41C158002987CB /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -175,6 +196,12 @@
 		C45413452A4A803E000D0685 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C4CBD4402A4FEA11009108C6 /* UIKit.framework */,
+				C4CBD43E2A4FEA0B009108C6 /* QuartzCore.framework */,
+				C4CBD43C2A4FEA04009108C6 /* libz.tbd */,
+				C4CBD43A2A4FE9FD009108C6 /* libc++.tbd */,
+				C4CBD4382A4FE9F3009108C6 /* CoreLocation.framework */,
+				C4CBD4362A4FE9ED009108C6 /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -217,8 +244,10 @@
 				C4DBE8292A41AF63002987CB /* Assets.xcassets */,
 				C4DBE82B2A41AF63002987CB /* LaunchScreen.storyboard */,
 				C4DBE82E2A41AF63002987CB /* Info.plist */,
-				C42F51B32A45669400023305 /* FQKey.plist */,
+				C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */,
 				C4DBE89E2A41C0E3002987CB /* GoogleService-Info.plist */,
+				C4CBD4322A4FE95A009108C6 /* GooglePlaces.xcframework */,
+				C4CBD4342A4FE9C9009108C6 /* GooglePlaces.bundle */,
 				C4DBE8492A41B32F002987CB /* Extensions */,
 				C4DBE87E2A41BB9C002987CB /* Services */,
 				C4DBE87B2A41BB68002987CB /* Models */,
@@ -305,7 +334,7 @@
 				C4DBE8D12A43E116002987CB /* MKPlaceMark+Extension.swift */,
 				C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */,
 				C45413402A497145000D0685 /* Date+Extension.swift */,
-				C4CBD4282A4EC7D4009108C6 /* UIImageView+SDWebImage.swift */,
+				C4CBD4422A4FECA2009108C6 /* GMSPlace+Combine.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -316,8 +345,8 @@
 				C4DBE87C2A41BB81002987CB /* LTError.swift */,
 				C4DBE8C72A42D446002987CB /* User.swift */,
 				C4DBE8C92A42D49B002987CB /* Trip.swift */,
-				C42F51B52A4574D900023305 /* FQResponse.swift */,
 				C48E488F2A4C2A3D00949E08 /* SettingModel.swift */,
+				C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -327,8 +356,8 @@
 			children = (
 				C4DBE8C52A42D391002987CB /* FireStoreService.swift */,
 				C42F51AF2A454D5F00023305 /* LocationService.swift */,
-				C42F51B12A45664600023305 /* FQService.swift */,
 				C454134A2A4A8871000D0685 /* FirebaseAuthHelper.swift */,
+				C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -423,7 +452,6 @@
 				C4DBE8C32A42B363002987CB /* IQKeyboardManagerSwift */,
 				C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */,
 				C45413462A4A803E000D0685 /* FirebaseAuth */,
-				C4CBD4262A4EC6BA009108C6 /* SDWebImage */,
 			);
 			productName = LettuceTrip;
 			productReference = C4DBE81D2A41AF62002987CB /* LettuceTrip.app */;
@@ -475,10 +503,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4CBD4352A4FE9C9009108C6 /* GooglePlaces.bundle in Resources */,
 				C4DBE82D2A41AF63002987CB /* LaunchScreen.storyboard in Resources */,
 				C4DBE82A2A41AF63002987CB /* Assets.xcassets in Resources */,
 				C4DBE8282A41AF62002987CB /* Main.storyboard in Resources */,
-				C42F51B42A45669400023305 /* FQKey.plist in Resources */,
+				C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */,
 				C4DBE89F2A41C0E3002987CB /* GoogleService-Info.plist in Resources */,
 				C454133F2A48920D000D0685 /* ArrangePlaceDetailCell.xib in Resources */,
 			);
@@ -523,6 +552,7 @@
 				C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */,
 				C4DBE8942A41BCED002987CB /* PlaceInfoHeaderView.swift in Sources */,
 				C4DBE8922A41BCDC002987CB /* PlacePhotoHeaderView.swift in Sources */,
+				C4CBD4432A4FECA2009108C6 /* GMSPlace+Combine.swift in Sources */,
 				C4DBE8BD2A429921002987CB /* UILabel+Style.swift in Sources */,
 				C42F51CE2A469E7200023305 /* FriendMessageCell.swift in Sources */,
 				C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */,
@@ -530,6 +560,8 @@
 				C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */,
 				C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */,
 				C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */,
+				C4CBD42D2A4FD097009108C6 /* GPlaceResponse.swift in Sources */,
+				C4CBD42F2A4FD122009108C6 /* GPlaceAPI.swift in Sources */,
 				C42F51C42A45B60C00023305 /* CalendarCell.swift in Sources */,
 				C4DBE8372A41B194002987CB /* MyTripViewController.swift in Sources */,
 				C454133E2A48920D000D0685 /* ArrangePlaceDetailCell.swift in Sources */,
@@ -538,9 +570,7 @@
 				C4DBE87D2A41BB81002987CB /* LTError.swift in Sources */,
 				C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */,
 				C454134D2A4A9937000D0685 /* SignInViewModel.swift in Sources */,
-				C42F51B62A4574D900023305 /* FQResponse.swift in Sources */,
 				C4CC0C082A48499200E03758 /* LocationMapCell.swift in Sources */,
-				C42F51B22A45664600023305 /* FQService.swift in Sources */,
 				C4DBE8982A41BD10002987CB /* UIViewController+Alert.swift in Sources */,
 				C4DBE8AE2A41D696002987CB /* SelectionView.swift in Sources */,
 				C45413442A4A7FF0000D0685 /* SignInViewController.swift in Sources */,
@@ -558,7 +588,6 @@
 				C4CC0C002A48255B00E03758 /* WishListViewController.swift in Sources */,
 				C4DBE8822A41BC02002987CB /* RoundedTextField.swift in Sources */,
 				C4DBE8962A41BD00002987CB /* UITableView+Identifier.swift in Sources */,
-				C4CBD4292A4EC7D4009108C6 /* UIImageView+SDWebImage.swift in Sources */,
 				C4DBE8AF2A41D696002987CB /* SelectionViewDelegate.swift in Sources */,
 				C42F51CA2A45E2AB00023305 /* CirclePlaceCell.swift in Sources */,
 				C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */,
@@ -651,6 +680,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -704,6 +734,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -860,11 +891,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
-		};
-		C4CBD4262A4EC6BA009108C6 /* SDWebImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C4CBD4252A4EC6BA009108C6 /* XCRemoteSwiftPackageReference "SDWebImage" */;
-			productName = SDWebImage;
 		};
 		C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;

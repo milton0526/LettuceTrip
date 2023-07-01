@@ -72,16 +72,9 @@ class PlaceAboutCell: UITableViewCell {
     }
 
     func config(with model: PlaceAboutCellViewModel) {
+        let openingHours = model.openingHours.joined(separator: "\n")
 
-        if model.businessStatus == true {
-            statusLabel.text = String(localized: "Opening now")
-            statusLabel.textColor = .systemGreen
-        } else {
-            statusLabel.text = String(localized: "Closed")
-            statusLabel.textColor = .systemRed
-        }
-
-        openingHourLabel.text = model.openingHours
+        openingHourLabel.text = openingHours
         linkLabel.text = model.website ?? "This place not provide website."
     }
 }
