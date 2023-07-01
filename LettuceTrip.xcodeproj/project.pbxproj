@@ -30,6 +30,9 @@
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
 		C4CBD4272A4EC6BA009108C6 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C4CBD4262A4EC6BA009108C6 /* SDWebImage */; };
 		C4CBD4292A4EC7D4009108C6 /* UIImageView+SDWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD4282A4EC7D4009108C6 /* UIImageView+SDWebImage.swift */; };
+		C4CBD42D2A4FD097009108C6 /* GPlaceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */; };
+		C4CBD42F2A4FD122009108C6 /* GPlaceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */; };
+		C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */; };
 		C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */; };
 		C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */; };
 		C4CC0BFE2A481E0100E03758 /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BFD2A481E0100E03758 /* ScheduleView.swift */; };
@@ -105,6 +108,9 @@
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C4CBD4282A4EC7D4009108C6 /* UIImageView+SDWebImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+SDWebImage.swift"; sourceTree = "<group>"; };
+		C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPlaceResponse.swift; sourceTree = "<group>"; };
+		C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPlaceAPI.swift; sourceTree = "<group>"; };
+		C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = GPlaceAPIKey.plist; sourceTree = "<group>"; };
 		C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomPlacesView.swift; sourceTree = "<group>"; };
 		C4CC0BFD2A481E0100E03758 /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
 		C4CC0BFF2A48255B00E03758 /* WishListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListViewController.swift; sourceTree = "<group>"; };
@@ -218,6 +224,7 @@
 				C4DBE82B2A41AF63002987CB /* LaunchScreen.storyboard */,
 				C4DBE82E2A41AF63002987CB /* Info.plist */,
 				C42F51B32A45669400023305 /* FQKey.plist */,
+				C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */,
 				C4DBE89E2A41C0E3002987CB /* GoogleService-Info.plist */,
 				C4DBE8492A41B32F002987CB /* Extensions */,
 				C4DBE87E2A41BB9C002987CB /* Services */,
@@ -318,6 +325,7 @@
 				C4DBE8C92A42D49B002987CB /* Trip.swift */,
 				C42F51B52A4574D900023305 /* FQResponse.swift */,
 				C48E488F2A4C2A3D00949E08 /* SettingModel.swift */,
+				C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -329,6 +337,7 @@
 				C42F51AF2A454D5F00023305 /* LocationService.swift */,
 				C42F51B12A45664600023305 /* FQService.swift */,
 				C454134A2A4A8871000D0685 /* FirebaseAuthHelper.swift */,
+				C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -479,6 +488,7 @@
 				C4DBE82A2A41AF63002987CB /* Assets.xcassets in Resources */,
 				C4DBE8282A41AF62002987CB /* Main.storyboard in Resources */,
 				C42F51B42A45669400023305 /* FQKey.plist in Resources */,
+				C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */,
 				C4DBE89F2A41C0E3002987CB /* GoogleService-Info.plist in Resources */,
 				C454133F2A48920D000D0685 /* ArrangePlaceDetailCell.xib in Resources */,
 			);
@@ -530,6 +540,8 @@
 				C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */,
 				C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */,
 				C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */,
+				C4CBD42D2A4FD097009108C6 /* GPlaceResponse.swift in Sources */,
+				C4CBD42F2A4FD122009108C6 /* GPlaceAPI.swift in Sources */,
 				C42F51C42A45B60C00023305 /* CalendarCell.swift in Sources */,
 				C4DBE8372A41B194002987CB /* MyTripViewController.swift in Sources */,
 				C454133E2A48920D000D0685 /* ArrangePlaceDetailCell.swift in Sources */,

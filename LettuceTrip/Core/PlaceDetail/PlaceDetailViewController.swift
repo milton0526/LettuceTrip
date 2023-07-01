@@ -8,6 +8,7 @@
 import UIKit
 import MapKit
 import TinyConstraints
+import Combine
 
 class PlaceDetailViewController: UIViewController {
 
@@ -27,6 +28,9 @@ class PlaceDetailViewController: UIViewController {
 
     let place: Place
     private var fqPlaceDetail: FQPlace?
+
+    private var gPlaceID: String?
+    private var cancellable = Set<AnyCancellable>()
 
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -59,6 +63,7 @@ class PlaceDetailViewController: UIViewController {
     }()
 
     private let fqService = FQService()
+    let apiService = GPlaceAPI()
 
     init(place: Place) {
         self.place = place
@@ -75,7 +80,15 @@ class PlaceDetailViewController: UIViewController {
         title = place.name
         view.backgroundColor = .systemBackground
         setupUI()
-        fetchDetails()
+
+        apiService.findPlaceFromText(place.name, location: place.coordinate) { result in
+            switch result {
+            case .success(let success):
+                print(success ?? "No place id")
+            case .failure(let failure):
+                print(failure.localizedDescription)
+            }
+        }
     }
 
     private func setupUI() {
