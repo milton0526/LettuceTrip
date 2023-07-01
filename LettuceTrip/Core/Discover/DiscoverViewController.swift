@@ -35,19 +35,7 @@ class DiscoverViewController: UIViewController {
         return textField
     }()
 
-    lazy var poiCollectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        collectionView.delegate = self
-        collectionView.isScrollEnabled = false
-        collectionView.register(POILocationCardCell.self, forCellWithReuseIdentifier: POILocationCardCell.identifier)
-        return collectionView
-    }()
-
     lazy var locationService = LocationService()
-    private var searchCompleter: MKLocalSearchCompleter?
-    private var searchRegion = MKCoordinateRegion(MKMapRect.world)
-
-    private var dataSource: UICollectionViewDiffableDataSource<Int, MKLocalSearchCompletion>!
     private var locationObservation: NSKeyValueObservation?
     private var currentLocation: CLLocation? {
         didSet {
@@ -58,23 +46,14 @@ class DiscoverViewController: UIViewController {
         }
     }
 
+    lazy var searchResultController = SearchCityViewController()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         locationService.errorPresentationTarget = self
         locationService.requestLocation()
         configMapView()
         setupUI()
-        configureDataSource()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        startProvidingCompletions()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        stopProvidingCompletions()
     }
 
     private func configMapView() {
@@ -99,9 +78,13 @@ class DiscoverViewController: UIViewController {
         }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
+    }
+
     private func setupUI() {
-        navigationController?.isNavigationBarHidden = true
-        [mapView, searchTextField, compass, poiCollectionView].forEach { view.addSubview($0) }
+        [mapView, searchTextField, compass].forEach { view.addSubview($0) }
 
         mapView.edgesToSuperview(excluding: .bottom)
         mapView.bottomToSuperview(usingSafeArea: true)
@@ -111,10 +94,23 @@ class DiscoverViewController: UIViewController {
 
         compass.trailingToSuperview(offset: 16)
         compass.topToBottom(of: searchTextField, offset: 16)
+        addSearchViewController()
+    }
 
-        poiCollectionView.backgroundColor = .clear
-        poiCollectionView.height(120)
-        poiCollectionView.edgesToSuperview(excluding: .top, insets: .bottom(20), usingSafeArea: true)
+    private func addSearchViewController() {
+        addChild(searchResultController)
+        if let child = children.first {
+            view.addSubview(child.view)
+            child.didMove(toParent: self)
+            child.view.topToBottom(of: searchTextField, offset: -8)
+            child.view.leading(to: searchTextField)
+            child.view.trailing(to: searchTextField)
+            child.view.layer.cornerRadius = 10
+            child.view.layer.masksToBounds = true
+            child.view.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+            child.view.height(160)
+            child.view.isHidden = true
+        }
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
@@ -130,28 +126,6 @@ class DiscoverViewController: UIViewController {
         section.contentInsets = .init(top: 8, leading: 16, bottom: 8, trailing: 16)
 
         return UICollectionViewCompositionalLayout(section: section)
-    }
-
-    private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: poiCollectionView) { collectionView, indexPath, item in
-            guard let cardCell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: POILocationCardCell.identifier,
-                for: indexPath) as? POILocationCardCell
-            else {
-                fatalError("Failed to dequeue POILocationCardCell")
-            }
-
-            cardCell.titleLabel.text = item.title
-            cardCell.subtitleLabel.text = item.subtitle
-            return cardCell
-        }
-    }
-
-    private func updateSnapshot(_ result: [MKLocalSearchCompletion]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, MKLocalSearchCompletion>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(result)
-        dataSource.apply(snapshot)
     }
 
     private func setupPOIAnnotation(_ annotation: MKMapFeatureAnnotation) -> MKAnnotationView? {
@@ -182,32 +156,46 @@ class DiscoverViewController: UIViewController {
     }
 }
 
-// MARK: - CollectionView Delegate
-extension DiscoverViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
-    }
-}
-
 // MARK: - TextField Delegate
 extension DiscoverViewController: UITextFieldDelegate {
+
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        textField.text = ""
+        return true
+    }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard
             let text = textField.text,
             !text.isEmpty
         else {
-            updateSnapshot([])
+            // show no result indicator view
             return
         }
 
-        searchCompleter?.queryFragment = text
+        children.first?.view.isHidden = false
+        searchResultController.search(for: text)
+        searchResultController.userSelectedCity = { [weak self] city in
+            guard let self = self else { return }
+            self.searchTextField.text = city.name
+            self.children.first?.view.isHidden = true
+            let cityRegion = MKCoordinateRegion(center: city.placemark.coordinate, latitudinalMeters: 8000, longitudinalMeters: 8000)
+            let pointRegion = MKCoordinateRegion(center: city.placemark.coordinate, latitudinalMeters: 250, longitudinalMeters: 250)
+            searchResultController.region = cityRegion
+
+            if city.pointOfInterestCategory != nil {
+                self.mapView.setRegion(pointRegion, animated: true)
+            } else {
+                self.mapView.setRegion(cityRegion, animated: true)
+            }
+        }
     }
 }
 
 // MARK: - MapView Delegate
 
 extension DiscoverViewController: MKMapViewDelegate {
+
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard let annotation = annotation as? MKMapFeatureAnnotation else {
             return nil
@@ -244,39 +232,5 @@ extension DiscoverViewController: MKMapViewDelegate {
 
         let detailVC = PlaceDetailViewController(place: place)
         navigationController?.pushViewController(detailVC, animated: true)
-    }
-}
-
-extension DiscoverViewController {
-
-    private func startProvidingCompletions() {
-        searchCompleter = MKLocalSearchCompleter()
-        searchCompleter?.delegate = self
-        searchCompleter?.region = searchRegion
-
-        // Only include matches for travel-related points of interest, and exclude address-based results.
-        searchCompleter?.resultTypes = .pointOfInterest
-        searchCompleter?.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
-    }
-
-    private func stopProvidingCompletions() {
-        searchCompleter = nil
-    }
-}
-
-extension DiscoverViewController: MKLocalSearchCompleterDelegate {
-
-    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        // As the user types, new completion suggestions continuously return to this method.
-        // Refresh the UI with the new results.
-        let results = completer.results
-        updateSnapshot(results)
-    }
-
-    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-        // Handle any errors that `MKLocalSearchCompleter` returns.
-        if let error = error as NSError? {
-            print("MKLocalSearchCompleter encountered an error: \(error.localizedDescription). The query fragment is: \"\(completer.queryFragment)\"")
-        }
     }
 }

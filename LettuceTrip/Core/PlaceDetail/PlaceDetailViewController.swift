@@ -82,7 +82,7 @@ class PlaceDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.isNavigationBarHidden = false
+        navigationController?.navigationBar.isHidden = false
         title = place.name
         view.backgroundColor = .systemBackground
         setupUI()

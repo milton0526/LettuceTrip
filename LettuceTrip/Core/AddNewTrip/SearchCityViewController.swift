@@ -23,6 +23,8 @@ class SearchCityViewController: UIViewController {
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, MKMapItem>!
 
+    var region: MKCoordinateRegion?
+
     private var localSearch: MKLocalSearch? {
         willSet {
             // Clear the results and cancel the currently running local search before starting a new search.
@@ -51,8 +53,11 @@ class SearchCityViewController: UIViewController {
         title = String(localized: "Destination")
         view.backgroundColor = .systemBackground
         view.addSubview(collectionView)
-        collectionView.edgesToSuperview(usingSafeArea: true)
-        configSearchController()
+        collectionView.edgesToSuperview()
+
+        if region == nil {
+            configSearchController()
+        }
     }
 
     private func configSearchController() {
@@ -66,7 +71,7 @@ class SearchCityViewController: UIViewController {
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+        let config = UICollectionLayoutListConfiguration(appearance: .plain)
         return UICollectionViewCompositionalLayout.list(using: config)
     }
 
@@ -97,14 +102,24 @@ class SearchCityViewController: UIViewController {
         dataSource.apply(snapshot)
     }
 
-    private func search(for queryString: String?) {
+    func search(for queryString: String?) {
         let searchRequest = MKLocalSearch.Request()
+
+        if let region = region {
+            searchRequest.region = region
+        }
+
         searchRequest.naturalLanguageQuery = queryString
         search(using: searchRequest)
     }
 
     private func search(using searchRequest: MKLocalSearch.Request) {
-        searchRequest.resultTypes = .address
+
+        if let region = region {
+            searchRequest.resultTypes = [.address, .pointOfInterest]
+        } else {
+            searchRequest.resultTypes = .address
+        }
 
         localSearch = MKLocalSearch(request: searchRequest)
         localSearch?.start { [unowned self] response, error in

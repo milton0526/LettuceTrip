@@ -10,7 +10,7 @@ import UIKit
 class RoundedTextField: UITextField {
     var textPadding = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
 
-    var cornerRadius: CGFloat = 25
+    var cornerRadius: CGFloat = 10
 
     override init(frame: CGRect) {
         super.init(frame: frame)

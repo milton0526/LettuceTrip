@@ -487,7 +487,6 @@
 				C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				C4DBE8C22A42B363002987CB /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
-				C4CBD4252A4EC6BA009108C6 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
 			productRefGroup = C4DBE81E2A41AF62002987CB /* Products */;
 			projectDirPath = "";
@@ -836,14 +835,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		C4CBD4252A4EC6BA009108C6 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
-			};
-		};
 		C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JonasGessner/JGProgressHUD.git";
