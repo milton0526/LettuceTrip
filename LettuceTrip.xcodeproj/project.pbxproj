@@ -25,17 +25,17 @@
 		C454134D2A4A9937000D0685 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134C2A4A9937000D0685 /* SignInViewModel.swift */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
+		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
+		C4C0F0552A512158002F59B3 /* GooglePlaces.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */; };
+		C4C0F0582A512182002F59B3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0572A512182002F59B3 /* CoreGraphics.framework */; };
+		C4C0F05A2A51218B002F59B3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0592A51218B002F59B3 /* CoreLocation.framework */; };
+		C4C0F05C2A512196002F59B3 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F05B2A512196002F59B3 /* libc++.tbd */; };
+		C4C0F05E2A51219C002F59B3 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F05D2A51219C002F59B3 /* libz.tbd */; };
+		C4C0F0602A5121A4002F59B3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F05F2A5121A4002F59B3 /* QuartzCore.framework */; };
+		C4C0F0622A5121AA002F59B3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0612A5121AA002F59B3 /* UIKit.framework */; };
 		C4CBD42D2A4FD097009108C6 /* GPlaceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */; };
 		C4CBD42F2A4FD122009108C6 /* GPlaceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */; };
 		C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */; };
-		C4CBD4332A4FE95A009108C6 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CBD4322A4FE95A009108C6 /* GooglePlaces.xcframework */; };
-		C4CBD4352A4FE9C9009108C6 /* GooglePlaces.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C4CBD4342A4FE9C9009108C6 /* GooglePlaces.bundle */; };
-		C4CBD4372A4FE9ED009108C6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CBD4362A4FE9ED009108C6 /* CoreGraphics.framework */; };
-		C4CBD4392A4FE9F3009108C6 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CBD4382A4FE9F3009108C6 /* CoreLocation.framework */; };
-		C4CBD43B2A4FE9FD009108C6 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CBD43A2A4FE9FD009108C6 /* libc++.tbd */; };
-		C4CBD43D2A4FEA04009108C6 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CBD43C2A4FEA04009108C6 /* libz.tbd */; };
-		C4CBD43F2A4FEA0B009108C6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CBD43E2A4FEA0B009108C6 /* QuartzCore.framework */; };
-		C4CBD4412A4FEA11009108C6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CBD4402A4FEA11009108C6 /* UIKit.framework */; };
 		C4CBD4432A4FECA2009108C6 /* GMSPlace+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD4422A4FECA2009108C6 /* GMSPlace+Combine.swift */; };
 		C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */; };
 		C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */; };
@@ -108,17 +108,17 @@
 		C454134C2A4A9937000D0685 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
+		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
+		C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlaces.bundle; path = "GooglePlaces.xcframework/ios-arm64/GooglePlaces.framework/Resources/GooglePlaces.bundle"; sourceTree = "<group>"; };
+		C4C0F0572A512182002F59B3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C4C0F0592A51218B002F59B3 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C4C0F05B2A512196002F59B3 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		C4C0F05D2A51219C002F59B3 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		C4C0F05F2A5121A4002F59B3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C4C0F0612A5121AA002F59B3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPlaceResponse.swift; sourceTree = "<group>"; };
 		C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPlaceAPI.swift; sourceTree = "<group>"; };
 		C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = GPlaceAPIKey.plist; sourceTree = "<group>"; };
-		C4CBD4322A4FE95A009108C6 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
-		C4CBD4342A4FE9C9009108C6 /* GooglePlaces.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlaces.bundle; path = "../../../../Downloads/GooglePlaces-8.0.0/Frameworks/GooglePlaces.xcframework/ios-arm64/GooglePlaces.framework/Resources/GooglePlaces.bundle"; sourceTree = "<group>"; };
-		C4CBD4362A4FE9ED009108C6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		C4CBD4382A4FE9F3009108C6 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		C4CBD43A2A4FE9FD009108C6 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
-		C4CBD43C2A4FEA04009108C6 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		C4CBD43E2A4FEA0B009108C6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		C4CBD4402A4FEA11009108C6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C4CBD4422A4FECA2009108C6 /* GMSPlace+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GMSPlace+Combine.swift"; sourceTree = "<group>"; };
 		C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomPlacesView.swift; sourceTree = "<group>"; };
 		C4CC0BFD2A481E0100E03758 /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
@@ -173,19 +173,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4CBD4412A4FEA11009108C6 /* UIKit.framework in Frameworks */,
-				C4CBD43F2A4FEA0B009108C6 /* QuartzCore.framework in Frameworks */,
-				C4CBD43D2A4FEA04009108C6 /* libz.tbd in Frameworks */,
-				C4CBD43B2A4FE9FD009108C6 /* libc++.tbd in Frameworks */,
-				C4CBD4392A4FE9F3009108C6 /* CoreLocation.framework in Frameworks */,
-				C4CBD4372A4FE9ED009108C6 /* CoreGraphics.framework in Frameworks */,
+				C4C0F0622A5121AA002F59B3 /* UIKit.framework in Frameworks */,
+				C4C0F0602A5121A4002F59B3 /* QuartzCore.framework in Frameworks */,
+				C4C0F05E2A51219C002F59B3 /* libz.tbd in Frameworks */,
+				C4C0F05C2A512196002F59B3 /* libc++.tbd in Frameworks */,
+				C4C0F05A2A51218B002F59B3 /* CoreLocation.framework in Frameworks */,
+				C4C0F0582A512182002F59B3 /* CoreGraphics.framework in Frameworks */,
 				C4DBE8C42A42B363002987CB /* IQKeyboardManagerSwift in Frameworks */,
 				C4DBE89B2A41BD7B002987CB /* Cosmos in Frameworks */,
 				C4DBE8A22A41C158002987CB /* FirebaseFirestore in Frameworks */,
 				C4DBE8412A41B288002987CB /* TinyConstraints in Frameworks */,
+				C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */,
 				C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */,
 				C45413472A4A803E000D0685 /* FirebaseAuth in Frameworks */,
-				C4CBD4332A4FE95A009108C6 /* GooglePlaces.xcframework in Frameworks */,
 				C4DBE8A42A41C158002987CB /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -193,15 +193,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C45413452A4A803E000D0685 /* Frameworks */ = {
+		C4C0F0562A512182002F59B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C4CBD4402A4FEA11009108C6 /* UIKit.framework */,
-				C4CBD43E2A4FEA0B009108C6 /* QuartzCore.framework */,
-				C4CBD43C2A4FEA04009108C6 /* libz.tbd */,
-				C4CBD43A2A4FE9FD009108C6 /* libc++.tbd */,
-				C4CBD4382A4FE9F3009108C6 /* CoreLocation.framework */,
-				C4CBD4362A4FE9ED009108C6 /* CoreGraphics.framework */,
+				C4C0F0612A5121AA002F59B3 /* UIKit.framework */,
+				C4C0F05F2A5121A4002F59B3 /* QuartzCore.framework */,
+				C4C0F05D2A51219C002F59B3 /* libz.tbd */,
+				C4C0F05B2A512196002F59B3 /* libc++.tbd */,
+				C4C0F0592A51218B002F59B3 /* CoreLocation.framework */,
+				C4C0F0572A512182002F59B3 /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -222,7 +222,7 @@
 			children = (
 				C4DBE81F2A41AF62002987CB /* LettuceTrip */,
 				C4DBE81E2A41AF62002987CB /* Products */,
-				C45413452A4A803E000D0685 /* Frameworks */,
+				C4C0F0562A512182002F59B3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -246,8 +246,8 @@
 				C4DBE82E2A41AF63002987CB /* Info.plist */,
 				C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */,
 				C4DBE89E2A41C0E3002987CB /* GoogleService-Info.plist */,
-				C4CBD4322A4FE95A009108C6 /* GooglePlaces.xcframework */,
-				C4CBD4342A4FE9C9009108C6 /* GooglePlaces.bundle */,
+				C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */,
+				C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */,
 				C4DBE8492A41B32F002987CB /* Extensions */,
 				C4DBE87E2A41BB9C002987CB /* Services */,
 				C4DBE87B2A41BB68002987CB /* Models */,
@@ -502,13 +502,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4CBD4352A4FE9C9009108C6 /* GooglePlaces.bundle in Resources */,
 				C4DBE82D2A41AF63002987CB /* LaunchScreen.storyboard in Resources */,
 				C4DBE82A2A41AF63002987CB /* Assets.xcassets in Resources */,
 				C4DBE8282A41AF62002987CB /* Main.storyboard in Resources */,
 				C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */,
 				C4DBE89F2A41C0E3002987CB /* GoogleService-Info.plist in Resources */,
 				C454133F2A48920D000D0685 /* ArrangePlaceDetailCell.xib in Resources */,
+				C4C0F0552A512158002F59B3 /* GooglePlaces.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

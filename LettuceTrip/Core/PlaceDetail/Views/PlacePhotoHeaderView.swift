@@ -108,7 +108,7 @@ extension PlacePhotoHeaderView: UICollectionViewDataSource {
 
         let photo = photos[indexPath.item]
 
-        photoCell.titleLabel.text = photo.attribution ?? ""
+        photoCell.titleLabel.text = photo.display
         photoCell.imageView.image = photo.image
 
         return photoCell
@@ -130,6 +130,7 @@ private class PlacePhotoCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12, weight: .semibold)
         label.textColor = .white
+        label.numberOfLines = 2
         return label
     }()
 
@@ -149,5 +150,6 @@ private class PlacePhotoCell: UICollectionViewCell {
         imageView.edgesToSuperview()
         titleLabel.leadingToSuperview(offset: 16)
         titleLabel.bottomToSuperview(offset: -16)
+        titleLabel.width(to: contentView, multiplier: 0.4)
     }
 }

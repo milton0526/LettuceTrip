@@ -117,11 +117,6 @@ class EditTripViewController: UIViewController {
     private func customNavBar() {
         title = trip.tripName
 
-        let chatRoomButton = UIBarButtonItem(
-            image: UIImage(systemName: "person.2"),
-            style: .plain,
-            target: self,
-            action: #selector(openChatRoom))
         let editListButton = UIBarButtonItem(
             image: UIImage(systemName: "list.bullet.clipboard"),
             style: .plain,
@@ -132,16 +127,7 @@ class EditTripViewController: UIViewController {
             style: .plain,
             target: self,
             action: #selector(shareTrip))
-        navigationItem.rightBarButtonItems = [chatRoomButton, editListButton, shareButton]
-    }
-
-    @objc func openChatRoom(_ sender: UIBarButtonItem) {
-        // Check if room exist in FireStore
-        let chatVC = ChatRoomViewController()
-        chatVC.trip = trip
-        let nav = UINavigationController(rootViewController: chatVC)
-        nav.modalPresentationStyle = .fullScreen
-        present(nav, animated: true)
+        navigationItem.rightBarButtonItems = [editListButton, shareButton]
     }
 
     @objc func openWishList(_ sender: UIBarButtonItem) {

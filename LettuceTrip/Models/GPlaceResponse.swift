@@ -23,4 +23,19 @@ struct Candidate: Decodable {
 struct GPlacePhoto {
     var attribution: String?
     let image: UIImage
+
+    var display: String {
+        guard
+            let attribution = attribution,
+            let firstCut = attribution.split(separator: "{").first,
+            let secondCut = firstCut.split(separator: "(").last
+        else {
+            return ""
+        }
+
+        let result = String(describing: secondCut)
+        let display = String(localized: "Provide by:\n\(result)")
+
+        return display
+    }
 }
