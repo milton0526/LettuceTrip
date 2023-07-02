@@ -12,10 +12,12 @@ import PhotosUI
 
 class EditTripViewController: UIViewController {
 
-    var trip: Trip
+    private var trip: Trip
+    private var isEditMode: Bool
 
-    init(trip: Trip) {
+    init(trip: Trip, isEditMode: Bool = true) {
         self.trip = trip
+        self.isEditMode = isEditMode
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -34,8 +36,6 @@ class EditTripViewController: UIViewController {
         imageView.layer.cornerRadius = 34
         imageView.layer.masksToBounds = true
         imageView.isUserInteractionEnabled = true
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(pickImage))
-        imageView.addGestureRecognizer(tapGesture)
         return imageView
     }()
 
@@ -44,8 +44,6 @@ class EditTripViewController: UIViewController {
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.delegate = self
-        collectionView.dragDelegate = self
-        collectionView.dropDelegate = self
         collectionView.register(ArrangePlaceCell.self, forCellWithReuseIdentifier: ArrangePlaceCell.identifier)
         return collectionView
     }()
@@ -58,12 +56,13 @@ class EditTripViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = trip.tripName
         view.backgroundColor = .systemBackground
-        customNavBar()
         setupUI()
         scheduleView.schedules = convertDateToDisplay()
         scheduleView.delegate = self
         configureDataSource()
+        setEditMode()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -84,7 +83,7 @@ class EditTripViewController: UIViewController {
         view.addSubview(collectionView)
 
         imageView.edgesToSuperview(excluding: .bottom, insets: .top(8) + .horizontal(16), usingSafeArea: true)
-        imageView.height(120)
+        imageView.height(160)
 
         scheduleView.topToBottom(of: imageView)
         scheduleView.horizontalToSuperview(insets: .horizontal(16))
@@ -92,6 +91,16 @@ class EditTripViewController: UIViewController {
 
         collectionView.topToBottom(of: scheduleView)
         collectionView.edgesToSuperview(excluding: .top, usingSafeArea: true)
+    }
+
+    private func setEditMode() {
+        if isEditMode {
+            customNavBar()
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(pickImage))
+            imageView.addGestureRecognizer(tapGesture)
+            collectionView.dragDelegate = self
+            collectionView.dropDelegate = self
+        }
     }
 
     private func fetchPlaces() {
@@ -105,6 +114,11 @@ class EditTripViewController: UIViewController {
             case .success(let place):
                 self.places = place
 
+                if !isEditMode {
+                    listener?.remove()
+                    listener = nil
+                }
+
                 DispatchQueue.main.async {
                     self.updateSnapshot(by: self.currentSelectedDate)
                 }
@@ -115,8 +129,6 @@ class EditTripViewController: UIViewController {
     }
 
     private func customNavBar() {
-        title = trip.tripName
-
         let editListButton = UIBarButtonItem(
             image: UIImage(systemName: "list.bullet.clipboard"),
             style: .plain,
@@ -243,22 +255,20 @@ class EditTripViewController: UIViewController {
 extension EditTripViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let place = filterPlaces[indexPath.item]
+        let viewController: UIViewController
 
-        let arrangeVC = ArrangePlaceViewController()
-        arrangeVC.trip = trip
-        arrangeVC.place = place
-        arrangeVC.editMode = false
-
-        navigationController?.pushViewController(arrangeVC, animated: true)
+        if isEditMode {
+            viewController = ArrangePlaceViewController(trip: trip, place: place, isEditMode: false)
+        } else {
+            viewController = PlaceDetailViewController(place: place)
+        }
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
 
 // MARK: - CollectionView Drag Delegate
 extension EditTripViewController: UICollectionViewDragDelegate {
-
-    func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
-    }
 
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         let placeItem = String(filterPlaces[indexPath.item].arrangedTime?.ISO8601Format() ?? "")

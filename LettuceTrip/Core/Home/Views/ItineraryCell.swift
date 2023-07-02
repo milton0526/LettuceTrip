@@ -30,7 +30,9 @@ class ItineraryCollectionViewCell: UICollectionViewCell {
         let button = UIButton()
         button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         button.tintColor = .tintColor
-        button.addTarget(self, action: #selector(didTapMenuButton), for: .touchUpInside)
+        button.showsMenuAsPrimaryAction = true
+        button.menu = UIMenu(children: [
+        ])
         return button
     }()
 
@@ -66,10 +68,6 @@ class ItineraryCollectionViewCell: UICollectionViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    @objc func didTapMenuButton(_ sender: UIButton) {
-        // show action sheet
     }
 
     private func setupViews() {
@@ -108,6 +106,7 @@ class ItineraryCollectionViewCell: UICollectionViewCell {
         userNameLabel.text = trip.members.first
         tripNameLabel.text = trip.tripName
         timeLabel.text = trip.startDate.formatted(date: .numeric, time: .omitted)
+        imageView.image = UIImage(data: trip.image)
 
         // Need to use dispatch group to fetch user data
     }

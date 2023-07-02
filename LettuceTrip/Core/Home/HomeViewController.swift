@@ -38,7 +38,7 @@ class HomeViewController: UIViewController {
     }
 
     private func setupUI() {
-        navigationItem.title = String(localized: "Discover")
+        navigationItem.title = String(localized: "Community")
         view.addSubview(collectionView)
         collectionView.edgesToSuperview(usingSafeArea: true)
     }
@@ -105,6 +105,8 @@ extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        // let trip = shareTrips[indexPath.item]
+        let trip = shareTrips[indexPath.item]
+        let editVC = EditTripViewController(trip: trip, isEditMode: false)
+        navigationController?.pushViewController(editVC, animated: true)
     }
 }

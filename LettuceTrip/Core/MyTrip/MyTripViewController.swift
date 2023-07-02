@@ -132,7 +132,7 @@ class MyTripViewController: UIViewController {
 // MARK: - UITableView Delegate
 extension MyTripViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        136
+        160
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

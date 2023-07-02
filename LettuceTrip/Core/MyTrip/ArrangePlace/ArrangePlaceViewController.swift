@@ -11,9 +11,20 @@ import TinyConstraints
 
 class ArrangePlaceViewController: UIViewController {
 
-    var trip: Trip?
-    var place: Place?
-    var editMode = true
+    private var trip: Trip
+    private var place: Place
+    private var isEditMode = true
+
+    init(trip: Trip, place: Place, isEditMode: Bool = true) {
+        self.trip = trip
+        self.place = place
+        self.isEditMode = isEditMode
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -64,7 +75,7 @@ class ArrangePlaceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = place?.name
+        title = place.name
 
         let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(savePlace))
         navigationItem.rightBarButtonItem = saveButton
@@ -72,13 +83,6 @@ class ArrangePlaceViewController: UIViewController {
     }
 
     @objc func savePlace(_ sender: UIBarButtonItem) {
-        guard
-            let trip = trip,
-            var place = place
-        else {
-            return
-        }
-
         let indexPath = IndexPath(row: 1, section: 0)
 
         guard let cell = tableView.cellForRow(at: indexPath) as? ArrangePlaceDetailCell else { return }
@@ -100,7 +104,7 @@ class ArrangePlaceViewController: UIViewController {
     }
 
     private func setupUI() {
-        if !editMode {
+        if !isEditMode {
             stackView.addArrangedSubview(navigateButton)
         }
 
@@ -118,8 +122,6 @@ class ArrangePlaceViewController: UIViewController {
     }
 
     @objc func openAppleMap(_ sender: UIButton) {
-        guard let place = place else { return }
-
         let placeMark = MKPlacemark(coordinate: place.coordinate)
         let mapItem = MKMapItem(placemark: placeMark)
         mapItem.name = place.name
@@ -127,7 +129,6 @@ class ArrangePlaceViewController: UIViewController {
     }
 
     @objc func showDetail(_ sender: UIButton) {
-        guard let place = place else { return }
         let detailVC = PlaceDetailViewController(place: place)
         navigationController?.pushViewController(detailVC, animated: true)
     }
@@ -144,12 +145,6 @@ extension ArrangePlaceViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard
-            let trip = trip,
-            let place = place
-        else {
-            return UITableViewCell()
-        }
 
         switch indexPath.row {
         case 0:
@@ -168,7 +163,7 @@ extension ArrangePlaceViewController: UITableViewDataSource {
                 fatalError("Failed to dequeue map cell.")
             }
 
-            if editMode {
+            if isEditMode {
                 detailCell.config(with: trip, place: place)
             } else {
                 detailCell.config(with: trip, place: place, isArrange: true)
