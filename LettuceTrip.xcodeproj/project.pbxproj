@@ -22,7 +22,7 @@
 		C45413442A4A7FF0000D0685 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45413432A4A7FF0000D0685 /* SignInViewController.swift */; };
 		C45413472A4A803E000D0685 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C45413462A4A803E000D0685 /* FirebaseAuth */; };
 		C454134B2A4A8871000D0685 /* FirebaseAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134A2A4A8871000D0685 /* FirebaseAuthHelper.swift */; };
-		C454134D2A4A9937000D0685 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134C2A4A9937000D0685 /* SignInViewModel.swift */; };
+		C454134D2A4A9937000D0685 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134C2A4A9937000D0685 /* AuthManager.swift */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
 		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
@@ -105,7 +105,7 @@
 		C45413422A4A7E4F000D0685 /* LettuceTrip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LettuceTrip.entitlements; sourceTree = "<group>"; };
 		C45413432A4A7FF0000D0685 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		C454134A2A4A8871000D0685 /* FirebaseAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthHelper.swift; sourceTree = "<group>"; };
-		C454134C2A4A9937000D0685 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
+		C454134C2A4A9937000D0685 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
@@ -267,7 +267,7 @@
 				C4DBE83D2A41B1C7002987CB /* MyTrip */,
 				C4DBE83E2A41B1D5002987CB /* Profile */,
 				C45413432A4A7FF0000D0685 /* SignInViewController.swift */,
-				C454134C2A4A9937000D0685 /* SignInViewModel.swift */,
+				C454134C2A4A9937000D0685 /* AuthManager.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -568,7 +568,7 @@
 				C4DBE8482A41B329002987CB /* ItineraryCell.swift in Sources */,
 				C4DBE87D2A41BB81002987CB /* LTError.swift in Sources */,
 				C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */,
-				C454134D2A4A9937000D0685 /* SignInViewModel.swift in Sources */,
+				C454134D2A4A9937000D0685 /* AuthManager.swift in Sources */,
 				C4CC0C082A48499200E03758 /* LocationMapCell.swift in Sources */,
 				C4DBE8982A41BD10002987CB /* UIViewController+Alert.swift in Sources */,
 				C4DBE8AE2A41D696002987CB /* SelectionView.swift in Sources */,
