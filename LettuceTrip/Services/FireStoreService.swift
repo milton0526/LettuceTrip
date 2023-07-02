@@ -124,6 +124,10 @@ class FireStoreService {
         }
     }
 
+    func deleteDocument(id: String) {
+        database.collection(CollectionRef.trips.rawValue).document(id).delete()
+    }
+
     func updateTrip(trip: Trip, completion: @escaping (Error?) -> Void) {
         guard let tripID = trip.id else { return }
 
@@ -256,10 +260,17 @@ class FireStoreService {
                                 trips.append(trip)
                             }
 
-                        case .modified, .removed:
+                        case .modified:
                             if let modifyTrip = try? diff.document.data(as: Trip.self) {
                                 if let index = trips.firstIndex(where: { $0.id == modifyTrip.id }) {
                                     trips[index].image = modifyTrip.image
+                                }
+                            }
+
+                        case .removed:
+                            if let removedTrip = try? diff.document.data(as: Trip.self) {
+                                if let index = trips.firstIndex(where: { $0.id == removedTrip.id }) {
+                                    trips.remove(at: index)
                                 }
                             }
                         }
