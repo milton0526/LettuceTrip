@@ -71,13 +71,7 @@ class MyTripViewController: UIViewController {
     }
 
     private func customNavBar() {
-        let welcomeView = UILabel()
-        welcomeView.text = String(localized: "My Trip")
-        welcomeView.font = .systemFont(ofSize: 22, weight: .bold)
-        welcomeView.textColor = .label
-
-        let leftBarItem = UIBarButtonItem(customView: welcomeView)
-        navigationItem.leftBarButtonItem = leftBarItem
+        navigationItem.title = String(localized: "My trips")
         navigationItem.rightBarButtonItem = editButtonItem
     }
 

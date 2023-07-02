@@ -115,10 +115,10 @@ class SearchCityViewController: UIViewController {
 
     private func search(using searchRequest: MKLocalSearch.Request) {
 
-        if let region = region {
-            searchRequest.resultTypes = [.address, .pointOfInterest]
-        } else {
+        if region == nil {
             searchRequest.resultTypes = .address
+        } else {
+            searchRequest.resultTypes = [.address, .pointOfInterest]
         }
 
         localSearch = MKLocalSearch(request: searchRequest)
