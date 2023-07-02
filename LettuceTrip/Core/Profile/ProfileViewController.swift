@@ -23,6 +23,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
     }()
 
     lazy var profileHeaderView = ProfileHeaderView()
+    private let authManager = AuthManager()
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, SettingModel>!
 
@@ -40,6 +41,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         configDataSource()
         updateSnapshot()
         fetchData()
+
+        authManager.viewController = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -134,6 +137,20 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         switch indexPath.item {
+        case 2:
+            let alert = UIAlertController(
+                title: String(localized: "Are you sure want to delete account?"),
+                message: String(localized: "All associate data will be delete too."),
+                preferredStyle: .alert)
+            let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
+            let confirm = UIAlertAction(title: String(localized: "Confirm"), style: .destructive) { [weak self] _ in
+                self?.authManager.deleteAccount()
+            }
+
+            alert.addAction(cancel)
+            alert.addAction(confirm)
+
+            present(alert, animated: true)
         case 3:
             confirmSignOut()
         default: break

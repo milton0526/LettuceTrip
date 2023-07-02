@@ -132,9 +132,7 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
 
         let place = places[indexPath.item]
 
-        let arrangeVC = ArrangePlaceViewController()
-        arrangeVC.trip = trip
-        arrangeVC.place = place
+        let arrangeVC = ArrangePlaceViewController(trip: trip, place: place)
         navigationController?.pushViewController(arrangeVC, animated: true)
     }
 }

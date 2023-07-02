@@ -27,8 +27,8 @@ class FireStoreService {
 
     var currentUser: String? {
         // Test user id
-        "U3K16S3A8vduG71uXhEq6GDkStg2"
-        // Auth.auth().currentUser?.uid
+        // "xlyR2EUkqm8yhkRXiIRQ"
+        Auth.auth().currentUser?.uid
     }
 
     func signOut(completion: @escaping (Error?) -> Void) {
@@ -52,6 +52,11 @@ class FireStoreService {
             print("Failed to add new user to Firebase")
             completion(.failure(error))
         }
+    }
+
+    func deleteUserInFireStore() {
+        guard let currentUser = currentUser else { return }
+        database.collection(CollectionRef.users.rawValue).document(currentUser).delete()
     }
 
     func addDocument(at collection: CollectionRef, data: Encodable, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -122,6 +127,10 @@ class FireStoreService {
         ]) { error in
             completion(error)
         }
+    }
+
+    func deleteDocument(id: String) {
+        database.collection(CollectionRef.trips.rawValue).document(id).delete()
     }
 
     func updateTrip(trip: Trip, completion: @escaping (Error?) -> Void) {
@@ -256,10 +265,17 @@ class FireStoreService {
                                 trips.append(trip)
                             }
 
-                        case .modified, .removed:
+                        case .modified:
                             if let modifyTrip = try? diff.document.data(as: Trip.self) {
                                 if let index = trips.firstIndex(where: { $0.id == modifyTrip.id }) {
                                     trips[index].image = modifyTrip.image
+                                }
+                            }
+
+                        case .removed:
+                            if let removedTrip = try? diff.document.data(as: Trip.self) {
+                                if let index = trips.firstIndex(where: { $0.id == removedTrip.id }) {
+                                    trips.remove(at: index)
                                 }
                             }
                         }

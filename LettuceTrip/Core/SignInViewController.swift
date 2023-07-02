@@ -32,18 +32,18 @@ class SignInViewController: UIViewController {
     }()
 
     private lazy var appleSignInButton = ASAuthorizationAppleIDButton(authorizationButtonType: .signIn, authorizationButtonStyle: currentStyle)
-    private let viewModel = SignInViewModel()
+    private let authManager = AuthManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.viewController = self
+        authManager.viewController = self
         appleSignInButton.addTarget(self, action: #selector(startSignInWithAppleFlow), for: .touchUpInside)
         view.backgroundColor = .systemBackground
         setupUI()
     }
 
     @objc func startSignInWithAppleFlow(_ sender: UIColor) {
-        viewModel.signInWithApple()
+        authManager.signInWithApple()
     }
 
     private func setupUI() {
