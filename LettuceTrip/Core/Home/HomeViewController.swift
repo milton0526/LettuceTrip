@@ -6,7 +6,10 @@
 //
 
 import UIKit
+import MapKit
 import TinyConstraints
+
+// reload method
 
 class HomeViewController: UIViewController {
 
@@ -18,8 +21,8 @@ class HomeViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.delegate = self
         collectionView.register(
-            ItineraryCollectionViewCell.self,
-            forCellWithReuseIdentifier: ItineraryCollectionViewCell.identifier)
+            ItineraryCell.self,
+            forCellWithReuseIdentifier: ItineraryCell.identifier)
         collectionView.register(
             ItineraryHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -64,21 +67,20 @@ class HomeViewController: UIViewController {
     private func configureDataSource() {
         dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, item in
             guard let itineraryCell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: ItineraryCollectionViewCell.identifier,
-                for: indexPath) as? ItineraryCollectionViewCell
+                withReuseIdentifier: ItineraryCell.identifier,
+                for: indexPath) as? ItineraryCell
             else {
                 fatalError("Failed to dequeue cityCell")
             }
 
+            itineraryCell.delegate = self
             itineraryCell.config(with: item)
             return itineraryCell
         }
     }
 
     private func fetchData() {
-
         FireStoreService.shared.fetchShareTrips { [weak self] result in
-
             DispatchQueue.main.async {
                 switch result {
                 case .success(let trips):
@@ -108,5 +110,14 @@ extension HomeViewController: UICollectionViewDelegate {
         let trip = shareTrips[indexPath.item]
         let editVC = EditTripViewController(trip: trip, isEditMode: false)
         navigationController?.pushViewController(editVC, animated: true)
+    }
+}
+
+// MARK: Itinerary cell Delegate
+extension HomeViewController: ItineraryCellDelegate {
+
+    func reportAction(_ cell: ItineraryCell) {
+        print("Report clicked")
+        // Send report
     }
 }

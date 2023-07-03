@@ -11,15 +11,20 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 struct Trip: Codable, Hashable {
-    @DocumentID var id: String?
+    var id: String?
     var tripName: String
     var image: Data
     var startDate: Date
     var endDate: Date
     var duration: Int
-    var destination: GeoPoint
+    var destination: String
+    var geoLocation: GeoPoint
     var members: [String]
     var isPublic: Bool
+
+    var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: geoLocation.latitude, longitude: geoLocation.longitude)
+    }
 }
 
 struct Message: Codable, Hashable {

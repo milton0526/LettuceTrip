@@ -27,8 +27,8 @@ class FireStoreService {
 
     var currentUser: String? {
         // Test user id
-        // "xlyR2EUkqm8yhkRXiIRQ"
-        Auth.auth().currentUser?.uid
+        "LpDb7nvzvSZZcTtJZOld4OS3aEB3"
+        // Auth.auth().currentUser?.uid
     }
 
     func signOut(completion: @escaping (Error?) -> Void) {
@@ -59,12 +59,15 @@ class FireStoreService {
         database.collection(CollectionRef.users.rawValue).document(currentUser).delete()
     }
 
-    func addDocument(at collection: CollectionRef, data: Encodable, completion: @escaping (Result<Void, Error>) -> Void) {
+    func addNewTrip(at collection: CollectionRef, trip: Trip, completion: @escaping (Result<String, Error>) -> Void) {
         let ref = database.collection(collection.rawValue)
+        let tempID = ref.document().documentID
+        var newTrip = trip
+        newTrip.id = tempID
 
         do {
-            try ref.addDocument(from: data)
-            completion(.success(()))
+            try ref.document(tempID).setData(from: newTrip)
+            completion(.success((tempID)))
             print("Successfully add new document at collection: \(collection.rawValue)")
         } catch {
             completion(.failure(error))
@@ -91,7 +94,7 @@ class FireStoreService {
         }
     }
 
-    func batchUpdate(at trip: Trip, from source: Place, to destination: Place, completion: @escaping () -> Void) {
+    func batchUpdateInOrder(at trip: Trip, from source: Place, to destination: Place, completion: @escaping (Result<Void, Error>) -> Void) {
         guard
             let tripID = trip.id,
             let sourceID = source.id,
@@ -112,9 +115,36 @@ class FireStoreService {
 
         batch.commit { error in
             if let error = error {
+                completion(.failure(error))
                 print("Error to commit batch: \(error.localizedDescription)")
             } else {
+                completion(.success(()))
                 print("Successfully update batch.")
+            }
+        }
+    }
+
+    func copyPlaces(tripID: String, places: [Place], completion: @escaping (Result<Void, Error>) -> Void) {
+        let batch = database.batch()
+        let baseRef = database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.places.rawValue)
+
+        places.forEach { place in
+            if let placeID = place.id {
+                do {
+                    try batch.setData(from: place, forDocument: baseRef.document(placeID))
+                } catch {
+                    print("Error set batch update copy places: \(error.localizedDescription)")
+                }
+            }
+        }
+
+        batch.commit { error in
+            if let error = error {
+                completion(.failure(error))
+                print("Error to commit batch: \(error.localizedDescription)")
+            } else {
+                completion(.success(()))
+                print("Successfully update copy batch.")
             }
         }
     }

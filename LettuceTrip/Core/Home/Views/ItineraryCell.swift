@@ -8,7 +8,13 @@
 import UIKit
 import TinyConstraints
 
-class ItineraryCollectionViewCell: UICollectionViewCell {
+protocol ItineraryCellDelegate: AnyObject {
+    func reportAction(_ cell: ItineraryCell)
+}
+
+class ItineraryCell: UICollectionViewCell {
+
+    weak var delegate: ItineraryCellDelegate?
 
     lazy var userImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "person.circle"))
@@ -20,7 +26,6 @@ class ItineraryCollectionViewCell: UICollectionViewCell {
 
     lazy var userNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Milton liu"
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.textColor = .label
         return label
@@ -32,6 +37,7 @@ class ItineraryCollectionViewCell: UICollectionViewCell {
         button.tintColor = .tintColor
         button.showsMenuAsPrimaryAction = true
         button.menu = UIMenu(children: [
+            UIAction(title: String(localized: "Report"), handler: reportActionHandler(_:))
         ])
         return button
     }()
@@ -47,7 +53,6 @@ class ItineraryCollectionViewCell: UICollectionViewCell {
 
     lazy var tripNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Trip to Kyoto"
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .label
         return label
@@ -55,7 +60,6 @@ class ItineraryCollectionViewCell: UICollectionViewCell {
 
     lazy var timeLabel: UILabel = {
         let label = UILabel()
-        label.text = "2022/06/16"
         label.font = .systemFont(ofSize: 14, weight: .regular)
         label.textColor = .secondaryLabel
         return label
@@ -109,5 +113,9 @@ class ItineraryCollectionViewCell: UICollectionViewCell {
         imageView.image = UIImage(data: trip.image)
 
         // Need to use dispatch group to fetch user data
+    }
+
+    private func reportActionHandler(_ action: UIAction) {
+        delegate?.reportAction(self)
     }
 }

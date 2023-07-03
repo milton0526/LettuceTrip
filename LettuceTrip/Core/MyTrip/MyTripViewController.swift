@@ -83,7 +83,7 @@ class MyTripViewController: UIViewController {
     }
 
     @objc func addTripButtonTapped(_ sender: UIButton) {
-        let addNewTripVC = AddNewTripViewController()
+        let addNewTripVC = AddNewTripViewController(isCopy: false)
         let navVC = UINavigationController(rootViewController: addNewTripVC)
         let viewHeight = view.frame.height
         let detentsHeight = UISheetPresentationController.Detent.custom { _ in

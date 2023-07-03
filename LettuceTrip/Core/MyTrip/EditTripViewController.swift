@@ -9,11 +9,12 @@ import UIKit
 import FirebaseFirestore
 import TinyConstraints
 import PhotosUI
+import MapKit
 
 class EditTripViewController: UIViewController {
 
     private var trip: Trip
-    private var isEditMode: Bool
+    private let isEditMode: Bool
 
     init(trip: Trip, isEditMode: Bool = true) {
         self.trip = trip
@@ -100,6 +101,13 @@ class EditTripViewController: UIViewController {
             imageView.addGestureRecognizer(tapGesture)
             collectionView.dragDelegate = self
             collectionView.dropDelegate = self
+        } else {
+            let copyButton = UIBarButtonItem(
+                image: UIImage(systemName: "square.and.arrow.down"),
+                style: .plain,
+                target: self,
+                action: #selector(copyItinerary))
+            navigationItem.rightBarButtonItem = copyButton
         }
     }
 
@@ -189,6 +197,29 @@ class EditTripViewController: UIViewController {
         let picker = PHPickerViewController(configuration: config)
         picker.delegate = self
         present(picker, animated: true)
+    }
+
+    @objc func copyItinerary(_ sender: UIBarButtonItem) {
+        let addTripVC = AddNewTripViewController(isCopy: true)
+        let placeMark = MKPlacemark(coordinate: trip.coordinate)
+        let mapItem = MKMapItem(placemark: placeMark)
+        mapItem.name = trip.destination
+        addTripVC.selectedCity = mapItem
+        addTripVC.places = places
+        addTripVC.destinationTextField.text = trip.destination
+        addTripVC.durationTextField.text = String(trip.duration + 1)
+
+        let navVC = UINavigationController(rootViewController: addTripVC)
+        let viewHeight = view.frame.height
+        let detentsHeight = UISheetPresentationController.Detent.custom { _ in
+            viewHeight * 0.7
+        }
+        if let bottomSheet = navVC.sheetPresentationController {
+            bottomSheet.detents = [detentsHeight]
+            bottomSheet.preferredCornerRadius = 20
+            bottomSheet.prefersGrabberVisible = true
+            present(navVC, animated: true)
+        }
     }
 
     private func convertDateToDisplay() -> [Date] {
@@ -326,7 +357,7 @@ extension EditTripViewController: UICollectionViewDropDelegate {
                         sourceItem.arrangedTime = destinationItem.arrangedTime
                         destinationItem.arrangedTime = date
 
-                        FireStoreService.shared.batchUpdate(at: trip, from: sourceItem, to: destinationItem) {
+                        FireStoreService.shared.batchUpdateInOrder(at: trip, from: sourceItem, to: destinationItem) { _ in 
                             print("Ha Ha, that's some easy.")
                         }
                     }
