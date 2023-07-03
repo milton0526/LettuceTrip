@@ -44,11 +44,48 @@ class ArrangePlaceCell: UICollectionViewCell {
         return view
     }()
 
+    lazy var busImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(systemName: "bus.fill"))
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .tintColor
+        return imageView
+    }()
+
+    lazy var estimatedTimeLabel: UIView = {
+        let label = UILabel()
+        label.text = "35 Minutes"
+        label.font = .systemFont(ofSize: 14, weight: .bold)
+        return label
+    }()
+
+    lazy var timeVStack: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [fromTimeLabel, lineView, toTimeLabel])
+        stackView.axis = .vertical
+        stackView.spacing = 4
+        stackView.alignment = .center
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+
+    lazy var placeHStack: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [timeVStack, placeLabel, iconImageView])
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+
+    lazy var estimatedHStack: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [busImageView, estimatedTimeLabel, UIView()])
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        stackView.alignment = .center
+        stackView.distribution = .fill
+        return stackView
+    }()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .secondarySystemBackground
-        contentView.layer.cornerRadius = 10
-        contentView.layer.masksToBounds = true
         setupViews()
     }
 
@@ -57,29 +94,24 @@ class ArrangePlaceCell: UICollectionViewCell {
     }
 
     private func setupViews() {
-        let subviews = [fromTimeLabel, toTimeLabel, lineView, placeLabel, iconImageView]
-        subviews.forEach { contentView.addSubview($0) }
-
-        fromTimeLabel.topToSuperview(offset: 8)
-        fromTimeLabel.leadingToSuperview(offset: 16)
-        fromTimeLabel.bottomToTop(of: lineView, offset: -8)
-        fromTimeLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-
-        lineView.size(.init(width: 1.3, height: 14))
-        lineView.centerX(to: fromTimeLabel)
-        lineView.centerYToSuperview()
-
-        toTimeLabel.topToBottom(of: lineView, offset: 8)
-        toTimeLabel.centerX(to: fromTimeLabel)
-        toTimeLabel.bottomToSuperview(offset: -8)
-
-        placeLabel.centerYToSuperview()
-        placeLabel.leadingToTrailing(of: fromTimeLabel, offset: 24)
-        placeLabel.widthToSuperview(multiplier: 0.5)
+        [placeHStack, estimatedHStack].forEach { contentView.addSubview($0) }
 
         iconImageView.size(.init(width: 35, height: 35))
-        iconImageView.centerYToSuperview()
-        iconImageView.trailingToSuperview(offset: 16)
+        lineView.size(.init(width: 1.3, height: 14))
+
+        placeHStack.topToSuperview()
+        placeHStack.horizontalToSuperview(insets: .horizontal(8))
+        placeHStack.height(68, relation: .equalOrGreater)
+        placeHStack.backgroundColor = .secondarySystemBackground
+        placeHStack.layer.cornerRadius = 10
+        placeHStack.layer.masksToBounds = true
+        placeHStack.layoutMargins = .init(top: 8, left: 16, bottom: 8, right: 16)
+        placeHStack.isLayoutMarginsRelativeArrangement = true
+
+        estimatedHStack.topToBottom(of: placeHStack, offset: 8)
+        estimatedHStack.height(16, relation: .equalOrGreater)
+        estimatedHStack.horizontalToSuperview(insets: .horizontal(16))
+        estimatedHStack.bottomToSuperview()
     }
 
     func config(with place: Place) {

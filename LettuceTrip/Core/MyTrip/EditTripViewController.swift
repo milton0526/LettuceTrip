@@ -52,7 +52,13 @@ class EditTripViewController: UIViewController {
     private var listener: ListenerRegistration?
     private var dataSource: UICollectionViewDiffableDataSource<Section, Place>!
     private var places: [Place] = []
-    private var filterPlaces: [Place] = []
+    private var filterPlaces: [Place] = [] {
+        didSet {
+            if !filterPlaces.isEmpty {
+                estimateTravelTime()
+            }
+        }
+    }
     private lazy var currentSelectedDate = trip.startDate
 
     override func viewDidLoad() {
@@ -238,12 +244,12 @@ class EditTripViewController: UIViewController {
     private func createLayout() -> UICollectionViewCompositionalLayout {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0))
+            heightDimension: .estimated(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(68))
+            heightDimension: .estimated(100))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
@@ -279,6 +285,25 @@ class EditTripViewController: UIViewController {
 
         // use snapshot reload method to avoid weird animation
         dataSource.applySnapshotUsingReloadData(snapshot)
+    }
+
+    // Estimated time
+    private func estimateTravelTime() {
+        let source = filterPlaces[0]
+        let destination = filterPlaces[1]
+
+        let request = MKDirections.Request()
+        request.source = MKMapItem(placemark: MKPlacemark(coordinate: source.coordinate))
+        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: destination.coordinate))
+        request.departureDate = source.arrangedTime
+        request.transportType = .transit
+
+        let directions = MKDirections(request: request)
+        directions.calculateETA { response, _ in
+            guard let response = response else { return }
+            let minutes = response.expectedTravelTime / 60
+            print(String(format: "%.0f", minutes))
+        }
     }
 }
 
@@ -357,7 +382,7 @@ extension EditTripViewController: UICollectionViewDropDelegate {
                         sourceItem.arrangedTime = destinationItem.arrangedTime
                         destinationItem.arrangedTime = date
 
-                        FireStoreService.shared.batchUpdateInOrder(at: trip, from: sourceItem, to: destinationItem) { _ in 
+                        FireStoreService.shared.batchUpdateInOrder(at: trip, from: sourceItem, to: destinationItem) { _ in
                             print("Ha Ha, that's some easy.")
                         }
                     }

@@ -160,7 +160,13 @@ class FireStoreService {
     }
 
     func deleteDocument(id: String) {
-        database.collection(CollectionRef.trips.rawValue).document(id).delete()
+        database.collection(CollectionRef.trips.rawValue).document(id).delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("Delete successfully")
+            }
+        }
     }
 
     func updateTrip(trip: Trip, completion: @escaping (Error?) -> Void) {
