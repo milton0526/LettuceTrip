@@ -47,6 +47,12 @@ struct Place: Codable, Hashable {
     var coordinate: CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
     }
+
+    var endTime: Date? {
+        guard let arrangedTime = arrangedTime, let duration = duration else { return nil }
+        let result = arrangedTime.addingTimeInterval(duration)
+        return result
+    }
 }
 
 struct PlaceArrangement {

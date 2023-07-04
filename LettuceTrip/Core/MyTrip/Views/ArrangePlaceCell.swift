@@ -51,10 +51,9 @@ class ArrangePlaceCell: UICollectionViewCell {
         return imageView
     }()
 
-    lazy var estimatedTimeLabel: UIView = {
+    lazy var estimatedTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "35 Minutes"
-        label.font = .systemFont(ofSize: 14, weight: .bold)
+        label.font = .systemFont(ofSize: 14, weight: .semibold)
         return label
     }()
 
@@ -93,6 +92,11 @@ class ArrangePlaceCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        estimatedHStack.isHidden = false
+    }
+
     private func setupViews() {
         [placeHStack, estimatedHStack].forEach { contentView.addSubview($0) }
 
@@ -114,13 +118,19 @@ class ArrangePlaceCell: UICollectionViewCell {
         estimatedHStack.bottomToSuperview()
     }
 
-    func config(with place: Place) {
+    func config(with place: Place, travelTime: String? = nil) {
         guard let duration = place.duration else { return }
-        let toTime = place.arrangedTime?.addingTimeInterval(duration)
+        let toTime = place.endTime
 
         fromTimeLabel.text = place.arrangedTime?.formatted(date: .omitted, time: .shortened)
         toTimeLabel.text = toTime?.formatted(date: .omitted, time: .shortened)
         placeLabel.text = place.name
         iconImageView.image = UIImage(data: place.iconImage)?.withTintColor(.tintColor)
+
+        if let travelTime = travelTime {
+            estimatedTimeLabel.text = String(localized: "\(travelTime) minutes")
+        } else {
+            estimatedHStack.isHidden = true
+        }
     }
 }

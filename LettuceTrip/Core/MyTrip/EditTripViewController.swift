@@ -52,10 +52,16 @@ class EditTripViewController: UIViewController {
     private var listener: ListenerRegistration?
     private var dataSource: UICollectionViewDiffableDataSource<Section, Place>!
     private var places: [Place] = []
-    private var filterPlaces: [Place] = [] {
+    private var sortedPlaces: [Place] = [] {
         didSet {
-            if !filterPlaces.isEmpty {
-                estimateTravelTime()
+            estimateTravelTime()
+        }
+    }
+
+    @MainActor private var estimatedTimes: [Int: String] = [:] {
+        didSet {
+            if estimatedTimes.count == sortedPlaces.count - 1 {
+                updateSnapshot()
             }
         }
     }
@@ -127,14 +133,11 @@ class EditTripViewController: UIViewController {
             switch result {
             case .success(let place):
                 self.places = place
+                self.filterPlace(by: self.currentSelectedDate)
 
                 if !isEditMode {
                     listener?.remove()
                     listener = nil
-                }
-
-                DispatchQueue.main.async {
-                    self.updateSnapshot(by: self.currentSelectedDate)
                 }
             case .failure(let error):
                 self.showAlertToUser(error: error)
@@ -260,7 +263,7 @@ class EditTripViewController: UIViewController {
     }
 
     private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, item in
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [unowned self] collectionView, indexPath, item in
             guard let arrangeCell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ArrangePlaceCell.identifier,
                 for: indexPath) as? ArrangePlaceCell
@@ -268,41 +271,55 @@ class EditTripViewController: UIViewController {
                 fatalError("Failed to dequeue cityCell")
             }
 
-            arrangeCell.config(with: item)
+            if indexPath.item < estimatedTimes.count {
+                arrangeCell.config(with: item, travelTime: estimatedTimes[indexPath.item] ?? "")
+            } else {
+                arrangeCell.config(with: item)
+            }
             return arrangeCell
         }
     }
 
-    private func updateSnapshot(by date: Date) {
+    private func updateSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Place>()
         snapshot.appendSections([.main])
-
-        let filterResults = places.filter { $0.arrangedTime?.resetHourAndMinute() == date.resetHourAndMinute() }
-        // swiftlint: disable force_unwrapping
-        filterPlaces = filterResults.sorted { $0.arrangedTime! < $1.arrangedTime! }
-        // swiftlint: enable force_unwrapping
-        snapshot.appendItems(filterPlaces)
-
+        snapshot.appendItems(sortedPlaces)
         // use snapshot reload method to avoid weird animation
         dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
+    private func filterPlace(by date: Date) {
+        let filterResults = places.filter { $0.arrangedTime?.resetHourAndMinute() == date.resetHourAndMinute() }
+        // swiftlint: disable force_unwrapping
+        let sortedResults = filterResults.sorted { $0.arrangedTime! < $1.arrangedTime! }
+        sortedPlaces = sortedResults
+        // swiftlint: enable force_unwrapping
+    }
+
     // Estimated time
     private func estimateTravelTime() {
-        let source = filterPlaces[0]
-        let destination = filterPlaces[1]
+        guard !sortedPlaces.isEmpty else {
+            updateSnapshot()
+            return
+        }
 
-        let request = MKDirections.Request()
-        request.source = MKMapItem(placemark: MKPlacemark(coordinate: source.coordinate))
-        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: destination.coordinate))
-        request.departureDate = source.arrangedTime
-        request.transportType = .transit
+        estimatedTimes = [:]
+        for i in 1..<sortedPlaces.count {
+            let source = sortedPlaces[i - 1]
+            let destination = sortedPlaces[i]
+            let request = MKDirections.Request()
+            request.source = MKMapItem(placemark: MKPlacemark(coordinate: source.coordinate))
+            request.destination = MKMapItem(placemark: MKPlacemark(coordinate: destination.coordinate))
+            request.departureDate = source.endTime
+            request.transportType = .transit
 
-        let directions = MKDirections(request: request)
-        directions.calculateETA { response, _ in
-            guard let response = response else { return }
-            let minutes = response.expectedTravelTime / 60
-            print(String(format: "%.0f", minutes))
+            let directions = MKDirections(request: request)
+            directions.calculateETA { response, _ in
+                guard let response = response else { return }
+                let minutes = response.expectedTravelTime / 60
+                let formattedMins = (String(format: "%.0f", minutes))
+                self.estimatedTimes.updateValue(formattedMins, forKey: i - 1)
+            }
         }
     }
 }
@@ -310,7 +327,7 @@ class EditTripViewController: UIViewController {
 // MARK: - CollectionView Delegate
 extension EditTripViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let place = filterPlaces[indexPath.item]
+        let place = sortedPlaces[indexPath.item]
         let viewController: UIViewController
 
         if isEditMode {
@@ -327,7 +344,7 @@ extension EditTripViewController: UICollectionViewDelegate {
 extension EditTripViewController: UICollectionViewDragDelegate {
 
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        let placeItem = String(filterPlaces[indexPath.item].arrangedTime?.ISO8601Format() ?? "")
+        let placeItem = String(sortedPlaces[indexPath.item].arrangedTime?.ISO8601Format() ?? "")
         let itemProvider = NSItemProvider(object: placeItem as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = placeItem
@@ -345,9 +362,6 @@ extension EditTripViewController: UICollectionViewDropDelegate {
         }
 
         return UICollectionViewDropProposal(operation: .forbidden)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, dropSessionDidEnd session: UIDropSession) {
     }
 
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
@@ -376,8 +390,8 @@ extension EditTripViewController: UICollectionViewDropDelegate {
                     if let dateString = placeTime,
                         let date = formatter.date(from: dateString) {
 
-                        var sourceItem = filterPlaces[sourceIndexPath.item]
-                        var destinationItem = filterPlaces[destinationIndexPath.item]
+                        var sourceItem = sortedPlaces[sourceIndexPath.item]
+                        var destinationItem = sortedPlaces[destinationIndexPath.item]
 
                         sourceItem.arrangedTime = destinationItem.arrangedTime
                         destinationItem.arrangedTime = date
@@ -396,7 +410,7 @@ extension EditTripViewController: UICollectionViewDropDelegate {
 extension EditTripViewController: ScheduleViewDelegate {
     func didSelectedDate(_ view: ScheduleView, selectedDate: Date) {
         currentSelectedDate = selectedDate
-        updateSnapshot(by: selectedDate)
+        filterPlace(by: selectedDate)
     }
 }
 
