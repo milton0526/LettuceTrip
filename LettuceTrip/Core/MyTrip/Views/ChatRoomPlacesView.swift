@@ -15,6 +15,8 @@ class ChatRoomPlacesView: UIView, UICollectionViewDelegateFlowLayout, UICollecti
         }
     }
 
+    var touchHandler: ((Place) -> Void)?
+
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -29,6 +31,9 @@ class ChatRoomPlacesView: UIView, UICollectionViewDelegateFlowLayout, UICollecti
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        layer.cornerRadius = 34
+        layer.masksToBounds = true
+        layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         backgroundColor = .tintColor
         addSubview(collectionView)
         collectionView.edgesToSuperview(insets: .uniform(8))
@@ -40,6 +45,8 @@ class ChatRoomPlacesView: UIView, UICollectionViewDelegateFlowLayout, UICollecti
 
     // MARK: - Delegate method
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let place = places[indexPath.item]
+        touchHandler?(place)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

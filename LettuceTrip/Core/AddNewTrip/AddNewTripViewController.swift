@@ -70,7 +70,18 @@ class AddNewTripViewController: UIViewController {
         return datePicker
     }()
 
-    private var selectedCity: MKMapItem?
+    var selectedCity: MKMapItem?
+    var places: [Place] = []
+    private let isCopy: Bool
+
+    init(isCopy: Bool) {
+        self.isCopy = isCopy
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,7 +90,7 @@ class AddNewTripViewController: UIViewController {
 
     private func setupUI() {
         view.backgroundColor = .systemBackground
-        title = String(localized: "Create trip")
+        title = isCopy ? String(localized: "Copy this trip") : String(localized: "Create new trip")
 
         let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveTrip))
         navigationItem.rightBarButtonItem = saveButton
@@ -104,6 +115,7 @@ class AddNewTripViewController: UIViewController {
         destinationTextField.topToBottom(of: destinationLabel, offset: 8)
         destinationTextField.height(50)
         destinationTextField.horizontalToSuperview(insets: .horizontal(16))
+        destinationTextField.isEnabled = !isCopy
 
         durationLabel.topToBottom(of: destinationTextField, offset: 16)
         durationLabel.height(22)
@@ -112,6 +124,7 @@ class AddNewTripViewController: UIViewController {
         durationTextField.topToBottom(of: durationLabel, offset: 8)
         durationTextField.height(50)
         durationTextField.horizontalToSuperview(insets: .horizontal(16))
+        durationTextField.isEnabled = !isCopy
 
         startTimeLabel.topToBottom(of: durationTextField, offset: 24)
         startTimeLabel.height(22)
@@ -143,7 +156,8 @@ class AddNewTripViewController: UIViewController {
             let startDate = startDate,
             let endDate = Calendar.current.date(byAdding: .day, value: duration - 1, to: startDate),
             let selectedCity = selectedCity,
-            let user = FireStoreService.shared.currentUser
+            let user = FireStoreService.shared.currentUser,
+            let imageData = UIImage(named: "placeholder")?.jpegData(compressionQuality: 0.1)
         else {
             return
         }
@@ -152,17 +166,45 @@ class AddNewTripViewController: UIViewController {
         let longitude = selectedCity.placemark.coordinate.longitude
         let city = GeoPoint(latitude: latitude, longitude: longitude)
 
-        let trip = Trip(tripName: tripName, startDate: startDate, endDate: endDate, duration: duration - 1, destination: city, members: [user])
+        let trip = Trip(
+            tripName: tripName,
+            image: imageData,
+            startDate: startDate,
+            endDate: endDate,
+            duration: duration - 1,
+            destination: selectedCity.name ?? "",
+            geoLocation: city,
+            members: [user],
+            isPublic: false)
 
         // upload to firebase
-        FireStoreService.shared.addDocument(at: .trips, data: trip) { [weak self] result in
+        FireStoreService.shared.addNewTrip(at: .trips, trip: trip) { [unowned self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let id):
 
+                    if self.isCopy {
+                        self.copyPlaces(id)
+                    } else {
+                        self.dismiss(animated: true)
+                    }
+
+                case .failure(let error):
+                    self.showAlertToUser(error: error)
+                }
+            }
+        }
+    }
+
+    private func copyPlaces(_ id: String) {
+        FireStoreService.shared.copyPlaces(tripID: id, places: places) { [unowned self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    self?.dismiss(animated: true)
+                    print("Success copy place into new trip")
+                    self.dismiss(animated: true)
                 case .failure(let error):
-                    self?.showAlertToUser(error: error)
+                    self.showAlertToUser(error: error)
                 }
             }
         }
@@ -171,6 +213,7 @@ class AddNewTripViewController: UIViewController {
 
 // MARK: - UITextField Delegate
 extension AddNewTripViewController: UITextFieldDelegate {
+
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField == destinationTextField {
             let searchCityVC = SearchCityViewController()

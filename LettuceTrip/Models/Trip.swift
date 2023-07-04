@@ -10,14 +10,21 @@ import MapKit
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-struct Trip: Codable {
-    @DocumentID var id: String?
+struct Trip: Codable, Hashable {
+    var id: String?
     var tripName: String
+    var image: Data
     var startDate: Date
     var endDate: Date
     var duration: Int
-    var destination: GeoPoint
+    var destination: String
+    var geoLocation: GeoPoint
     var members: [String]
+    var isPublic: Bool
+
+    var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: geoLocation.latitude, longitude: geoLocation.longitude)
+    }
 }
 
 struct Message: Codable, Hashable {
@@ -39,6 +46,12 @@ struct Place: Codable, Hashable {
 
     var coordinate: CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
+    }
+
+    var endTime: Date? {
+        guard let arrangedTime = arrangedTime, let duration = duration else { return nil }
+        let result = arrangedTime.addingTimeInterval(duration)
+        return result
     }
 }
 

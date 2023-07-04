@@ -8,7 +8,6 @@
 import Foundation
 
 struct PlaceAboutCellViewModel {
-    let businessStatus: Bool?
-    let openingHours: String
+    let openingHours: [String]
     let website: String?
 }

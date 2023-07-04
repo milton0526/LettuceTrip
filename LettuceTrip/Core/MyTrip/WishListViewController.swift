@@ -53,22 +53,26 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         listener = nil
     }
 
+    @objc func openChatRoom(_ sender: UIBarButtonItem) {
+        let chatVC = ChatRoomViewController()
+        chatVC.trip = trip
+        let nav = UINavigationController(rootViewController: chatVC)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
+    }
+
     private func setupUI() {
         view.backgroundColor = .systemBackground
         view.addSubview(collectionView)
         collectionView.edgesToSuperview(usingSafeArea: true)
 
-        let backButton = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.backward"),
+        let chatRoomButton = UIBarButtonItem(
+            image: UIImage(systemName: "person.2"),
             style: .plain,
             target: self,
-            action: #selector(popView))
-        navigationItem.hidesBackButton = true
-        navigationItem.leftBarButtonItem = backButton
-    }
+            action: #selector(openChatRoom))
 
-    @objc func popView(_ sender: UIBarButtonItem) {
-        navigationController?.popViewController(animated: true)
+        navigationItem.rightBarButtonItem = chatRoomButton
     }
 
     private func fetchPlaces() {
@@ -128,9 +132,7 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
 
         let place = places[indexPath.item]
 
-        let arrangeVC = ArrangePlaceViewController()
-        arrangeVC.trip = trip
-        arrangeVC.place = place
+        let arrangeVC = ArrangePlaceViewController(trip: trip, place: place)
         navigationController?.pushViewController(arrangeVC, animated: true)
     }
 }

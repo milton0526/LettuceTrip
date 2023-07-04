@@ -9,6 +9,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseAuth
 
+// swiftlint: disable type_body_length
 class FireStoreService {
 
     static let shared = FireStoreService()
@@ -27,8 +28,19 @@ class FireStoreService {
 
     var currentUser: String? {
         // Test user id
-        "U3K16S3A8vduG71uXhEq6GDkStg2"
-        // Auth.auth().currentUser?.uid
+        // "LpDb7nvzvSZZcTtJZOld4OS3aEB3"
+        Auth.auth().currentUser?.uid
+    }
+
+    func signOut(completion: @escaping (Error?) -> Void) {
+        let firebaseAuth = Auth.auth()
+        do {
+            try firebaseAuth.signOut()
+            completion(nil)
+        } catch {
+            completion(error)
+            print("Error signing out: \(error.localizedDescription)")
+        }
     }
 
     func createUser(id: String, user: User, completion: @escaping (Result<User, Error>) -> Void) {
@@ -43,12 +55,41 @@ class FireStoreService {
         }
     }
 
-    func addDocument(at collection: CollectionRef, data: Encodable, completion: @escaping (Result<Void, Error>) -> Void) {
+    func updateDeviceToken(token: String?) {
+        guard
+            let currentUser = currentUser,
+            let token = token
+        else {
+            return
+        }
+
+        let ref = database.collection(CollectionRef.users.rawValue).document(currentUser)
+
+        ref.updateData([
+            "deviceToken": token
+        ]) { error in
+            if let error = error {
+                print("Error update device token.")
+            } else {
+                print("Successfully update device token.")
+            }
+        }
+    }
+
+    func deleteUserInFireStore() {
+        guard let currentUser = currentUser else { return }
+        database.collection(CollectionRef.users.rawValue).document(currentUser).delete()
+    }
+
+    func addNewTrip(at collection: CollectionRef, trip: Trip, completion: @escaping (Result<String, Error>) -> Void) {
         let ref = database.collection(collection.rawValue)
+        let tempID = ref.document().documentID
+        var newTrip = trip
+        newTrip.id = tempID
 
         do {
-            try ref.addDocument(from: data)
-            completion(.success(()))
+            try ref.document(tempID).setData(from: newTrip)
+            completion(.success((tempID)))
             print("Successfully add new document at collection: \(collection.rawValue)")
         } catch {
             completion(.failure(error))
@@ -75,6 +116,106 @@ class FireStoreService {
         }
     }
 
+    func batchUpdateInOrder(at trip: Trip, from source: Place, to destination: Place, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard
+            let tripID = trip.id,
+            let sourceID = source.id,
+            let destinationID = destination.id
+        else {
+            return
+        }
+
+        let batch = database.batch()
+        let baseRef = database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.places.rawValue)
+
+        do {
+            try batch.setData(from: source, forDocument: baseRef.document(sourceID), merge: true)
+            try batch.setData(from: destination, forDocument: baseRef.document(destinationID), merge: true)
+        } catch {
+            print("Error set batch update items: \(error.localizedDescription)")
+        }
+
+        batch.commit { error in
+            if let error = error {
+                completion(.failure(error))
+                print("Error to commit batch: \(error.localizedDescription)")
+            } else {
+                completion(.success(()))
+                print("Successfully update batch.")
+            }
+        }
+    }
+
+    func copyPlaces(tripID: String, places: [Place], completion: @escaping (Result<Void, Error>) -> Void) {
+        let batch = database.batch()
+        let baseRef = database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.places.rawValue)
+
+        places.forEach { place in
+            if let placeID = place.id {
+                do {
+                    try batch.setData(from: place, forDocument: baseRef.document(placeID))
+                } catch {
+                    print("Error set batch update copy places: \(error.localizedDescription)")
+                }
+            }
+        }
+
+        batch.commit { error in
+            if let error = error {
+                completion(.failure(error))
+                print("Error to commit batch: \(error.localizedDescription)")
+            } else {
+                completion(.success(()))
+                print("Successfully update copy batch.")
+            }
+        }
+    }
+
+    func updateMembers(userID: String, at tripID: String, completion: @escaping (Error?) -> Void) {
+        let ref = database.collection(CollectionRef.trips.rawValue).document(tripID)
+
+        ref.updateData([
+            "members": FieldValue.arrayUnion([userID])
+        ]) { error in
+            completion(error)
+        }
+    }
+
+    func deleteDocument(id: String) {
+        database.collection(CollectionRef.trips.rawValue).document(id).delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("Delete successfully")
+            }
+        }
+    }
+
+    func deletePlace(at trip: Trip, place: Place) {
+        guard let tripID = trip.id, let placeID = place.id else { return }
+        database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.places.rawValue).document(placeID).delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("Delete successfully")
+            }
+        }
+    }
+
+    func updateTrip(trip: Trip, completion: @escaping (Error?) -> Void) {
+        guard let tripID = trip.id else { return }
+
+        let ref = database.collection(CollectionRef.trips.rawValue).document(tripID)
+
+        do {
+            try ref.setData(from: trip, merge: true)
+            completion(nil)
+        } catch {
+            print("Error update trip state")
+            completion(error)
+        }
+    }
+
     func sendMessage(with message: String, in tripID: String, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let userID = currentUser else { return }
         let ref = database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.chatRoom.rawValue)
@@ -90,19 +231,62 @@ class FireStoreService {
         }
     }
 
-    func getDocument<T: Decodable>(from collection: CollectionRef, docId: String, dataType: T.Type, completion: @escaping (Result<T, Error>) -> Void) {
+    func getAllDocuments<T: Decodable>(from collection: CollectionRef, completion: @escaping (Result<[T], Error>) -> Void) {
         let ref = database.collection(collection.rawValue)
+        var results: [T] = []
 
-        ref.document(docId).getDocument(as: dataType) { result in
-            switch result {
-            case .success(let data):
-                completion(.success(data))
-                print("Successfully get trip data: \(data)")
-            case .failure(let error):
+        ref.getDocuments { snapshot, error in
+            if let error = error {
+                print("Error get all documents in \(collection.rawValue)")
                 completion(.failure(error))
-                print("Failed get trip data: \(error)")
+            } else {
+                guard let snapshot = snapshot else { return }
+
+                snapshot.documents.forEach { doc in
+                    if let data = try? doc.data(as: T.self) {
+                        results.append(data)
+                    }
+                }
+                completion(.success(results))
             }
         }
+    }
+
+    func getUserData(completion: @escaping (Result<User, Error>) -> Void) {
+        guard let currentUser = currentUser else { return }
+        let ref = database.collection(CollectionRef.users.rawValue)
+
+        ref.document(currentUser).getDocument(as: User.self) { result in
+            switch result {
+            case .success(let user):
+                completion(.success(user))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
+    func fetchShareTrips(completion: @escaping (Result<[Trip], Error>) -> Void) {
+        let ref = database.collection(CollectionRef.trips.rawValue)
+        var trips: [Trip] = []
+
+        ref
+            .whereField("isPublic", isEqualTo: true)
+            .limit(to: 10)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error getting Share trips")
+                    completion(.failure(error))
+                } else {
+                    guard let snapshot = snapshot else { return }
+                    snapshot.documents.forEach { doc in
+                        if let trip = try? doc.data(as: Trip.self) {
+                            trips.append(trip)
+                        }
+                    }
+                    completion(.success(trips))
+                }
+            }
     }
 
     func fetchAllUserTrips(completion: @escaping (Result<[Trip], Error>) -> Void) {
@@ -150,9 +334,19 @@ class FireStoreService {
                                 trips.append(trip)
                             }
 
-                        case .modified, .removed:
-                            // remove trip maybe cause issue
-                            completion(.success([]))
+                        case .modified:
+                            if let modifyTrip = try? diff.document.data(as: Trip.self) {
+                                if let index = trips.firstIndex(where: { $0.id == modifyTrip.id }) {
+                                    trips[index].image = modifyTrip.image
+                                }
+                            }
+
+                        case .removed:
+                            if let removedTrip = try? diff.document.data(as: Trip.self) {
+                                if let index = trips.firstIndex(where: { $0.id == removedTrip.id }) {
+                                    trips.remove(at: index)
+                                }
+                            }
                         }
                     }
                     completion(.success(trips))
@@ -184,8 +378,19 @@ class FireStoreService {
                                 places.append(place)
                             }
 
-                        case .modified, .removed:
-                            completion(.success([]))
+                        case .modified:
+                            if let modifiedPlace = try? diff.document.data(as: Place.self) {
+                                if let index = places.firstIndex(where: { $0.id == modifiedPlace.id }) {
+                                    places[index].arrangedTime = modifiedPlace.arrangedTime
+                                }
+                            }
+
+                        case .removed:
+                            if let removedPlace = try? diff.document.data(as: Place.self) {
+                                if let index = places.firstIndex(where: { $0.id == removedPlace.id }) {
+                                    places.remove(at: index)
+                                }
+                            }
                         }
                     }
 
@@ -216,6 +421,12 @@ class FireStoreService {
                             if let message = try? diff.document.data(as: Message.self) {
                                 messages.append(message)
                             }
+                        case .modified:
+                            if let modifiedMSG = try? diff.document.data(as: Message.self) {
+                                if let index = messages.firstIndex(where: { $0.id == modifiedMSG.id }) {
+                                    messages[index].sendTime = modifiedMSG.sendTime
+                                }
+                            }
                         default:
                             break
                         }
@@ -226,3 +437,4 @@ class FireStoreService {
         return listener
     }
 }
+// swiftlint: enable type_body_length

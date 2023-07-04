@@ -8,13 +8,17 @@
 import UIKit
 import FirebaseFirestore
 import TinyConstraints
+import PhotosUI
+import MapKit
 
 class EditTripViewController: UIViewController {
 
-    let trip: Trip
+    private var trip: Trip
+    private let isEditMode: Bool
 
-    init(trip: Trip) {
+    init(trip: Trip, isEditMode: Bool = true) {
         self.trip = trip
+        self.isEditMode = isEditMode
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -27,11 +31,12 @@ class EditTripViewController: UIViewController {
     }
 
     lazy var imageView: UIImageView = {
-        let imageView = UIImageView(image: .init(named: "placeholder2"))
+        let imageView = UIImageView(image: UIImage(data: trip.image))
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 34
         imageView.layer.masksToBounds = true
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
 
@@ -47,21 +52,35 @@ class EditTripViewController: UIViewController {
     private var listener: ListenerRegistration?
     private var dataSource: UICollectionViewDiffableDataSource<Section, Place>!
     private var places: [Place] = []
-    private var filterPlaces: [Place] = []
+    private var sortedPlaces: [Place] = [] {
+        didSet {
+            estimateTravelTime()
+        }
+    }
+
+    @MainActor private var estimatedTimes: [Int: String] = [:] {
+        didSet {
+            if estimatedTimes.count == sortedPlaces.count - 1 {
+                updateSnapshot()
+            }
+        }
+    }
+    private lazy var currentSelectedDate = trip.startDate
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = trip.tripName
         view.backgroundColor = .systemBackground
-        customNavBar()
         setupUI()
         scheduleView.schedules = convertDateToDisplay()
         scheduleView.delegate = self
         configureDataSource()
+        setEditMode()
+        scheduleView.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .centeredVertically)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        scheduleView.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .centeredVertically)
         fetchPlaces()
     }
 
@@ -77,7 +96,7 @@ class EditTripViewController: UIViewController {
         view.addSubview(collectionView)
 
         imageView.edgesToSuperview(excluding: .bottom, insets: .top(8) + .horizontal(16), usingSafeArea: true)
-        imageView.height(120)
+        imageView.height(160)
 
         scheduleView.topToBottom(of: imageView)
         scheduleView.horizontalToSuperview(insets: .horizontal(16))
@@ -85,6 +104,23 @@ class EditTripViewController: UIViewController {
 
         collectionView.topToBottom(of: scheduleView)
         collectionView.edgesToSuperview(excluding: .top, usingSafeArea: true)
+    }
+
+    private func setEditMode() {
+        if isEditMode {
+            customNavBar()
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(pickImage))
+            imageView.addGestureRecognizer(tapGesture)
+            collectionView.dragDelegate = self
+            collectionView.dropDelegate = self
+        } else {
+            let copyButton = UIBarButtonItem(
+                image: UIImage(systemName: "square.and.arrow.down"),
+                style: .plain,
+                target: self,
+                action: #selector(copyItinerary))
+            navigationItem.rightBarButtonItem = copyButton
+        }
     }
 
     private func fetchPlaces() {
@@ -97,9 +133,11 @@ class EditTripViewController: UIViewController {
             switch result {
             case .success(let place):
                 self.places = place
+                self.filterPlace(by: self.currentSelectedDate)
 
-                DispatchQueue.main.async {
-                    self.updateSnapshot(by: self.trip.startDate)
+                if !isEditMode {
+                    listener?.remove()
+                    listener = nil
                 }
             case .failure(let error):
                 self.showAlertToUser(error: error)
@@ -108,13 +146,6 @@ class EditTripViewController: UIViewController {
     }
 
     private func customNavBar() {
-        title = trip.tripName
-
-        let chatRoomButton = UIBarButtonItem(
-            image: UIImage(systemName: "person.2"),
-            style: .plain,
-            target: self,
-            action: #selector(openChatRoom))
         let editListButton = UIBarButtonItem(
             image: UIImage(systemName: "list.bullet.clipboard"),
             style: .plain,
@@ -124,17 +155,8 @@ class EditTripViewController: UIViewController {
             image: UIImage(systemName: "square.and.arrow.up"),
             style: .plain,
             target: self,
-            action: #selector(shareWithFriends))
-        navigationItem.rightBarButtonItems = [chatRoomButton, editListButton, shareButton]
-    }
-
-    @objc func openChatRoom(_ sender: UIBarButtonItem) {
-        // Check if room exist in FireStore
-        let chatVC = ChatRoomViewController()
-        chatVC.trip = trip
-        let nav = UINavigationController(rootViewController: chatVC)
-        nav.modalPresentationStyle = .fullScreen
-        present(nav, animated: true)
+            action: #selector(shareTrip))
+        navigationItem.rightBarButtonItems = [editListButton, shareButton]
     }
 
     @objc func openWishList(_ sender: UIBarButtonItem) {
@@ -142,12 +164,70 @@ class EditTripViewController: UIViewController {
         navigationController?.pushViewController(wishVC, animated: true)
     }
 
-    @objc func shareWithFriends(_ sender: UIBarButtonItem) {
+    @objc func shareTrip(_ sender: UIBarButtonItem) {
         guard let tripID = trip.id else { return }
 
-        if let shareURL = URL(string: "lettuceTrip.app.shareLink://invite/trip?\(tripID)") {
-            let activityVC = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
-            present(activityVC, animated: true)
+        let actionSheet = UIAlertController(
+            title: String(localized: "Share this trip to..."),
+            message: nil,
+            preferredStyle: .actionSheet)
+
+        let shareToCommunity = UIAlertAction(title: String(localized: "Community"), style: .default) { [weak self] _ in
+            // share to home page
+            guard let self = self else { return }
+            var trip = self.trip
+            trip.isPublic = true
+
+            FireStoreService.shared.updateTrip(trip: trip) { error in
+                if let error = error {
+                    self.showAlertToUser(error: error)
+                }
+            }
+        }
+
+        let shareLinkToFriend = UIAlertAction(title: String(localized: "Invite your friends"), style: .default) { [weak self] _ in
+            if let shareURL = URL(string: "lettuceTrip.app.shareLink://invite/trip?\(tripID)") {
+                let activityVC = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+                self?.present(activityVC, animated: true)
+            }
+        }
+
+        let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
+
+        actionSheet.addAction(shareToCommunity)
+        actionSheet.addAction(shareLinkToFriend)
+        actionSheet.addAction(cancel)
+        present(actionSheet, animated: true)
+    }
+
+    @objc func pickImage(_ gesture: UIGestureRecognizer) {
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+
+    @objc func copyItinerary(_ sender: UIBarButtonItem) {
+        let addTripVC = AddNewTripViewController(isCopy: true)
+        let placeMark = MKPlacemark(coordinate: trip.coordinate)
+        let mapItem = MKMapItem(placemark: placeMark)
+        mapItem.name = trip.destination
+        addTripVC.selectedCity = mapItem
+        addTripVC.places = places
+        addTripVC.destinationTextField.text = trip.destination
+        addTripVC.durationTextField.text = String(trip.duration + 1)
+
+        let navVC = UINavigationController(rootViewController: addTripVC)
+        let viewHeight = view.frame.height
+        let detentsHeight = UISheetPresentationController.Detent.custom { _ in
+            viewHeight * 0.7
+        }
+        if let bottomSheet = navVC.sheetPresentationController {
+            bottomSheet.detents = [detentsHeight]
+            bottomSheet.preferredCornerRadius = 20
+            bottomSheet.prefersGrabberVisible = true
+            present(navVC, animated: true)
         }
     }
 
@@ -167,12 +247,12 @@ class EditTripViewController: UIViewController {
     private func createLayout() -> UICollectionViewCompositionalLayout {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0))
+            heightDimension: .estimated(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(68))
+            heightDimension: .estimated(100))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
@@ -183,7 +263,7 @@ class EditTripViewController: UIViewController {
     }
 
     private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, item in
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [unowned self] collectionView, indexPath, item in
             guard let arrangeCell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ArrangePlaceCell.identifier,
                 for: indexPath) as? ArrangePlaceCell
@@ -191,32 +271,206 @@ class EditTripViewController: UIViewController {
                 fatalError("Failed to dequeue cityCell")
             }
 
-            arrangeCell.config(with: item)
+            if indexPath.item < estimatedTimes.count {
+                arrangeCell.config(with: item, travelTime: estimatedTimes[indexPath.item] ?? "")
+            } else {
+                arrangeCell.config(with: item)
+            }
             return arrangeCell
         }
     }
 
-    private func updateSnapshot(by date: Date) {
+    private func updateSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Place>()
         snapshot.appendSections([.main])
+        snapshot.appendItems(sortedPlaces)
+        // use snapshot reload method to avoid weird animation
+        dataSource.applySnapshotUsingReloadData(snapshot)
+    }
 
+    private func filterPlace(by date: Date) {
         let filterResults = places.filter { $0.arrangedTime?.resetHourAndMinute() == date.resetHourAndMinute() }
-        filterPlaces = filterResults.sorted { $0.arrangedTime! < $1.arrangedTime! }
+        // swiftlint: disable force_unwrapping
+        let sortedResults = filterResults.sorted { $0.arrangedTime! < $1.arrangedTime! }
+        sortedPlaces = sortedResults
+        // swiftlint: enable force_unwrapping
+    }
 
-        snapshot.appendItems(filterPlaces)
-        dataSource.apply(snapshot)
+    // Estimated time
+    private func estimateTravelTime() {
+        guard !sortedPlaces.isEmpty else {
+            updateSnapshot()
+            return
+        }
+
+        estimatedTimes = [:]
+        for i in 1..<sortedPlaces.count {
+            let source = sortedPlaces[i - 1]
+            let destination = sortedPlaces[i]
+            let request = MKDirections.Request()
+            request.source = MKMapItem(placemark: MKPlacemark(coordinate: source.coordinate))
+            request.destination = MKMapItem(placemark: MKPlacemark(coordinate: destination.coordinate))
+            request.departureDate = source.endTime
+            request.transportType = [.automobile, .transit]
+
+            let directions = MKDirections(request: request)
+            directions.calculateETA { response, error in
+                if let error = error {
+                    print("ETA Error: \(error.localizedDescription)")
+                }
+                guard let response = response else { return }
+                let minutes = response.expectedTravelTime / 60
+                let formattedMins = (String(format: "%.0f", minutes))
+                self.estimatedTimes.updateValue(formattedMins, forKey: i - 1)
+            }
+        }
     }
 }
 
 // MARK: - CollectionView Delegate
 extension EditTripViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let place = sortedPlaces[indexPath.item]
+        let viewController: UIViewController
+
+        if isEditMode {
+            viewController = ArrangePlaceViewController(trip: trip, place: place, isEditMode: false)
+        } else {
+            viewController = PlaceDetailViewController(place: place)
+        }
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
+        guard isEditMode else { return nil }
+        guard let itemIndexPath = collectionView.indexPathForItem(at: point) else { return nil }
+        let place = places[itemIndexPath.item]
+
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
+            let deleteAction = UIAction(title: String(localized: "Delete"), image: UIImage(systemName: "trash")) { [unowned self] _ in
+                let alertVC = UIAlertController(
+                    title: String(localized: "Are you sure want to delete?"),
+                    message: String(localized: "This action can not be undo!"),
+                    preferredStyle: .alert)
+                let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
+                let delete = UIAlertAction(title: String(localized: "Delete"), style: .destructive) { _ in
+                    FireStoreService.shared.deletePlace(at: self.trip, place: place)
+                }
+
+                alertVC.addAction(cancel)
+                alertVC.addAction(delete)
+                present(alertVC, animated: true)
+            }
+
+            return UIMenu(children: [deleteAction])
+        }
+    }
+}
+
+
+// MARK: - CollectionView Drag Delegate
+extension EditTripViewController: UICollectionViewDragDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let placeItem = String(sortedPlaces[indexPath.item].arrangedTime?.ISO8601Format() ?? "")
+        let itemProvider = NSItemProvider(object: placeItem as NSString)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = placeItem
+        return [dragItem]
+    }
+}
+
+
+// MARK: - CollectionView Drop Delegate
+extension EditTripViewController: UICollectionViewDropDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        if collectionView.hasActiveDrag {
+            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        }
+
+        return UICollectionViewDropProposal(operation: .forbidden)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        var destinationIndexPath: IndexPath
+        if let indexPath = coordinator.destinationIndexPath {
+            destinationIndexPath = indexPath
+        } else {
+            let items = dataSource.snapshot().numberOfItems(inSection: .main)
+            destinationIndexPath = IndexPath(item: items - 1, section: 0)
+        }
+
+        if coordinator.proposal.operation == .move {
+            moveItem(coordinator: coordinator, destinationIndexPath: destinationIndexPath, collectionView: collectionView)
+        }
+    }
+
+    private func moveItem(coordinator: UICollectionViewDropCoordinator, destinationIndexPath: IndexPath, collectionView: UICollectionView) {
+        if let dragItem = coordinator.items.first,
+            let sourceIndexPath = dragItem.sourceIndexPath {
+
+            collectionView.performBatchUpdates {
+                for item in coordinator.items {
+                    let placeTime = item.dragItem.localObject as? String
+                    let formatter = ISO8601DateFormatter()
+
+                    if let dateString = placeTime,
+                        let date = formatter.date(from: dateString) {
+
+                        var sourceItem = sortedPlaces[sourceIndexPath.item]
+                        var destinationItem = sortedPlaces[destinationIndexPath.item]
+
+                        sourceItem.arrangedTime = destinationItem.arrangedTime
+                        destinationItem.arrangedTime = date
+
+                        FireStoreService.shared.batchUpdateInOrder(at: trip, from: sourceItem, to: destinationItem) { _ in
+                            print("Ha Ha, that's some easy.")
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
 // MARK: - ScheduleView Delegate
 extension EditTripViewController: ScheduleViewDelegate {
     func didSelectedDate(_ view: ScheduleView, selectedDate: Date) {
-        updateSnapshot(by: selectedDate)
+        currentSelectedDate = selectedDate
+        filterPlace(by: selectedDate)
+    }
+}
+
+// MARK: - PHPickerController Delegate
+extension EditTripViewController: PHPickerViewControllerDelegate {
+
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+
+        let itemProviders = results.map(\.itemProvider)
+        if let itemProvider = itemProviders.first, itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                guard
+                    let self = self,
+                    let image = image as? UIImage,
+                    let imageData = image.jpegData(compressionQuality: 0.1)
+                else {
+                    return
+                }
+
+                // Update imageView first
+                DispatchQueue.main.async {
+                    self.imageView.image = image
+                    self.trip.image = imageData
+
+                    FireStoreService.shared.updateTrip(trip: self.trip) { error in
+                        if let error = error {
+                            self.showAlertToUser(error: error)
+                        }
+                    }
+                }
+            }
+        }
     }
 }

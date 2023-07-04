@@ -8,22 +8,60 @@
 import UIKit
 import TinyConstraints
 
-class ItineraryCollectionViewCell: UICollectionViewCell {
+protocol ItineraryCellDelegate: AnyObject {
+    func reportAction(_ cell: ItineraryCell)
+}
+
+class ItineraryCell: UICollectionViewCell {
+
+    weak var delegate: ItineraryCellDelegate?
+
+    lazy var userImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(systemName: "person.circle"))
+        imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = 10
+        imageView.layer.masksToBounds = true
+        return imageView
+    }()
+
+    lazy var userNameLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 12, weight: .medium)
+        label.textColor = .label
+        return label
+    }()
+
+    lazy var menuButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        button.tintColor = .tintColor
+        button.showsMenuAsPrimaryAction = true
+        button.menu = UIMenu(children: [
+            UIAction(title: String(localized: "Report"), handler: reportActionHandler(_:))
+        ])
+        return button
+    }()
 
     lazy var imageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "kyoto"))
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 24
+        imageView.layer.cornerRadius = 16
         imageView.layer.masksToBounds = true
         return imageView
     }()
 
-    lazy var titleLabel: UILabel = {
+    lazy var tripNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Trip to Kyoto"
-        label.font = .systemFont(ofSize: 14, weight: .bold)
+        label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .label
+        return label
+    }()
+
+    lazy var timeLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.textColor = .secondaryLabel
         return label
     }()
 
@@ -37,13 +75,47 @@ class ItineraryCollectionViewCell: UICollectionViewCell {
     }
 
     private func setupViews() {
-        contentView.addSubview(imageView)
-        contentView.addSubview(titleLabel)
-        imageView.size(CGSize(width: 68, height: 68))
-        imageView.centerY(to: contentView)
-        imageView.leading(to: contentView)
+        [userImageView, userNameLabel, menuButton, imageView, tripNameLabel, timeLabel].forEach { contentView.addSubview($0) }
 
-        titleLabel.leadingToTrailing(of: imageView, offset: 8)
-        titleLabel.top(to: imageView, offset: 8)
+        imageView.horizontalToSuperview()
+        imageView.centerYToSuperview()
+        imageView.widthToSuperview()
+
+        userImageView.aspectRatio(1.0)
+        userImageView.leadingToSuperview(offset: 8)
+        userImageView.topToSuperview(offset: 4)
+        userImageView.bottomToTop(of: imageView, offset: -4)
+
+        userNameLabel.centerY(to: userImageView)
+        userNameLabel.leadingToTrailing(of: userImageView, offset: 4)
+        userNameLabel.height(20)
+        userNameLabel.trailing(to: menuButton, offset: 8, relation: .equalOrGreater)
+
+        menuButton.centerY(to: userImageView)
+        menuButton.trailingToSuperview(offset: 8)
+        menuButton.size(CGSize(width: 20, height: 20))
+
+        tripNameLabel.leading(to: userImageView)
+        tripNameLabel.topToBottom(of: imageView, offset: 4)
+        tripNameLabel.height(20)
+        tripNameLabel.bottomToSuperview(offset: -4)
+        tripNameLabel.trailingToLeading(of: timeLabel, offset: -8, relation: .equalOrGreater)
+
+        timeLabel.centerY(to: tripNameLabel)
+        timeLabel.trailingToSuperview(offset: 8)
+        timeLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+    }
+
+    func config(with trip: Trip) {
+        userNameLabel.text = trip.members.first
+        tripNameLabel.text = trip.tripName
+        timeLabel.text = trip.startDate.formatted(date: .numeric, time: .omitted)
+        imageView.image = UIImage(data: trip.image)
+
+        // Need to use dispatch group to fetch user data
+    }
+
+    private func reportActionHandler(_ action: UIAction) {
+        delegate?.reportAction(self)
     }
 }

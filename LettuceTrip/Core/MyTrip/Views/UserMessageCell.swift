@@ -70,7 +70,7 @@ class UserMessageCell: UICollectionViewCell {
         contentView.addSubview(timeLabel)
         stackView.verticalToSuperview(insets: .vertical(10))
         stackView.trailingToSuperview(offset: 12)
-        stackView.widthToSuperview(multiplier: 0.6)
+        stackView.widthToSuperview(multiplier: 0.6, relation: .equalOrLess)
 
         timeLabel.trailingToLeading(of: stackView, offset: -8)
         timeLabel.height(14)

@@ -31,12 +31,15 @@ class LocationMapCell: UITableViewCell {
     }
 
     func config(with place: Place) {
-        // let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: place.coordinate))
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = place.coordinate
+        annotation.title = place.name
         let region = MKCoordinateRegion(
             center: place.coordinate,
-            latitudinalMeters: 1000,
-            longitudinalMeters: 1000)
-        mapView.setRegion(region, animated: false)
-        // mapView.showAnnotations([], animated: <#T##Bool#>)
+            latitudinalMeters: 250,
+            longitudinalMeters: 250)
+
+        mapView.showAnnotations([annotation], animated: false)
+        mapView.region = region
     }
 }

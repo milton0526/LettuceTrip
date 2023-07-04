@@ -17,8 +17,6 @@ class ChatRoomViewController: UIViewController {
         case main
     }
 
-    lazy var placesView = ChatRoomPlacesView()
-
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.register(UserMessageCell.self, forCellWithReuseIdentifier: UserMessageCell.identifier)
@@ -43,10 +41,7 @@ class ChatRoomViewController: UIViewController {
     private var dataSource: UICollectionViewDiffableDataSource<Section, Message>!
 
     private var chatMessages: [Message] = []
-    private var places: [Place] = []
-
     private var messageListener: ListenerRegistration?
-    private var placeListener: ListenerRegistration?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,17 +50,13 @@ class ChatRoomViewController: UIViewController {
         setupUI()
         configBackButton()
         configureDataSource()
-
         fetchMessages()
-        fetchPlaces()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         messageListener?.remove()
-        placeListener?.remove()
         messageListener = nil
-        placeListener = nil
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -100,6 +91,7 @@ class ChatRoomViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success:
+                    self?.inputTextField.resignFirstResponder()
                     self?.inputTextField.text = ""
                 case .failure(let error):
                     self?.showAlertToUser(error: error)
@@ -119,12 +111,9 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func setupUI() {
-        [placesView, collectionView, inputTextField, sendButton].forEach { view.addSubview($0) }
+        [collectionView, inputTextField, sendButton].forEach { view.addSubview($0) }
 
-        placesView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
-        placesView.height(100)
-
-        collectionView.topToBottom(of: placesView, offset: 8)
+        collectionView.topToSuperview(usingSafeArea: true)
         collectionView.horizontalToSuperview()
         collectionView.bottomToTop(of: inputTextField, offset: -8)
 
@@ -187,7 +176,7 @@ class ChatRoomViewController: UIViewController {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Message>()
         snapshot.appendSections([.main])
         snapshot.appendItems(chatMessages)
-        dataSource.apply(snapshot)
+        dataSource.apply(snapshot, animatingDifferences: false)
 
         if !chatMessages.isEmpty {
             let indexPath = IndexPath(item: chatMessages.count - 1, section: 0)
@@ -209,26 +198,6 @@ class ChatRoomViewController: UIViewController {
                     self.updateSnapshot()
                 }
 
-            case .failure(let error):
-                self.showAlertToUser(error: error)
-            }
-        }
-    }
-
-    private func fetchPlaces() {
-        guard let tripID = trip?.id else { return }
-        places.removeAll(keepingCapacity: true)
-
-        placeListener = FireStoreService.shared.addListenerInTripPlaces(tripId: tripID, isArrange: false) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let place):
-                self.places = place
-
-                DispatchQueue.main.async {
-                    self.placesView.places = self.places
-                }
             case .failure(let error):
                 self.showAlertToUser(error: error)
             }

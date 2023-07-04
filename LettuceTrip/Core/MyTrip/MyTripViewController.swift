@@ -55,7 +55,8 @@ class MyTripViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        customNavBar()
+        navigationItem.title = String(localized: "My trips")
+        navigationItem.backButtonDisplayMode = .minimal
         setupUI()
     }
 
@@ -68,17 +69,6 @@ class MyTripViewController: UIViewController {
         super.viewDidDisappear(animated)
         listener?.remove()
         listener = nil
-    }
-
-    private func customNavBar() {
-        let welcomeView = UILabel()
-        welcomeView.text = String(localized: "My Trip")
-        welcomeView.font = .systemFont(ofSize: 22, weight: .bold)
-        welcomeView.textColor = .label
-
-        let leftBarItem = UIBarButtonItem(customView: welcomeView)
-        navigationItem.leftBarButtonItem = leftBarItem
-        navigationItem.rightBarButtonItem = editButtonItem
     }
 
     private func setupUI() {
@@ -94,7 +84,7 @@ class MyTripViewController: UIViewController {
     }
 
     @objc func addTripButtonTapped(_ sender: UIButton) {
-        let addNewTripVC = AddNewTripViewController()
+        let addNewTripVC = AddNewTripViewController(isCopy: false)
         let navVC = UINavigationController(rootViewController: addNewTripVC)
         let viewHeight = view.frame.height
         let detentsHeight = UISheetPresentationController.Detent.custom { _ in
@@ -143,7 +133,7 @@ class MyTripViewController: UIViewController {
 // MARK: - UITableView Delegate
 extension MyTripViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        136
+        160
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -153,6 +143,34 @@ extension MyTripViewController: UITableViewDelegate {
 
         let editVC = EditTripViewController(trip: trip)
         navigationController?.pushViewController(editVC, animated: true)
+    }
+
+    // Delete action
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
+            let deleteAction = UIAction(title: String(localized: "Delete"), image: UIImage(systemName: "trash")) { [unowned self] _ in
+                let trip = currentSegment == .upcoming
+                ? upcomingTrips[indexPath.row]
+                : closedTrips[indexPath.row]
+
+                guard let tripID = trip.id else { return }
+
+                let alertVC = UIAlertController(
+                    title: String(localized: "Are you sure want to delete?"),
+                    message: String(localized: "This action can not be undo!"),
+                    preferredStyle: .alert)
+                let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
+                let delete = UIAlertAction(title: String(localized: "Delete"), style: .destructive) { _ in
+                    FireStoreService.shared.deleteDocument(id: tripID)
+                }
+
+                alertVC.addAction(cancel)
+                alertVC.addAction(delete)
+                present(alertVC, animated: true)
+            }
+
+            return UIMenu(children: [deleteAction])
+        }
     }
 }
 

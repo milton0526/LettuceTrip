@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		C42F51B02A454D5F00023305 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51AF2A454D5F00023305 /* LocationService.swift */; };
-		C42F51B22A45664600023305 /* FQService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B12A45664600023305 /* FQService.swift */; };
-		C42F51B42A45669400023305 /* FQKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C42F51B32A45669400023305 /* FQKey.plist */; };
-		C42F51B62A4574D900023305 /* FQResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B52A4574D900023305 /* FQResponse.swift */; };
 		C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B72A45936800023305 /* EditTripViewController.swift */; };
 		C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */; };
 		C42F51C42A45B60C00023305 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51C32A45B60C00023305 /* CalendarCell.swift */; };
@@ -25,13 +22,28 @@
 		C45413442A4A7FF0000D0685 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45413432A4A7FF0000D0685 /* SignInViewController.swift */; };
 		C45413472A4A803E000D0685 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C45413462A4A803E000D0685 /* FirebaseAuth */; };
 		C454134B2A4A8871000D0685 /* FirebaseAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134A2A4A8871000D0685 /* FirebaseAuthHelper.swift */; };
-		C454134D2A4A9937000D0685 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134C2A4A9937000D0685 /* SignInViewModel.swift */; };
+		C454134D2A4A9937000D0685 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134C2A4A9937000D0685 /* AuthManager.swift */; };
+		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
+		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
+		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
+		C4C0F0552A512158002F59B3 /* GooglePlaces.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */; };
+		C4C0F0582A512182002F59B3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0572A512182002F59B3 /* CoreGraphics.framework */; };
+		C4C0F05A2A51218B002F59B3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0592A51218B002F59B3 /* CoreLocation.framework */; };
+		C4C0F05C2A512196002F59B3 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F05B2A512196002F59B3 /* libc++.tbd */; };
+		C4C0F05E2A51219C002F59B3 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F05D2A51219C002F59B3 /* libz.tbd */; };
+		C4C0F0602A5121A4002F59B3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F05F2A5121A4002F59B3 /* QuartzCore.framework */; };
+		C4C0F0622A5121AA002F59B3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0612A5121AA002F59B3 /* UIKit.framework */; };
+		C4CBD42D2A4FD097009108C6 /* GPlaceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */; };
+		C4CBD42F2A4FD122009108C6 /* GPlaceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */; };
+		C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */; };
+		C4CBD4432A4FECA2009108C6 /* GMSPlace+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD4422A4FECA2009108C6 /* GMSPlace+Combine.swift */; };
 		C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */; };
 		C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */; };
 		C4CC0BFE2A481E0100E03758 /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BFD2A481E0100E03758 /* ScheduleView.swift */; };
 		C4CC0C002A48255B00E03758 /* WishListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BFF2A48255B00E03758 /* WishListViewController.swift */; };
 		C4CC0C042A48465300E03758 /* ArrangePlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0C032A48465300E03758 /* ArrangePlaceViewController.swift */; };
 		C4CC0C082A48499200E03758 /* LocationMapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0C062A48499200E03758 /* LocationMapCell.swift */; };
+		C4DAD90E2A53D8B1003D7A13 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = C4DAD90D2A53D8B1003D7A13 /* FirebaseMessaging */; };
 		C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8202A41AF62002987CB /* AppDelegate.swift */; };
 		C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8222A41AF62002987CB /* SceneDelegate.swift */; };
 		C4DBE8252A41AF62002987CB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8242A41AF62002987CB /* HomeViewController.swift */; };
@@ -42,8 +54,7 @@
 		C4DBE8372A41B194002987CB /* MyTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8362A41B194002987CB /* MyTripViewController.swift */; };
 		C4DBE8392A41B19B002987CB /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8382A41B19B002987CB /* ProfileViewController.swift */; };
 		C4DBE8412A41B288002987CB /* TinyConstraints in Frameworks */ = {isa = PBXBuildFile; productRef = C4DBE8402A41B288002987CB /* TinyConstraints */; };
-		C4DBE8442A41B2F7002987CB /* PopularCityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8432A41B2F7002987CB /* PopularCityCell.swift */; };
-		C4DBE8462A41B312002987CB /* PopularCityHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8452A41B312002987CB /* PopularCityHeaderView.swift */; };
+		C4DBE8462A41B312002987CB /* ItineraryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8452A41B312002987CB /* ItineraryHeaderView.swift */; };
 		C4DBE8482A41B329002987CB /* ItineraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8472A41B329002987CB /* ItineraryCell.swift */; };
 		C4DBE84B2A41B350002987CB /* UICollectionView+Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE84A2A41B350002987CB /* UICollectionView+Identifier.swift */; };
 		C4DBE87D2A41BB81002987CB /* LTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE87C2A41BB81002987CB /* LTError.swift */; };
@@ -74,7 +85,6 @@
 		C4DBE8C62A42D391002987CB /* FireStoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C52A42D391002987CB /* FireStoreService.swift */; };
 		C4DBE8C82A42D446002987CB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C72A42D446002987CB /* User.swift */; };
 		C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C92A42D49B002987CB /* Trip.swift */; };
-		C4DBE8CC2A42D79D002987CB /* ShareTrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CB2A42D79D002987CB /* ShareTrips.swift */; };
 		C4DBE8CE2A4306BB002987CB /* SearchCityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */; };
 		C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CF2A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift */; };
 		C4DBE8D22A43E116002987CB /* MKPlaceMark+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8D12A43E116002987CB /* MKPlaceMark+Extension.swift */; };
@@ -82,9 +92,6 @@
 
 /* Begin PBXFileReference section */
 		C42F51AF2A454D5F00023305 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
-		C42F51B12A45664600023305 /* FQService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FQService.swift; sourceTree = "<group>"; };
-		C42F51B32A45669400023305 /* FQKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = FQKey.plist; sourceTree = "<group>"; };
-		C42F51B52A4574D900023305 /* FQResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FQResponse.swift; sourceTree = "<group>"; };
 		C42F51B72A45936800023305 /* EditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
 		C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceCell.swift; sourceTree = "<group>"; };
 		C42F51C32A45B60C00023305 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
@@ -99,7 +106,21 @@
 		C45413422A4A7E4F000D0685 /* LettuceTrip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LettuceTrip.entitlements; sourceTree = "<group>"; };
 		C45413432A4A7FF0000D0685 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		C454134A2A4A8871000D0685 /* FirebaseAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthHelper.swift; sourceTree = "<group>"; };
-		C454134C2A4A9937000D0685 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
+		C454134C2A4A9937000D0685 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
+		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
+		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
+		C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlaces.bundle; path = "GooglePlaces.xcframework/ios-arm64/GooglePlaces.framework/Resources/GooglePlaces.bundle"; sourceTree = "<group>"; };
+		C4C0F0572A512182002F59B3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C4C0F0592A51218B002F59B3 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C4C0F05B2A512196002F59B3 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		C4C0F05D2A51219C002F59B3 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		C4C0F05F2A5121A4002F59B3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C4C0F0612A5121AA002F59B3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPlaceResponse.swift; sourceTree = "<group>"; };
+		C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPlaceAPI.swift; sourceTree = "<group>"; };
+		C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = GPlaceAPIKey.plist; sourceTree = "<group>"; };
+		C4CBD4422A4FECA2009108C6 /* GMSPlace+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GMSPlace+Combine.swift"; sourceTree = "<group>"; };
 		C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomPlacesView.swift; sourceTree = "<group>"; };
 		C4CC0BFD2A481E0100E03758 /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
 		C4CC0BFF2A48255B00E03758 /* WishListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListViewController.swift; sourceTree = "<group>"; };
@@ -116,8 +137,7 @@
 		C4DBE8342A41B18B002987CB /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
 		C4DBE8362A41B194002987CB /* MyTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTripViewController.swift; sourceTree = "<group>"; };
 		C4DBE8382A41B19B002987CB /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		C4DBE8432A41B2F7002987CB /* PopularCityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularCityCell.swift; sourceTree = "<group>"; };
-		C4DBE8452A41B312002987CB /* PopularCityHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularCityHeaderView.swift; sourceTree = "<group>"; };
+		C4DBE8452A41B312002987CB /* ItineraryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryHeaderView.swift; sourceTree = "<group>"; };
 		C4DBE8472A41B329002987CB /* ItineraryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryCell.swift; sourceTree = "<group>"; };
 		C4DBE84A2A41B350002987CB /* UICollectionView+Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Identifier.swift"; sourceTree = "<group>"; };
 		C4DBE87C2A41BB81002987CB /* LTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LTError.swift; sourceTree = "<group>"; };
@@ -144,7 +164,6 @@
 		C4DBE8C52A42D391002987CB /* FireStoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreService.swift; sourceTree = "<group>"; };
 		C4DBE8C72A42D446002987CB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C4DBE8C92A42D49B002987CB /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
-		C4DBE8CB2A42D79D002987CB /* ShareTrips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTrips.swift; sourceTree = "<group>"; };
 		C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCityViewController.swift; sourceTree = "<group>"; };
 		C4DBE8CF2A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPointOfInterestCategory+Extension.swift"; sourceTree = "<group>"; };
 		C4DBE8D12A43E116002987CB /* MKPlaceMark+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPlaceMark+Extension.swift"; sourceTree = "<group>"; };
@@ -155,11 +174,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4C0F0622A5121AA002F59B3 /* UIKit.framework in Frameworks */,
+				C4C0F0602A5121A4002F59B3 /* QuartzCore.framework in Frameworks */,
+				C4C0F05E2A51219C002F59B3 /* libz.tbd in Frameworks */,
+				C4C0F05C2A512196002F59B3 /* libc++.tbd in Frameworks */,
+				C4C0F05A2A51218B002F59B3 /* CoreLocation.framework in Frameworks */,
+				C4C0F0582A512182002F59B3 /* CoreGraphics.framework in Frameworks */,
 				C4DBE8C42A42B363002987CB /* IQKeyboardManagerSwift in Frameworks */,
 				C4DBE89B2A41BD7B002987CB /* Cosmos in Frameworks */,
 				C4DBE8A22A41C158002987CB /* FirebaseFirestore in Frameworks */,
 				C4DBE8412A41B288002987CB /* TinyConstraints in Frameworks */,
+				C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */,
 				C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */,
+				C4DAD90E2A53D8B1003D7A13 /* FirebaseMessaging in Frameworks */,
 				C45413472A4A803E000D0685 /* FirebaseAuth in Frameworks */,
 				C4DBE8A42A41C158002987CB /* FirebaseFirestoreSwift in Frameworks */,
 			);
@@ -168,9 +195,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C45413452A4A803E000D0685 /* Frameworks */ = {
+		C4C0F0562A512182002F59B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C4C0F0612A5121AA002F59B3 /* UIKit.framework */,
+				C4C0F05F2A5121A4002F59B3 /* QuartzCore.framework */,
+				C4C0F05D2A51219C002F59B3 /* libz.tbd */,
+				C4C0F05B2A512196002F59B3 /* libc++.tbd */,
+				C4C0F0592A51218B002F59B3 /* CoreLocation.framework */,
+				C4C0F0572A512182002F59B3 /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -191,7 +224,7 @@
 			children = (
 				C4DBE81F2A41AF62002987CB /* LettuceTrip */,
 				C4DBE81E2A41AF62002987CB /* Products */,
-				C45413452A4A803E000D0685 /* Frameworks */,
+				C4C0F0562A512182002F59B3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -213,8 +246,10 @@
 				C4DBE8292A41AF63002987CB /* Assets.xcassets */,
 				C4DBE82B2A41AF63002987CB /* LaunchScreen.storyboard */,
 				C4DBE82E2A41AF63002987CB /* Info.plist */,
-				C42F51B32A45669400023305 /* FQKey.plist */,
+				C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */,
 				C4DBE89E2A41C0E3002987CB /* GoogleService-Info.plist */,
+				C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */,
+				C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */,
 				C4DBE8492A41B32F002987CB /* Extensions */,
 				C4DBE87E2A41BB9C002987CB /* Services */,
 				C4DBE87B2A41BB68002987CB /* Models */,
@@ -234,7 +269,7 @@
 				C4DBE83D2A41B1C7002987CB /* MyTrip */,
 				C4DBE83E2A41B1D5002987CB /* Profile */,
 				C45413432A4A7FF0000D0685 /* SignInViewController.swift */,
-				C454134C2A4A9937000D0685 /* SignInViewModel.swift */,
+				C454134C2A4A9937000D0685 /* AuthManager.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -275,6 +310,7 @@
 			isa = PBXGroup;
 			children = (
 				C4DBE8382A41B19B002987CB /* ProfileViewController.swift */,
+				C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -282,8 +318,7 @@
 		C4DBE8422A41B2DC002987CB /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				C4DBE8432A41B2F7002987CB /* PopularCityCell.swift */,
-				C4DBE8452A41B312002987CB /* PopularCityHeaderView.swift */,
+				C4DBE8452A41B312002987CB /* ItineraryHeaderView.swift */,
 				C4DBE8472A41B329002987CB /* ItineraryCell.swift */,
 			);
 			path = Views;
@@ -301,6 +336,7 @@
 				C4DBE8D12A43E116002987CB /* MKPlaceMark+Extension.swift */,
 				C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */,
 				C45413402A497145000D0685 /* Date+Extension.swift */,
+				C4CBD4422A4FECA2009108C6 /* GMSPlace+Combine.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -311,8 +347,8 @@
 				C4DBE87C2A41BB81002987CB /* LTError.swift */,
 				C4DBE8C72A42D446002987CB /* User.swift */,
 				C4DBE8C92A42D49B002987CB /* Trip.swift */,
-				C4DBE8CB2A42D79D002987CB /* ShareTrips.swift */,
-				C42F51B52A4574D900023305 /* FQResponse.swift */,
+				C48E488F2A4C2A3D00949E08 /* SettingModel.swift */,
+				C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -322,8 +358,8 @@
 			children = (
 				C4DBE8C52A42D391002987CB /* FireStoreService.swift */,
 				C42F51AF2A454D5F00023305 /* LocationService.swift */,
-				C42F51B12A45664600023305 /* FQService.swift */,
 				C454134A2A4A8871000D0685 /* FirebaseAuthHelper.swift */,
+				C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -418,6 +454,7 @@
 				C4DBE8C32A42B363002987CB /* IQKeyboardManagerSwift */,
 				C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */,
 				C45413462A4A803E000D0685 /* FirebaseAuth */,
+				C4DAD90D2A53D8B1003D7A13 /* FirebaseMessaging */,
 			);
 			productName = LettuceTrip;
 			productReference = C4DBE81D2A41AF62002987CB /* LettuceTrip.app */;
@@ -471,9 +508,10 @@
 				C4DBE82D2A41AF63002987CB /* LaunchScreen.storyboard in Resources */,
 				C4DBE82A2A41AF63002987CB /* Assets.xcassets in Resources */,
 				C4DBE8282A41AF62002987CB /* Main.storyboard in Resources */,
-				C42F51B42A45669400023305 /* FQKey.plist in Resources */,
+				C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */,
 				C4DBE89F2A41C0E3002987CB /* GoogleService-Info.plist in Resources */,
 				C454133F2A48920D000D0685 /* ArrangePlaceDetailCell.xib in Resources */,
+				C4C0F0552A512158002F59B3 /* GooglePlaces.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -513,26 +551,28 @@
 				C4DBE8CE2A4306BB002987CB /* SearchCityViewController.swift in Sources */,
 				C4DBE8852A41BC1B002987CB /* POILocationCardCell.swift in Sources */,
 				C4DBE84B2A41B350002987CB /* UICollectionView+Identifier.swift in Sources */,
+				C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */,
 				C4DBE8942A41BCED002987CB /* PlaceInfoHeaderView.swift in Sources */,
 				C4DBE8922A41BCDC002987CB /* PlacePhotoHeaderView.swift in Sources */,
+				C4CBD4432A4FECA2009108C6 /* GMSPlace+Combine.swift in Sources */,
 				C4DBE8BD2A429921002987CB /* UILabel+Style.swift in Sources */,
 				C42F51CE2A469E7200023305 /* FriendMessageCell.swift in Sources */,
 				C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */,
 				C4DBE88E2A41BCAB002987CB /* PlaceAboutCell.swift in Sources */,
+				C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */,
 				C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */,
 				C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */,
+				C4CBD42D2A4FD097009108C6 /* GPlaceResponse.swift in Sources */,
+				C4CBD42F2A4FD122009108C6 /* GPlaceAPI.swift in Sources */,
 				C42F51C42A45B60C00023305 /* CalendarCell.swift in Sources */,
 				C4DBE8372A41B194002987CB /* MyTripViewController.swift in Sources */,
 				C454133E2A48920D000D0685 /* ArrangePlaceDetailCell.swift in Sources */,
 				C4DBE89D2A41BD8C002987CB /* RatingStarView.swift in Sources */,
 				C4DBE8482A41B329002987CB /* ItineraryCell.swift in Sources */,
-				C4DBE8442A41B2F7002987CB /* PopularCityCell.swift in Sources */,
 				C4DBE87D2A41BB81002987CB /* LTError.swift in Sources */,
 				C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */,
-				C454134D2A4A9937000D0685 /* SignInViewModel.swift in Sources */,
-				C42F51B62A4574D900023305 /* FQResponse.swift in Sources */,
+				C454134D2A4A9937000D0685 /* AuthManager.swift in Sources */,
 				C4CC0C082A48499200E03758 /* LocationMapCell.swift in Sources */,
-				C42F51B22A45664600023305 /* FQService.swift in Sources */,
 				C4DBE8982A41BD10002987CB /* UIViewController+Alert.swift in Sources */,
 				C4DBE8AE2A41D696002987CB /* SelectionView.swift in Sources */,
 				C45413442A4A7FF0000D0685 /* SignInViewController.swift in Sources */,
@@ -543,7 +583,7 @@
 				C4DBE8B22A41DD83002987CB /* TripCell.swift in Sources */,
 				C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */,
 				C4DBE8902A41BCC3002987CB /* PlaceAboutCellViewModel.swift in Sources */,
-				C4DBE8462A41B312002987CB /* PopularCityHeaderView.swift in Sources */,
+				C4DBE8462A41B312002987CB /* ItineraryHeaderView.swift in Sources */,
 				C4DBE8882A41BC60002987CB /* PlaceDetailViewController.swift in Sources */,
 				C4CC0BFE2A481E0100E03758 /* ScheduleView.swift in Sources */,
 				C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */,
@@ -559,7 +599,6 @@
 				C4DBE8C62A42D391002987CB /* FireStoreService.swift in Sources */,
 				C4CC0C042A48465300E03758 /* ArrangePlaceViewController.swift in Sources */,
 				C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */,
-				C4DBE8CC2A42D79D002987CB /* ShareTrips.swift in Sources */,
 				C4DBE8D22A43E116002987CB /* MKPlaceMark+Extension.swift in Sources */,
 				C4DBE8C82A42D446002987CB /* User.swift in Sources */,
 				C42F51B02A454D5F00023305 /* LocationService.swift in Sources */,
@@ -643,6 +682,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -696,6 +736,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -726,7 +767,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.miltonliu.LettuceTrip;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -761,7 +802,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.miltonliu.LettuceTrip;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -849,6 +890,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */;
 			productName = JGProgressHUD;
+		};
+		C4DAD90D2A53D8B1003D7A13 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 		C4DBE8402A41B288002987CB /* TinyConstraints */ = {
 			isa = XCSwiftPackageProductDependency;
