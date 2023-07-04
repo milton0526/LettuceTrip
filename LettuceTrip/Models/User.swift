@@ -13,4 +13,5 @@ struct User: Codable {
     let name: String
     let email: String
     var image: Data?
+    var deviceToken: String?
 }

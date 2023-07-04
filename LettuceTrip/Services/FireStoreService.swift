@@ -9,6 +9,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseAuth
 
+// swiftlint: disable type_body_length
 class FireStoreService {
 
     static let shared = FireStoreService()
@@ -27,8 +28,8 @@ class FireStoreService {
 
     var currentUser: String? {
         // Test user id
-        "LpDb7nvzvSZZcTtJZOld4OS3aEB3"
-        // Auth.auth().currentUser?.uid
+        // "LpDb7nvzvSZZcTtJZOld4OS3aEB3"
+        Auth.auth().currentUser?.uid
     }
 
     func signOut(completion: @escaping (Error?) -> Void) {
@@ -51,6 +52,27 @@ class FireStoreService {
         } catch {
             print("Failed to add new user to Firebase")
             completion(.failure(error))
+        }
+    }
+
+    func updateDeviceToken(token: String?) {
+        guard
+            let currentUser = currentUser,
+            let token = token
+        else {
+            return
+        }
+
+        let ref = database.collection(CollectionRef.users.rawValue).document(currentUser)
+
+        ref.updateData([
+            "deviceToken": token
+        ]) { error in
+            if let error = error {
+                print("Error update device token.")
+            } else {
+                print("Successfully update device token.")
+            }
         }
     }
 
@@ -161,6 +183,17 @@ class FireStoreService {
 
     func deleteDocument(id: String) {
         database.collection(CollectionRef.trips.rawValue).document(id).delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("Delete successfully")
+            }
+        }
+    }
+
+    func deletePlace(at trip: Trip, place: Place) {
+        guard let tripID = trip.id, let placeID = place.id else { return }
+        database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.places.rawValue).document(placeID).delete { error in
             if let error = error {
                 print(error.localizedDescription)
             } else {
@@ -345,10 +378,17 @@ class FireStoreService {
                                 places.append(place)
                             }
 
-                        case .modified, .removed:
+                        case .modified:
                             if let modifiedPlace = try? diff.document.data(as: Place.self) {
                                 if let index = places.firstIndex(where: { $0.id == modifiedPlace.id }) {
                                     places[index].arrangedTime = modifiedPlace.arrangedTime
+                                }
+                            }
+
+                        case .removed:
+                            if let removedPlace = try? diff.document.data(as: Place.self) {
+                                if let index = places.firstIndex(where: { $0.id == removedPlace.id }) {
+                                    places.remove(at: index)
                                 }
                             }
                         }
@@ -397,3 +437,4 @@ class FireStoreService {
         return listener
     }
 }
+// swiftlint: enable type_body_length

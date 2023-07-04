@@ -44,8 +44,8 @@ class ArrangePlaceCell: UICollectionViewCell {
         return view
     }()
 
-    lazy var busImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "bus.fill"))
+    lazy var hareImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(systemName: "hare.fill"))
         imageView.contentMode = .scaleAspectFit
         imageView.tintColor = .tintColor
         return imageView
@@ -75,7 +75,7 @@ class ArrangePlaceCell: UICollectionViewCell {
     }()
 
     lazy var estimatedHStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [busImageView, estimatedTimeLabel, UIView()])
+        let stackView = UIStackView(arrangedSubviews: [hareImageView, estimatedTimeLabel, UIView()])
         stackView.axis = .horizontal
         stackView.spacing = 8
         stackView.alignment = .center
@@ -119,7 +119,6 @@ class ArrangePlaceCell: UICollectionViewCell {
     }
 
     func config(with place: Place, travelTime: String? = nil) {
-        guard let duration = place.duration else { return }
         let toTime = place.endTime
 
         fromTimeLabel.text = place.arrangedTime?.formatted(date: .omitted, time: .shortened)
