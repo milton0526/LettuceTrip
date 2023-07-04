@@ -57,8 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate: UNUserNotificationCenterDelegate {
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let token = deviceToken.map { String(format: "%.2x", $0) }.joined()
-        // FireStoreService.shared.updateDeviceToken(token: token)
+//        let token = deviceToken.map { String(format: "%.2x", $0) }.joined()
+//        FireStoreService.shared.updateDeviceToken(token: token)
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {

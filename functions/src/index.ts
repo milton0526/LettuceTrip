@@ -22,27 +22,39 @@ export const helloWorld = onRequest((request, response) => {
   response.send("Hello from Firebase!");
 });
 
-// 1
-export const chatMessageSent = functions.firestore
-    .document("trips/{tripId}/chatRoom/{messageId}")
-    .onCreate((snapshot, context) => { 
-// 2
-      const message = snapshot.data(); 
-      const recipientId = message.id;
-      console.log("RECIPIENT ID: " + recipientId);
-// 3
-      admin.firestore.CollectionReference('trips')
-          .once("value").then((tokenSnapshot) => {
-            const token = String(tokenSnapshot.val());
-            const payload = {
-              notification: {
-                title: String(message.userID),
-                body: String(message.message),
-                sound: "default",
-              }, 
-            };
-            admin.messaging().sendToDevice(token, payload);
-          }
-          );
-      return Promise.resolve;
-    });
+const db = admin.firestore();
+
+exports.userTriggeredNotifications = functions
+  .region("asia-east1") // You can change this to be a region closer to you
+  .firestore
+  .document("trips/{tripId}/chatRoom/{messageId}")
+  .onCreate(async (snapshot, context) => {
+    const triggerSnapshot = snapshot.data();
+    const triggeredUserId = triggerSnapshot.userID;
+    const userReference = db.collection("users").doc(`${triggeredUserId}`);
+    const userWhoTriggered = await userReference.get();
+
+    if (!userWhoTriggered.exists) {
+      functions.logger.error("No such document", triggeredUserId);
+      return;
+    } else {
+      const userData = userWhoTriggered.data();
+      const token = userData?.deviceToken;
+
+      const payload = {
+        notification: {
+          title: "New trigger!",
+          body: "You triggered a notification to yourself",
+        },
+      };
+
+      const response = await admin.messaging().sendToDevice(token, payload);
+      response.results.forEach((result) => {
+        const error = result.error;
+        if (error) {
+          functions.logger.error("Failed sending notification", token, error);
+        }
+      });
+      return;
+    }
+  });

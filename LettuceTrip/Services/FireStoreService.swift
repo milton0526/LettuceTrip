@@ -28,8 +28,8 @@ class FireStoreService {
 
     var currentUser: String? {
         // Test user id
-        "LpDb7nvzvSZZcTtJZOld4OS3aEB3"
-        // Auth.auth().currentUser?.uid
+        // "LpDb7nvzvSZZcTtJZOld4OS3aEB3"
+        Auth.auth().currentUser?.uid
     }
 
     func signOut(completion: @escaping (Error?) -> Void) {
