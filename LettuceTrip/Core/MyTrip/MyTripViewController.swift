@@ -56,6 +56,7 @@ class MyTripViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = String(localized: "My trips")
+        navigationItem.backButtonDisplayMode = .minimal
         setupUI()
     }
 

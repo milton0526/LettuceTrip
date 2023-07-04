@@ -342,8 +342,10 @@ extension EditTripViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
+        guard isEditMode else { return nil }
         guard let itemIndexPath = collectionView.indexPathForItem(at: point) else { return nil }
         let place = places[itemIndexPath.item]
+
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
             let deleteAction = UIAction(title: String(localized: "Delete"), image: UIImage(systemName: "trash")) { [unowned self] _ in
                 let alertVC = UIAlertController(
