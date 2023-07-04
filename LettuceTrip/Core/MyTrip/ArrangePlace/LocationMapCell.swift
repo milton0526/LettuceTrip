@@ -36,8 +36,8 @@ class LocationMapCell: UITableViewCell {
         annotation.title = place.name
         let region = MKCoordinateRegion(
             center: place.coordinate,
-            latitudinalMeters: 100,
-            longitudinalMeters: 100)
+            latitudinalMeters: 250,
+            longitudinalMeters: 250)
 
         mapView.showAnnotations([annotation], animated: false)
         mapView.region = region
