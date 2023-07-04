@@ -313,7 +313,7 @@ class EditTripViewController: UIViewController {
             request.source = MKMapItem(placemark: MKPlacemark(coordinate: source.coordinate))
             request.destination = MKMapItem(placemark: MKPlacemark(coordinate: destination.coordinate))
             request.departureDate = source.endTime
-            request.transportType = .any
+            request.transportType = [.automobile, .transit]
 
             let directions = MKDirections(request: request)
             directions.calculateETA { response, error in
@@ -341,6 +341,29 @@ extension EditTripViewController: UICollectionViewDelegate {
             viewController = PlaceDetailViewController(place: place)
         }
         navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let itemIndexPath = collectionView.indexPathForItem(at: point) else { return nil }
+        let place = places[itemIndexPath.item]
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
+            let deleteAction = UIAction(title: String(localized: "Delete"), image: UIImage(systemName: "trash")) { [unowned self] _ in
+                let alertVC = UIAlertController(
+                    title: String(localized: "Are you sure want to delete?"),
+                    message: String(localized: "This action can not be undo!"),
+                    preferredStyle: .alert)
+                let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
+                let delete = UIAlertAction(title: String(localized: "Delete"), style: .destructive) { _ in
+                    FireStoreService.shared.deletePlace(at: self.trip, place: place)
+                }
+
+                alertVC.addAction(cancel)
+                alertVC.addAction(delete)
+                present(alertVC, animated: true)
+            }
+
+            return UIMenu(children: [deleteAction])
+        }
     }
 }
 
