@@ -30,6 +30,7 @@ class HomeViewController: UIViewController {
         return collectionView
     }()
 
+    private let refreshControl = UIRefreshControl()
     private var dataSource: UICollectionViewDiffableDataSource<Section, Trip>!
     private var shareTrips: [Trip] = []
 
@@ -37,6 +38,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         configureDataSource()
+        configureRefreshControl()
         fetchData()
     }
 
@@ -44,6 +46,13 @@ class HomeViewController: UIViewController {
         navigationItem.title = String(localized: "Community")
         view.addSubview(collectionView)
         collectionView.edgesToSuperview(usingSafeArea: true)
+    }
+
+    private func configureRefreshControl() {
+        refreshControl.tintColor = .tintColor
+        refreshControl.attributedTitle = .init("Refreshing...")
+        collectionView.refreshControl = refreshControl
+        collectionView.refreshControl?.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
@@ -85,6 +94,7 @@ class HomeViewController: UIViewController {
                 switch result {
                 case .success(let trips):
                     self?.shareTrips = trips
+                    self?.refreshControl.endRefreshing()
                     self?.updateSnapshot()
                 case .failure(let error):
                     self?.showAlertToUser(error: error)
@@ -99,6 +109,12 @@ class HomeViewController: UIViewController {
         snapshot.appendSections([.main])
         snapshot.appendItems(shareTrips)
         dataSource.apply(snapshot)
+    }
+
+    @objc func handleRefreshControl() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.fetchData()
+        }
     }
 }
 

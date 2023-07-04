@@ -178,13 +178,19 @@ class AddNewTripViewController: UIViewController {
             isPublic: false)
 
         // upload to firebase
-        FireStoreService.shared.addNewTrip(at: .trips, trip: trip) { [weak self] result in
-            switch result {
-            case .success(let id):
-                self?.copyPlaces(id)
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    self?.showAlertToUser(error: error)
+        FireStoreService.shared.addNewTrip(at: .trips, trip: trip) { [unowned self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let id):
+
+                    if self.isCopy {
+                        self.copyPlaces(id)
+                    } else {
+                        self.dismiss(animated: true)
+                    }
+
+                case .failure(let error):
+                    self.showAlertToUser(error: error)
                 }
             }
         }
