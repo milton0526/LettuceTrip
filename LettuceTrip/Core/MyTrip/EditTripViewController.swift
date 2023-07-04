@@ -76,11 +76,13 @@ class EditTripViewController: UIViewController {
         scheduleView.delegate = self
         configureDataSource()
         setEditMode()
+        scheduleView.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .centeredVertically)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        scheduleView.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .centeredVertically)
+        // issue
+
         fetchPlaces()
     }
 
@@ -311,10 +313,13 @@ class EditTripViewController: UIViewController {
             request.source = MKMapItem(placemark: MKPlacemark(coordinate: source.coordinate))
             request.destination = MKMapItem(placemark: MKPlacemark(coordinate: destination.coordinate))
             request.departureDate = source.endTime
-            request.transportType = .transit
+            request.transportType = .any
 
             let directions = MKDirections(request: request)
-            directions.calculateETA { response, _ in
+            directions.calculateETA { response, error in
+                if let error = error {
+                    print("ETA Error: \(error.localizedDescription)")
+                }
                 guard let response = response else { return }
                 let minutes = response.expectedTravelTime / 60
                 let formattedMins = (String(format: "%.0f", minutes))
