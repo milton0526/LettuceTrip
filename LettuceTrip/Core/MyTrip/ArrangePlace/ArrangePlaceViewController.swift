@@ -51,15 +51,15 @@ class ArrangePlaceViewController: UIViewController {
         return button
     }()
 
-    lazy var moreDetailButton: UIButton = {
+    lazy var saveButton: UIButton = {
         var config = UIButton.Configuration.filled()
-        config.title = String(localized: "More details")
+        config.title = String(localized: "Save")
         config.attributedTitle?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         config.baseForegroundColor = .white
         config.baseBackgroundColor = .tintColor
         config.cornerStyle = .capsule
         let button = UIButton(configuration: config)
-        button.addTarget(self, action: #selector(showDetail), for: .touchUpInside)
+        button.addTarget(self, action: #selector(savePlace), for: .touchUpInside)
         return button
     }()
 
@@ -77,12 +77,16 @@ class ArrangePlaceViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = place.name
 
-        let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(savePlace))
-        navigationItem.rightBarButtonItem = saveButton
+        let detailButton = UIBarButtonItem(
+            image: UIImage(systemName: "info.circle"),
+            style: .plain,
+            target: self,
+            action: #selector(showDetail))
+        navigationItem.rightBarButtonItem = detailButton
         setupUI()
     }
 
-    @objc func savePlace(_ sender: UIBarButtonItem) {
+    @objc func savePlace(_ sender: UIButton) {
         let indexPath = IndexPath(row: 1, section: 0)
 
         guard let cell = tableView.cellForRow(at: indexPath) as? ArrangePlaceDetailCell else { return }
@@ -108,7 +112,7 @@ class ArrangePlaceViewController: UIViewController {
             stackView.addArrangedSubview(navigateButton)
         }
 
-        stackView.addArrangedSubview(moreDetailButton)
+        stackView.addArrangedSubview(saveButton)
 
         view.addSubview(tableView)
         view.addSubview(stackView)
@@ -128,7 +132,7 @@ class ArrangePlaceViewController: UIViewController {
         mapItem.openInMaps()
     }
 
-    @objc func showDetail(_ sender: UIButton) {
+    @objc func showDetail(_ sender: UIBarButtonItem) {
         let detailVC = PlaceDetailViewController(place: place)
         navigationController?.pushViewController(detailVC, animated: true)
     }
