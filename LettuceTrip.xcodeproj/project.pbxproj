@@ -44,6 +44,7 @@
 		C4CC0C042A48465300E03758 /* ArrangePlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0C032A48465300E03758 /* ArrangePlaceViewController.swift */; };
 		C4CC0C082A48499200E03758 /* LocationMapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0C062A48499200E03758 /* LocationMapCell.swift */; };
 		C4DAD90E2A53D8B1003D7A13 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = C4DAD90D2A53D8B1003D7A13 /* FirebaseMessaging */; };
+		C4DAD9102A551EFB003D7A13 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = C4DAD90F2A551EFB003D7A13 /* FirebaseCrashlytics */; };
 		C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8202A41AF62002987CB /* AppDelegate.swift */; };
 		C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8222A41AF62002987CB /* SceneDelegate.swift */; };
 		C4DBE8252A41AF62002987CB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8242A41AF62002987CB /* HomeViewController.swift */; };
@@ -187,6 +188,7 @@
 				C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */,
 				C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */,
 				C4DAD90E2A53D8B1003D7A13 /* FirebaseMessaging in Frameworks */,
+				C4DAD9102A551EFB003D7A13 /* FirebaseCrashlytics in Frameworks */,
 				C45413472A4A803E000D0685 /* FirebaseAuth in Frameworks */,
 				C4DBE8A42A41C158002987CB /* FirebaseFirestoreSwift in Frameworks */,
 			);
@@ -440,6 +442,7 @@
 				C4DBE81A2A41AF62002987CB /* Frameworks */,
 				C4DBE81B2A41AF62002987CB /* Resources */,
 				C4DBE8A52A41D2B3002987CB /* ShellScript */,
+				C4DAD9112A551F76003D7A13 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -455,6 +458,7 @@
 				C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */,
 				C45413462A4A803E000D0685 /* FirebaseAuth */,
 				C4DAD90D2A53D8B1003D7A13 /* FirebaseMessaging */,
+				C4DAD90F2A551EFB003D7A13 /* FirebaseCrashlytics */,
 			);
 			productName = LettuceTrip;
 			productReference = C4DBE81D2A41AF62002987CB /* LettuceTrip.app */;
@@ -518,6 +522,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		C4DAD9112A551F76003D7A13 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
 		C4DBE8A52A41D2B3002987CB /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -752,6 +775,7 @@
 				CODE_SIGN_ENTITLEMENTS = LettuceTrip/LettuceTrip.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = C5NNGG4J5Q;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LettuceTrip/Info.plist;
@@ -895,6 +919,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
+		};
+		C4DAD90F2A551EFB003D7A13 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 		C4DBE8402A41B288002987CB /* TinyConstraints */ = {
 			isa = XCSwiftPackageProductDependency;
