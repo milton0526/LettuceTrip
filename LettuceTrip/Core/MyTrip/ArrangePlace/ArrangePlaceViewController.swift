@@ -134,6 +134,8 @@ class ArrangePlaceViewController: UIViewController {
 
     @objc func showDetail(_ sender: UIBarButtonItem) {
         let detailVC = PlaceDetailViewController(place: place)
+        detailVC.addToTripButton.isEnabled = false
+        detailVC.addToTripButton.alpha = 0.8
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }

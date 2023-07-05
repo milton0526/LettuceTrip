@@ -252,11 +252,11 @@ class FireStoreService {
         }
     }
 
-    func getUserData(completion: @escaping (Result<User, Error>) -> Void) {
-        guard let currentUser = currentUser else { return }
+    func getUserData(userId: String?, completion: @escaping (Result<User, Error>) -> Void) {
+        guard let userId = userId else { return }
         let ref = database.collection(CollectionRef.users.rawValue)
 
-        ref.document(currentUser).getDocument(as: User.self) { result in
+        ref.document(userId).getDocument(as: User.self) { result in
             switch result {
             case .success(let user):
                 completion(.success(user))
