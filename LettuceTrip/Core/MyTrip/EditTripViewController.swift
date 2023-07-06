@@ -332,19 +332,8 @@ extension EditTripViewController: UITableViewDelegate {
         guard isEditMode else { return nil }
         guard let place = dataSource.itemIdentifier(for: indexPath) else { return nil }
         let deleteAction = UIContextualAction(style: .destructive, title: String(localized: "Delete"), handler: { [unowned self] _, _, completion in
-
-            let alertVC = UIAlertController(
-                title: String(localized: "Are you sure want to delete?"),
-                message: String(localized: "This action can not be undo!"),
-                preferredStyle: .alert)
-            let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
-            let delete = UIAlertAction(title: String(localized: "Delete"), style: .destructive) { _ in
-                FireStoreService.shared.deletePlace(at: self.trip, place: place)
-            }
-
-            alertVC.addAction(cancel)
-            alertVC.addAction(delete)
-            present(alertVC, animated: true)
+            FireStoreService.shared.deletePlace(at: self.trip, place: place)
+            completion(true)
         })
 
         return UISwipeActionsConfiguration(actions: [deleteAction])
