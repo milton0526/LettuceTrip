@@ -72,6 +72,7 @@ class AddNewTripViewController: UIViewController {
 
     var selectedCity: MKMapItem?
     var places: [Place] = []
+    var copyFromTrip: Trip?
     private let isCopy: Bool
 
     init(isCopy: Bool) {
@@ -185,7 +186,13 @@ class AddNewTripViewController: UIViewController {
                 case .success(let id):
 
                     if self.isCopy {
-                        self.copyPlaces(id)
+                        guard
+                            let copyDate = self.copyFromTrip?.startDate,
+                            let gap = Calendar.current.dateComponents([.day], from: copyDate, to: startDate).day
+                        else {
+                            return
+                        }
+                        self.copyPlaces(id, gap: gap)
                     } else {
                         self.dismiss(animated: true)
                     }
@@ -197,8 +204,19 @@ class AddNewTripViewController: UIViewController {
         }
     }
 
-    private func copyPlaces(_ id: String) {
-        FireStoreService.shared.copyPlaces(tripID: id, places: places) { [unowned self] result in
+    private func copyPlaces(_ id: String, gap: Int) {
+        let calendar = Calendar.current
+        var results: [Place] = []
+
+        for var place in places {
+            // swiftlint: disable force_unwrapping
+            let newDate = calendar.date(byAdding: .day, value: gap, to: place.arrangedTime!)
+            // swiftlint: enable force_unwrapping
+            place.arrangedTime = newDate
+            results.append(place)
+        }
+
+        FireStoreService.shared.copyPlaces(tripID: id, places: results) { [unowned self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:

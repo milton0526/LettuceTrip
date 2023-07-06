@@ -215,9 +215,12 @@ class EditTripViewController: UIViewController {
         let mapItem = MKMapItem(placemark: placeMark)
         mapItem.name = trip.destination
         addTripVC.selectedCity = mapItem
+        addTripVC.copyFromTrip = trip
         addTripVC.places = places
         addTripVC.destinationTextField.text = trip.destination
+        addTripVC.destinationTextField.textColor = .systemGray
         addTripVC.durationTextField.text = String(trip.duration + 1)
+        addTripVC.durationTextField.textColor = .systemGray
 
         let navVC = UINavigationController(rootViewController: addTripVC)
         let viewHeight = view.frame.height
