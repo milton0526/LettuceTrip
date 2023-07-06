@@ -70,6 +70,7 @@ class AddNewTripViewController: UIViewController {
         return datePicker
     }()
 
+    // These property for copy trip use
     var selectedCity: MKMapItem?
     var places: [Place] = []
     var copyFromTrip: Trip?
