@@ -23,11 +23,6 @@ class LocationService: NSObject {
         locationManager.delegate = self
     }
 
-    func requestLocation() {
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.requestLocation()
-    }
-
     private func displayLocationServicesDeniedAlert() {
         let message = String(localized: "Enable location service to give you better experience while using app.")
         let alert = UIAlertController(
@@ -53,8 +48,16 @@ extension LocationService: CLLocationManagerDelegate {
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         let status = locationManager.authorizationStatus
-        if status == .denied {
+
+        switch status {
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .restricted, .denied:
             displayLocationServicesDeniedAlert()
+        case .authorizedWhenInUse:
+            locationManager.requestLocation()
+        default:
+            print("Unknown location service status.")
         }
     }
 

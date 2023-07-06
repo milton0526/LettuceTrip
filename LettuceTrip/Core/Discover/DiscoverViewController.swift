@@ -32,6 +32,7 @@ class DiscoverViewController: UIViewController {
         textField.leftViewMode = .always
         textField.leftView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
         textField.delegate = self
+        textField.returnKeyType = .search
         return textField
     }()
 
@@ -43,6 +44,7 @@ class DiscoverViewController: UIViewController {
 
             let mapRegion = MKCoordinateRegion(center: currentLocation.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
             mapView.setRegion(mapRegion, animated: true)
+            searchResultController.region = mapRegion
         }
     }
 
@@ -51,9 +53,16 @@ class DiscoverViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         locationService.errorPresentationTarget = self
-        locationService.requestLocation()
         configMapView()
         setupUI()
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        var touch = touches.first
+        guard let childView = children.first?.view else { return }
+        if touch?.view != childView {
+            childView.isHidden = true
+        }
     }
 
     private func configMapView() {
@@ -164,6 +173,11 @@ extension DiscoverViewController: UITextFieldDelegate {
         return true
     }
 
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard
             let text = textField.text,
@@ -180,7 +194,7 @@ extension DiscoverViewController: UITextFieldDelegate {
             self.searchTextField.text = city.name
             self.children.first?.view.isHidden = true
             let cityRegion = MKCoordinateRegion(center: city.placemark.coordinate, latitudinalMeters: 8000, longitudinalMeters: 8000)
-            let pointRegion = MKCoordinateRegion(center: city.placemark.coordinate, latitudinalMeters: 250, longitudinalMeters: 250)
+            let pointRegion = MKCoordinateRegion(center: city.placemark.coordinate, latitudinalMeters: 125, longitudinalMeters: 125)
             searchResultController.region = cityRegion
 
             if city.pointOfInterestCategory != nil {

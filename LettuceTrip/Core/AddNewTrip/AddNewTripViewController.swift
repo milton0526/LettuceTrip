@@ -70,8 +70,10 @@ class AddNewTripViewController: UIViewController {
         return datePicker
     }()
 
+    // These property for copy trip use
     var selectedCity: MKMapItem?
     var places: [Place] = []
+    var copyFromTrip: Trip?
     private let isCopy: Bool
 
     init(isCopy: Bool) {
@@ -154,7 +156,7 @@ class AddNewTripViewController: UIViewController {
             let duration = Int(durationField),
             duration > 0,
             let startDate = startDate,
-            let endDate = Calendar.current.date(byAdding: .day, value: duration - 1, to: startDate),
+            var endDate = Calendar.current.date(byAdding: .day, value: duration, to: startDate),
             let selectedCity = selectedCity,
             let user = FireStoreService.shared.currentUser,
             let imageData = UIImage(named: "placeholder")?.jpegData(compressionQuality: 0.1)
@@ -162,6 +164,7 @@ class AddNewTripViewController: UIViewController {
             return
         }
 
+        endDate.addTimeInterval(-60)
         let latitude = selectedCity.placemark.coordinate.latitude
         let longitude = selectedCity.placemark.coordinate.longitude
         let city = GeoPoint(latitude: latitude, longitude: longitude)
@@ -184,7 +187,13 @@ class AddNewTripViewController: UIViewController {
                 case .success(let id):
 
                     if self.isCopy {
-                        self.copyPlaces(id)
+                        guard
+                            let copyDate = self.copyFromTrip?.startDate,
+                            let gap = Calendar.current.dateComponents([.day], from: copyDate, to: startDate).day
+                        else {
+                            return
+                        }
+                        self.copyPlaces(id, gap: gap)
                     } else {
                         self.dismiss(animated: true)
                     }
@@ -196,8 +205,19 @@ class AddNewTripViewController: UIViewController {
         }
     }
 
-    private func copyPlaces(_ id: String) {
-        FireStoreService.shared.copyPlaces(tripID: id, places: places) { [unowned self] result in
+    private func copyPlaces(_ id: String, gap: Int) {
+        let calendar = Calendar.current
+        var results: [Place] = []
+
+        for var place in places {
+            // swiftlint: disable force_unwrapping
+            let newDate = calendar.date(byAdding: .day, value: gap, to: place.arrangedTime!)
+            // swiftlint: enable force_unwrapping
+            place.arrangedTime = newDate
+            results.append(place)
+        }
+
+        FireStoreService.shared.copyPlaces(tripID: id, places: results) { [unowned self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:

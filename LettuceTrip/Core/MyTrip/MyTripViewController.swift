@@ -114,7 +114,7 @@ class MyTripViewController: UIViewController {
 
     private func filterByDate(trips: [Trip]) {
         trips.forEach { trip in
-            if trip.endDate > .distantPast {
+            if trip.endDate > .now {
                 upcomingTrips.append(trip)
             } else {
                 closedTrips.append(trip)

@@ -34,7 +34,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         profileHeaderView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
         profileHeaderView.height(100)
 
-        collectionView.topToBottom(of: profileHeaderView, offset: 8)
+        collectionView.topToBottom(of: profileHeaderView)
         collectionView.edgesToSuperview(excluding: .top, usingSafeArea: true)
 
         customNavBarStyle()
@@ -94,7 +94,9 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
     }
 
     private func fetchData() {
-        FireStoreService.shared.getUserData { [weak self] result in
+        guard let currentUser = FireStoreService.shared.currentUser else { return }
+
+        FireStoreService.shared.getUserData(userId: currentUser) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
