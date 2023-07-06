@@ -34,7 +34,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         profileHeaderView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
         profileHeaderView.height(100)
 
-        collectionView.topToBottom(of: profileHeaderView, offset: 8)
+        collectionView.topToBottom(of: profileHeaderView)
         collectionView.edgesToSuperview(excluding: .top, usingSafeArea: true)
 
         customNavBarStyle()

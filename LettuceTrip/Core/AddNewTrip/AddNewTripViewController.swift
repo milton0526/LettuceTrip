@@ -154,7 +154,7 @@ class AddNewTripViewController: UIViewController {
             let duration = Int(durationField),
             duration > 0,
             let startDate = startDate,
-            let endDate = Calendar.current.date(byAdding: .day, value: duration - 1, to: startDate),
+            var endDate = Calendar.current.date(byAdding: .day, value: duration, to: startDate),
             let selectedCity = selectedCity,
             let user = FireStoreService.shared.currentUser,
             let imageData = UIImage(named: "placeholder")?.jpegData(compressionQuality: 0.1)
@@ -162,6 +162,7 @@ class AddNewTripViewController: UIViewController {
             return
         }
 
+        endDate.addTimeInterval(-60)
         let latitude = selectedCity.placemark.coordinate.latitude
         let longitude = selectedCity.placemark.coordinate.longitude
         let city = GeoPoint(latitude: latitude, longitude: longitude)

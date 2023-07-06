@@ -96,7 +96,17 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let config = UICollectionLayoutListConfiguration(appearance: .plain)
+        var config = UICollectionLayoutListConfiguration(appearance: .plain)
+        config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
+            let deleteAction = UIContextualAction(style: .destructive, title: String(localized: "Delete")) { _, _, completion in
+                if let item = self.dataSource.itemIdentifier(for: indexPath) {
+                    FireStoreService.shared.deletePlace(at: self.trip, place: item)
+                    completion(true)
+                }
+            }
+            return .init(actions: [deleteAction])
+        }
+
         return UICollectionViewCompositionalLayout.list(using: config)
     }
 
@@ -121,7 +131,7 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Place>()
         snapshot.appendSections([.main])
         snapshot.appendItems(places)
-        dataSource.apply(snapshot)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
 

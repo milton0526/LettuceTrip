@@ -42,15 +42,16 @@ class EditTripViewController: UIViewController {
 
     lazy var scheduleView = ScheduleView()
 
-    lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        collectionView.delegate = self
-        collectionView.register(ArrangePlaceCell.self, forCellWithReuseIdentifier: ArrangePlaceCell.identifier)
-        return collectionView
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.separatorStyle = .none
+        tableView.delegate = self
+        tableView.register(ArrangePlaceCell.self, forCellReuseIdentifier: ArrangePlaceCell.identifier)
+        return tableView
     }()
 
     private var listener: ListenerRegistration?
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Place>!
+    private var dataSource: UITableViewDiffableDataSource<Section, Place>!
     private var places: [Place] = []
     private var sortedPlaces: [Place] = [] {
         didSet {
@@ -93,7 +94,7 @@ class EditTripViewController: UIViewController {
     private func setupUI() {
         view.addSubview(imageView)
         view.addSubview(scheduleView)
-        view.addSubview(collectionView)
+        view.addSubview(tableView)
 
         imageView.edgesToSuperview(excluding: .bottom, insets: .top(8) + .horizontal(16), usingSafeArea: true)
         imageView.height(160)
@@ -102,8 +103,8 @@ class EditTripViewController: UIViewController {
         scheduleView.horizontalToSuperview(insets: .horizontal(16))
         scheduleView.height(80)
 
-        collectionView.topToBottom(of: scheduleView)
-        collectionView.edgesToSuperview(excluding: .top, usingSafeArea: true)
+        tableView.topToBottom(of: scheduleView)
+        tableView.edgesToSuperview(excluding: .top, usingSafeArea: true)
     }
 
     private func setEditMode() {
@@ -111,8 +112,8 @@ class EditTripViewController: UIViewController {
             customNavBar()
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(pickImage))
             imageView.addGestureRecognizer(tapGesture)
-            collectionView.dragDelegate = self
-            collectionView.dropDelegate = self
+            tableView.dragDelegate = self
+            tableView.dropDelegate = self
         } else {
             let copyButton = UIBarButtonItem(
                 image: UIImage(systemName: "square.and.arrow.down"),
@@ -244,28 +245,10 @@ class EditTripViewController: UIViewController {
         return travelDays
     }
 
-    private func createLayout() -> UICollectionViewCompositionalLayout {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(100))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(100))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-
-        let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 12
-        section.contentInsets = .init(top: 8, leading: 16, bottom: 8, trailing: 16)
-
-        return UICollectionViewCompositionalLayout(section: section)
-    }
-
     private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [unowned self] collectionView, indexPath, item in
-            guard let arrangeCell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: ArrangePlaceCell.identifier,
+        dataSource = UITableViewDiffableDataSource(tableView: tableView) { [unowned self] tableView, indexPath, item in
+            guard let arrangeCell = tableView.dequeueReusableCell(
+                withIdentifier: ArrangePlaceCell.identifier,
                 for: indexPath) as? ArrangePlaceCell
             else {
                 fatalError("Failed to dequeue cityCell")
@@ -315,8 +298,9 @@ class EditTripViewController: UIViewController {
 
             let directions = MKDirections(request: request)
             directions.calculateETA { response, error in
-                if let error = error {
-                    print("ETA Error: \(error.localizedDescription)")
+                if error != nil {
+                    self.estimatedTimes.updateValue(String(localized: "Not available"), forKey: i - 1)
+                    return
                 }
                 guard let response = response else { return }
                 let minutes = response.expectedTravelTime / 60
@@ -328,8 +312,8 @@ class EditTripViewController: UIViewController {
 }
 
 // MARK: - CollectionView Delegate
-extension EditTripViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+extension EditTripViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let place = sortedPlaces[indexPath.item]
         let viewController: UIViewController
 
@@ -341,37 +325,34 @@ extension EditTripViewController: UICollectionViewDelegate {
         navigationController?.pushViewController(viewController, animated: true)
     }
 
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         guard isEditMode else { return nil }
-        guard let itemIndexPath = collectionView.indexPathForItem(at: point) else { return nil }
-        let place = places[itemIndexPath.item]
+        guard let place = dataSource.itemIdentifier(for: indexPath) else { return nil }
+        let deleteAction = UIContextualAction(style: .destructive, title: String(localized: "Delete"), handler: { [unowned self] _, _, completion in
 
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
-            let deleteAction = UIAction(title: String(localized: "Delete"), image: UIImage(systemName: "trash")) { [unowned self] _ in
-                let alertVC = UIAlertController(
-                    title: String(localized: "Are you sure want to delete?"),
-                    message: String(localized: "This action can not be undo!"),
-                    preferredStyle: .alert)
-                let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
-                let delete = UIAlertAction(title: String(localized: "Delete"), style: .destructive) { _ in
-                    FireStoreService.shared.deletePlace(at: self.trip, place: place)
-                }
-
-                alertVC.addAction(cancel)
-                alertVC.addAction(delete)
-                present(alertVC, animated: true)
+            let alertVC = UIAlertController(
+                title: String(localized: "Are you sure want to delete?"),
+                message: String(localized: "This action can not be undo!"),
+                preferredStyle: .alert)
+            let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
+            let delete = UIAlertAction(title: String(localized: "Delete"), style: .destructive) { _ in
+                FireStoreService.shared.deletePlace(at: self.trip, place: place)
             }
 
-            return UIMenu(children: [deleteAction])
-        }
+            alertVC.addAction(cancel)
+            alertVC.addAction(delete)
+            present(alertVC, animated: true)
+        })
+
+        return UISwipeActionsConfiguration(actions: [deleteAction])
     }
 }
 
 
 // MARK: - CollectionView Drag Delegate
-extension EditTripViewController: UICollectionViewDragDelegate {
+extension EditTripViewController: UITableViewDragDelegate {
 
-    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         let placeItem = String(sortedPlaces[indexPath.item].arrangedTime?.ISO8601Format() ?? "")
         let itemProvider = NSItemProvider(object: placeItem as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
@@ -382,17 +363,17 @@ extension EditTripViewController: UICollectionViewDragDelegate {
 
 
 // MARK: - CollectionView Drop Delegate
-extension EditTripViewController: UICollectionViewDropDelegate {
+extension EditTripViewController: UITableViewDropDelegate {
 
-    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-        if collectionView.hasActiveDrag {
-            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+    func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        if tableView.hasActiveDrag {
+            return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
         }
 
-        return UICollectionViewDropProposal(operation: .forbidden)
+        return UITableViewDropProposal(operation: .forbidden)
     }
 
-    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
         var destinationIndexPath: IndexPath
         if let indexPath = coordinator.destinationIndexPath {
             destinationIndexPath = indexPath
@@ -402,15 +383,15 @@ extension EditTripViewController: UICollectionViewDropDelegate {
         }
 
         if coordinator.proposal.operation == .move {
-            moveItem(coordinator: coordinator, destinationIndexPath: destinationIndexPath, collectionView: collectionView)
+            moveItem(coordinator: coordinator, destinationIndexPath: destinationIndexPath, tableView: tableView)
         }
     }
 
-    private func moveItem(coordinator: UICollectionViewDropCoordinator, destinationIndexPath: IndexPath, collectionView: UICollectionView) {
+    private func moveItem(coordinator: UITableViewDropCoordinator, destinationIndexPath: IndexPath, tableView: UITableView) {
         if let dragItem = coordinator.items.first,
             let sourceIndexPath = dragItem.sourceIndexPath {
 
-            collectionView.performBatchUpdates {
+            tableView.performBatchUpdates {
                 for item in coordinator.items {
                     let placeTime = item.dragItem.localObject as? String
                     let formatter = ISO8601DateFormatter()

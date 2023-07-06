@@ -156,27 +156,25 @@ class PlaceDetailViewController: UIViewController {
             message: nil,
             preferredStyle: .actionSheet)
 
-        if trips.isEmpty {
-            let action = UIAlertAction(title: "Create new trip!", style: .default) { [weak self] _ in
-                self?.showAddNewTripVC()
-            }
-            actionSheet.addAction(action)
-        } else {
-            trips
-                .filter { $0.endDate > .distantPast }
-                .sorted { $0.startDate > $1.startDate }
-                .forEach { trip in
-                    let action = UIAlertAction(
-                        title: trip.tripName,
-                        style: .default) { [weak self] _ in
-                            guard let self = self else { return }
-                            FireStoreService.shared.updatePlace(self.place, to: trip) { _ in
-                                // tell user if this place add to trip list
-                            }
-                    }
-                    actionSheet.addAction(action)
+        trips
+            .filter { $0.endDate > .now }
+            .sorted { $0.startDate > $1.startDate }
+            .forEach { trip in
+                let updateAction = UIAlertAction(
+                    title: trip.tripName,
+                    style: .default) { [weak self] _ in
+                        guard let self = self else { return }
+                        FireStoreService.shared.updatePlace(self.place, to: trip) { _ in
+                            // tell user if this place add to trip list
+                        }
                 }
+                actionSheet.addAction(updateAction)
+            }
+
+        let createAction = UIAlertAction(title: "🆕 Create new trip", style: .default) { [weak self] _ in
+            self?.showAddNewTripVC()
         }
+        actionSheet.addAction(createAction)
 
         let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
         actionSheet.addAction(cancel)

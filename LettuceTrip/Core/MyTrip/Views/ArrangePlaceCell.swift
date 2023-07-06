@@ -8,7 +8,7 @@
 import UIKit
 import TinyConstraints
 
-class ArrangePlaceCell: UICollectionViewCell {
+class ArrangePlaceCell: UITableViewCell {
 
     lazy var fromTimeLabel: UILabel = {
         let label = UILabel()
@@ -83,8 +83,9 @@ class ArrangePlaceCell: UICollectionViewCell {
         return stackView
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
         setupViews()
     }
 
@@ -103,7 +104,7 @@ class ArrangePlaceCell: UICollectionViewCell {
         iconImageView.size(.init(width: 35, height: 35))
         lineView.size(.init(width: 1.3, height: 14))
 
-        placeHStack.topToSuperview()
+        placeHStack.topToSuperview(offset: 8)
         placeHStack.horizontalToSuperview(insets: .horizontal(8))
         placeHStack.height(68, relation: .equalOrGreater)
         placeHStack.backgroundColor = .secondarySystemBackground
@@ -127,7 +128,7 @@ class ArrangePlaceCell: UICollectionViewCell {
         iconImageView.image = UIImage(data: place.iconImage)?.withTintColor(.tintColor)
 
         if let travelTime = travelTime {
-            estimatedTimeLabel.text = String(localized: "\(travelTime) minutes")
+            estimatedTimeLabel.text = travelTime == "Not available" ? travelTime : String(localized: "\(travelTime) minutes")
         } else {
             estimatedHStack.isHidden = true
         }
