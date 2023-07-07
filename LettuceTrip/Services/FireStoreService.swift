@@ -28,8 +28,8 @@ class FireStoreService {
 
     var currentUser: String? {
         // Test user id
-        // "LpDb7nvzvSZZcTtJZOld4OS3aEB3"
-        Auth.auth().currentUser?.uid
+        "LpDb7nvzvSZZcTtJZOld4OS3aEB3"
+        // Auth.auth().currentUser?.uid
     }
 
     func signOut(completion: @escaping (Error?) -> Void) {
@@ -69,7 +69,7 @@ class FireStoreService {
             "deviceToken": token
         ]) { error in
             if let error = error {
-                print("Error update device token.")
+                print("Error update device token: \(error.localizedDescription)")
             } else {
                 print("Successfully update device token.")
             }
@@ -193,13 +193,17 @@ class FireStoreService {
 
     func deletePlace(at trip: Trip, place: Place) {
         guard let tripID = trip.id, let placeID = place.id else { return }
-        database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.places.rawValue).document(placeID).delete { error in
-            if let error = error {
-                print(error.localizedDescription)
-            } else {
-                print("Delete successfully")
+        database.collection(CollectionRef.trips.rawValue)
+            .document(tripID)
+            .collection(CollectionRef.places.rawValue)
+            .document(placeID)
+            .delete { error in
+                if let error = error {
+                    print(error.localizedDescription)
+                } else {
+                    print("Delete successfully")
+                }
             }
-        }
     }
 
     func updateTrip(trip: Trip, completion: @escaping (Error?) -> Void) {

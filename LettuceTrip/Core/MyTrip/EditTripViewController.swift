@@ -331,10 +331,10 @@ extension EditTripViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         guard isEditMode else { return nil }
         guard let place = dataSource.itemIdentifier(for: indexPath) else { return nil }
-        let deleteAction = UIContextualAction(style: .destructive, title: String(localized: "Delete"), handler: { [unowned self] _, _, completion in
+        let deleteAction = UIContextualAction(style: .destructive, title: String(localized: "Delete")) { [unowned self] _, _, completion in
             FireStoreService.shared.deletePlace(at: self.trip, place: place)
             completion(true)
-        })
+        }
 
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }

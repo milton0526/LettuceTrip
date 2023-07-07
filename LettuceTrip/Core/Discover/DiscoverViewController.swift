@@ -58,7 +58,7 @@ class DiscoverViewController: UIViewController {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        var touch = touches.first
+        let touch = touches.first
         guard let childView = children.first?.view else { return }
         if touch?.view != childView {
             childView.isHidden = true

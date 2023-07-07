@@ -23,6 +23,8 @@
 		C45413472A4A803E000D0685 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C45413462A4A803E000D0685 /* FirebaseAuth */; };
 		C454134B2A4A8871000D0685 /* FirebaseAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134A2A4A8871000D0685 /* FirebaseAuthHelper.swift */; };
 		C454134D2A4A9937000D0685 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134C2A4A9937000D0685 /* AuthManager.swift */; };
+		C480BDE82A56C3D100A1A7E5 /* BaseSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BDE72A56C3D100A1A7E5 /* BaseSettingViewController.swift */; };
+		C480BDEA2A56C56E00A1A7E5 /* AppearanceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BDE92A56C56E00A1A7E5 /* AppearanceVC.swift */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
 		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
@@ -108,6 +110,8 @@
 		C45413432A4A7FF0000D0685 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		C454134A2A4A8871000D0685 /* FirebaseAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthHelper.swift; sourceTree = "<group>"; };
 		C454134C2A4A9937000D0685 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		C480BDE72A56C3D100A1A7E5 /* BaseSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSettingViewController.swift; sourceTree = "<group>"; };
+		C480BDE92A56C56E00A1A7E5 /* AppearanceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceVC.swift; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
@@ -313,6 +317,8 @@
 			children = (
 				C4DBE8382A41B19B002987CB /* ProfileViewController.swift */,
 				C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */,
+				C480BDE72A56C3D100A1A7E5 /* BaseSettingViewController.swift */,
+				C480BDE92A56C56E00A1A7E5 /* AppearanceVC.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -588,6 +594,7 @@
 				C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */,
 				C4CBD42D2A4FD097009108C6 /* GPlaceResponse.swift in Sources */,
 				C4CBD42F2A4FD122009108C6 /* GPlaceAPI.swift in Sources */,
+				C480BDEA2A56C56E00A1A7E5 /* AppearanceVC.swift in Sources */,
 				C42F51C42A45B60C00023305 /* CalendarCell.swift in Sources */,
 				C4DBE8372A41B194002987CB /* MyTripViewController.swift in Sources */,
 				C454133E2A48920D000D0685 /* ArrangePlaceDetailCell.swift in Sources */,
@@ -616,6 +623,7 @@
 				C4DBE8962A41BD00002987CB /* UITableView+Identifier.swift in Sources */,
 				C4DBE8AF2A41D696002987CB /* SelectionViewDelegate.swift in Sources */,
 				C42F51CA2A45E2AB00023305 /* CirclePlaceCell.swift in Sources */,
+				C480BDE82A56C3D100A1A7E5 /* BaseSettingViewController.swift in Sources */,
 				C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */,
 				C45413412A497145000D0685 /* Date+Extension.swift in Sources */,
 				C42F51C62A45BD1D00023305 /* ChatRoomViewController.swift in Sources */,

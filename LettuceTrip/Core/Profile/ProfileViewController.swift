@@ -14,6 +14,13 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         case main
     }
 
+    enum Item: Int {
+        case appearance
+        case language
+        case deleteAccount
+        case signOut
+    }
+
     private var settings = SettingModel.profileSettings
 
     lazy var collectionView: UICollectionView = {
@@ -138,8 +145,16 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        switch indexPath.item {
-        case 2:
+        guard let item = Item(rawValue: indexPath.item) else { return }
+
+        switch item {
+        case .appearance:
+            let appearanceVC = AppearanceVC()
+            navigationController?.pushViewController(appearanceVC, animated: true)
+        case .language:
+            break
+
+        case .deleteAccount:
             let alert = UIAlertController(
                 title: String(localized: "Are you sure want to delete account?"),
                 message: String(localized: "All associate data will be delete too."),
@@ -153,9 +168,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
             alert.addAction(confirm)
 
             present(alert, animated: true)
-        case 3:
+        case .signOut:
             confirmSignOut()
-        default: break
         }
     }
 }

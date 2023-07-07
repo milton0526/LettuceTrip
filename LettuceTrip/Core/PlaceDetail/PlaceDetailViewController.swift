@@ -10,6 +10,7 @@ import MapKit
 import TinyConstraints
 import Combine
 import GooglePlaces
+import SafariServices
 
 class PlaceDetailViewController: UIViewController {
 
@@ -283,6 +284,10 @@ extension PlaceDetailViewController: UITableViewDataSource {
                 website: gmsPlace.website?.absoluteString)
 
             aboutCell.config(with: about)
+            aboutCell.handler = { [weak self] url in
+                let safariVC = SFSafariViewController(url: url)
+                self?.present(safariVC, animated: true)
+            }
 
             return aboutCell
         }

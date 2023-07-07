@@ -40,8 +40,13 @@ class PlaceAboutCell: UITableViewCell {
         label.textColor = .systemBlue
         label.font = .systemFont(ofSize: 14)
         label.sizeToFit()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openWebsite))
+        label.addGestureRecognizer(tapGesture)
+        label.isUserInteractionEnabled = true
         return label
     }()
+
+    var handler: ((URL) -> Void)?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -51,6 +56,19 @@ class PlaceAboutCell: UITableViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc func openWebsite(_ gesture: UIGestureRecognizer) {
+        guard
+            let website = linkLabel.text,
+            !website.isEmpty
+        else {
+            return
+        }
+
+        if let url = URL(string: website) {
+            handler?(url)
+        }
     }
 
     private func setupViews() {

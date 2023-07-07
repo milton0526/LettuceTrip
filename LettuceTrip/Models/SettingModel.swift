@@ -19,4 +19,9 @@ extension SettingModel {
         SettingModel(title: String(localized: "Delete account"), image: UIImage(systemName: "person.crop.circle.badge.xmark")),
         SettingModel(title: String(localized: "Sign out"), image: UIImage(systemName: "rectangle.portrait.and.arrow.forward"))
     ]
+
+    static let theme = [
+        SettingModel(title: String(localized: "Light mode"), image: UIImage(systemName: "lightbulb")),
+        SettingModel(title: String(localized: "Dark mode"), image: UIImage(systemName: "lightbulb.slash"))
+    ]
 }
