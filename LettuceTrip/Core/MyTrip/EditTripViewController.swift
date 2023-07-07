@@ -130,7 +130,6 @@ class EditTripViewController: UIViewController {
 
         listener = FireStoreService.shared.addListenerInTripPlaces(tripId: tripID, isArrange: true) { [weak self] result in
             guard let self = self else { return }
-            JGHudIndicator.shared.showHud(type: .loading(text: "Calculate..."))
 
             switch result {
             case .success(let place):
@@ -294,6 +293,7 @@ class EditTripViewController: UIViewController {
             return
         }
 
+        JGHudIndicator.shared.showHud(type: .loading(text: "Calculate..."))
         estimatedTimes = [:]
         for i in 1..<sortedPlaces.count {
             let source = sortedPlaces[i - 1]

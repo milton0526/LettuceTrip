@@ -102,6 +102,7 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private func fetchDetails() {
+        JGHudIndicator.shared.showHud(type: .loading())
         apiService
             .findPlaceFromText(place.name, location: place.coordinate)
             .compactMap(\.candidates.first?.placeID)
@@ -130,6 +131,7 @@ class PlaceDetailViewController: UIViewController {
                     self?.placePhotos.append(place)
                     if counter == photoIndices {
                         self?.tableView.reloadData()
+                        JGHudIndicator.shared.dismissHUD()
                     } else {
                         counter += 1
                     }

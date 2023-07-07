@@ -74,6 +74,7 @@ final class JGHudIndicator {
             return
         }
         hud.textLabel.text = text
+        hud.indicatorView = JGProgressHUDIndeterminateIndicatorView()
         hud.show(in: view)
     }
 

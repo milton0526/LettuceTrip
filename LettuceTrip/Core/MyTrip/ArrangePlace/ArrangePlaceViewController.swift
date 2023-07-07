@@ -99,10 +99,10 @@ class ArrangePlaceViewController: UIViewController {
         // Update fireStore document
         FireStoreService.shared.updatePlace(place, to: trip, update: true) { [weak self] error in
             guard let self = self else { return }
-            if let error = error {
-                // Show error message to user.
-            } else {
+            if error == nil {
                 self.navigationController?.popViewController(animated: true)
+            } else {
+                JGHudIndicator.shared.showHud(type: .failure)
             }
         }
     }

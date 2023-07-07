@@ -52,6 +52,7 @@ class MyTripViewController: UIViewController {
     private var upcomingTrips: [Trip] = []
     private var closedTrips: [Trip] = []
     private var currentSegment: Segment = .upcoming
+    private lazy var placeHolder = makePlaceholder(text: String(localized: "Add new trip to start!"))
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -177,9 +178,9 @@ extension MyTripViewController: UITableViewDelegate {
 // MARK: - UITableView DataSource
 extension MyTripViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        currentSegment == .upcoming
-        ? upcomingTrips.count
-        : closedTrips.count
+        let trips = currentSegment == .upcoming ? upcomingTrips : closedTrips
+        placeHolder.isHidden = trips.isEmpty ? false : true
+        return trips.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

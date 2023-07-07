@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import TinyConstraints
 
 extension UIViewController {
 
@@ -18,5 +19,16 @@ extension UIViewController {
             alert.addAction(action)
             self.present(alert, animated: true)
         }
+    }
+
+    func makePlaceholder(text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.textColor = .secondaryLabel
+        label.font = .systemFont(ofSize: 20, weight: .heavy)
+        label.isHidden = true
+        view.addSubview(label)
+        label.centerInSuperview()
+        return label
     }
 }
