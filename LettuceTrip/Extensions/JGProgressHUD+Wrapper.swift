@@ -11,7 +11,7 @@ import JGProgressHUD
 final class JGHudIndicator {
     static let shared = JGHudIndicator()
 
-    private let hud = JGProgressHUD(automaticStyle: ())
+    private let hud = JGProgressHUD(style: .dark)
 
     private var view: UIView {
         // swiftlint: disable force_unwrapping

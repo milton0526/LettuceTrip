@@ -293,7 +293,7 @@ class EditTripViewController: UIViewController {
             return
         }
 
-        JGHudIndicator.shared.showHud(type: .loading(text: "Calculate..."))
+        JGHudIndicator.shared.showHud(type: .loading(text: String(localized: "Calculate...")))
         estimatedTimes = [:]
         for i in 1..<sortedPlaces.count {
             let source = sortedPlaces[i - 1]

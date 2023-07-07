@@ -1,0 +1,9 @@
+/* Bundle display name */
+"CFBundleDisplayName" = "Lettuce Trip";
+
+/* Bundle name */
+"CFBundleName" = "LettuceTrip";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "取得您裝置的位置，以提供您更多推薦地點";
+
