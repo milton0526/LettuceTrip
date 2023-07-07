@@ -1,0 +1,179 @@
+/* No comment provided by engineer. */
+"%@ minutes" = "%@ 分鐘";
+
+/* No comment provided by engineer. */
+"About" = "關於";
+
+/* No comment provided by engineer. */
+"Add new trip to start!" = "開始新增行程吧！";
+
+/* No comment provided by engineer. */
+"Add this place into trip" = "新增地點至行程";
+
+/* No comment provided by engineer. */
+"Add to trip" = "新增至行程";
+
+/* No comment provided by engineer. */
+"All associate data will be delete too." = "全部資料將會一併刪除";
+
+/* No comment provided by engineer. */
+"Appearance" = "外觀";
+
+/* No comment provided by engineer. */
+"Are you sure want to delete account?" = "您確定要刪除帳戶嗎？";
+
+/* No comment provided by engineer. */
+"Are you sure want to delete?" = "您確定要刪除嗎？";
+
+/* No comment provided by engineer. */
+"Are you sure want to sign out?" = "確定要登出嗎？";
+
+/* No comment provided by engineer. */
+"Cancel" = "取消";
+
+/* No comment provided by engineer. */
+"Closed" = "已結束";
+
+/* No comment provided by engineer. */
+"Community" = "社群";
+
+/* No comment provided by engineer. */
+"Confirm" = "確認";
+
+/* No comment provided by engineer. */
+"Copy this trip" = "複製行程";
+
+/* No comment provided by engineer. */
+"Create new trip" = "建立行程";
+
+/* No comment provided by engineer. */
+"Dark mode" = "黑暗模式";
+
+/* No comment provided by engineer. */
+"Delete" = "刪除";
+
+/* No comment provided by engineer. */
+"Delete account" = "刪除帳號";
+
+/* No comment provided by engineer. */
+"Destination" = "目的地";
+
+/* No comment provided by engineer. */
+"Discover best places to go on vacation and make itinerary with friends😍" = "探索旅遊目的地，並且和朋友共同安排行程😍";
+
+/* No comment provided by engineer. */
+"Duration" = "天數";
+
+/* No comment provided by engineer. */
+"Enable location service to give you better experience while using app." = "啟用GPS來帶給您更棒的使用體驗";
+
+/* No comment provided by engineer. */
+"Failed to get place information!" = "無法取得地點資訊";
+
+/* No comment provided by engineer. */
+"Failed to search city!" = "無相關城市";
+
+/* No comment provided by engineer. */
+"Failure" = "錯誤";
+
+/* No comment provided by engineer. */
+"Group Chat" = "聊天室";
+
+/* No comment provided by engineer. */
+"Invite your friends" = "邀請朋友";
+
+/* No comment provided by engineer. */
+"Language" = "語言";
+
+/* No comment provided by engineer. */
+"Light mode" = "淺色模式";
+
+/* No comment provided by engineer. */
+"Loading..." = "讀取中...";
+
+/* No comment provided by engineer. */
+"Location Service denied!" = "存取定位被拒！";
+
+/* No comment provided by engineer. */
+"My trips" = "我的旅行";
+
+/* No comment provided by engineer. */
+"Navigate" = "導航";
+
+/* No comment provided by engineer. */
+"Not available" = "未提供";
+
+/* No comment provided by engineer. */
+"OK" = "是";
+
+/* No comment provided by engineer. */
+"Oops! No one share there trip!🥲" = "糟糕！沒有人分享行程🥲";
+
+/* No comment provided by engineer. */
+"Our team will check ASAP, Thanks!" = "我們會盡快確認此回報，謝謝";
+
+/* No comment provided by engineer. */
+"Please check your internet and try again later." = "請確認網路連線後再重試";
+
+/* No comment provided by engineer. */
+"Please try again later." = "請稍後再試";
+
+/* No comment provided by engineer. */
+"Provide by:\n%@" = "提供者:\n%@";
+
+/* No comment provided by engineer. */
+"Report" = "回報";
+
+/* No comment provided by engineer. */
+"Save" = "儲存";
+
+/* No comment provided by engineer. */
+"Search city to travel..." = "搜尋城市";
+
+/* No comment provided by engineer. */
+"Search places..." = "搜尋地點";
+
+/* No comment provided by engineer. */
+"Settings" = "設定";
+
+/* No comment provided by engineer. */
+"Share this trip to..." = "分享行程給...";
+
+/* No comment provided by engineer. */
+"Sign out" = "登出";
+
+/* No comment provided by engineer. */
+"Some one invite your to edit this trip" = "有人邀請你一同編輯行程";
+
+/* No comment provided by engineer. */
+"Start time" = "開始日";
+
+/* No comment provided by engineer. */
+"Success" = "成功";
+
+/* No comment provided by engineer. */
+"Sure" = "好";
+
+/* No comment provided by engineer. */
+"There's nothing here!" = "目前是空的哦！";
+
+/* No comment provided by engineer. */
+"This action can not be undo!" = "此動作無法回朔！";
+
+/* No comment provided by engineer. */
+"Trip name" = "旅行名稱";
+
+/* No comment provided by engineer. */
+"Upcoming" = "進行中";
+
+/* No comment provided by engineer. */
+"We received your report!" = "已收到您的檢舉！";
+
+/* No comment provided by engineer. */
+"Website" = "網站";
+
+/* No comment provided by engineer. */
+"Wish List" = "待安排清單";
+
+/* No comment provided by engineer. */
+"Calculate..." = "計算中...";

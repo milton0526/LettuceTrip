@@ -26,6 +26,8 @@
 		C480BDE82A56C3D100A1A7E5 /* BaseSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BDE72A56C3D100A1A7E5 /* BaseSettingViewController.swift */; };
 		C480BDEA2A56C56E00A1A7E5 /* AppearanceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BDE92A56C56E00A1A7E5 /* AppearanceVC.swift */; };
 		C480BDF42A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BDF32A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift */; };
+		C480BDFD2A58221C00A1A7E5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C480BDFB2A58221C00A1A7E5 /* InfoPlist.strings */; };
+		C480BE002A58221C00A1A7E5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C480BDFE2A58221C00A1A7E5 /* Localizable.strings */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
 		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
@@ -114,6 +116,10 @@
 		C480BDE72A56C3D100A1A7E5 /* BaseSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSettingViewController.swift; sourceTree = "<group>"; };
 		C480BDE92A56C56E00A1A7E5 /* AppearanceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceVC.swift; sourceTree = "<group>"; };
 		C480BDF32A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JGProgressHUD+Wrapper.swift"; sourceTree = "<group>"; };
+		C480BDF92A581D1300A1A7E5 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
+		C480BDFA2A581D1300A1A7E5 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		C480BDFC2A58221C00A1A7E5 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		C480BDFF2A58221C00A1A7E5 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
@@ -254,6 +260,8 @@
 				C4DBE8292A41AF63002987CB /* Assets.xcassets */,
 				C4DBE82B2A41AF63002987CB /* LaunchScreen.storyboard */,
 				C4DBE82E2A41AF63002987CB /* Info.plist */,
+				C480BDFE2A58221C00A1A7E5 /* Localizable.strings */,
+				C480BDFB2A58221C00A1A7E5 /* InfoPlist.strings */,
 				C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */,
 				C4DBE89E2A41C0E3002987CB /* GoogleService-Info.plist */,
 				C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */,
@@ -495,6 +503,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hant",
 			);
 			mainGroup = C4DBE8142A41AF62002987CB;
 			packageReferences = (
@@ -519,8 +528,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4DBE82D2A41AF63002987CB /* LaunchScreen.storyboard in Resources */,
+				C480BDFD2A58221C00A1A7E5 /* InfoPlist.strings in Resources */,
 				C4DBE82A2A41AF63002987CB /* Assets.xcassets in Resources */,
 				C4DBE8282A41AF62002987CB /* Main.storyboard in Resources */,
+				C480BE002A58221C00A1A7E5 /* Localizable.strings in Resources */,
 				C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */,
 				C4DBE89F2A41C0E3002987CB /* GoogleService-Info.plist in Resources */,
 				C454133F2A48920D000D0685 /* ArrangePlaceDetailCell.xib in Resources */,
@@ -644,10 +655,27 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		C480BDFB2A58221C00A1A7E5 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C480BDFC2A58221C00A1A7E5 /* zh-Hant */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		C480BDFE2A58221C00A1A7E5 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C480BDFF2A58221C00A1A7E5 /* zh-Hant */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		C4DBE8262A41AF62002987CB /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				C4DBE8272A41AF62002987CB /* Base */,
+				C480BDF92A581D1300A1A7E5 /* zh-Hant */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -656,6 +684,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				C4DBE82C2A41AF63002987CB /* Base */,
+				C480BDFA2A581D1300A1A7E5 /* zh-Hant */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -667,6 +696,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -729,6 +759,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
