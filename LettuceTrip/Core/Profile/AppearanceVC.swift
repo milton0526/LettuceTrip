@@ -7,6 +7,22 @@
 
 import UIKit
 
+enum AppTheme: Int {
+    static let key = "Theme"
+
+    case light
+    case dark
+
+    var mode: String {
+        switch self {
+        case .light:
+            return "Light mode"
+        case .dark:
+            return "Dark mode"
+        }
+    }
+}
+
 class AppearanceVC: BaseSettingViewController {
 
     private var themeModels = SettingModel.theme
@@ -51,11 +67,11 @@ class AppearanceVC: BaseSettingViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        let selected = themeModels[indexPath.item]
+        guard let selected = AppTheme(rawValue: indexPath.item) else { return }
 
-        // Click to switch appearance
         if indexPath.item != currentTheme {
-            keyWindow?.overrideUserInterfaceStyle = selected.title == "Light mode" ? .light : .dark
+            keyWindow?.overrideUserInterfaceStyle = selected.mode == "Light mode" ? .light : .dark
+            UserDefaults.standard.setValue(selected.mode, forKey: AppTheme.key)
             updateSnapshot()
         }
     }

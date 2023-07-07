@@ -27,6 +27,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             viewController = mainVC
         }
 
+        if let appTheme = UserDefaults.standard.string(forKey: AppTheme.key) {
+            window?.overrideUserInterfaceStyle = appTheme == "Light mode" ? .light : .dark
+        }
+
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()
         // swiftlint: disable unused_optional_binding

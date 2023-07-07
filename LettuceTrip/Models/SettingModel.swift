@@ -15,7 +15,6 @@ struct SettingModel: Hashable {
 extension SettingModel {
     static let profileSettings = [
         SettingModel(title: String(localized: "Appearance"), image: UIImage(systemName: "paintbrush")),
-        SettingModel(title: String(localized: "Language"), image: UIImage(systemName: "globe")),
         SettingModel(title: String(localized: "Delete account"), image: UIImage(systemName: "person.crop.circle.badge.xmark")),
         SettingModel(title: String(localized: "Sign out"), image: UIImage(systemName: "rectangle.portrait.and.arrow.forward"))
     ]

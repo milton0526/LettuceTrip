@@ -65,12 +65,13 @@ extension LocationService: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         currentLocation = locations.last
-        print("Current location: \(currentLocation)")
         JGHudIndicator.shared.dismissHUD()
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         // Handle any errors that `CLLocationManager` returns.
+        JGHudIndicator.shared.dismissHUD()
+        JGHudIndicator.shared.showHud(type: .failure)
         print("locationManager error: \(error.localizedDescription)")
     }
 }

@@ -16,7 +16,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
 
     enum Item: Int {
         case appearance
-        case language
         case deleteAccount
         case signOut
     }
@@ -151,9 +150,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         case .appearance:
             let appearanceVC = AppearanceVC()
             navigationController?.pushViewController(appearanceVC, animated: true)
-        case .language:
-            break
-
         case .deleteAccount:
             let alert = UIAlertController(
                 title: String(localized: "Are you sure want to delete account?"),
