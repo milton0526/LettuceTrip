@@ -25,6 +25,7 @@
 		C454134D2A4A9937000D0685 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454134C2A4A9937000D0685 /* AuthManager.swift */; };
 		C480BDE82A56C3D100A1A7E5 /* BaseSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BDE72A56C3D100A1A7E5 /* BaseSettingViewController.swift */; };
 		C480BDEA2A56C56E00A1A7E5 /* AppearanceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BDE92A56C56E00A1A7E5 /* AppearanceVC.swift */; };
+		C480BDF42A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BDF32A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
 		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
@@ -112,6 +113,7 @@
 		C454134C2A4A9937000D0685 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		C480BDE72A56C3D100A1A7E5 /* BaseSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSettingViewController.swift; sourceTree = "<group>"; };
 		C480BDE92A56C56E00A1A7E5 /* AppearanceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceVC.swift; sourceTree = "<group>"; };
+		C480BDF32A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JGProgressHUD+Wrapper.swift"; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
@@ -345,6 +347,7 @@
 				C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */,
 				C45413402A497145000D0685 /* Date+Extension.swift */,
 				C4CBD4422A4FECA2009108C6 /* GMSPlace+Combine.swift */,
+				C480BDF32A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -591,6 +594,7 @@
 				C4DBE88E2A41BCAB002987CB /* PlaceAboutCell.swift in Sources */,
 				C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */,
 				C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */,
+				C480BDF42A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift in Sources */,
 				C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */,
 				C4CBD42D2A4FD097009108C6 /* GPlaceResponse.swift in Sources */,
 				C4CBD42F2A4FD122009108C6 /* GPlaceAPI.swift in Sources */,

@@ -36,6 +36,8 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         return collectionView
     }()
 
+    private lazy var placeHolder = makePlaceholder(text: String(localized: "There's nothing here!"))
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = String(localized: "Wish List")
@@ -84,6 +86,7 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
 
             switch result {
             case .success(let place):
+                self.placeHolder.isHidden = place.isEmpty ? false : true
                 self.places = place
 
                 DispatchQueue.main.async {

@@ -97,7 +97,7 @@ class FireStoreService {
         }
     }
 
-    func updatePlace(_ place: Place, to trip: Trip, update: Bool = false, completion: @escaping (Bool) -> Void) {
+    func updatePlace(_ place: Place, to trip: Trip, update: Bool = false, completion: @escaping (Error?) -> Void) {
         guard let tripID = trip.id else { return }
         let ref = database.collection(CollectionRef.trips.rawValue).document(tripID).collection(CollectionRef.places.rawValue)
 
@@ -108,10 +108,10 @@ class FireStoreService {
             } else {
                 try ref.addDocument(from: place)
             }
-            completion(true)
+            completion(nil)
             print("Successfully add new place at tripID: \(tripID)")
         } catch {
-            completion(false)
+            completion(error)
             print("Failed to add new place at tripID: \(tripID)")
         }
     }

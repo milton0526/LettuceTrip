@@ -102,6 +102,7 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private func fetchDetails() {
+        JGHudIndicator.shared.showHud(type: .loading())
         apiService
             .findPlaceFromText(place.name, location: place.coordinate)
             .compactMap(\.candidates.first?.placeID)
@@ -130,6 +131,7 @@ class PlaceDetailViewController: UIViewController {
                     self?.placePhotos.append(place)
                     if counter == photoIndices {
                         self?.tableView.reloadData()
+                        JGHudIndicator.shared.dismissHUD()
                     } else {
                         counter += 1
                     }
@@ -165,8 +167,12 @@ class PlaceDetailViewController: UIViewController {
                     title: trip.tripName,
                     style: .default) { [weak self] _ in
                         guard let self = self else { return }
-                        FireStoreService.shared.updatePlace(self.place, to: trip) { _ in
-                            // tell user if this place add to trip list
+                        FireStoreService.shared.updatePlace(self.place, to: trip) { error in
+                            if error != nil {
+                                JGHudIndicator.shared.showHud(type: .failure)
+                            } else {
+                                JGHudIndicator.shared.showHud(type: .success)
+                            }
                         }
                 }
                 actionSheet.addAction(updateAction)

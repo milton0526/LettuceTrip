@@ -16,11 +16,12 @@ class LocationService: NSObject {
     @objc dynamic var currentLocation: CLLocation?
 
     /// The view controller that presents any errors coming from location services.
-    weak var errorPresentationTarget: UIViewController?
+    weak var viewController: UIViewController?
 
     override init() {
         super.init()
         locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
     }
 
     private func displayLocationServicesDeniedAlert() {
@@ -40,7 +41,7 @@ class LocationService: NSObject {
         alert.addAction(openSettings)
         alert.addAction(cancel)
 
-        errorPresentationTarget?.present(alert, animated: true)
+        viewController?.present(alert, animated: true)
     }
 }
 
@@ -56,6 +57,7 @@ extension LocationService: CLLocationManagerDelegate {
             displayLocationServicesDeniedAlert()
         case .authorizedWhenInUse:
             locationManager.requestLocation()
+            JGHudIndicator.shared.showHud(type: .loading())
         default:
             print("Unknown location service status.")
         }
@@ -63,6 +65,8 @@ extension LocationService: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         currentLocation = locations.last
+        print("Current location: \(currentLocation)")
+        JGHudIndicator.shared.dismissHUD()
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

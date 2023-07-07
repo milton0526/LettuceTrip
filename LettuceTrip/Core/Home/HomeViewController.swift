@@ -33,6 +33,7 @@ class HomeViewController: UIViewController {
     private let refreshControl = UIRefreshControl()
     private var dataSource: UICollectionViewDiffableDataSource<Section, Trip>!
     private var shareTrips: [Trip] = []
+    private lazy var placeHolder = makePlaceholder(text: String(localized: "Oops! No one share there trip!🥲"))
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,6 +94,7 @@ class HomeViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let trips):
+                    self?.placeHolder.isHidden = trips.isEmpty ? false : true
                     self?.shareTrips = trips
                     self?.refreshControl.endRefreshing()
                     self?.updateSnapshot()
@@ -133,7 +135,12 @@ extension HomeViewController: UICollectionViewDelegate {
 extension HomeViewController: ItineraryCellDelegate {
 
     func reportAction(_ cell: ItineraryCell) {
-        print("Report clicked")
-        // Send report
+        let alertVC = UIAlertController(
+            title: String(localized: "We received your report!"),
+            message: String(localized: "Our team will check ASAP, Thanks!"),
+            preferredStyle: .alert)
+        let okAction = UIAlertAction(title: String(localized: "OK"), style: .default)
+        alertVC.addAction(okAction)
+        present(alertVC, animated: true)
     }
 }

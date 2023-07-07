@@ -195,11 +195,12 @@ class AddNewTripViewController: UIViewController {
                         }
                         self.copyPlaces(id, gap: gap)
                     } else {
+                        JGHudIndicator.shared.showHud(type: .success)
                         self.dismiss(animated: true)
                     }
 
-                case .failure(let error):
-                    self.showAlertToUser(error: error)
+                case .failure:
+                    JGHudIndicator.shared.showHud(type: .failure)
                 }
             }
         }
@@ -221,10 +222,10 @@ class AddNewTripViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    print("Success copy place into new trip")
+                    JGHudIndicator.shared.showHud(type: .success)
                     self.dismiss(animated: true)
-                case .failure(let error):
-                    self.showAlertToUser(error: error)
+                case .failure:
+                    JGHudIndicator.shared.showHud(type: .failure)
                 }
             }
         }

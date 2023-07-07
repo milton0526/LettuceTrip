@@ -180,8 +180,10 @@ class EditTripViewController: UIViewController {
             trip.isPublic = true
 
             FireStoreService.shared.updateTrip(trip: trip) { error in
-                if let error = error {
-                    self.showAlertToUser(error: error)
+                if error == nil {
+                    JGHudIndicator.shared.showHud(type: .success)
+                } else {
+                    JGHudIndicator.shared.showHud(type: .failure)
                 }
             }
         }
@@ -271,7 +273,9 @@ class EditTripViewController: UIViewController {
         snapshot.appendSections([.main])
         snapshot.appendItems(sortedPlaces)
         // use snapshot reload method to avoid weird animation
-        dataSource.applySnapshotUsingReloadData(snapshot)
+        dataSource.apply(snapshot, animatingDifferences: false) {
+            JGHudIndicator.shared.dismissHUD()
+        }
     }
 
     private func filterPlace(by date: Date) {
@@ -289,6 +293,7 @@ class EditTripViewController: UIViewController {
             return
         }
 
+        JGHudIndicator.shared.showHud(type: .loading(text: "Calculate..."))
         estimatedTimes = [:]
         for i in 1..<sortedPlaces.count {
             let source = sortedPlaces[i - 1]
@@ -398,7 +403,7 @@ extension EditTripViewController: UITableViewDropDelegate {
                         destinationItem.arrangedTime = date
 
                         FireStoreService.shared.batchUpdateInOrder(at: trip, from: sourceItem, to: destinationItem) { _ in
-                            print("Ha Ha, that's some easy.")
+                            // Maybe do nothing
                         }
                     }
                 }
