@@ -12,6 +12,7 @@ enum AppTheme: Int {
 
     case light
     case dark
+    case followSystem
 
     var mode: String {
         switch self {
@@ -19,6 +20,8 @@ enum AppTheme: Int {
             return "Light mode"
         case .dark:
             return "Dark mode"
+        case .followSystem:
+            return "Follow system"
         }
     }
 }
@@ -28,7 +31,11 @@ class AppearanceVC: BaseSettingViewController {
     private var themeModels = SettingModel.theme
 
     private var currentTheme: Int {
-        UITraitCollection.current.userInterfaceStyle == .light ? 0 : 1
+        if UserDefaults.standard.string(forKey: AppTheme.key) == AppTheme.followSystem.mode {
+            return 2
+        } else {
+            return UITraitCollection.current.userInterfaceStyle == .light ? 0 : 1
+        }
     }
 
     var keyWindow: UIWindow? {
@@ -70,7 +77,13 @@ class AppearanceVC: BaseSettingViewController {
         guard let selected = AppTheme(rawValue: indexPath.item) else { return }
 
         if indexPath.item != currentTheme {
-            keyWindow?.overrideUserInterfaceStyle = selected.mode == "Light mode" ? .light : .dark
+            if selected.mode == AppTheme.followSystem.mode {
+                keyWindow?.overrideUserInterfaceStyle = .unspecified
+                UserDefaults.standard.removeObject(forKey: AppTheme.key)
+            } else {
+                keyWindow?.overrideUserInterfaceStyle = selected.mode == AppTheme.light.mode ? .light : .dark
+            }
+
             UserDefaults.standard.setValue(selected.mode, forKey: AppTheme.key)
             updateSnapshot()
         }

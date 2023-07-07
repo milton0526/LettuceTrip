@@ -21,6 +21,7 @@ extension SettingModel {
 
     static let theme = [
         SettingModel(title: String(localized: "Light mode"), image: UIImage(systemName: "lightbulb")),
-        SettingModel(title: String(localized: "Dark mode"), image: UIImage(systemName: "lightbulb.slash"))
+        SettingModel(title: String(localized: "Dark mode"), image: UIImage(systemName: "lightbulb.slash")),
+        SettingModel(title: String(localized: "Follow system"), image: UIImage(systemName: "iphone"))
     ]
 }

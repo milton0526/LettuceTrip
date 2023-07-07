@@ -178,7 +178,7 @@ class PlaceDetailViewController: UIViewController {
                 actionSheet.addAction(updateAction)
             }
 
-        let createAction = UIAlertAction(title: "🆕 Create new trip", style: .default) { [weak self] _ in
+        let createAction = UIAlertAction(title: String(localized: "Create new trip"), style: .default) { [weak self] _ in
             self?.showAddNewTripVC()
         }
         actionSheet.addAction(createAction)
