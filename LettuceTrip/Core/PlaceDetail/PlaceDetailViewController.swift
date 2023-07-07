@@ -165,8 +165,12 @@ class PlaceDetailViewController: UIViewController {
                     title: trip.tripName,
                     style: .default) { [weak self] _ in
                         guard let self = self else { return }
-                        FireStoreService.shared.updatePlace(self.place, to: trip) { _ in
-                            // tell user if this place add to trip list
+                        FireStoreService.shared.updatePlace(self.place, to: trip) { error in
+                            if error != nil {
+                                JGHudIndicator.shared.showHud(type: .failure)
+                            } else {
+                                JGHudIndicator.shared.showHud(type: .success)
+                            }
                         }
                 }
                 actionSheet.addAction(updateAction)

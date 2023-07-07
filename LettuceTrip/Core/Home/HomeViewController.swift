@@ -133,7 +133,12 @@ extension HomeViewController: UICollectionViewDelegate {
 extension HomeViewController: ItineraryCellDelegate {
 
     func reportAction(_ cell: ItineraryCell) {
-        print("Report clicked")
-        // Send report
+        let alertVC = UIAlertController(
+            title: String(localized: "We received your report!"),
+            message: String(localized: "Our team will check ASAP, Thanks!"),
+            preferredStyle: .alert)
+        let okAction = UIAlertAction(title: String(localized: "OK"), style: .default)
+        alertVC.addAction(okAction)
+        present(alertVC, animated: true)
     }
 }

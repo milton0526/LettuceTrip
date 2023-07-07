@@ -52,7 +52,7 @@ class DiscoverViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        locationService.errorPresentationTarget = self
+        locationService.viewController = self
         configMapView()
         setupUI()
     }
@@ -82,7 +82,7 @@ class DiscoverViewController: UIViewController {
                 let value = change.newValue,
                 let location = value
             else { return }
-
+            
             self.currentLocation = location
         }
     }
