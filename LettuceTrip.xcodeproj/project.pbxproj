@@ -28,6 +28,8 @@
 		C480BDF42A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BDF32A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift */; };
 		C480BDFD2A58221C00A1A7E5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C480BDFB2A58221C00A1A7E5 /* InfoPlist.strings */; };
 		C480BE002A58221C00A1A7E5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C480BDFE2A58221C00A1A7E5 /* Localizable.strings */; };
+		C480BE032A590A9500A1A7E5 /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE022A590A9500A1A7E5 /* FirestoreManager.swift */; };
+		C480BE062A590B0100A1A7E5 /* FirebaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE052A590B0100A1A7E5 /* FirebaseHelper.swift */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
 		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
@@ -120,6 +122,8 @@
 		C480BDFA2A581D1300A1A7E5 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		C480BDFC2A58221C00A1A7E5 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		C480BDFF2A58221C00A1A7E5 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		C480BE022A590A9500A1A7E5 /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
+		C480BE052A590B0100A1A7E5 /* FirebaseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseHelper.swift; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
@@ -209,6 +213,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C480BE012A590A8300A1A7E5 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				C480BE022A590A9500A1A7E5 /* FirestoreManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		C480BE042A590AF200A1A7E5 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				C480BE052A590B0100A1A7E5 /* FirebaseHelper.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		C4C0F0562A512182002F59B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -268,6 +288,8 @@
 				C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */,
 				C4DBE8492A41B32F002987CB /* Extensions */,
 				C4DBE87E2A41BB9C002987CB /* Services */,
+				C480BE042A590AF200A1A7E5 /* Helpers */,
+				C480BE012A590A8300A1A7E5 /* Managers */,
 				C4DBE87B2A41BB68002987CB /* Models */,
 				C4DBE83A2A41B1A0002987CB /* Core */,
 			);
@@ -630,10 +652,12 @@
 				C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */,
 				C4DBE8902A41BCC3002987CB /* PlaceAboutCellViewModel.swift in Sources */,
 				C4DBE8462A41B312002987CB /* ItineraryHeaderView.swift in Sources */,
+				C480BE032A590A9500A1A7E5 /* FirestoreManager.swift in Sources */,
 				C4DBE8882A41BC60002987CB /* PlaceDetailViewController.swift in Sources */,
 				C4CC0BFE2A481E0100E03758 /* ScheduleView.swift in Sources */,
 				C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */,
 				C4CC0C002A48255B00E03758 /* WishListViewController.swift in Sources */,
+				C480BE062A590B0100A1A7E5 /* FirebaseHelper.swift in Sources */,
 				C4DBE8822A41BC02002987CB /* RoundedTextField.swift in Sources */,
 				C4DBE8962A41BD00002987CB /* UITableView+Identifier.swift in Sources */,
 				C4DBE8AF2A41D696002987CB /* SelectionViewDelegate.swift in Sources */,

@@ -19,7 +19,6 @@ class FireStoreService {
     enum CollectionRef: String {
         case users
         case trips
-        case shareTrips
         case chatRoom
         case places
     }
