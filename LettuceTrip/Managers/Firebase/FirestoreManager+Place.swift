@@ -1,0 +1,136 @@
+//
+//  FirestoreManager+Place.swift
+//  LettuceTrip
+//
+//  Created by Milton Liu on 2023/7/8.
+//
+
+import Foundation
+import Combine
+import FirebaseFirestore
+
+extension FirestoreManager {
+
+    func updatePlace(_ place: Place, at tripId: String, isUpdate: Bool = false) -> AnyPublisher<Void, Error> {
+        guard let placeId = place.id else {
+            return Fail(error: FirebaseError.wrongId(place.id)).eraseToAnyPublisher()
+        }
+
+        let subDirectory = SubDirectory(documentId: tripId, collection: .places)
+        let ref = FirestoreHelper.makeCollectionRef(database, at: .trips, inside: subDirectory)
+
+        return Future { promise in
+            do {
+                if isUpdate {
+                    try ref.document(placeId).setData(from: place, merge: true) { error in
+                        guard error == nil else {
+                            return promise(.failure(FirebaseError.update("Place")))
+                        }
+                        promise(.success(()))
+                    }
+                } else {
+                    try ref.addDocument(from: place) { error in
+                        guard error == nil else {
+                            return promise(.failure(FirebaseError.update("Place")))
+                        }
+                        promise(.success(()))
+                    }
+                }
+            } catch {
+                promise(.failure(error))
+            }
+        }.eraseToAnyPublisher()
+    }
+
+    func copyPlaces(at tripID: String, with places: [Place]) -> AnyPublisher<Void, Error> {
+        let batch = database.batch()
+        let subDirectory = SubDirectory(documentId: tripID, collection: .places)
+        let baseRef = FirestoreHelper.makeCollectionRef(database, at: .trips, inside: subDirectory)
+
+        places.forEach { place in
+            if let placeID = place.id {
+                do {
+                    try batch.setData(from: place, forDocument: baseRef.document(placeID))
+                } catch {
+                    print("Error set batch update copy places: \(error.localizedDescription)")
+                }
+            }
+        }
+
+        return Future { promise in
+            batch.commit { error in
+                guard error == nil else {
+                    return promise(.failure(FirebaseError.copy))
+                }
+                promise(.success(()))
+            }
+        }.eraseToAnyPublisher()
+    }
+
+    func batchUpdatePlaces(at trip: Trip, from source: Place, to destination: Place) -> AnyPublisher<Void, Error> {
+        guard
+            let tripId = trip.id,
+            let sourceId = source.id,
+            let destinationId = destination.id
+        else {
+            return Fail(error: FirebaseError.update("Batch update place.")).eraseToAnyPublisher()
+        }
+
+        let batch = database.batch()
+        let subDirectory = SubDirectory(documentId: tripId, collection: .places)
+        let baseRef = FirestoreHelper.makeCollectionRef(database, at: .trips, inside: subDirectory)
+
+        do {
+            try batch.setData(from: source, forDocument: baseRef.document(sourceId), merge: true)
+            try batch.setData(from: destination, forDocument: baseRef.document(destinationId), merge: true)
+        } catch {
+            print("Error set batch update items: \(error.localizedDescription)")
+        }
+
+        return Future { promise in
+            batch.commit { error in
+                guard error == nil else {
+                    return promise(.failure(FirebaseError.update("Batch update places")))
+                }
+                promise(.success(()))
+            }
+        }.eraseToAnyPublisher()
+    }
+
+    func placeListener(at tripId: String, isArrange: Bool = true, completion: @escaping (Result<[Place], Error>) -> Void) -> ListenerRegistration {
+        let subDirectory = SubDirectory(documentId: tripId, collection: .places)
+        let ref = FirestoreHelper.makeCollectionRef(database, at: .trips, inside: subDirectory)
+        var allPlaces: [Place] = []
+
+        let listener = ref.whereField("isArrange", isEqualTo: isArrange)
+            .addSnapshotListener { snapshot, error in
+                guard error == nil else {
+                    completion(.failure(FirebaseError.listenerError("Place")))
+                    return
+                }
+
+                snapshot?.documentChanges.forEach { diff in
+                    do {
+                        let place = try diff.document.data(as: Place.self)
+
+                        switch diff.type {
+                        case .added:
+                            allPlaces.append(place)
+                        case .modified:
+                            if let index = allPlaces.firstIndex(where: { $0.id == place.id }) {
+                                allPlaces[index].arrangedTime = place.arrangedTime
+                            }
+                        case .removed:
+                            if let index = allPlaces.firstIndex(where: { $0.id == place.id }) {
+                                allPlaces.remove(at: index)
+                            }
+                        }
+                    } catch {
+                        completion(.failure(error))
+                    }
+                    completion(.success(allPlaces))
+                }
+            }
+        return listener
+    }
+}

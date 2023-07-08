@@ -31,6 +31,9 @@
 		C480BE032A590A9500A1A7E5 /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE022A590A9500A1A7E5 /* FirestoreManager.swift */; };
 		C480BE062A590B0100A1A7E5 /* FirestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE052A590B0100A1A7E5 /* FirestoreHelper.swift */; };
 		C480BE0F2A591AFD00A1A7E5 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE0E2A591AFD00A1A7E5 /* FirebaseError.swift */; };
+		C480BE1C2A596CA500A1A7E5 /* FirestoreManager+User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE1B2A596CA500A1A7E5 /* FirestoreManager+User.swift */; };
+		C480BE1E2A5972C100A1A7E5 /* FirestoreManager+Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE1D2A5972C100A1A7E5 /* FirestoreManager+Place.swift */; };
+		C480BE212A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE202A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
 		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
@@ -126,6 +129,9 @@
 		C480BE022A590A9500A1A7E5 /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
 		C480BE052A590B0100A1A7E5 /* FirestoreHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreHelper.swift; sourceTree = "<group>"; };
 		C480BE0E2A591AFD00A1A7E5 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
+		C480BE1B2A596CA500A1A7E5 /* FirestoreManager+User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreManager+User.swift"; sourceTree = "<group>"; };
+		C480BE1D2A5972C100A1A7E5 /* FirestoreManager+Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreManager+Place.swift"; sourceTree = "<group>"; };
+		C480BE202A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreManager+ChatRoom.swift"; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
@@ -218,7 +224,7 @@
 		C480BE012A590A8300A1A7E5 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				C480BE022A590A9500A1A7E5 /* FirestoreManager.swift */,
+				C480BE1F2A5972FC00A1A7E5 /* Firebase */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -229,6 +235,26 @@
 				C480BE052A590B0100A1A7E5 /* FirestoreHelper.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		C480BE1A2A596C3000A1A7E5 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				C4DBE87C2A41BB81002987CB /* LTError.swift */,
+				C480BE0E2A591AFD00A1A7E5 /* FirebaseError.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		C480BE1F2A5972FC00A1A7E5 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				C480BE022A590A9500A1A7E5 /* FirestoreManager.swift */,
+				C480BE1D2A5972C100A1A7E5 /* FirestoreManager+Place.swift */,
+				C480BE202A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift */,
+				C480BE1B2A596CA500A1A7E5 /* FirestoreManager+User.swift */,
+			);
+			path = Firebase;
 			sourceTree = "<group>";
 		};
 		C4C0F0562A512182002F59B3 /* Frameworks */ = {
@@ -387,12 +413,11 @@
 		C4DBE87B2A41BB68002987CB /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C4DBE87C2A41BB81002987CB /* LTError.swift */,
+				C480BE1A2A596C3000A1A7E5 /* Errors */,
 				C4DBE8C72A42D446002987CB /* User.swift */,
 				C4DBE8C92A42D49B002987CB /* Trip.swift */,
 				C48E488F2A4C2A3D00949E08 /* SettingModel.swift */,
 				C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */,
-				C480BE0E2A591AFD00A1A7E5 /* FirebaseError.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -648,8 +673,11 @@
 				C4DBE8AE2A41D696002987CB /* SelectionView.swift in Sources */,
 				C45413442A4A7FF0000D0685 /* SignInViewController.swift in Sources */,
 				C4DBE8252A41AF62002987CB /* HomeViewController.swift in Sources */,
+				C480BE212A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift in Sources */,
+				C480BE1C2A596CA500A1A7E5 /* FirestoreManager+User.swift in Sources */,
 				C42F51D22A46ADDB00023305 /* UINavigationBar+Extension.swift in Sources */,
 				C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */,
+				C480BE1E2A5972C100A1A7E5 /* FirestoreManager+Place.swift in Sources */,
 				C4DBE8352A41B18B002987CB /* DiscoverViewController.swift in Sources */,
 				C480BE0F2A591AFD00A1A7E5 /* FirebaseError.swift in Sources */,
 				C4DBE8B22A41DD83002987CB /* TripCell.swift in Sources */,

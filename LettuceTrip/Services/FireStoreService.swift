@@ -31,23 +31,12 @@ class FireStoreService {
         // Auth.auth().currentUser?.uid
     }
 
-    func signOut(completion: @escaping (Error?) -> Void) {
-        let firebaseAuth = Auth.auth()
-        do {
-            try firebaseAuth.signOut()
-            completion(nil)
-        } catch {
-            completion(error)
-            print("Error signing out: \(error.localizedDescription)")
-        }
-    }
-
-    func createUser(id: String, user: User, completion: @escaping (Result<User, Error>) -> Void) {
+    func createUser(id: String, user: User, completion: @escaping (Result<Void, Error>) -> Void) {
         let ref = database.collection(CollectionRef.users.rawValue)
 
         do {
             try ref.document(id).setData(from: user)
-            completion(.success(user))
+            completion(.success(()))
         } catch {
             print("Failed to add new user to Firebase")
             completion(.failure(error))

@@ -16,6 +16,7 @@ enum FirebaseError: LocalizedError {
     case copy
     case delete
     case get
+    case user(String)
 
     var errorDescription: String? {
         switch self {
@@ -34,7 +35,9 @@ enum FirebaseError: LocalizedError {
         case .delete:
             return String(localized: "Failed to delete.")
         case .get:
-            return String(localized: "Failed to get delete.")
+            return String(localized: "Failed to get data.")
+        case .user(let type):
+            return String(localized: "Error message: \(type).")
         }
     }
 }

@@ -29,6 +29,17 @@ class AuthManager: NSObject {
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
     }
+
+    func signOut(completion: @escaping (Error?) -> Void) {
+        let firebaseAuth = Auth.auth()
+        do {
+            try firebaseAuth.signOut()
+            completion(nil)
+        } catch {
+            completion(error)
+            print("Error signing out: \(error.localizedDescription)")
+        }
+    }
 }
 
 extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {

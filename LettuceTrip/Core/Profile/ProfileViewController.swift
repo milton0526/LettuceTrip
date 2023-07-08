@@ -120,7 +120,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
     private func confirmSignOut() {
         let alert = UIAlertController(title: String(localized: "Are you sure want to sign out?"), message: nil, preferredStyle: .alert)
         let sure = UIAlertAction(title: String(localized: "Sure"), style: .default) { [weak self] _ in
-            FireStoreService.shared.signOut { error in
+            self?.authManager.signOut { error in
                 DispatchQueue.main.async {
                     if let error = error {
                         self?.showAlertToUser(error: error)
