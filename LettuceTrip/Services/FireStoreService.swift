@@ -54,26 +54,26 @@ class FireStoreService {
         }
     }
 
-    func updateDeviceToken(token: String?) {
-        guard
-            let currentUser = currentUser,
-            let token = token
-        else {
-            return
-        }
-
-        let ref = database.collection(CollectionRef.users.rawValue).document(currentUser)
-
-        ref.updateData([
-            "deviceToken": token
-        ]) { error in
-            if let error = error {
-                print("Error update device token: \(error.localizedDescription)")
-            } else {
-                print("Successfully update device token.")
-            }
-        }
-    }
+//    func updateDeviceToken(token: String?) {
+//        guard
+//            let currentUser = currentUser,
+//            let token = token
+//        else {
+//            return
+//        }
+//
+//        let ref = database.collection(CollectionRef.users.rawValue).document(currentUser)
+//
+//        ref.updateData([
+//            "deviceToken": token
+//        ]) { error in
+//            if let error = error {
+//                print("Error update device token: \(error.localizedDescription)")
+//            } else {
+//                print("Successfully update device token.")
+//            }
+//        }
+//    }
 
     func deleteUserInFireStore() {
         guard let currentUser = currentUser else { return }

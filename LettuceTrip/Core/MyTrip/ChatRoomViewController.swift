@@ -44,9 +44,6 @@ class ChatRoomViewController: UIViewController {
     private var chatMessages: [Message] = []
     private var messageListener: ListenerRegistration?
 
-    private var cancelBags = Set<AnyCancellable>()
-    private let manager = FirestoreManager()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -189,36 +186,22 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func fetchMessages() {
-        guard let tripId = trip?.id else { return }
-//
-//        let (listener, result) = manager.chatRoomListener(tripId)
-//        messageListener = listener
-//        result
-//            .sink { completion in
-//                self.updateSnapshot()
-//            } receiveValue: { messages in
-//                self.chatMessages = messages
-//            }
-//            .store(in: &cancelBags)
-    }
+        guard let tripID = trip?.id else { return }
 
-//    private func fetchMessages() {
-//        guard let tripID = trip?.id else { return }
-//
-//        messageListener = FireStoreService.shared.addListenerToChatRoom(by: tripID) { [weak self] result in
-//            guard let self = self else { return }
-//
-//            switch result {
-//            case .success(let messages):
-//                self.chatMessages = messages
-//
-//                DispatchQueue.main.async {
-//                    self.updateSnapshot()
-//                }
-//
-//            case .failure(let error):
-//                self.showAlertToUser(error: error)
-//            }
-//        }
-//    }
+        messageListener = FireStoreService.shared.addListenerToChatRoom(by: tripID) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let messages):
+                self.chatMessages = messages
+
+                DispatchQueue.main.async {
+                    self.updateSnapshot()
+                }
+
+            case .failure(let error):
+                self.showAlertToUser(error: error)
+            }
+        }
+    }
 }

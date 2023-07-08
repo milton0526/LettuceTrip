@@ -10,10 +10,12 @@ import Foundation
 enum FirebaseError: LocalizedError {
     case wrongId(String?)
     case createTrip
-    case updateTrip
-    case updatePlace
+    case update(String)
     case sendMessage
     case listenerError(String)
+    case copy
+    case delete
+    case get
 
     var errorDescription: String? {
         switch self {
@@ -21,14 +23,18 @@ enum FirebaseError: LocalizedError {
             return "Trip ID error :\(id ?? "No Id")."
         case .createTrip:
             return String(localized: "Failed to create new trip.")
-        case .updateTrip:
-            return String(localized: "Failed to update trip.")
-        case .updatePlace:
-            return String(localized: "Failed to update place.")
+        case .update(let type):
+            return String(localized: "Failed to update \(type).")
         case .sendMessage:
             return String(localized: "Failed to send message.")
         case .listenerError(let listener):
             return "Listener at \(listener) error."
+        case .copy:
+            return String(localized: "Failed to copy places.")
+        case .delete:
+            return String(localized: "Failed to delete.")
+        case .get:
+            return String(localized: "Failed to get delete.")
         }
     }
 }
