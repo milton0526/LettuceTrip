@@ -29,7 +29,8 @@
 		C480BDFD2A58221C00A1A7E5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C480BDFB2A58221C00A1A7E5 /* InfoPlist.strings */; };
 		C480BE002A58221C00A1A7E5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C480BDFE2A58221C00A1A7E5 /* Localizable.strings */; };
 		C480BE032A590A9500A1A7E5 /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE022A590A9500A1A7E5 /* FirestoreManager.swift */; };
-		C480BE062A590B0100A1A7E5 /* FirebaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE052A590B0100A1A7E5 /* FirebaseHelper.swift */; };
+		C480BE062A590B0100A1A7E5 /* FirestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE052A590B0100A1A7E5 /* FirestoreHelper.swift */; };
+		C480BE0F2A591AFD00A1A7E5 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE0E2A591AFD00A1A7E5 /* FirebaseError.swift */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
 		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
@@ -123,7 +124,8 @@
 		C480BDFC2A58221C00A1A7E5 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		C480BDFF2A58221C00A1A7E5 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		C480BE022A590A9500A1A7E5 /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
-		C480BE052A590B0100A1A7E5 /* FirebaseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseHelper.swift; sourceTree = "<group>"; };
+		C480BE052A590B0100A1A7E5 /* FirestoreHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreHelper.swift; sourceTree = "<group>"; };
+		C480BE0E2A591AFD00A1A7E5 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
@@ -224,7 +226,7 @@
 		C480BE042A590AF200A1A7E5 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				C480BE052A590B0100A1A7E5 /* FirebaseHelper.swift */,
+				C480BE052A590B0100A1A7E5 /* FirestoreHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -390,6 +392,7 @@
 				C4DBE8C92A42D49B002987CB /* Trip.swift */,
 				C48E488F2A4C2A3D00949E08 /* SettingModel.swift */,
 				C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */,
+				C480BE0E2A591AFD00A1A7E5 /* FirebaseError.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -648,6 +651,7 @@
 				C42F51D22A46ADDB00023305 /* UINavigationBar+Extension.swift in Sources */,
 				C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */,
 				C4DBE8352A41B18B002987CB /* DiscoverViewController.swift in Sources */,
+				C480BE0F2A591AFD00A1A7E5 /* FirebaseError.swift in Sources */,
 				C4DBE8B22A41DD83002987CB /* TripCell.swift in Sources */,
 				C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */,
 				C4DBE8902A41BCC3002987CB /* PlaceAboutCellViewModel.swift in Sources */,
@@ -657,7 +661,7 @@
 				C4CC0BFE2A481E0100E03758 /* ScheduleView.swift in Sources */,
 				C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */,
 				C4CC0C002A48255B00E03758 /* WishListViewController.swift in Sources */,
-				C480BE062A590B0100A1A7E5 /* FirebaseHelper.swift in Sources */,
+				C480BE062A590B0100A1A7E5 /* FirestoreHelper.swift in Sources */,
 				C4DBE8822A41BC02002987CB /* RoundedTextField.swift in Sources */,
 				C4DBE8962A41BD00002987CB /* UITableView+Identifier.swift in Sources */,
 				C4DBE8AF2A41D696002987CB /* SelectionViewDelegate.swift in Sources */,

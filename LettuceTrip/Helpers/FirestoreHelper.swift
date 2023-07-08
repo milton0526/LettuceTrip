@@ -1,31 +1,28 @@
 //
-//  FirebaseHelper.swift
+//  FirestoreHelper.swift
 //  LettuceTrip
 //
 //  Created by Milton Liu on 2023/7/8.
 //
 
 import Foundation
+import Combine
 import FirebaseFirestore
 
-enum FirebaseHelper {
+struct SubDirectory {
+    let documentId: String
+    let collection: FirestoreHelper
+}
 
-    enum Collection: String {
-        case users
-        case trips
-        case chatRoom
-        case places
-    }
-
-    struct SubDirectory {
-        let documentId: String
-        let collection: Collection
-    }
-
+enum FirestoreHelper: String {
+    case users
+    case trips
+    case chatRoom
+    case places
 
     static func makeCollectionRef(
         _ database: Firestore,
-        at root: Collection,
+        at root: FirestoreHelper,
         inside subDirectory: SubDirectory? = nil
     ) -> CollectionReference {
 

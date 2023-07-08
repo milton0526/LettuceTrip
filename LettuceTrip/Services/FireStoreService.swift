@@ -234,27 +234,6 @@ class FireStoreService {
         }
     }
 
-    func getAllDocuments<T: Decodable>(from collection: CollectionRef, completion: @escaping (Result<[T], Error>) -> Void) {
-        let ref = database.collection(collection.rawValue)
-        var results: [T] = []
-
-        ref.getDocuments { snapshot, error in
-            if let error = error {
-                print("Error get all documents in \(collection.rawValue)")
-                completion(.failure(error))
-            } else {
-                guard let snapshot = snapshot else { return }
-
-                snapshot.documents.forEach { doc in
-                    if let data = try? doc.data(as: T.self) {
-                        results.append(data)
-                    }
-                }
-                completion(.success(results))
-            }
-        }
-    }
-
     func getUserData(userId: String?, completion: @escaping (Result<User, Error>) -> Void) {
         guard let userId = userId else { return }
         let ref = database.collection(CollectionRef.users.rawValue)
