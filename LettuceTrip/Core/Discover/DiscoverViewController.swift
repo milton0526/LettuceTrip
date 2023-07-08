@@ -82,7 +82,7 @@ class DiscoverViewController: UIViewController {
                 let value = change.newValue,
                 let location = value
             else { return }
-            
+
             self.currentLocation = location
         }
     }
