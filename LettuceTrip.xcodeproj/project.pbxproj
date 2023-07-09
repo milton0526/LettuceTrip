@@ -36,8 +36,8 @@
 		C480BE212A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE202A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift */; };
 		C480BE232A5981CD00A1A7E5 /* ChatRoomVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE222A5981CD00A1A7E5 /* ChatRoomVM.swift */; };
 		C480BE2E2A5A581000A1A7E5 /* UnsplashPhotoPicker in Frameworks */ = {isa = PBXBuildFile; productRef = C480BE2D2A5A581000A1A7E5 /* UnsplashPhotoPicker */; };
-		C480BE302A5A588300A1A7E5 /* UpslashKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = C480BE2F2A5A588300A1A7E5 /* UpslashKeys.plist */; };
-		C480BE322A5A59F500A1A7E5 /* UpslashKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE312A5A59F500A1A7E5 /* UpslashKey.swift */; };
+		C480BE302A5A588300A1A7E5 /* UnsplashKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = C480BE2F2A5A588300A1A7E5 /* UnsplashKeys.plist */; };
+		C480BE322A5A59F500A1A7E5 /* UnsplashKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE312A5A59F500A1A7E5 /* UnsplashKey.swift */; };
 		C480BE352A5A5FDD00A1A7E5 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C480BE342A5A5FDD00A1A7E5 /* SDWebImage */; };
 		C480BE382A5A805000A1A7E5 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = C480BE372A5A805000A1A7E5 /* CombineCocoa */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
@@ -137,8 +137,8 @@
 		C480BE1D2A5972C100A1A7E5 /* FirestoreManager+Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreManager+Place.swift"; sourceTree = "<group>"; };
 		C480BE202A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreManager+ChatRoom.swift"; sourceTree = "<group>"; };
 		C480BE222A5981CD00A1A7E5 /* ChatRoomVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomVM.swift; sourceTree = "<group>"; };
-		C480BE2F2A5A588300A1A7E5 /* UpslashKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = UpslashKeys.plist; sourceTree = "<group>"; };
-		C480BE312A5A59F500A1A7E5 /* UpslashKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpslashKey.swift; sourceTree = "<group>"; };
+		C480BE2F2A5A588300A1A7E5 /* UnsplashKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = UnsplashKeys.plist; sourceTree = "<group>"; };
+		C480BE312A5A59F500A1A7E5 /* UnsplashKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashKey.swift; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
@@ -318,7 +318,7 @@
 				C480BDFE2A58221C00A1A7E5 /* Localizable.strings */,
 				C480BDFB2A58221C00A1A7E5 /* InfoPlist.strings */,
 				C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */,
-				C480BE2F2A5A588300A1A7E5 /* UpslashKeys.plist */,
+				C480BE2F2A5A588300A1A7E5 /* UnsplashKeys.plist */,
 				C4DBE89E2A41C0E3002987CB /* GoogleService-Info.plist */,
 				C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */,
 				C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */,
@@ -427,7 +427,7 @@
 				C4DBE8C92A42D49B002987CB /* Trip.swift */,
 				C48E488F2A4C2A3D00949E08 /* SettingModel.swift */,
 				C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */,
-				C480BE312A5A59F500A1A7E5 /* UpslashKey.swift */,
+				C480BE312A5A59F500A1A7E5 /* UnsplashKey.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -595,7 +595,7 @@
 				C4DBE82D2A41AF63002987CB /* LaunchScreen.storyboard in Resources */,
 				C480BDFD2A58221C00A1A7E5 /* InfoPlist.strings in Resources */,
 				C4DBE82A2A41AF63002987CB /* Assets.xcassets in Resources */,
-				C480BE302A5A588300A1A7E5 /* UpslashKeys.plist in Resources */,
+				C480BE302A5A588300A1A7E5 /* UnsplashKeys.plist in Resources */,
 				C4DBE8282A41AF62002987CB /* Main.storyboard in Resources */,
 				C480BE002A58221C00A1A7E5 /* Localizable.strings in Resources */,
 				C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */,
@@ -718,7 +718,7 @@
 				C4DBE8C62A42D391002987CB /* FireStoreService.swift in Sources */,
 				C4CC0C042A48465300E03758 /* ArrangePlaceViewController.swift in Sources */,
 				C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */,
-				C480BE322A5A59F500A1A7E5 /* UpslashKey.swift in Sources */,
+				C480BE322A5A59F500A1A7E5 /* UnsplashKey.swift in Sources */,
 				C4DBE8D22A43E116002987CB /* MKPlaceMark+Extension.swift in Sources */,
 				C4DBE8C82A42D446002987CB /* LTUser.swift in Sources */,
 				C42F51B02A454D5F00023305 /* LocationService.swift in Sources */,

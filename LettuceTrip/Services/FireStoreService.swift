@@ -26,9 +26,7 @@ class FireStoreService {
     private let database = Firestore.firestore()
 
     var currentUser: String? {
-        // Test user id
-        "LpDb7nvzvSZZcTtJZOld4OS3aEB3"
-        // Auth.auth().currentUser?.uid
+        Auth.auth().currentUser?.uid
     }
 
     func createUser(id: String, user: LTUser, completion: @escaping (Result<Void, Error>) -> Void) {

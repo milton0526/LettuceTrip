@@ -211,14 +211,14 @@ class EditTripViewController: UIViewController {
             title: String(localized: "Choose image from"),
             message: nil,
             preferredStyle: .actionSheet)
-        let upSlashSource = UIAlertAction(title: "Upslash", style: .default) { [unowned self] _ in
-            guard let url = Bundle.main.url(forResource: "UpslashKeys", withExtension: "plist") else {
+        let unSplashSource = UIAlertAction(title: "Unsplash", style: .default) { [unowned self] _ in
+            guard let url = Bundle.main.url(forResource: "UnsplashKeys", withExtension: "plist") else {
                 return
             }
 
             do {
                 let data = try Data(contentsOf: url)
-                let result = try PropertyListDecoder().decode(UpslashKey.self, from: data)
+                let result = try PropertyListDecoder().decode(UnsplashKey.self, from: data)
                 let config = UnsplashPhotoPickerConfiguration(accessKey: result.accessKey, secretKey: result.secretKey)
                 let photoPicker = UnsplashPhotoPicker(configuration: config)
                 photoPicker.photoPickerDelegate = self
@@ -240,7 +240,7 @@ class EditTripViewController: UIViewController {
 
         let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
 
-        actionSheetVC.addAction(upSlashSource)
+        actionSheetVC.addAction(unSplashSource)
         actionSheetVC.addAction(photoLibrary)
         actionSheetVC.addAction(cancel)
         present(actionSheetVC, animated: true)
@@ -491,9 +491,9 @@ extension EditTripViewController: PHPickerViewControllerDelegate {
 extension EditTripViewController: UnsplashPhotoPickerDelegate {
 
     func unsplashPhotoPicker(_ photoPicker: UnsplashPhotoPicker, didSelectPhotos photos: [UnsplashPhoto]) {
-        guard let photo = photos.first?.urls[.small] else { return }
+        guard let photo = photos.first?.urls[.regular] else { return }
         imageView.sd_setImage(with: photo) { image, error, _, _ in
-            if let image = image, let imageData = image.jpegData(compressionQuality: 0.1) {
+            if let image = image, let imageData = image.jpegData(compressionQuality: 0.3) {
                 self.trip.image = imageData
                 FireStoreService.shared.updateTrip(trip: self.trip) { error in
                     if let error = error {
