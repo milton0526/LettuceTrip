@@ -29,7 +29,16 @@
 "Are you sure want to sign out?" = "確定要登出嗎？";
 
 /* No comment provided by engineer. */
+"Calculate..." = "計算中...";
+
+/* No comment provided by engineer. */
 "Cancel" = "取消";
+
+/* No comment provided by engineer. */
+"Chat room" = "聊天室";
+
+/* No comment provided by engineer. */
+"Choose image from" = "從哪裡選擇圖片";
 
 /* No comment provided by engineer. */
 "Closed" = "已結束";
@@ -68,22 +77,34 @@
 "Enable location service to give you better experience while using app." = "啟用GPS來帶給您更棒的使用體驗";
 
 /* No comment provided by engineer. */
-"Failed to get place information!" = "無法取得地點資訊";
+"Error message: %@." = "錯誤代碼: %@.";
 
 /* No comment provided by engineer. */
-"Failed to search city!" = "無相關城市";
+"Failed to copy places." = "複製地點失敗";
+
+/* No comment provided by engineer. */
+"Failed to create new trip." = "建立行程失敗";
+
+/* No comment provided by engineer. */
+"Failed to delete." = "刪除失敗";
+
+/* No comment provided by engineer. */
+"Failed to get data." = "取得資料失敗";
+
+/* No comment provided by engineer. */
+"Failed to send message." = "傳送訊息失敗";
+
+/* No comment provided by engineer. */
+"Failed to update %@." = "無法更新 %@.";
 
 /* No comment provided by engineer. */
 "Failure" = "錯誤";
 
 /* No comment provided by engineer. */
-"Group Chat" = "聊天室";
+"Follow system" = "跟隨系統預設";
 
 /* No comment provided by engineer. */
 "Invite your friends" = "邀請朋友";
-
-/* No comment provided by engineer. */
-"Language" = "語言";
 
 /* No comment provided by engineer. */
 "Light mode" = "淺色模式";
@@ -104,7 +125,7 @@
 "Not available" = "未提供";
 
 /* No comment provided by engineer. */
-"OK" = "是";
+"OK" = "好";
 
 /* No comment provided by engineer. */
 "Oops! No one share there trip!🥲" = "糟糕！沒有人分享行程🥲";
@@ -113,10 +134,7 @@
 "Our team will check ASAP, Thanks!" = "我們會盡快確認此回報，謝謝";
 
 /* No comment provided by engineer. */
-"Please check your internet and try again later." = "請確認網路連線後再重試";
-
-/* No comment provided by engineer. */
-"Please try again later." = "請稍後再試";
+"Photo Library" = "相簿";
 
 /* No comment provided by engineer. */
 "Provide by:\n%@" = "提供者:\n%@";
@@ -144,6 +162,9 @@
 
 /* No comment provided by engineer. */
 "Some one invite your to edit this trip" = "有人邀請你一同編輯行程";
+
+/* No comment provided by engineer. */
+"Something went wrong!" = "發生未知的錯誤！";
 
 /* No comment provided by engineer. */
 "Start time" = "開始日";
@@ -175,8 +196,3 @@
 /* No comment provided by engineer. */
 "Wish List" = "待安排清單";
 
-/* No comment provided by engineer. */
-"Calculate..." = "計算中...";
-
-/* No comment provided by engineer. */
-"Follow system" = "跟隨系統預設";

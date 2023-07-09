@@ -60,7 +60,6 @@
 		C4CC0C002A48255B00E03758 /* WishListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BFF2A48255B00E03758 /* WishListViewController.swift */; };
 		C4CC0C042A48465300E03758 /* ArrangePlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0C032A48465300E03758 /* ArrangePlaceViewController.swift */; };
 		C4CC0C082A48499200E03758 /* LocationMapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0C062A48499200E03758 /* LocationMapCell.swift */; };
-		C4DAD90E2A53D8B1003D7A13 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = C4DAD90D2A53D8B1003D7A13 /* FirebaseMessaging */; };
 		C4DAD9102A551EFB003D7A13 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = C4DAD90F2A551EFB003D7A13 /* FirebaseCrashlytics */; };
 		C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8202A41AF62002987CB /* AppDelegate.swift */; };
 		C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8222A41AF62002987CB /* SceneDelegate.swift */; };
@@ -221,7 +220,6 @@
 				C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */,
 				C480BE382A5A805000A1A7E5 /* CombineCocoa in Frameworks */,
 				C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */,
-				C4DAD90E2A53D8B1003D7A13 /* FirebaseMessaging in Frameworks */,
 				C4DAD9102A551EFB003D7A13 /* FirebaseCrashlytics in Frameworks */,
 				C45413472A4A803E000D0685 /* FirebaseAuth in Frameworks */,
 				C4DBE8A42A41C158002987CB /* FirebaseFirestoreSwift in Frameworks */,
@@ -536,7 +534,6 @@
 				C4DBE8C32A42B363002987CB /* IQKeyboardManagerSwift */,
 				C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */,
 				C45413462A4A803E000D0685 /* FirebaseAuth */,
-				C4DAD90D2A53D8B1003D7A13 /* FirebaseMessaging */,
 				C4DAD90F2A551EFB003D7A13 /* FirebaseCrashlytics */,
 				C480BE2D2A5A581000A1A7E5 /* UnsplashPhotoPicker */,
 				C480BE342A5A5FDD00A1A7E5 /* SDWebImage */,
@@ -1073,11 +1070,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */;
 			productName = JGProgressHUD;
-		};
-		C4DAD90D2A53D8B1003D7A13 /* FirebaseMessaging */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseMessaging;
 		};
 		C4DAD90F2A551EFB003D7A13 /* FirebaseCrashlytics */ = {
 			isa = XCSwiftPackageProductDependency;
