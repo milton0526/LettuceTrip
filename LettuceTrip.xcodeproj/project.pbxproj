@@ -35,6 +35,10 @@
 		C480BE1E2A5972C100A1A7E5 /* FirestoreManager+Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE1D2A5972C100A1A7E5 /* FirestoreManager+Place.swift */; };
 		C480BE212A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE202A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift */; };
 		C480BE232A5981CD00A1A7E5 /* ChatRoomVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE222A5981CD00A1A7E5 /* ChatRoomVM.swift */; };
+		C480BE2E2A5A581000A1A7E5 /* UnsplashPhotoPicker in Frameworks */ = {isa = PBXBuildFile; productRef = C480BE2D2A5A581000A1A7E5 /* UnsplashPhotoPicker */; };
+		C480BE302A5A588300A1A7E5 /* UpslashKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = C480BE2F2A5A588300A1A7E5 /* UpslashKeys.plist */; };
+		C480BE322A5A59F500A1A7E5 /* UpslashKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE312A5A59F500A1A7E5 /* UpslashKey.swift */; };
+		C480BE352A5A5FDD00A1A7E5 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C480BE342A5A5FDD00A1A7E5 /* SDWebImage */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
 		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
@@ -133,6 +137,8 @@
 		C480BE1D2A5972C100A1A7E5 /* FirestoreManager+Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreManager+Place.swift"; sourceTree = "<group>"; };
 		C480BE202A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreManager+ChatRoom.swift"; sourceTree = "<group>"; };
 		C480BE222A5981CD00A1A7E5 /* ChatRoomVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomVM.swift; sourceTree = "<group>"; };
+		C480BE2F2A5A588300A1A7E5 /* UpslashKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = UpslashKeys.plist; sourceTree = "<group>"; };
+		C480BE312A5A59F500A1A7E5 /* UpslashKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpslashKey.swift; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
@@ -201,9 +207,11 @@
 			files = (
 				C4C0F0622A5121AA002F59B3 /* UIKit.framework in Frameworks */,
 				C4C0F0602A5121A4002F59B3 /* QuartzCore.framework in Frameworks */,
+				C480BE2E2A5A581000A1A7E5 /* UnsplashPhotoPicker in Frameworks */,
 				C4C0F05E2A51219C002F59B3 /* libz.tbd in Frameworks */,
 				C4C0F05C2A512196002F59B3 /* libc++.tbd in Frameworks */,
 				C4C0F05A2A51218B002F59B3 /* CoreLocation.framework in Frameworks */,
+				C480BE352A5A5FDD00A1A7E5 /* SDWebImage in Frameworks */,
 				C4C0F0582A512182002F59B3 /* CoreGraphics.framework in Frameworks */,
 				C4DBE8C42A42B363002987CB /* IQKeyboardManagerSwift in Frameworks */,
 				C4DBE89B2A41BD7B002987CB /* Cosmos in Frameworks */,
@@ -310,6 +318,7 @@
 				C480BDFE2A58221C00A1A7E5 /* Localizable.strings */,
 				C480BDFB2A58221C00A1A7E5 /* InfoPlist.strings */,
 				C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */,
+				C480BE2F2A5A588300A1A7E5 /* UpslashKeys.plist */,
 				C4DBE89E2A41C0E3002987CB /* GoogleService-Info.plist */,
 				C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */,
 				C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */,
@@ -418,6 +427,7 @@
 				C4DBE8C92A42D49B002987CB /* Trip.swift */,
 				C48E488F2A4C2A3D00949E08 /* SettingModel.swift */,
 				C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */,
+				C480BE312A5A59F500A1A7E5 /* UpslashKey.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -526,6 +536,8 @@
 				C45413462A4A803E000D0685 /* FirebaseAuth */,
 				C4DAD90D2A53D8B1003D7A13 /* FirebaseMessaging */,
 				C4DAD90F2A551EFB003D7A13 /* FirebaseCrashlytics */,
+				C480BE2D2A5A581000A1A7E5 /* UnsplashPhotoPicker */,
+				C480BE342A5A5FDD00A1A7E5 /* SDWebImage */,
 			);
 			productName = LettuceTrip;
 			productReference = C4DBE81D2A41AF62002987CB /* LettuceTrip.app */;
@@ -562,6 +574,8 @@
 				C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				C4DBE8C22A42B363002987CB /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
+				C480BE2C2A5A581000A1A7E5 /* XCRemoteSwiftPackageReference "unsplash-photopicker-ios" */,
+				C480BE332A5A5FDD00A1A7E5 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
 			productRefGroup = C4DBE81E2A41AF62002987CB /* Products */;
 			projectDirPath = "";
@@ -580,6 +594,7 @@
 				C4DBE82D2A41AF63002987CB /* LaunchScreen.storyboard in Resources */,
 				C480BDFD2A58221C00A1A7E5 /* InfoPlist.strings in Resources */,
 				C4DBE82A2A41AF63002987CB /* Assets.xcassets in Resources */,
+				C480BE302A5A588300A1A7E5 /* UpslashKeys.plist in Resources */,
 				C4DBE8282A41AF62002987CB /* Main.storyboard in Resources */,
 				C480BE002A58221C00A1A7E5 /* Localizable.strings in Resources */,
 				C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */,
@@ -702,6 +717,7 @@
 				C4DBE8C62A42D391002987CB /* FireStoreService.swift in Sources */,
 				C4CC0C042A48465300E03758 /* ArrangePlaceViewController.swift in Sources */,
 				C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */,
+				C480BE322A5A59F500A1A7E5 /* UpslashKey.swift in Sources */,
 				C4DBE8D22A43E116002987CB /* MKPlaceMark+Extension.swift in Sources */,
 				C4DBE8C82A42D446002987CB /* User.swift in Sources */,
 				C42F51B02A454D5F00023305 /* LocationService.swift in Sources */,
@@ -962,6 +978,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		C480BE2C2A5A581000A1A7E5 /* XCRemoteSwiftPackageReference "unsplash-photopicker-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/unsplash/unsplash-photopicker-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		C480BE332A5A5FDD00A1A7E5 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JonasGessner/JGProgressHUD.git";
@@ -1009,6 +1041,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		C480BE2D2A5A581000A1A7E5 /* UnsplashPhotoPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C480BE2C2A5A581000A1A7E5 /* XCRemoteSwiftPackageReference "unsplash-photopicker-ios" */;
+			productName = UnsplashPhotoPicker;
+		};
+		C480BE342A5A5FDD00A1A7E5 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C480BE332A5A5FDD00A1A7E5 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
 		};
 		C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;

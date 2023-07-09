@@ -11,6 +11,8 @@ import TinyConstraints
 import PhotosUI
 import MapKit
 import Combine
+import UnsplashPhotoPicker
+import SDWebImage
 
 class EditTripViewController: UIViewController {
 
@@ -205,11 +207,43 @@ class EditTripViewController: UIViewController {
     }
 
     @objc func pickImage(_ gesture: UIGestureRecognizer) {
-        var config = PHPickerConfiguration()
-        config.filter = .images
-        let picker = PHPickerViewController(configuration: config)
-        picker.delegate = self
-        present(picker, animated: true)
+        let actionSheetVC = UIAlertController(
+            title: String(localized: "Choose image from"),
+            message: nil,
+            preferredStyle: .actionSheet)
+        let upSlashSource = UIAlertAction(title: "Upslash", style: .default) { [unowned self] _ in
+            guard let url = Bundle.main.url(forResource: "UpslashKeys", withExtension: "plist") else {
+                return
+            }
+
+            do {
+                let data = try Data(contentsOf: url)
+                let result = try PropertyListDecoder().decode(UpslashKey.self, from: data)
+                let config = UnsplashPhotoPickerConfiguration(accessKey: result.accessKey, secretKey: result.secretKey)
+                let photoPicker = UnsplashPhotoPicker(configuration: config)
+                photoPicker.photoPickerDelegate = self
+                self.present(photoPicker, animated: true)
+            } catch {
+                return
+            }
+        }
+
+        let photoLibrary = UIAlertAction(
+            title: String(localized: "Photo Library"),
+            style: .default) { [unowned self] _ in
+                var config = PHPickerConfiguration()
+                config.filter = .images
+                let picker = PHPickerViewController(configuration: config)
+                picker.delegate = self
+                self.present(picker, animated: true)
+        }
+
+        let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
+
+        actionSheetVC.addAction(upSlashSource)
+        actionSheetVC.addAction(photoLibrary)
+        actionSheetVC.addAction(cancel)
+        present(actionSheetVC, animated: true)
     }
 
     @objc func copyItinerary(_ sender: UIBarButtonItem) {
@@ -452,4 +486,23 @@ extension EditTripViewController: PHPickerViewControllerDelegate {
             }
         }
     }
+}
+
+extension EditTripViewController: UnsplashPhotoPickerDelegate {
+
+    func unsplashPhotoPicker(_ photoPicker: UnsplashPhotoPicker, didSelectPhotos photos: [UnsplashPhoto]) {
+        guard let photo = photos.first?.urls[.small] else { return }
+        imageView.sd_setImage(with: photo) { image, error, _, _ in
+            if let image = image, let imageData = image.jpegData(compressionQuality: 0.1) {
+                self.trip.image = imageData
+                FireStoreService.shared.updateTrip(trip: self.trip) { error in
+                    if let error = error {
+                        self.showAlertToUser(error: error)
+                    }
+                }
+            }
+        }
+    }
+
+    func unsplashPhotoPickerDidCancel(_ photoPicker: UnsplashPhotoPicker) { }
 }
