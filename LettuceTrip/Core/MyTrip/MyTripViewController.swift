@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 import TinyConstraints
 import FirebaseFirestore
 
@@ -53,6 +54,8 @@ class MyTripViewController: UIViewController {
     private var closedTrips: [Trip] = []
     private var currentSegment: Segment = .upcoming
     private lazy var placeHolder = makePlaceholder(text: String(localized: "Add new trip to start!"))
+    private var cancelBags: Set<AnyCancellable> = []
+    private let fsManager = FirestoreManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -161,8 +164,19 @@ extension MyTripViewController: UITableViewDelegate {
                     message: String(localized: "This action can not be undo!"),
                     preferredStyle: .alert)
                 let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
-                let delete = UIAlertAction(title: String(localized: "Delete"), style: .destructive) { _ in
-                    FireStoreService.shared.deleteDocument(id: tripID)
+                let delete = UIAlertAction(
+                    title: String(localized: "Delete"),
+                    style: .destructive) { [unowned self] _ in
+                    self.fsManager.update(trip, with: self.fsManager.userId, isRemove: true)
+                            .receive(on: DispatchQueue.main)
+                            .sink { completion in
+                                switch completion {
+                                case .finished: break
+                                case .failure(let error):
+                                    self.showAlertToUser(error: error)
+                                }
+                            } receiveValue: { _ in }
+                            .store(in: &cancelBags)
                 }
 
                 alertVC.addAction(cancel)

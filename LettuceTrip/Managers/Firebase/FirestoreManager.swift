@@ -79,7 +79,7 @@ final class FirestoreManager {
         }
     }
 
-    func update(_ trip: Trip, with userId: String? = nil) -> AnyPublisher<Void, Error> {
+    func update(_ trip: Trip, with userId: String? = nil, isRemove: Bool = false) -> AnyPublisher<Void, Error> {
         guard let tripId = trip.id else {
             return Fail(error: FirebaseError.wrongId(trip.id)).eraseToAnyPublisher()
         }
@@ -89,7 +89,7 @@ final class FirestoreManager {
         if let userId = userId {
             return Future { promise in
                 ref.updateData([
-                    "members": FieldValue.arrayUnion([userId])
+                    "members": isRemove ? FieldValue.arrayRemove([userId]) : FieldValue.arrayUnion([userId])
                 ]) { error in
                     guard error == nil else {
                         return promise(.failure(FirebaseError.update("Member")))
