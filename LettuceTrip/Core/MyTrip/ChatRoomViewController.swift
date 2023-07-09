@@ -47,14 +47,13 @@ class ChatRoomViewController: UIViewController {
         didSet {
             if members.count == trip?.members.count {
                 userView.members = members
+                DispatchQueue.main.async { [weak self] in
+                    self?.updateSnapshot()
+                }
             }
         }
     }
-    private var chatMessages: [Message] = [] {
-        didSet {
-            self.updateSnapshot()
-        }
-    }
+    private var chatMessages: [Message] = []
     private var messageListener: ListenerRegistration?
     private var cancelBags: Set<AnyCancellable> = []
     private let fsManager = FirestoreManager()
@@ -229,11 +228,7 @@ class ChatRoomViewController: UIViewController {
             switch result {
             case .success(let messages):
                 self.chatMessages = messages
-
-                DispatchQueue.main.async {
-                    self.updateSnapshot()
-                }
-
+                self.fetchUser()
             case .failure(let error):
                 self.showAlertToUser(error: error)
             }
