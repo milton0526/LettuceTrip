@@ -7,12 +7,15 @@
 
 import AuthenticationServices
 import FirebaseAuth
+import Combine
 
 class AuthManager: NSObject {
 
     private var currentNonce: String?
     weak var viewController: UIViewController?
     private var isDelete = false
+    private var cancelBags: Set<AnyCancellable> = []
+    private let fsManager = FirestoreManager()
 
     func signInWithApple(isDelete: Bool = false) {
         self.isDelete = isDelete
@@ -94,7 +97,7 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
     private func signIntoFirebase(credential: OAuthCredential) {
         guard let viewController = viewController else { return }
 
-        Auth.auth().signIn(with: credential) { authResults, error in
+        Auth.auth().signIn(with: credential) { [weak self] authResults, error in
             if let error = error {
                 print("Error sign in with Firebase" + error.localizedDescription)
 
@@ -106,6 +109,7 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
             }
 
             guard
+                let self = self,
                 let userID = authResults?.user.uid,
                 let userName = authResults?.user.displayName,
                 let email = authResults?.user.email
@@ -114,21 +118,39 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
             }
 
             // User is signed in to Firebase with Apple.
-            let user = LTUser(id: userID, name: userName, email: email)
 
-            FireStoreService.shared.createUser(id: userID, user: user) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success:
-                        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                        let mainVC = storyBoard.instantiateViewController(withIdentifier: "TabBarController")
-                        mainVC.modalPresentationStyle = .fullScreen
-                        viewController.present(mainVC, animated: true)
-                    case .failure(let error):
-                        viewController.showAlertToUser(error: error)
+            // Create user if first time...
+
+            self.fsManager.checkUserExist(id: userID)
+                .sink { _ in
+                } receiveValue: { exist in
+                    if !exist {
+                        let user = LTUser(id: userID, name: userName, email: email)
+
+                        self.fsManager.createUser(id: userID, user: user)
+                            .receive(on: DispatchQueue.main)
+                            .sink { completion in
+                                switch completion {
+                                case .finished:
+                                    let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                                    let mainVC = storyBoard.instantiateViewController(withIdentifier: "TabBarController")
+                                    mainVC.modalPresentationStyle = .fullScreen
+                                    viewController.present(mainVC, animated: true)
+                                case .failure(let error):
+                                    viewController.showAlertToUser(error: error)
+                                }
+                            } receiveValue: { _ in }
+                            .store(in: &self.cancelBags)
+                    } else {
+                        DispatchQueue.main.async {
+                            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                            let mainVC = storyBoard.instantiateViewController(withIdentifier: "TabBarController")
+                            mainVC.modalPresentationStyle = .fullScreen
+                            viewController.present(mainVC, animated: true)
+                        }
                     }
                 }
-            }
+                .store(in: &cancelBags)
         }
     }
 

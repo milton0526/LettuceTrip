@@ -16,21 +16,6 @@ class ItineraryCell: UICollectionViewCell {
 
     weak var delegate: ItineraryCellDelegate?
 
-    lazy var userImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "person.circle"))
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 10
-        imageView.layer.masksToBounds = true
-        return imageView
-    }()
-
-    lazy var userNameLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .label
-        return label
-    }()
-
     lazy var menuButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
@@ -55,6 +40,7 @@ class ItineraryCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .label
+        label.textAlignment = .center
         return label
     }()
 
@@ -75,44 +61,31 @@ class ItineraryCell: UICollectionViewCell {
     }
 
     private func setupViews() {
-        [userImageView, userNameLabel, menuButton, imageView, tripNameLabel, timeLabel].forEach { contentView.addSubview($0) }
+        [menuButton, imageView, tripNameLabel, timeLabel].forEach { contentView.addSubview($0) }
 
         imageView.horizontalToSuperview()
-        imageView.centerYToSuperview()
+        imageView.topToSuperview()
         imageView.widthToSuperview()
 
-        userImageView.aspectRatio(1.0)
-        userImageView.leadingToSuperview(offset: 8)
-        userImageView.topToSuperview(offset: 4)
-        userImageView.bottomToTop(of: imageView, offset: -4)
-
-        userNameLabel.centerY(to: userImageView)
-        userNameLabel.leadingToTrailing(of: userImageView, offset: 4)
-        userNameLabel.height(20)
-        userNameLabel.trailing(to: menuButton, offset: 8, relation: .equalOrGreater)
-
-        menuButton.centerY(to: userImageView)
-        menuButton.trailingToSuperview(offset: 8)
-        menuButton.size(CGSize(width: 20, height: 20))
-
-        tripNameLabel.leading(to: userImageView)
-        tripNameLabel.topToBottom(of: imageView, offset: 4)
-        tripNameLabel.height(20)
+        tripNameLabel.topToBottom(of: imageView, offset: 8)
+        tripNameLabel.height(18)
+        tripNameLabel.widthToSuperview(multiplier: 0.5)
+        tripNameLabel.centerXToSuperview()
         tripNameLabel.bottomToSuperview(offset: -4)
-        tripNameLabel.trailingToLeading(of: timeLabel, offset: -8, relation: .equalOrGreater)
 
         timeLabel.centerY(to: tripNameLabel)
-        timeLabel.trailingToSuperview(offset: 8)
+        timeLabel.leadingToSuperview(offset: 8)
         timeLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+
+        menuButton.trailingToSuperview(offset: 8)
+        menuButton.size(CGSize(width: 28, height: 28))
+        menuButton.bottomToSuperview()
     }
 
     func config(with trip: Trip) {
-        userNameLabel.text = trip.members.first
         tripNameLabel.text = trip.tripName
         timeLabel.text = trip.startDate.formatted(date: .numeric, time: .omitted)
         imageView.image = UIImage(data: trip.image)
-
-        // Need to use dispatch group to fetch user data
     }
 
     private func reportActionHandler(_ action: UIAction) {

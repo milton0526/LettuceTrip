@@ -11,7 +11,7 @@ import TinyConstraints
 class CirclePlaceCell: UICollectionViewCell {
 
     lazy var iconImageView: UIImageView = {
-        let imageView = UIImageView(image: .init(systemName: "person"))
+        let imageView = UIImageView(image: .init(systemName: "person.crop.circle"))
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 16

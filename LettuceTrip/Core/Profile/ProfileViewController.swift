@@ -116,9 +116,9 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
     }
 
     private func fetchData() {
-        guard let currentUser = FireStoreService.shared.currentUser else { return }
+        guard let userId = fsManager.user?.uid else { return }
 
-        FireStoreService.shared.getUserData(userId: currentUser) { [weak self] result in
+        FireStoreService.shared.getUserData(userId: userId) { [weak self] result in
             guard let self = self else { return }
 
             switch result {

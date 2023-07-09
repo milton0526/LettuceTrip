@@ -12,7 +12,7 @@ import TinyConstraints
 class UserMessageCell: UICollectionViewCell {
 
     lazy var imageView: UIImageView = {
-        let imageView = UIImageView(image: .init(systemName: "person"))
+        let imageView = UIImageView(image: .init(systemName: "person.crop.circle"))
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 10
         imageView.clipsToBounds = true

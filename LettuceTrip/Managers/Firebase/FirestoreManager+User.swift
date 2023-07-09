@@ -78,4 +78,22 @@ extension FirestoreManager {
             }
         }.eraseToAnyPublisher()
     }
+
+    func checkUserExist(id: String) -> AnyPublisher<Bool, Error> {
+        let ref = FirestoreHelper.makeCollectionRef(database, at: .users).document(id)
+
+        return Future { promise in
+            ref.getDocument { document, error in
+                guard error == nil else {
+                    return promise(.failure(error!))
+                }
+
+                if let document = document, document.exists {
+                    promise(.success(true))
+                } else {
+                    promise(.success(false))
+                }
+            }
+        }.eraseToAnyPublisher()
+    }
 }
