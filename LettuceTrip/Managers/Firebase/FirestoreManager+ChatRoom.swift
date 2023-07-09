@@ -11,9 +11,14 @@ import FirebaseFirestore
 
 extension FirestoreManager {
 
-    func sendMessage(_ message: Message, at tripId: String) -> AnyPublisher<Void, Error> {
+    func sendMessage(_ text: String, at tripId: String) -> AnyPublisher<Void, Error> {
+        guard let userId = userId else {
+            return Fail(error: FirebaseError.wrongId(userId)).eraseToAnyPublisher()
+        }
+
         let subDirectory = SubDirectory(documentId: tripId, collection: .chatRoom)
         let ref = FirestoreHelper.makeCollectionRef(database, at: .trips, inside: subDirectory)
+        let message = Message(userID: userId, message: text)
 
         return Future { promise in
             do {
@@ -62,5 +67,21 @@ extension FirestoreManager {
         }
 
         return listener
+    }
+
+    func chatRoomListener(_ tripId: String) -> AnyPublisher<QuerySnapshot, Error> {
+        let subDirectory = SubDirectory(documentId: tripId, collection: .places)
+        let ref = FirestoreHelper.makeCollectionRef(database, at: .trips, inside: subDirectory)
+        let subject = PassthroughSubject<QuerySnapshot, Error>()
+
+        let listener = ref.order(by: "sendTime")
+            .addSnapshotListener { querySnapshot, error in
+                guard let querySnapshot = querySnapshot else {
+                    return subject.send(completion: .failure(error!))
+                }
+                subject.send(querySnapshot)
+            }
+
+        return subject.handleEvents(receiveCancel: listener.remove).eraseToAnyPublisher()
     }
 }

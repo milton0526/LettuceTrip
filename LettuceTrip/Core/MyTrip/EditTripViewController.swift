@@ -10,6 +10,7 @@ import FirebaseFirestore
 import TinyConstraints
 import PhotosUI
 import MapKit
+import Combine
 
 class EditTripViewController: UIViewController {
 

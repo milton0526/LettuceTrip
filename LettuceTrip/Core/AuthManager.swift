@@ -37,7 +37,6 @@ class AuthManager: NSObject {
             completion(nil)
         } catch {
             completion(error)
-            print("Error signing out: \(error.localizedDescription)")
         }
     }
 }

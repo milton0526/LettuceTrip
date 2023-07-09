@@ -11,9 +11,11 @@ import Combine
 extension FirestoreManager {
 
     func createUser(id: String, user: User) -> AnyPublisher<Void, Error> {
-        return Future { [unowned self] promise in
+        let ref = FirestoreHelper.makeCollectionRef(database, at: .users)
+
+        return Future { promise in
             do {
-                try self.userRef.document(id).setData(from: user) { error in
+                try ref.document(id).setData(from: user) { error in
                     guard error == nil else {
                         return promise(.failure(FirebaseError.user("Failed to create user")))
                     }
@@ -29,9 +31,10 @@ extension FirestoreManager {
         guard let userId = userId else {
             return Fail(error: FirebaseError.wrongId(userId)).eraseToAnyPublisher()
         }
+        let ref = FirestoreHelper.makeCollectionRef(database, at: .users)
 
-        return Future { [unowned self] promise in
-            self.userRef.document(userId).getDocument(as: User.self) { result in
+        return Future { promise in
+            ref.document(userId).getDocument(as: User.self) { result in
                 switch result {
                 case .success(let user):
                     promise(.success(user))
@@ -43,8 +46,13 @@ extension FirestoreManager {
     }
 
     func deleteUser() -> AnyPublisher<Void, Error> {
-        return Future { [unowned self] promise in
-            self.userRef.document(userId).delete { error in
+        guard let userId = userId else {
+            return Fail(error: FirebaseError.wrongId(userId)).eraseToAnyPublisher()
+        }
+        let ref = FirestoreHelper.makeCollectionRef(database, at: .users)
+
+        return Future { promise in
+            ref.document(userId).delete { error in
                 guard error == nil else {
                     return promise(.failure(FirebaseError.user("Failed to delete user")))
                 }

@@ -8,15 +8,16 @@
 import Foundation
 import Combine
 import FirebaseFirestore
+import FirebaseAuth
 
 final class FirestoreManager {
 
-    let userId: String
-    lazy var userRef = FirestoreHelper.makeCollectionRef(database, at: .users)
     let database = Firestore.firestore()
 
-    init(userId: String) {
-        self.userId = userId
+    var userId: String? {
+        // Test user id
+        "LpDb7nvzvSZZcTtJZOld4OS3aEB3"
+        // Auth.auth().currentUser?.uid
     }
 
     // MARK: Trip Method

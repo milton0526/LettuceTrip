@@ -34,6 +34,7 @@
 		C480BE1C2A596CA500A1A7E5 /* FirestoreManager+User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE1B2A596CA500A1A7E5 /* FirestoreManager+User.swift */; };
 		C480BE1E2A5972C100A1A7E5 /* FirestoreManager+Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE1D2A5972C100A1A7E5 /* FirestoreManager+Place.swift */; };
 		C480BE212A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE202A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift */; };
+		C480BE232A5981CD00A1A7E5 /* ChatRoomVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE222A5981CD00A1A7E5 /* ChatRoomVM.swift */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
 		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
@@ -69,7 +70,6 @@
 		C4DBE8462A41B312002987CB /* ItineraryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8452A41B312002987CB /* ItineraryHeaderView.swift */; };
 		C4DBE8482A41B329002987CB /* ItineraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8472A41B329002987CB /* ItineraryCell.swift */; };
 		C4DBE84B2A41B350002987CB /* UICollectionView+Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE84A2A41B350002987CB /* UICollectionView+Identifier.swift */; };
-		C4DBE87D2A41BB81002987CB /* LTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE87C2A41BB81002987CB /* LTError.swift */; };
 		C4DBE8822A41BC02002987CB /* RoundedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8812A41BC02002987CB /* RoundedTextField.swift */; };
 		C4DBE8852A41BC1B002987CB /* POILocationCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8842A41BC1B002987CB /* POILocationCardCell.swift */; };
 		C4DBE8882A41BC60002987CB /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8872A41BC60002987CB /* PlaceDetailViewController.swift */; };
@@ -132,6 +132,7 @@
 		C480BE1B2A596CA500A1A7E5 /* FirestoreManager+User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreManager+User.swift"; sourceTree = "<group>"; };
 		C480BE1D2A5972C100A1A7E5 /* FirestoreManager+Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreManager+Place.swift"; sourceTree = "<group>"; };
 		C480BE202A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreManager+ChatRoom.swift"; sourceTree = "<group>"; };
+		C480BE222A5981CD00A1A7E5 /* ChatRoomVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomVM.swift; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
@@ -165,7 +166,6 @@
 		C4DBE8452A41B312002987CB /* ItineraryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryHeaderView.swift; sourceTree = "<group>"; };
 		C4DBE8472A41B329002987CB /* ItineraryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryCell.swift; sourceTree = "<group>"; };
 		C4DBE84A2A41B350002987CB /* UICollectionView+Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Identifier.swift"; sourceTree = "<group>"; };
-		C4DBE87C2A41BB81002987CB /* LTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LTError.swift; sourceTree = "<group>"; };
 		C4DBE8812A41BC02002987CB /* RoundedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedTextField.swift; sourceTree = "<group>"; };
 		C4DBE8842A41BC1B002987CB /* POILocationCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POILocationCardCell.swift; sourceTree = "<group>"; };
 		C4DBE8872A41BC60002987CB /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
@@ -240,7 +240,6 @@
 		C480BE1A2A596C3000A1A7E5 /* Errors */ = {
 			isa = PBXGroup;
 			children = (
-				C4DBE87C2A41BB81002987CB /* LTError.swift */,
 				C480BE0E2A591AFD00A1A7E5 /* FirebaseError.swift */,
 			);
 			path = Errors;
@@ -366,6 +365,7 @@
 				C4DBE8362A41B194002987CB /* MyTripViewController.swift */,
 				C42F51B72A45936800023305 /* EditTripViewController.swift */,
 				C42F51C52A45BD1D00023305 /* ChatRoomViewController.swift */,
+				C480BE222A5981CD00A1A7E5 /* ChatRoomVM.swift */,
 				C4CC0BFF2A48255B00E03758 /* WishListViewController.swift */,
 				C4CC0C052A48496500E03758 /* ArrangePlace */,
 			);
@@ -665,7 +665,6 @@
 				C454133E2A48920D000D0685 /* ArrangePlaceDetailCell.swift in Sources */,
 				C4DBE89D2A41BD8C002987CB /* RatingStarView.swift in Sources */,
 				C4DBE8482A41B329002987CB /* ItineraryCell.swift in Sources */,
-				C4DBE87D2A41BB81002987CB /* LTError.swift in Sources */,
 				C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */,
 				C454134D2A4A9937000D0685 /* AuthManager.swift in Sources */,
 				C4CC0C082A48499200E03758 /* LocationMapCell.swift in Sources */,
@@ -685,6 +684,7 @@
 				C4DBE8902A41BCC3002987CB /* PlaceAboutCellViewModel.swift in Sources */,
 				C4DBE8462A41B312002987CB /* ItineraryHeaderView.swift in Sources */,
 				C480BE032A590A9500A1A7E5 /* FirestoreManager.swift in Sources */,
+				C480BE232A5981CD00A1A7E5 /* ChatRoomVM.swift in Sources */,
 				C4DBE8882A41BC60002987CB /* PlaceDetailViewController.swift in Sources */,
 				C4CC0BFE2A481E0100E03758 /* ScheduleView.swift in Sources */,
 				C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */,

@@ -41,8 +41,14 @@ class ChatRoomViewController: UIViewController {
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, Message>!
 
-    private var chatMessages: [Message] = []
+    private var chatMessages: [Message] = [] {
+        didSet {
+            self.updateSnapshot()
+        }
+    }
     private var messageListener: ListenerRegistration?
+    private var cancelBags: Set<AnyCancellable> = []
+    private let fsManager = FirestoreManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,7 +72,7 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func customNavBarStyle() {
-        title = String(localized: "Group Chat")
+        title = String(localized: "Chat room")
         navigationItem.largeTitleDisplayMode = .never
 
         let appearance = UINavigationBarAppearance()
@@ -88,17 +94,18 @@ class ChatRoomViewController: UIViewController {
             return
         }
 
-        FireStoreService.shared.sendMessage(with: text, in: tripID) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success:
-                    self?.inputTextField.resignFirstResponder()
-                    self?.inputTextField.text = ""
+        fsManager.sendMessage(text, at: tripID)
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] completion in
+                switch completion {
+                case .finished:
+                    self.inputTextField.resignFirstResponder()
+                    self.inputTextField.text = ""
                 case .failure(let error):
-                    self?.showAlertToUser(error: error)
+                    self.showAlertToUser(error: error)
                 }
-            }
-        }
+            } receiveValue: { _ in }
+            .store(in: &cancelBags)
     }
 
     private func configBackButton() {
@@ -188,9 +195,7 @@ class ChatRoomViewController: UIViewController {
     private func fetchMessages() {
         guard let tripID = trip?.id else { return }
 
-        messageListener = FireStoreService.shared.addListenerToChatRoom(by: tripID) { [weak self] result in
-            guard let self = self else { return }
-
+        messageListener = fsManager.chatRoomListener(tripID) { [unowned self] result in
             switch result {
             case .success(let messages):
                 self.chatMessages = messages
@@ -204,4 +209,39 @@ class ChatRoomViewController: UIViewController {
             }
         }
     }
+
+//    private func fetchMessages2() {
+//        guard let tripID = trip?.id else { return }
+//
+//        fsManager.chatRoomListener(tripID)
+//            .receive(on: DispatchQueue.main)
+//
+//            .sink { [unowned self] completion in
+//                switch completion {
+//                case .finished:
+//                    self.updateSnapshot()
+//                case .failure(let error):
+//                    self.showAlertToUser(error: error)
+//                }
+//            } receiveValue: { [unowned self] snapshot in
+//                snapshot.documentChanges.forEach { diff in
+//                    do {
+//                        let message = try diff.document.data(as: Message.self)
+//                        switch diff.type {
+//                        case .added:
+//                            self.chatMessages.append(message)
+//                        case .modified:
+//                            if let index = self.chatMessages.firstIndex(where: { $0.id == message.id }) {
+//                                self.chatMessages[index].sendTime = message.sendTime
+//                            }
+//                        default:
+//                            break
+//                        }
+//                    } catch {
+//                        print("Decode error...")
+//                    }
+//                }
+//            }
+//            .store(in: &cancelBags)
+//    }
 }

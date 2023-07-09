@@ -133,4 +133,20 @@ extension FirestoreManager {
             }
         return listener
     }
+
+    func placeListener(at tripId: String, isArrange: Bool = true) -> AnyPublisher<QuerySnapshot, Error> {
+        let subDirectory = SubDirectory(documentId: tripId, collection: .places)
+        let ref = FirestoreHelper.makeCollectionRef(database, at: .trips, inside: subDirectory)
+        let subject = PassthroughSubject<QuerySnapshot, Error>()
+
+        let listener = ref.whereField("isArrange", isEqualTo: isArrange)
+            .addSnapshotListener { querySnapshot, error in
+                guard let querySnapshot = querySnapshot else {
+                    return subject.send(completion: .failure(error!))
+                }
+                subject.send(querySnapshot)
+            }
+
+        return subject.handleEvents(receiveCancel: listener.remove).eraseToAnyPublisher()
+    }
 }
