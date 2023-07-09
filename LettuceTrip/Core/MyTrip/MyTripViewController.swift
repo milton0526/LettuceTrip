@@ -167,7 +167,7 @@ extension MyTripViewController: UITableViewDelegate {
                 let delete = UIAlertAction(
                     title: String(localized: "Delete"),
                     style: .destructive) { [unowned self] _ in
-                    self.fsManager.update(trip, with: self.fsManager.userId, isRemove: true)
+                        self.fsManager.update(trip, with: self.fsManager.user?.uid, isRemove: true)
                             .receive(on: DispatchQueue.main)
                             .sink { completion in
                                 switch completion {

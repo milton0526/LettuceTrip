@@ -114,7 +114,7 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
             }
 
             // User is signed in to Firebase with Apple.
-            let user = User(id: userID, name: userName, email: email)
+            let user = LTUser(id: userID, name: userName, email: email)
 
             FireStoreService.shared.createUser(id: userID, user: user) { result in
                 DispatchQueue.main.async {

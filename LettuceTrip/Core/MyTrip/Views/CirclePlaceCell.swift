@@ -11,22 +11,20 @@ import TinyConstraints
 class CirclePlaceCell: UICollectionViewCell {
 
     lazy var iconImageView: UIImageView = {
-        let imageView = UIImageView(image: .init(systemName: "leaf"))
-        imageView.contentMode = .scaleAspectFit
+        let imageView = UIImageView(image: .init(systemName: "person"))
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 16
         imageView.layer.masksToBounds = true
-        imageView.layer.borderWidth = 2
-        imageView.tintColor = .white
-        imageView.layer.borderColor = UIColor.systemYellow.cgColor
         return imageView
     }()
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.text = "Some National Park"
         label.textAlignment = .center
-        label.numberOfLines = 2
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.1
         label.sizeToFit()
         label.textColor = .white
         return label
@@ -51,6 +49,15 @@ class CirclePlaceCell: UICollectionViewCell {
 
         titleLabel.topToBottom(of: iconImageView, offset: 8)
         titleLabel.horizontalToSuperview(insets: .horizontal(8))
+        titleLabel.height(14)
         titleLabel.bottomToSuperview(offset: -8, relation: .equalOrGreater)
+    }
+
+    func config(user: LTUser) {
+        if let data = user.image {
+            iconImageView.image = UIImage(data: data)
+        }
+
+        titleLabel.text = user.name
     }
 }

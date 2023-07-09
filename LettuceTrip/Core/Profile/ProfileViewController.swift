@@ -7,6 +7,8 @@
 
 import UIKit
 import TinyConstraints
+import PhotosUI
+import Combine
 
 class ProfileViewController: UIViewController, UICollectionViewDelegate {
 
@@ -33,6 +35,9 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, SettingModel>!
 
+    private var cancelBags: Set<AnyCancellable> = []
+    private let fsManager = FirestoreManager()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(profileHeaderView)
@@ -43,6 +48,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         collectionView.topToBottom(of: profileHeaderView)
         collectionView.edgesToSuperview(excluding: .top, usingSafeArea: true)
 
+        bind()
         customNavBarStyle()
         configDataSource()
         updateSnapshot()
@@ -54,6 +60,16 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.hideHairline()
+    }
+
+    private func bind() {
+        profileHeaderView.imageHandler = { [unowned self] in
+            var config = PHPickerConfiguration()
+            config.filter = .images
+            let picker = PHPickerViewController(configuration: config)
+            picker.delegate = self
+            self.present(picker, animated: true)
+        }
     }
 
     private func customNavBarStyle() {
@@ -110,6 +126,9 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
                 DispatchQueue.main.async {
                     self.profileHeaderView.nameLabel.text = user.name
                     self.profileHeaderView.emailLabel.text = user.email
+                    if let image = user.image {
+                        self.profileHeaderView.imageView.image = UIImage(data: image)
+                    }
                 }
             case .failure(let error):
                 self.showAlertToUser(error: error)
@@ -166,6 +185,42 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
             present(alert, animated: true)
         case .signOut:
             confirmSignOut()
+        }
+    }
+}
+
+// MARK: - PHPickerController Delegate
+extension ProfileViewController: PHPickerViewControllerDelegate {
+
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+
+        let itemProviders = results.map(\.itemProvider)
+        if let itemProvider = itemProviders.first, itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                guard
+                    let self = self,
+                    let image = image as? UIImage,
+                    let imageData = image.jpegData(compressionQuality: 0.1)
+                else {
+                    return
+                }
+
+                DispatchQueue.main.async {
+                    self.profileHeaderView.imageView.image = image
+                }
+
+                self.fsManager.updateUser(image: imageData)
+                    .receive(on: DispatchQueue.main)
+                    .sink { completion in
+                        switch completion {
+                        case .finished: break
+                        case .failure(let error):
+                            self.showAlertToUser(error: error)
+                        }
+                    } receiveValue: { _ in }
+                    .store(in: &self.cancelBags)
+            }
         }
     }
 }

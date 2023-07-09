@@ -12,8 +12,8 @@ import FirebaseFirestore
 extension FirestoreManager {
 
     func sendMessage(_ text: String, at tripId: String) -> AnyPublisher<Void, Error> {
-        guard let userId = userId else {
-            return Fail(error: FirebaseError.wrongId(userId)).eraseToAnyPublisher()
+        guard let userId = user?.uid else {
+            return Fail(error: FirebaseError.wrongId(user?.uid)).eraseToAnyPublisher()
         }
 
         let subDirectory = SubDirectory(documentId: tripId, collection: .chatRoom)

@@ -13,10 +13,13 @@ class ProfileHeaderView: UIView {
     lazy var imageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "person.crop.circle"))
         imageView.tintColor = .white
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
+        imageView.layer.cornerRadius = 30
         imageView.layer.masksToBounds = true
+        imageView.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeUserImage))
+        imageView.addGestureRecognizer(tapGesture)
         return imageView
     }()
 
@@ -34,6 +37,8 @@ class ProfileHeaderView: UIView {
         return label
     }()
 
+    var imageHandler: (() -> Void)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -41,6 +46,10 @@ class ProfileHeaderView: UIView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc func changeUserImage(_ gesture: UIGestureRecognizer) {
+        imageHandler?()
     }
 
     private func setupViews() {

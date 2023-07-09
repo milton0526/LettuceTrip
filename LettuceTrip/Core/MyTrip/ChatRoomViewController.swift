@@ -18,6 +18,8 @@ class ChatRoomViewController: UIViewController {
         case main
     }
 
+    lazy var userView = ChatRoomPlacesView()
+
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.register(UserMessageCell.self, forCellWithReuseIdentifier: UserMessageCell.identifier)
@@ -41,6 +43,13 @@ class ChatRoomViewController: UIViewController {
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, Message>!
 
+    private var members: [LTUser] = [] {
+        didSet {
+            if members.count == trip?.members.count {
+                userView.members = members
+            }
+        }
+    }
     private var chatMessages: [Message] = [] {
         didSet {
             self.updateSnapshot()
@@ -57,6 +66,7 @@ class ChatRoomViewController: UIViewController {
         setupUI()
         configBackButton()
         configureDataSource()
+        fetchUser()
         fetchMessages()
     }
 
@@ -119,9 +129,12 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func setupUI() {
-        [collectionView, inputTextField, sendButton].forEach { view.addSubview($0) }
+        [userView, collectionView, inputTextField, sendButton].forEach { view.addSubview($0) }
 
-        collectionView.topToSuperview(usingSafeArea: true)
+        userView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
+        userView.height(80)
+
+        collectionView.topToBottom(of: userView)
         collectionView.horizontalToSuperview()
         collectionView.bottomToTop(of: inputTextField, offset: -8)
 
@@ -154,8 +167,9 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, message in
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, message in
             guard
+                let self = self,
                 let userMSGCell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: UserMessageCell.identifier,
                     for: indexPath) as? UserMessageCell,
@@ -166,15 +180,17 @@ class ChatRoomViewController: UIViewController {
                 fatalError("Failed to dequeue cityCell")
             }
 
-            guard let currentUser = FireStoreService.shared.currentUser else {
+            guard let currentUser = self.fsManager.user else {
                 fatalError("No user login.")
             }
 
-            if message.userID == currentUser {
-                userMSGCell.config(with: message)
+            if message.userID == currentUser.uid {
+                let myself = members.first { $0.id == message.userID }
+                userMSGCell.config(with: message, from: myself)
                 return userMSGCell
             } else {
-                friendMSGCell.config(with: message)
+                let friend = members.first { $0.id == message.userID }
+                friendMSGCell.config(with: message, from: friend)
                 return friendMSGCell
             }
         }
@@ -189,6 +205,20 @@ class ChatRoomViewController: UIViewController {
         if !chatMessages.isEmpty {
             let indexPath = IndexPath(item: chatMessages.count - 1, section: 0)
             collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+        }
+    }
+
+    private func fetchUser() {
+        guard let members = trip?.members else { return }
+
+        members.forEach { member in
+            fsManager.getUserData(userId: member)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveCompletion: { _ in
+                }, receiveValue: { [weak self] user in
+                    self?.members.append(user)
+                })
+                .store(in: &cancelBags)
         }
     }
 

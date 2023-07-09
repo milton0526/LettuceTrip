@@ -9,13 +9,11 @@ import UIKit
 
 class ChatRoomPlacesView: UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
-    var places: [Place] = [] {
+    var members: [LTUser] = [] {
         didSet {
             collectionView.reloadData()
         }
     }
-
-    var touchHandler: ((Place) -> Void)?
 
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -45,12 +43,11 @@ class ChatRoomPlacesView: UIView, UICollectionViewDelegateFlowLayout, UICollecti
 
     // MARK: - Delegate method
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let place = places[indexPath.item]
-        touchHandler?(place)
+        let place = members[indexPath.item]
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 80, height: 80)
+        return CGSize(width: 60, height: 60)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -63,21 +60,20 @@ class ChatRoomPlacesView: UIView, UICollectionViewDelegateFlowLayout, UICollecti
 
     // MARK: - DataSource method
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        places.count
+        members.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let placeCell = collectionView.dequeueReusableCell(
+        guard let userCell = collectionView.dequeueReusableCell(
             withReuseIdentifier: CirclePlaceCell.identifier,
             for: indexPath) as? CirclePlaceCell
         else {
             fatalError("Failed to dequeue cityCell")
         }
 
-        let place = places[indexPath.item]
-        placeCell.titleLabel.text = place.name
-        placeCell.iconImageView.image = UIImage(data: place.iconImage)?.withTintColor(.tintColor)
+        let member = members[indexPath.item]
+        userCell.config(user: member)
 
-        return placeCell
+        return userCell
     }
 }

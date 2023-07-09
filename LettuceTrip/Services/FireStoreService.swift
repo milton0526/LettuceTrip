@@ -31,7 +31,7 @@ class FireStoreService {
         // Auth.auth().currentUser?.uid
     }
 
-    func createUser(id: String, user: User, completion: @escaping (Result<Void, Error>) -> Void) {
+    func createUser(id: String, user: LTUser, completion: @escaping (Result<Void, Error>) -> Void) {
         let ref = database.collection(CollectionRef.users.rawValue)
 
         do {
@@ -223,11 +223,11 @@ class FireStoreService {
         }
     }
 
-    func getUserData(userId: String?, completion: @escaping (Result<User, Error>) -> Void) {
+    func getUserData(userId: String?, completion: @escaping (Result<LTUser, Error>) -> Void) {
         guard let userId = userId else { return }
         let ref = database.collection(CollectionRef.users.rawValue)
 
-        ref.document(userId).getDocument(as: User.self) { result in
+        ref.document(userId).getDocument(as: LTUser.self) { result in
             switch result {
             case .success(let user):
                 completion(.success(user))

@@ -11,7 +11,8 @@ class FriendMessageCell: UICollectionViewCell {
 
     lazy var imageView: UIImageView = {
         let imageView = UIImageView(image: .init(systemName: "figure.archery"))
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 10
         imageView.layer.masksToBounds = true
         return imageView
@@ -75,8 +76,11 @@ class FriendMessageCell: UICollectionViewCell {
         timeLabel.bottom(to: stackView)
     }
 
-    func config(with message: Message) {
+    func config(with message: Message, from user: LTUser?) {
         textView.text = message.message
         timeLabel.text = message.sendTime?.formatted(date: .omitted, time: .shortened)
+        if let data = user?.image {
+            imageView.image = UIImage(data: data)
+        }
     }
 }

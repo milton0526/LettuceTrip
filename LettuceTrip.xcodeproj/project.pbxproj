@@ -39,6 +39,7 @@
 		C480BE302A5A588300A1A7E5 /* UpslashKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = C480BE2F2A5A588300A1A7E5 /* UpslashKeys.plist */; };
 		C480BE322A5A59F500A1A7E5 /* UpslashKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE312A5A59F500A1A7E5 /* UpslashKey.swift */; };
 		C480BE352A5A5FDD00A1A7E5 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C480BE342A5A5FDD00A1A7E5 /* SDWebImage */; };
+		C480BE382A5A805000A1A7E5 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = C480BE372A5A805000A1A7E5 /* CombineCocoa */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
 		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
@@ -99,7 +100,7 @@
 		C4DBE8BD2A429921002987CB /* UILabel+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8BC2A429921002987CB /* UILabel+Style.swift */; };
 		C4DBE8C42A42B363002987CB /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C4DBE8C32A42B363002987CB /* IQKeyboardManagerSwift */; };
 		C4DBE8C62A42D391002987CB /* FireStoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C52A42D391002987CB /* FireStoreService.swift */; };
-		C4DBE8C82A42D446002987CB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C72A42D446002987CB /* User.swift */; };
+		C4DBE8C82A42D446002987CB /* LTUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C72A42D446002987CB /* LTUser.swift */; };
 		C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C92A42D49B002987CB /* Trip.swift */; };
 		C4DBE8CE2A4306BB002987CB /* SearchCityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */; };
 		C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CF2A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift */; };
@@ -193,7 +194,7 @@
 		C4DBE8B42A428797002987CB /* AddNewTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewTripViewController.swift; sourceTree = "<group>"; };
 		C4DBE8BC2A429921002987CB /* UILabel+Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Style.swift"; sourceTree = "<group>"; };
 		C4DBE8C52A42D391002987CB /* FireStoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreService.swift; sourceTree = "<group>"; };
-		C4DBE8C72A42D446002987CB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		C4DBE8C72A42D446002987CB /* LTUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LTUser.swift; sourceTree = "<group>"; };
 		C4DBE8C92A42D49B002987CB /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 		C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCityViewController.swift; sourceTree = "<group>"; };
 		C4DBE8CF2A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPointOfInterestCategory+Extension.swift"; sourceTree = "<group>"; };
@@ -218,6 +219,7 @@
 				C4DBE8A22A41C158002987CB /* FirebaseFirestore in Frameworks */,
 				C4DBE8412A41B288002987CB /* TinyConstraints in Frameworks */,
 				C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */,
+				C480BE382A5A805000A1A7E5 /* CombineCocoa in Frameworks */,
 				C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */,
 				C4DAD90E2A53D8B1003D7A13 /* FirebaseMessaging in Frameworks */,
 				C4DAD9102A551EFB003D7A13 /* FirebaseCrashlytics in Frameworks */,
@@ -423,7 +425,7 @@
 			isa = PBXGroup;
 			children = (
 				C480BE1A2A596C3000A1A7E5 /* Errors */,
-				C4DBE8C72A42D446002987CB /* User.swift */,
+				C4DBE8C72A42D446002987CB /* LTUser.swift */,
 				C4DBE8C92A42D49B002987CB /* Trip.swift */,
 				C48E488F2A4C2A3D00949E08 /* SettingModel.swift */,
 				C4CBD42C2A4FD097009108C6 /* GPlaceResponse.swift */,
@@ -538,6 +540,7 @@
 				C4DAD90F2A551EFB003D7A13 /* FirebaseCrashlytics */,
 				C480BE2D2A5A581000A1A7E5 /* UnsplashPhotoPicker */,
 				C480BE342A5A5FDD00A1A7E5 /* SDWebImage */,
+				C480BE372A5A805000A1A7E5 /* CombineCocoa */,
 			);
 			productName = LettuceTrip;
 			productReference = C4DBE81D2A41AF62002987CB /* LettuceTrip.app */;
@@ -576,6 +579,7 @@
 				C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 				C480BE2C2A5A581000A1A7E5 /* XCRemoteSwiftPackageReference "unsplash-photopicker-ios" */,
 				C480BE332A5A5FDD00A1A7E5 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				C480BE362A5A805000A1A7E5 /* XCRemoteSwiftPackageReference "CombineCocoa" */,
 			);
 			productRefGroup = C4DBE81E2A41AF62002987CB /* Products */;
 			projectDirPath = "";
@@ -719,7 +723,7 @@
 				C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */,
 				C480BE322A5A59F500A1A7E5 /* UpslashKey.swift in Sources */,
 				C4DBE8D22A43E116002987CB /* MKPlaceMark+Extension.swift in Sources */,
-				C4DBE8C82A42D446002987CB /* User.swift in Sources */,
+				C4DBE8C82A42D446002987CB /* LTUser.swift in Sources */,
 				C42F51B02A454D5F00023305 /* LocationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -994,6 +998,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		C480BE362A5A805000A1A7E5 /* XCRemoteSwiftPackageReference "CombineCocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CombineCommunity/CombineCocoa.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.1;
+			};
+		};
 		C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JonasGessner/JGProgressHUD.git";
@@ -1051,6 +1063,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C480BE332A5A5FDD00A1A7E5 /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
+		};
+		C480BE372A5A805000A1A7E5 /* CombineCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C480BE362A5A805000A1A7E5 /* XCRemoteSwiftPackageReference "CombineCocoa" */;
+			productName = CombineCocoa;
 		};
 		C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;

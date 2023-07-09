@@ -10,7 +10,7 @@ import Combine
 
 extension FirestoreManager {
 
-    func createUser(id: String, user: User) -> AnyPublisher<Void, Error> {
+    func createUser(id: String, user: LTUser) -> AnyPublisher<Void, Error> {
         let ref = FirestoreHelper.makeCollectionRef(database, at: .users)
 
         return Future { promise in
@@ -27,14 +27,14 @@ extension FirestoreManager {
         }.eraseToAnyPublisher()
     }
 
-    func getUserData(userId: String?) -> AnyPublisher<User, Error> {
+    func getUserData(userId: String?) -> AnyPublisher<LTUser, Error> {
         guard let userId = userId else {
             return Fail(error: FirebaseError.wrongId(userId)).eraseToAnyPublisher()
         }
         let ref = FirestoreHelper.makeCollectionRef(database, at: .users)
 
         return Future { promise in
-            ref.document(userId).getDocument(as: User.self) { result in
+            ref.document(userId).getDocument(as: LTUser.self) { result in
                 switch result {
                 case .success(let user):
                     promise(.success(user))
@@ -45,9 +45,27 @@ extension FirestoreManager {
         }.eraseToAnyPublisher()
     }
 
+    func updateUser(image: Data) -> AnyPublisher<Void, Error> {
+        guard let userId = user?.uid else {
+            return Fail(error: FirebaseError.wrongId(user?.uid)).eraseToAnyPublisher()
+        }
+        let ref = FirestoreHelper.makeCollectionRef(database, at: .users)
+
+        return Future { promise in
+            ref.document(userId).updateData([
+                "image": image
+            ]) { error in
+                guard error == nil else {
+                    return promise(.failure(FirebaseError.user("Failed to update user image.")))
+                }
+                promise(.success(()))
+            }
+        }.eraseToAnyPublisher()
+    }
+
     func deleteUser() -> AnyPublisher<Void, Error> {
-        guard let userId = userId else {
-            return Fail(error: FirebaseError.wrongId(userId)).eraseToAnyPublisher()
+        guard let userId = user?.uid else {
+            return Fail(error: FirebaseError.wrongId(user?.uid)).eraseToAnyPublisher()
         }
         let ref = FirestoreHelper.makeCollectionRef(database, at: .users)
 

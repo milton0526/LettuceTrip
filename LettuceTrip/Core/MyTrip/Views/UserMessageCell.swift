@@ -6,14 +6,16 @@
 //
 
 import UIKit
+import Combine
 import TinyConstraints
 
 class UserMessageCell: UICollectionViewCell {
 
     lazy var imageView: UIImageView = {
-        let imageView = UIImageView(image: .init(systemName: "figure.australian.football"))
-        imageView.contentMode = .scaleAspectFit
+        let imageView = UIImageView(image: .init(systemName: "person"))
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 10
+        imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
         return imageView
     }()
@@ -27,7 +29,6 @@ class UserMessageCell: UICollectionViewCell {
         textView.textContainerInset = .init(top: 8, left: 8, bottom: 8, right: 8)
         textView.layer.cornerRadius = 12
         textView.layer.masksToBounds = true
-        textView.text = "這是測試訊息cell，我希望能順利產生我要的畫面"
         return textView
     }()
 
@@ -77,8 +78,11 @@ class UserMessageCell: UICollectionViewCell {
         timeLabel.bottom(to: stackView)
     }
 
-    func config(with message: Message) {
+    func config(with message: Message, from user: LTUser?) {
         textView.text = message.message
         timeLabel.text = message.sendTime?.formatted(date: .omitted, time: .shortened)
+        if let data = user?.image {
+            imageView.image = UIImage(data: data)
+        }
     }
 }

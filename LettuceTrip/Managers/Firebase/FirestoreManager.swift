@@ -14,10 +14,8 @@ final class FirestoreManager {
 
     let database = Firestore.firestore()
 
-    var userId: String? {
-        // Test user id
-        "LpDb7nvzvSZZcTtJZOld4OS3aEB3"
-        // Auth.auth().currentUser?.uid
+    var user: User? {
+        Auth.auth().currentUser
     }
 
     // MARK: Trip Method
@@ -63,7 +61,7 @@ final class FirestoreManager {
             }.eraseToAnyPublisher()
         } else {
             return Future { [unowned self] promise in
-                ref.whereField("members", arrayContains: self.userId)
+                ref.whereField("members", arrayContains: self.user)
                     .getDocuments { snapshot, error in
                         guard error == nil else {
                             return promise(.failure(FirebaseError.get))
@@ -137,7 +135,7 @@ final class FirestoreManager {
         let ref = FirestoreHelper.makeCollectionRef(database, at: .trips)
         var allTrips: [Trip] = []
 
-        let listener = ref.whereField("members", arrayContains: userId)
+        let listener = ref.whereField("members", arrayContains: user)
             .addSnapshotListener { snapshot, error in
                 guard error == nil else {
                     completion(.failure(FirebaseError.listenerError("UserTrips")))
