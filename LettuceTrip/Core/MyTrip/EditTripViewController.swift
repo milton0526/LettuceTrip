@@ -71,6 +71,7 @@ class EditTripViewController: UIViewController {
         }
     }
     private lazy var currentSelectedDate = trip.startDate
+    private var listenerSubscription: AnyCancellable?
     private var cancelBags: Set<AnyCancellable> = []
 
     override func viewDidLoad() {
@@ -83,7 +84,17 @@ class EditTripViewController: UIViewController {
         configureDataSource()
         setEditMode()
         scheduleView.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .centeredVertically)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchPlaces()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        listenerSubscription?.cancel()
+        listenerSubscription = nil
     }
 
     private func setupUI() {
@@ -123,7 +134,7 @@ class EditTripViewController: UIViewController {
         guard let tripID = trip.id else { return }
         places.removeAll(keepingCapacity: true)
 
-        fsManager.placeListener(at: tripID)
+        listenerSubscription = fsManager.placeListener(at: tripID)
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] completion in
                 switch completion {
@@ -158,7 +169,6 @@ class EditTripViewController: UIViewController {
                 }
                 filterPlace(by: currentSelectedDate)
             }
-            .store(in: &cancelBags)
     }
 
     private func customNavBar() {
@@ -377,7 +387,7 @@ extension EditTripViewController: UITableViewDelegate {
         let viewController: UIViewController
 
         if isEditMode {
-            viewController = ArrangePlaceViewController(trip: trip, place: place, isEditMode: false)
+            viewController = ArrangePlaceViewController(trip: trip, place: place, isEditMode: false, fsManager: fsManager)
         } else {
             viewController = PlaceDetailViewController(place: place)
         }

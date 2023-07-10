@@ -162,7 +162,19 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
             return
         }
 
-        FireStoreService.shared.deleteUserInFireStore()
+        fsManager.deleteUser()
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    let signInVC = SignInViewController()
+                    signInVC.modalPresentationStyle = .fullScreen
+                    viewController.present(signInVC, animated: true)
+                case .failure(let error):
+                    viewController.showAlertToUser(error: error)
+                }
+            } receiveValue: { _ in }
+            .store(in: &cancelBags)
 
         user.delete { error in
             DispatchQueue.main.async {
@@ -170,9 +182,7 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
                     print("Auth delete user error: \(error.localizedDescription)")
                     viewController.showAlertToUser(error: error)
                 } else {
-                    let signInVC = SignInViewController()
-                    signInVC.modalPresentationStyle = .fullScreen
-                    viewController.present(signInVC, animated: true)
+
                 }
             }
         }

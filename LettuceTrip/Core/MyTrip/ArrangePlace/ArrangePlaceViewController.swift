@@ -8,17 +8,21 @@
 import UIKit
 import MapKit
 import TinyConstraints
+import Combine
 
 class ArrangePlaceViewController: UIViewController {
 
     private var trip: Trip
     private var place: Place
     private var isEditMode = true
+    private let fsManager: FirestoreManager
+    private var cancelBags: Set<AnyCancellable> = []
 
-    init(trip: Trip, place: Place, isEditMode: Bool = true) {
+    init(trip: Trip, place: Place, isEditMode: Bool = true, fsManager: FirestoreManager) {
         self.trip = trip
         self.place = place
         self.isEditMode = isEditMode
+        self.fsManager = fsManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -97,14 +101,18 @@ class ArrangePlaceViewController: UIViewController {
         place.memo = arrangement.memo
 
         // Update fireStore document
-        FireStoreService.shared.updatePlace(place, to: trip, update: true) { [weak self] error in
-            guard let self = self else { return }
-            if error == nil {
-                self.navigationController?.popViewController(animated: true)
-            } else {
-                JGHudIndicator.shared.showHud(type: .failure)
-            }
-        }
+        guard let tripId = trip.id else { return }
+        fsManager.updatePlace(place, at: tripId, isUpdate: true)
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] completion in
+                switch completion {
+                case .finished:
+                    navigationController?.popViewController(animated: true)
+                case .failure:
+                    JGHudIndicator.shared.showHud(type: .failure)
+                }
+            } receiveValue: { _ in }
+            .store(in: &cancelBags)
     }
 
     private func setupUI() {

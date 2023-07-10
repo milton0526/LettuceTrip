@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import FirebaseFirestore
 
 extension FirestoreManager {
 
@@ -57,6 +58,21 @@ extension FirestoreManager {
             ]) { error in
                 guard error == nil else {
                     return promise(.failure(FirebaseError.user("Failed to update user image.")))
+                }
+                promise(.success(()))
+            }
+        }.eraseToAnyPublisher()
+    }
+
+    func updateMember(userID: String, at tripID: String) -> AnyPublisher<Void, Error> {
+        let ref = FirestoreHelper.makeCollectionRef(database, at: .trips).document(tripID)
+
+        return Future { promise in
+            ref.updateData([
+                "members": FieldValue.arrayUnion([userID])
+            ]) { error in
+                guard error == nil else {
+                    return promise(.failure(FirebaseError.user("Failed to invite user.")))
                 }
                 promise(.success(()))
             }

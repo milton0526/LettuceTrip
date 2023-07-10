@@ -7,18 +7,21 @@
 
 import UIKit
 import FirebaseAuth
+import Combine
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var viewController: UIViewController?
+    private let fsManager = FirestoreManager()
+    private var subscription: AnyCancellable?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
-        if FireStoreService.shared.currentUser == nil {
+        if fsManager.user == nil {
             let signInVC = SignInViewController()
             viewController = signInVC
         } else {
@@ -77,9 +80,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let urlComponents = URLComponents(string: firstURL.absoluteString)
         guard
             let query = urlComponents?.query,
-            let userID = FireStoreService.shared.currentUser
+            let userID = fsManager.user
         else {
-
             // show alert to let user sign in
             return
         }
@@ -90,14 +92,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 message: nil,
                 preferredStyle: .alert)
 
-            let accept = UIAlertAction(title: "Accept", style: .default) { _ in
-                FireStoreService.shared.updateMembers(userID: userID, at: query) { error in
-                    if error == nil {
-                        print("Success add this trip")
-                    } else {
-                        print("Failed to add this trip into your list.")
-                    }
-                }
+            let accept = UIAlertAction(title: "Accept", style: .default) { [weak self] _ in
+                guard let self = self else { return }
+                subscription = self.fsManager.updateMember(userID: userID, at: query)
+                    .sink(receiveCompletion: { _ in
+                    }, receiveValue: { _ in })
             }
 
             let cancel = UIAlertAction(title: "Cancel", style: .cancel)

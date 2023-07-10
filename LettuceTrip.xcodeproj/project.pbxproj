@@ -98,7 +98,6 @@
 		C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8B42A428797002987CB /* AddNewTripViewController.swift */; };
 		C4DBE8BD2A429921002987CB /* UILabel+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8BC2A429921002987CB /* UILabel+Style.swift */; };
 		C4DBE8C42A42B363002987CB /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C4DBE8C32A42B363002987CB /* IQKeyboardManagerSwift */; };
-		C4DBE8C62A42D391002987CB /* FireStoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C52A42D391002987CB /* FireStoreService.swift */; };
 		C4DBE8C82A42D446002987CB /* LTUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C72A42D446002987CB /* LTUser.swift */; };
 		C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8C92A42D49B002987CB /* Trip.swift */; };
 		C4DBE8CE2A4306BB002987CB /* SearchCityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */; };
@@ -192,7 +191,6 @@
 		C4DBE8B12A41DD83002987CB /* TripCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripCell.swift; sourceTree = "<group>"; };
 		C4DBE8B42A428797002987CB /* AddNewTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewTripViewController.swift; sourceTree = "<group>"; };
 		C4DBE8BC2A429921002987CB /* UILabel+Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Style.swift"; sourceTree = "<group>"; };
-		C4DBE8C52A42D391002987CB /* FireStoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreService.swift; sourceTree = "<group>"; };
 		C4DBE8C72A42D446002987CB /* LTUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LTUser.swift; sourceTree = "<group>"; };
 		C4DBE8C92A42D49B002987CB /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 		C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCityViewController.swift; sourceTree = "<group>"; };
@@ -435,7 +433,6 @@
 		C4DBE87E2A41BB9C002987CB /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				C4DBE8C52A42D391002987CB /* FireStoreService.swift */,
 				C42F51AF2A454D5F00023305 /* LocationService.swift */,
 				C454134A2A4A8871000D0685 /* FirebaseAuthHelper.swift */,
 				C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */,
@@ -715,7 +712,6 @@
 				C45413412A497145000D0685 /* Date+Extension.swift in Sources */,
 				C42F51C62A45BD1D00023305 /* ChatRoomViewController.swift in Sources */,
 				C4DBE88A2A41BC7B002987CB /* PlaceInfoCell.swift in Sources */,
-				C4DBE8C62A42D391002987CB /* FireStoreService.swift in Sources */,
 				C4CC0C042A48465300E03758 /* ArrangePlaceViewController.swift in Sources */,
 				C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */,
 				C480BE322A5A59F500A1A7E5 /* UnsplashKey.swift in Sources */,
