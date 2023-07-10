@@ -71,4 +71,13 @@ class ProfileHeaderView: UIView {
         emailLabel.leading(to: nameLabel)
         emailLabel.trailing(to: nameLabel)
     }
+
+    func config(with user: LTUser) {
+        nameLabel.text = user.name
+        emailLabel.text = user.email
+
+        if let url = URL(string: user.image ?? "") {
+            imageView.setUserImage(url: url)
+        }
+    }
 }

@@ -37,6 +37,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
 
     private var cancelBags: Set<AnyCancellable> = []
     private let fsManager = FirestoreManager()
+    private let storageManager = StorageManager()
     private var user: LTUser?
 
     override func viewDidLoad() {
@@ -121,21 +122,17 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
 
         fsManager.getUserData(userId: userId)
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] completion in
+            .sink(receiveCompletion: { [unowned self] completion in
                 switch completion {
                 case .finished:
-                    self.profileHeaderView.nameLabel.text = user?.name
-                    self.profileHeaderView.emailLabel.text = user?.email
-                    if let image = user?.image {
-                        self.profileHeaderView.imageView.image = UIImage(data: image)
-                    }
-
+                    break
                 case .failure(let error):
                     showAlertToUser(error: error)
                 }
-            } receiveValue: { [unowned self] user in
+            }, receiveValue: { [unowned self] user in
                 self.user = user
-            }
+                profileHeaderView.config(with: user)
+            })
             .store(in: &cancelBags)
     }
 
@@ -204,25 +201,31 @@ extension ProfileViewController: PHPickerViewControllerDelegate {
                 guard
                     let self = self,
                     let image = image as? UIImage,
-                    let imageData = image.jpegData(compressionQuality: 0.1)
+                    let imageData = image.jpegData(compressionQuality: 0.3),
+                    let userID = user?.id
                 else {
                     return
                 }
 
-                DispatchQueue.main.async {
-                    self.profileHeaderView.imageView.image = image
-                }
-
-                self.fsManager.updateUser(image: imageData)
+                JGHudIndicator.shared.showHud(type: .loading(text: "Updating"))
+                storageManager.uploadImage(imageData, at: .users, with: userID)
                     .receive(on: DispatchQueue.main)
-                    .sink { completion in
+                    .flatMap { _ in
+                        self.storageManager.downloadRef(at: .users, with: userID)
+                    }
+                    .flatMap { url in
+                        self.fsManager.updateUser(image: url.absoluteString)
+                    }
+                    .sink(receiveCompletion: { completion in
                         switch completion {
-                        case .finished: break
+                        case .finished:
+                            self.fetchData()
+                            JGHudIndicator.shared.dismissHUD()
                         case .failure(let error):
                             self.showAlertToUser(error: error)
                         }
-                    } receiveValue: { _ in }
-                    .store(in: &self.cancelBags)
+                    }, receiveValue: { _ in })
+                    .store(in: &cancelBags)
             }
         }
     }

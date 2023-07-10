@@ -54,10 +54,10 @@ class CirclePlaceCell: UICollectionViewCell {
     }
 
     func config(user: LTUser) {
-        if let data = user.image {
-            iconImageView.image = UIImage(data: data)
+        if let imageString = user.image,
+            let url = URL(string: imageString) {
+            iconImageView.setUserImage(url: url)
         }
-
         titleLabel.text = user.name
     }
 }

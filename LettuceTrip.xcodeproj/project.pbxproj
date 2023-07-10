@@ -103,6 +103,9 @@
 		C4DBE8CE2A4306BB002987CB /* SearchCityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */; };
 		C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8CF2A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift */; };
 		C4DBE8D22A43E116002987CB /* MKPlaceMark+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8D12A43E116002987CB /* MKPlaceMark+Extension.swift */; };
+		C4EF99F72A5C04F300B1C4BC /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EF99F62A5C04F300B1C4BC /* StorageManager.swift */; };
+		C4EF99F92A5C051A00B1C4BC /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = C4EF99F82A5C051A00B1C4BC /* FirebaseStorage */; };
+		C4EF99FB2A5C09E900B1C4BC /* SDWebImage+Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EF99FA2A5C09E900B1C4BC /* SDWebImage+Wrapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -196,6 +199,8 @@
 		C4DBE8CD2A4306BB002987CB /* SearchCityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCityViewController.swift; sourceTree = "<group>"; };
 		C4DBE8CF2A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPointOfInterestCategory+Extension.swift"; sourceTree = "<group>"; };
 		C4DBE8D12A43E116002987CB /* MKPlaceMark+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPlaceMark+Extension.swift"; sourceTree = "<group>"; };
+		C4EF99F62A5C04F300B1C4BC /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		C4EF99FA2A5C09E900B1C4BC /* SDWebImage+Wrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SDWebImage+Wrapper.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +217,7 @@
 				C480BE352A5A5FDD00A1A7E5 /* SDWebImage in Frameworks */,
 				C4C0F0582A512182002F59B3 /* CoreGraphics.framework in Frameworks */,
 				C4DBE8C42A42B363002987CB /* IQKeyboardManagerSwift in Frameworks */,
+				C4EF99F92A5C051A00B1C4BC /* FirebaseStorage in Frameworks */,
 				C4DBE89B2A41BD7B002987CB /* Cosmos in Frameworks */,
 				C4DBE8A22A41C158002987CB /* FirebaseFirestore in Frameworks */,
 				C4DBE8412A41B288002987CB /* TinyConstraints in Frameworks */,
@@ -231,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				C480BE1F2A5972FC00A1A7E5 /* Firebase */,
+				C4EF99F62A5C04F300B1C4BC /* StorageManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -413,6 +420,7 @@
 				C45413402A497145000D0685 /* Date+Extension.swift */,
 				C4CBD4422A4FECA2009108C6 /* GMSPlace+Combine.swift */,
 				C480BDF32A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift */,
+				C4EF99FA2A5C09E900B1C4BC /* SDWebImage+Wrapper.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -535,6 +543,7 @@
 				C480BE2D2A5A581000A1A7E5 /* UnsplashPhotoPicker */,
 				C480BE342A5A5FDD00A1A7E5 /* SDWebImage */,
 				C480BE372A5A805000A1A7E5 /* CombineCocoa */,
+				C4EF99F82A5C051A00B1C4BC /* FirebaseStorage */,
 			);
 			productName = LettuceTrip;
 			productReference = C4DBE81D2A41AF62002987CB /* LettuceTrip.app */;
@@ -695,6 +704,7 @@
 				C4DBE8B22A41DD83002987CB /* TripCell.swift in Sources */,
 				C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */,
 				C4DBE8902A41BCC3002987CB /* PlaceAboutCellViewModel.swift in Sources */,
+				C4EF99F72A5C04F300B1C4BC /* StorageManager.swift in Sources */,
 				C4DBE8462A41B312002987CB /* ItineraryHeaderView.swift in Sources */,
 				C480BE032A590A9500A1A7E5 /* FirestoreManager.swift in Sources */,
 				C480BE232A5981CD00A1A7E5 /* ChatRoomVM.swift in Sources */,
@@ -714,6 +724,7 @@
 				C4DBE88A2A41BC7B002987CB /* PlaceInfoCell.swift in Sources */,
 				C4CC0C042A48465300E03758 /* ArrangePlaceViewController.swift in Sources */,
 				C4DBE8CA2A42D49B002987CB /* Trip.swift in Sources */,
+				C4EF99FB2A5C09E900B1C4BC /* SDWebImage+Wrapper.swift in Sources */,
 				C480BE322A5A59F500A1A7E5 /* UnsplashKey.swift in Sources */,
 				C4DBE8D22A43E116002987CB /* MKPlaceMark+Extension.swift in Sources */,
 				C4DBE8C82A42D446002987CB /* LTUser.swift in Sources */,
@@ -1096,6 +1107,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C4DBE8C22A42B363002987CB /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
 			productName = IQKeyboardManagerSwift;
+		};
+		C4EF99F82A5C051A00B1C4BC /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -46,7 +46,7 @@ extension FirestoreManager {
         }.eraseToAnyPublisher()
     }
 
-    func updateUser(image: Data) -> AnyPublisher<Void, Error> {
+    func updateUser(image: String) -> AnyPublisher<Void, Error> {
         guard let userId = user else {
             return Fail(error: FirebaseError.wrongId(user)).eraseToAnyPublisher()
         }

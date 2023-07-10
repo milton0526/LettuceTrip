@@ -79,8 +79,8 @@ class FriendMessageCell: UICollectionViewCell {
     func config(with message: Message, from user: LTUser?) {
         textView.text = message.message
         timeLabel.text = message.sendTime?.formatted(date: .omitted, time: .shortened)
-        if let data = user?.image {
-            imageView.image = UIImage(data: data)
+        if let url = URL(string: user?.image ?? "") {
+            imageView.setUserImage(url: url)
         }
     }
 }

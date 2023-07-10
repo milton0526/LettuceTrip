@@ -12,6 +12,5 @@ struct LTUser: Codable {
     let id: String
     let name: String
     let email: String
-    var image: Data?
-    var deviceToken: String?
+    var image: String?
 }
