@@ -206,10 +206,8 @@ class EditTripViewController: UIViewController {
         let shareToCommunity = UIAlertAction(title: String(localized: "Community"), style: .default) { [weak self] _ in
             // share to home page
             guard let self = self else { return }
-            var trip = self.trip
-            trip.isPublic = true
 
-            fsManager.update(trip)
+            fsManager.updateTrip(tripID, field: .isPublic, data: true)
                 .receive(on: DispatchQueue.main)
                 .sink { completion in
                     switch completion {
@@ -410,7 +408,7 @@ extension EditTripViewController: UITableViewDelegate {
                 return
             }
 
-            fsManager.delete(tripId, place: placeId)
+            fsManager.deleteTrip(tripId, place: placeId)
                 .receive(on: DispatchQueue.main)
                 .sink { [unowned self] result in
                     switch result {
@@ -539,7 +537,7 @@ extension EditTripViewController: PHPickerViewControllerDelegate {
                 self.storageManager.downloadRef(at: .trips, with: tripId)
             }
             .flatMap { url in
-                self.fsManager.update(self.trip, with: url.absoluteString)
+                self.fsManager.updateTrip(tripId, field: .image, data: url.absoluteString)
             }
             .sink { [unowned self] completion in
                 switch completion {

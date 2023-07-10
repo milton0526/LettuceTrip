@@ -166,8 +166,13 @@ extension MyTripViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
             let deleteAction = UIAction(title: String(localized: "Delete"), image: UIImage(systemName: "trash")) { [unowned self] _ in
-                guard let trip = filterTrips[currentSegment]?[indexPath.row] else { return }
-                guard let tripID = trip.id else { return }
+                guard
+                    let trip = filterTrips[currentSegment]?[indexPath.row],
+                    let tripID = trip.id,
+                    let userId = fsManager.user
+                else {
+                    return
+                }
 
                 let alertVC = UIAlertController(
                     title: String(localized: "Are you sure want to delete?"),
@@ -177,7 +182,7 @@ extension MyTripViewController: UITableViewDelegate {
                 let delete = UIAlertAction(
                     title: String(localized: "Delete"),
                     style: .destructive) { [unowned self] _ in
-                        self.fsManager.update(trip, with: self.fsManager.user, isRemove: true)
+                        self.fsManager.updateMember(userId: userId, atTrip: tripID, isRemove: true)
                             .receive(on: DispatchQueue.main)
                             .sink { completion in
                                 switch completion {

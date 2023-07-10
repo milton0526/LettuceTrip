@@ -221,7 +221,7 @@ class AddNewTripViewController: UIViewController {
             results.append(place)
         }
 
-        fsManager.copyPlaces(at: id, with: results)
+        fsManager.copyPlaces(at: id, places: results)
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] completion in
                 switch completion {

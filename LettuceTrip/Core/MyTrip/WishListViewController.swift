@@ -128,7 +128,7 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
                 }
 
                 if let item = self.dataSource.itemIdentifier(for: indexPath)?.id {
-                    fsManager.delete(tripId, place: item)
+                    fsManager.deleteTrip(tripId, place: item)
                         .receive(on: DispatchQueue.main)
                         .sink { result in
                             switch result {

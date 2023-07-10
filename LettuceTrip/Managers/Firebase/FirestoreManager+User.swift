@@ -64,15 +64,15 @@ extension FirestoreManager {
         }.eraseToAnyPublisher()
     }
 
-    func updateMember(userID: String, at tripID: String) -> AnyPublisher<Void, Error> {
-        let ref = FirestoreHelper.makeCollectionRef(database, at: .trips).document(tripID)
+    func updateMember(userId: String, atTrip tripId: String, isRemove: Bool = false) -> AnyPublisher<Void, Error> {
+        let ref = FirestoreHelper.makeCollectionRef(database, at: .trips).document(tripId)
 
         return Future { promise in
             ref.updateData([
-                "members": FieldValue.arrayUnion([userID])
+                "members": isRemove ? FieldValue.arrayRemove([userId]) : FieldValue.arrayUnion([userId])
             ]) { error in
                 guard error == nil else {
-                    return promise(.failure(FirebaseError.user("Failed to invite user.")))
+                    return promise(.failure(FirebaseError.user("Failed to update member.")))
                 }
                 promise(.success(()))
             }

@@ -40,7 +40,7 @@ extension FirestoreManager {
         }.eraseToAnyPublisher()
     }
 
-    func copyPlaces(at tripID: String, with places: [Place]) -> AnyPublisher<Void, Error> {
+    func copyPlaces(at tripID: String, places: [Place]) -> AnyPublisher<Void, Error> {
         let batch = database.batch()
         let subDirectory = SubDirectory(documentId: tripID, collection: .places)
         let baseRef = FirestoreHelper.makeCollectionRef(database, at: .trips, inside: subDirectory)

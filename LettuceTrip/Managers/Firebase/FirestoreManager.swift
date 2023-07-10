@@ -19,6 +19,11 @@ final class FirestoreManager {
         // Auth.auth().currentUser?.uid
     }
 
+    enum TripField: String {
+        case image
+        case isPublic
+    }
+
     // MARK: Trip Method
     func createTrip(_ trip: Trip) -> AnyPublisher<String, Error> {
         let ref = FirestoreHelper.makeCollectionRef(database, at: .trips)
@@ -78,60 +83,22 @@ final class FirestoreManager {
         }
     }
 
-    func update(_ trip: Trip, with imageString: String) -> AnyPublisher<Void, Error> {
-        guard let tripId = trip.id else {
-            return Fail(error: FirebaseError.wrongId(trip.id)).eraseToAnyPublisher()
-        }
-
+    func updateTrip(_ tripId: String, field: TripField, data: Any) -> AnyPublisher<Void, Error> {
         let ref = FirestoreHelper.makeCollectionRef(database, at: .trips).document(tripId)
+        let newData: [String: Any] = [field.rawValue: data]
 
         return Future { promise in
-            ref.updateData([
-                "image": imageString
-            ]) { error in
+            ref.updateData(newData) { error in
                 guard error == nil else {
-                    return promise(.failure(FirebaseError.update("Trip Image")))
+                    return promise(.failure(FirebaseError.update("Trip")))
                 }
                 promise(.success(()))
             }
         }.eraseToAnyPublisher()
     }
 
-    func update(_ trip: Trip, with userId: String? = nil, isRemove: Bool = false) -> AnyPublisher<Void, Error> {
-        guard let tripId = trip.id else {
-            return Fail(error: FirebaseError.wrongId(trip.id)).eraseToAnyPublisher()
-        }
 
-        let ref = FirestoreHelper.makeCollectionRef(database, at: .trips).document(tripId)
-
-        if let userId = userId {
-            return Future { promise in
-                ref.updateData([
-                    "members": isRemove ? FieldValue.arrayRemove([userId]) : FieldValue.arrayUnion([userId])
-                ]) { error in
-                    guard error == nil else {
-                        return promise(.failure(FirebaseError.update("Member")))
-                    }
-                    promise(.success(()))
-                }
-            }.eraseToAnyPublisher()
-        } else {
-            return Future { promise in
-                do {
-                    try ref.setData(from: trip, merge: true) { error in
-                        guard error == nil else {
-                            return promise(.failure(FirebaseError.update("Trip")))
-                        }
-                        promise(.success(()))
-                    }
-                } catch {
-                    promise(.failure(error))
-                }
-            }.eraseToAnyPublisher()
-        }
-    }
-
-    func delete(_ tripId: String, place placeId: String? = nil) -> AnyPublisher<Void, Error> {
+    func deleteTrip(_ tripId: String, place placeId: String? = nil) -> AnyPublisher<Void, Error> {
         let ref: DocumentReference
 
         if let placeId = placeId {
