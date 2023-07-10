@@ -141,20 +141,19 @@ class EditTripViewController: UIViewController {
                 }
 
                 snapshot.documentChanges.forEach { diff in
-                    guard
-                        let modifiedPlace = try? diff.document.data(as: Place.self),
-                        let index = places.firstIndex(where: { $0.id == modifiedPlace.id })
-                    else {
-                        return
-                    }
+                    guard let modifiedPlace = try? diff.document.data(as: Place.self) else { return }
 
                     switch diff.type {
                     case .added:
                         places.append(modifiedPlace)
                     case .modified:
-                        places[index].arrangedTime = modifiedPlace.arrangedTime
+                        if let index = places.firstIndex(where: { $0.id == modifiedPlace.id }) {
+                            places[index].arrangedTime = modifiedPlace.arrangedTime
+                        }
                     case .removed:
-                        places.remove(at: index)
+                        if let index = places.firstIndex(where: { $0.id == modifiedPlace.id }) {
+                            places.remove(at: index)
+                        }
                     }
                 }
                 filterPlace(by: currentSelectedDate)

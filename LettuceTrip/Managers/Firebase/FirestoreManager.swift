@@ -132,11 +132,15 @@ final class FirestoreManager {
         }.eraseToAnyPublisher()
     }
 
-    func tripListener(at tripId: String, isArrange: Bool = true) -> AnyPublisher<QuerySnapshot, Error> {
+    func tripListener() -> AnyPublisher<QuerySnapshot, Error> {
+        guard let user = user else {
+            return Fail(error: FirebaseError.wrongId(user)).eraseToAnyPublisher()
+        }
+
         let ref = FirestoreHelper.makeCollectionRef(database, at: .trips)
         let subject = PassthroughSubject<QuerySnapshot, Error>()
 
-        let listener = ref.whereField("isArrange", isEqualTo: isArrange)
+        let listener = ref.whereField("members", arrayContains: user)
             .addSnapshotListener { querySnapshot, error in
                 guard let querySnapshot = querySnapshot, error == nil else {
                     // swiftlint: disable force_unwrapping

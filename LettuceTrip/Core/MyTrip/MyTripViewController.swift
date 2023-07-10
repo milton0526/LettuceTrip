@@ -50,8 +50,8 @@ class MyTripViewController: UIViewController {
     }()
 
     private var listener: ListenerRegistration?
-    private var upcomingTrips: [Trip] = []
-    private var closedTrips: [Trip] = []
+    private var allTrips: [Trip] = []
+    private var filterTrips: [Segment: [Trip]] = [:]
     private var currentSegment: Segment = .upcoming
     private lazy var placeHolder = makePlaceholder(text: String(localized: "Add new trip to start!"))
     private var cancelBags: Set<AnyCancellable> = []
@@ -62,17 +62,7 @@ class MyTripViewController: UIViewController {
         navigationItem.title = String(localized: "My trips")
         navigationItem.backButtonDisplayMode = .minimal
         setupUI()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         fetchUserTrips()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        listener?.remove()
-        listener = nil
     }
 
     private func setupUI() {
@@ -103,30 +93,56 @@ class MyTripViewController: UIViewController {
     }
 
     private func fetchUserTrips() {
-        listener = FireStoreService.shared.addListenerToAllUserTrips { [weak self] result in
-            self?.upcomingTrips.removeAll(keepingCapacity: true)
-            self?.closedTrips.removeAll(keepingCapacity: true)
+        fsManager.tripListener()
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    self.showAlertToUser(error: error)
+                }
+            } receiveValue: { [unowned self] snapshot in
+                if allTrips.isEmpty {
+                    let firstResult = snapshot.documents.compactMap { try? $0.data(as: Trip.self) }
+                    allTrips = firstResult
+                    filterByDate()
+                    return
+                }
 
-            switch result {
-            case .success(let trips):
-                self?.filterByDate(trips: trips)
-            case .failure(let error):
-                self?.showAlertToUser(error: error)
+                snapshot.documentChanges.forEach { diff in
+                    guard let modifiedTrip = try? diff.document.data(as: Trip.self) else { return }
+
+                    switch diff.type {
+                    case .added:
+                        allTrips.append(modifiedTrip)
+                    case .modified:
+                        if let index = allTrips.firstIndex(where: { $0.id == modifiedTrip.id }) {
+                            allTrips[index].image = modifiedTrip.image
+                        }
+                    case .removed:
+                        if let index = allTrips.firstIndex(where: { $0.id == modifiedTrip.id }) {
+                            allTrips.remove(at: index)
+                        }
+                    }
+                }
+                filterByDate()
             }
-        }
+            .store(in: &cancelBags)
     }
 
-    private func filterByDate(trips: [Trip]) {
-        trips.forEach { trip in
+    private func filterByDate() {
+        filterTrips.removeAll(keepingCapacity: true)
+        allTrips.forEach { trip in
             if trip.endDate > .now {
-                upcomingTrips.append(trip)
+                filterTrips[.upcoming, default: []].append(trip)
             } else {
-                closedTrips.append(trip)
+                filterTrips[.closed, default: []].append(trip)
             }
         }
 
-        closedTrips.sort { $0.startDate > $1.startDate }
-        upcomingTrips.sort { $0.startDate < $1.startDate }
+        filterTrips[.upcoming]?.sort { $0.startDate > $1.startDate }
+        filterTrips[.closed]?.sort { $0.startDate < $1.startDate }
 
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
@@ -141,10 +157,7 @@ extension MyTripViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let trip = currentSegment == .upcoming
-        ? upcomingTrips[indexPath.row]
-        : closedTrips[indexPath.row]
-
+        guard let trip = filterTrips[currentSegment]?[indexPath.row] else { return }
         let editVC = EditTripViewController(trip: trip, fsManager: fsManager)
         navigationController?.pushViewController(editVC, animated: true)
     }
@@ -153,10 +166,7 @@ extension MyTripViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
             let deleteAction = UIAction(title: String(localized: "Delete"), image: UIImage(systemName: "trash")) { [unowned self] _ in
-                let trip = currentSegment == .upcoming
-                ? upcomingTrips[indexPath.row]
-                : closedTrips[indexPath.row]
-
+                guard let trip = filterTrips[currentSegment]?[indexPath.row] else { return }
                 guard let tripID = trip.id else { return }
 
                 let alertVC = UIAlertController(
@@ -192,7 +202,7 @@ extension MyTripViewController: UITableViewDelegate {
 // MARK: - UITableView DataSource
 extension MyTripViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let trips = currentSegment == .upcoming ? upcomingTrips : closedTrips
+        guard let trips = filterTrips[currentSegment] else { return 0 }
         placeHolder.isHidden = trips.isEmpty ? false : true
         return trips.count
     }
@@ -202,11 +212,9 @@ extension MyTripViewController: UITableViewDataSource {
             fatalError("Failed to dequeue trip cell")
         }
 
-        let trip = currentSegment == .upcoming
-        ? upcomingTrips[indexPath.row]
-        : closedTrips[indexPath.row]
-
-        tripCell.config(with: trip)
+        if let trip = filterTrips[currentSegment]?[indexPath.row] {
+            tripCell.config(with: trip)
+        }
         return tripCell
     }
 }
