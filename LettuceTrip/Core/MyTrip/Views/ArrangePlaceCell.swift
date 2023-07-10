@@ -128,7 +128,7 @@ class ArrangePlaceCell: UITableViewCell {
         iconImageView.image = UIImage(data: place.iconImage)?.withTintColor(.tintColor)
 
         if let travelTime = travelTime {
-            estimatedTimeLabel.text = travelTime == "Not available" ? travelTime : String(localized: "\(travelTime) minutes")
+            estimatedTimeLabel.text = travelTime == String(localized: "Not available") ? travelTime : String(localized: "\(travelTime) minutes")
         } else {
             estimatedHStack.isHidden = true
         }

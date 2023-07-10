@@ -83,10 +83,6 @@ class EditTripViewController: UIViewController {
         configureDataSource()
         setEditMode()
         scheduleView.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .centeredVertically)
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         fetchPlaces()
     }
 
@@ -161,7 +157,6 @@ class EditTripViewController: UIViewController {
                         places.remove(at: index)
                     }
                 }
-
                 filterPlace(by: currentSelectedDate)
             }
             .store(in: &cancelBags)
@@ -330,7 +325,7 @@ class EditTripViewController: UIViewController {
         snapshot.appendSections([.main])
         snapshot.appendItems(sortedPlaces)
         // use snapshot reload method to avoid weird animation
-        dataSource.apply(snapshot, animatingDifferences: false) {
+        dataSource.applySnapshotUsingReloadData(snapshot) {
             JGHudIndicator.shared.dismissHUD()
         }
     }

@@ -12,21 +12,19 @@ import FirebaseFirestore
 extension FirestoreManager {
 
     func updatePlace(_ place: Place, at tripId: String, isUpdate: Bool = false) -> AnyPublisher<Void, Error> {
-        guard let placeId = place.id else {
-            return Fail(error: FirebaseError.wrongId(place.id)).eraseToAnyPublisher()
-        }
-
         let subDirectory = SubDirectory(documentId: tripId, collection: .places)
         let ref = FirestoreHelper.makeCollectionRef(database, at: .trips, inside: subDirectory)
 
         return Future { promise in
             do {
                 if isUpdate {
-                    try ref.document(placeId).setData(from: place, merge: true) { error in
-                        guard error == nil else {
-                            return promise(.failure(FirebaseError.update("Place")))
+                    if let placeId = place.id {
+                        try ref.document(placeId).setData(from: place, merge: true) { error in
+                            guard error == nil else {
+                                return promise(.failure(FirebaseError.update("Place")))
+                            }
+                            promise(.success(()))
                         }
-                        promise(.success(()))
                     }
                 } else {
                     try ref.addDocument(from: place) { error in

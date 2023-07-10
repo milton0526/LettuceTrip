@@ -38,7 +38,8 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private var placePhotos: [GPlacePhoto] = []
-    private var cancellable = Set<AnyCancellable>()
+    private let fsManager = FirestoreManager()
+    private var cancelBags: Set<AnyCancellable> = []
 
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -112,7 +113,7 @@ class PlaceDetailViewController: UIViewController {
             }, receiveValue: { [weak self] place in
                 self?.gmsPlace = place
             })
-            .store(in: &cancellable)
+            .store(in: &cancelBags)
     }
 
     private func fetchPhotos(photos: [GMSPlacePhotoMetadata]) {
@@ -136,20 +137,25 @@ class PlaceDetailViewController: UIViewController {
                         counter += 1
                     }
                 }
-                .store(in: &cancellable)
+                .store(in: &cancelBags)
         }
     }
 
     @objc func addToTripButtonTapped(_ sender: UIButton) {
         // fetch firebase to check if user have trip list
-        FireStoreService.shared.fetchAllUserTrips { [weak self] result in
-            switch result {
-            case .success(let trips):
-                self?.showActionSheet(form: trips)
-            case .failure(let error):
-                self?.showAlertToUser(error: error)
+        fsManager.getTrips()
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    showAlertToUser(error: error)
+                }
+            } receiveValue: { [unowned self] trips in
+                showActionSheet(form: trips)
             }
-        }
+            .store(in: &cancelBags)
     }
 
     private func showActionSheet(form trips: [Trip]) {
@@ -166,14 +172,24 @@ class PlaceDetailViewController: UIViewController {
                 let updateAction = UIAlertAction(
                     title: trip.tripName,
                     style: .default) { [weak self] _ in
-                        guard let self = self else { return }
-                        FireStoreService.shared.updatePlace(self.place, to: trip) { error in
-                            if error != nil {
-                                JGHudIndicator.shared.showHud(type: .failure)
-                            } else {
-                                JGHudIndicator.shared.showHud(type: .success)
-                            }
+                        guard
+                            let self = self,
+                            let tripId = trip.id
+                        else {
+                            return
                         }
+
+                        self.fsManager.updatePlace(self.place, at: tripId)
+                            .receive(on: DispatchQueue.main)
+                            .sink { completion in
+                                switch completion {
+                                case .finished:
+                                    JGHudIndicator.shared.showHud(type: .success)
+                                case .failure:
+                                    JGHudIndicator.shared.showHud(type: .failure)
+                                }
+                            } receiveValue: { _ in }
+                            .store(in: &cancelBags)
                 }
                 actionSheet.addAction(updateAction)
             }
