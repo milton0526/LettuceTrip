@@ -37,6 +37,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
 
     private var cancelBags: Set<AnyCancellable> = []
     private let fsManager = FirestoreManager()
+    private var user: LTUser?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,22 +119,24 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
     private func fetchData() {
         guard let userId = fsManager.user else { return }
 
-        FireStoreService.shared.getUserData(userId: userId) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let user):
-                DispatchQueue.main.async {
-                    self.profileHeaderView.nameLabel.text = user.name
-                    self.profileHeaderView.emailLabel.text = user.email
-                    if let image = user.image {
+        fsManager.getUserData(userId: userId)
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] completion in
+                switch completion {
+                case .finished:
+                    self.profileHeaderView.nameLabel.text = user?.name
+                    self.profileHeaderView.emailLabel.text = user?.email
+                    if let image = user?.image {
                         self.profileHeaderView.imageView.image = UIImage(data: image)
                     }
+
+                case .failure(let error):
+                    showAlertToUser(error: error)
                 }
-            case .failure(let error):
-                self.showAlertToUser(error: error)
+            } receiveValue: { [unowned self] user in
+                self.user = user
             }
-        }
+            .store(in: &cancelBags)
     }
 
     private func confirmSignOut() {
