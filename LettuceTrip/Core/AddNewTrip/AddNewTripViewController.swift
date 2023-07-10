@@ -162,8 +162,7 @@ class AddNewTripViewController: UIViewController {
             let startDate = startDate,
             var endDate = Calendar.current.date(byAdding: .day, value: duration, to: startDate),
             let selectedCity = selectedCity,
-            let user = fsManager.user,
-            let imageData = UIImage(named: "placeholder")?.jpegData(compressionQuality: 0.1)
+            let user = fsManager.user
         else {
             return
         }
@@ -175,7 +174,6 @@ class AddNewTripViewController: UIViewController {
 
         let trip = Trip(
             tripName: tripName,
-            image: imageData,
             startDate: startDate,
             endDate: endDate,
             duration: duration - 1,

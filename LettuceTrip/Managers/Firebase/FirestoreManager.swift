@@ -78,6 +78,25 @@ final class FirestoreManager {
         }
     }
 
+    func update(_ trip: Trip, with imageString: String) -> AnyPublisher<Void, Error> {
+        guard let tripId = trip.id else {
+            return Fail(error: FirebaseError.wrongId(trip.id)).eraseToAnyPublisher()
+        }
+
+        let ref = FirestoreHelper.makeCollectionRef(database, at: .trips).document(tripId)
+
+        return Future { promise in
+            ref.updateData([
+                "image": imageString
+            ]) { error in
+                guard error == nil else {
+                    return promise(.failure(FirebaseError.update("Trip Image")))
+                }
+                promise(.success(()))
+            }
+        }.eraseToAnyPublisher()
+    }
+
     func update(_ trip: Trip, with userId: String? = nil, isRemove: Bool = false) -> AnyPublisher<Void, Error> {
         guard let tripId = trip.id else {
             return Fail(error: FirebaseError.wrongId(trip.id)).eraseToAnyPublisher()

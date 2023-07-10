@@ -207,7 +207,10 @@ extension ProfileViewController: PHPickerViewControllerDelegate {
                     return
                 }
 
-                JGHudIndicator.shared.showHud(type: .loading(text: "Updating"))
+                DispatchQueue.main.async {
+                    JGHudIndicator.shared.showHud(type: .loading(text: "Updating"))
+                }
+
                 storageManager.uploadImage(imageData, at: .users, with: userID)
                     .receive(on: DispatchQueue.main)
                     .flatMap { _ in

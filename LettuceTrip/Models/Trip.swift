@@ -13,7 +13,7 @@ import FirebaseFirestoreSwift
 struct Trip: Codable, Hashable {
     var id: String?
     var tripName: String
-    var image: Data
+    var image: String?
     var startDate: Date
     var endDate: Date
     var duration: Int

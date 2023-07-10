@@ -36,7 +36,7 @@ class EditTripViewController: UIViewController {
     }
 
     lazy var imageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(data: trip.image))
+        let imageView = UIImageView(image: .scene)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 34
@@ -70,6 +70,7 @@ class EditTripViewController: UIViewController {
             }
         }
     }
+    private let storageManager = StorageManager()
     private lazy var currentSelectedDate = trip.startDate
     private var listenerSubscription: AnyCancellable?
     private var cancelBags: Set<AnyCancellable> = []
@@ -101,6 +102,10 @@ class EditTripViewController: UIViewController {
         view.addSubview(imageView)
         view.addSubview(scheduleView)
         view.addSubview(tableView)
+
+        if let url = URL(string: trip.image ?? "") {
+            imageView.setTripImage(url: url)
+        }
 
         imageView.edgesToSuperview(excluding: .bottom, insets: .top(8) + .horizontal(16), usingSafeArea: true)
         imageView.height(160)
@@ -510,37 +515,42 @@ extension EditTripViewController: PHPickerViewControllerDelegate {
 
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
+        JGHudIndicator.shared.showHud(type: .loading(text: "Updating"))
 
         let itemProviders = results.map(\.itemProvider)
         if let itemProvider = itemProviders.first, itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
-                guard
-                    let self = self,
-                    let image = image as? UIImage,
-                    let imageData = image.jpegData(compressionQuality: 0.1)
-                else {
-                    return
-                }
-
-                // Update imageView first
-                DispatchQueue.main.async {
-                    self.imageView.image = image
-                    self.trip.image = imageData
-
-                    self.fsManager.update(self.trip)
-                        .receive(on: DispatchQueue.main)
-                        .sink { result in
-                            switch result {
-                            case .finished:
-                                break
-                            case .failure(let error):
-                                self.showAlertToUser(error: error)
-                            }
-                        } receiveValue: { _ in }
-                        .store(in: &self.cancelBags)
-                }
+            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, _ in
+                guard let self = self, let image = image as? UIImage else { return }
+                self.updateTripImage(image: image)
             }
         }
+    }
+
+    private func updateTripImage(image: UIImage) {
+        guard
+            let tripId = trip.id,
+            let imageData = image.jpegData(compressionQuality: 0.3)
+        else {
+            return
+        }
+
+        storageManager.uploadImage(imageData, at: .trips, with: tripId)
+            .flatMap { _ in
+                self.storageManager.downloadRef(at: .trips, with: tripId)
+            }
+            .flatMap { url in
+                self.fsManager.update(self.trip, with: url.absoluteString)
+            }
+            .sink { [unowned self] completion in
+                switch completion {
+                case .finished:
+                    imageView.image = image
+                    JGHudIndicator.shared.dismissHUD()
+                case .failure(let error):
+                    self.showAlertToUser(error: error)
+                }
+            } receiveValue: { _ in }
+            .store(in: &cancelBags)
     }
 }
 
@@ -548,23 +558,9 @@ extension EditTripViewController: UnsplashPhotoPickerDelegate {
 
     func unsplashPhotoPicker(_ photoPicker: UnsplashPhotoPicker, didSelectPhotos photos: [UnsplashPhoto]) {
         guard let photo = photos.first?.urls[.regular] else { return }
-        imageView.sd_setImage(with: photo) { [weak self] image, error, _, _ in
-            guard let self = self else { return }
-            if let image = image, let imageData = image.jpegData(compressionQuality: 0.3) {
-                self.trip.image = imageData
-
-                self.fsManager.update(self.trip)
-                    .receive(on: DispatchQueue.main)
-                    .sink { result in
-                        switch result {
-                        case .finished:
-                            break
-                        case .failure(let error):
-                            self.showAlertToUser(error: error)
-                        }
-                    } receiveValue: { _ in }
-                    .store(in: &self.cancelBags)
-            }
+        imageView.sd_setImage(with: photo) { [weak self] image, _, _, _ in
+            guard let self = self, let image = image else { return }
+            self.updateTripImage(image: image)
         }
     }
 

@@ -28,7 +28,7 @@ class ItineraryCell: UICollectionViewCell {
     }()
 
     lazy var imageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "kyoto"))
+        let imageView = UIImageView(image: .scene)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 16
@@ -85,7 +85,9 @@ class ItineraryCell: UICollectionViewCell {
     func config(with trip: Trip) {
         tripNameLabel.text = trip.tripName
         timeLabel.text = trip.startDate.formatted(date: .numeric, time: .omitted)
-        imageView.image = UIImage(data: trip.image)
+        if let url = URL(string: trip.image ?? "") {
+            imageView.setTripImage(url: url)
+        }
     }
 
     private func reportActionHandler(_ action: UIAction) {

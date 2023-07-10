@@ -10,10 +10,10 @@ import UIKit
 extension UIImageView {
 
     func setUserImage(url: URL) {
-        self.sd_setImage(with: url, placeholderImage: UIImage(systemName: "person.crop.circle"))
+        self.sd_setImage(with: url, placeholderImage: .person)
     }
 
     func setTripImage(url: URL) {
-        self.sd_setImage(with: url, placeholderImage: UIImage(named: "placeholder"))
+        self.sd_setImage(with: url, placeholderImage: .scene)
     }
 }

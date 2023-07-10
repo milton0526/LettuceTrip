@@ -106,6 +106,7 @@
 		C4EF99F72A5C04F300B1C4BC /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EF99F62A5C04F300B1C4BC /* StorageManager.swift */; };
 		C4EF99F92A5C051A00B1C4BC /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = C4EF99F82A5C051A00B1C4BC /* FirebaseStorage */; };
 		C4EF99FB2A5C09E900B1C4BC /* SDWebImage+Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EF99FA2A5C09E900B1C4BC /* SDWebImage+Wrapper.swift */; };
+		C4EF99FD2A5C309500B1C4BC /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EF99FC2A5C309500B1C4BC /* UIImage+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -201,6 +202,7 @@
 		C4DBE8D12A43E116002987CB /* MKPlaceMark+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPlaceMark+Extension.swift"; sourceTree = "<group>"; };
 		C4EF99F62A5C04F300B1C4BC /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		C4EF99FA2A5C09E900B1C4BC /* SDWebImage+Wrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SDWebImage+Wrapper.swift"; sourceTree = "<group>"; };
+		C4EF99FC2A5C309500B1C4BC /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -420,6 +422,7 @@
 				C45413402A497145000D0685 /* Date+Extension.swift */,
 				C4CBD4422A4FECA2009108C6 /* GMSPlace+Combine.swift */,
 				C480BDF32A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift */,
+				C4EF99FC2A5C309500B1C4BC /* UIImage+Extension.swift */,
 				C4EF99FA2A5C09E900B1C4BC /* SDWebImage+Wrapper.swift */,
 			);
 			path = Extensions;
@@ -690,6 +693,7 @@
 				C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */,
 				C454134D2A4A9937000D0685 /* AuthManager.swift in Sources */,
 				C4CC0C082A48499200E03758 /* LocationMapCell.swift in Sources */,
+				C4EF99FD2A5C309500B1C4BC /* UIImage+Extension.swift in Sources */,
 				C4DBE8982A41BD10002987CB /* UIViewController+Alert.swift in Sources */,
 				C4DBE8AE2A41D696002987CB /* SelectionView.swift in Sources */,
 				C45413442A4A7FF0000D0685 /* SignInViewController.swift in Sources */,
