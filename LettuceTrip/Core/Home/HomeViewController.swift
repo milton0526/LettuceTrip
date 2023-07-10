@@ -7,6 +7,7 @@
 
 import UIKit
 import MapKit
+import Combine
 import TinyConstraints
 
 // reload method
@@ -34,6 +35,8 @@ class HomeViewController: UIViewController {
     private var dataSource: UICollectionViewDiffableDataSource<Section, Trip>!
     private var shareTrips: [Trip] = []
     private lazy var placeHolder = makePlaceholder(text: String(localized: "Oops! No one share there trip!🥲"))
+    private let fsManager = FirestoreManager()
+    private var cancelBags: Set<AnyCancellable> = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,19 +93,22 @@ class HomeViewController: UIViewController {
     }
 
     private func fetchData() {
-        FireStoreService.shared.fetchShareTrips { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let trips):
-                    self?.placeHolder.isHidden = trips.isEmpty ? false : true
-                    self?.shareTrips = trips
-                    self?.refreshControl.endRefreshing()
-                    self?.updateSnapshot()
+        fsManager.getTrips(isPublic: true)
+            .retry(1)
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] completion in
+                switch completion {
+                case .finished:
+                    self.placeHolder.isHidden = self.shareTrips.isEmpty ? false : true
+                    self.refreshControl.endRefreshing()
+                    self.updateSnapshot()
                 case .failure(let error):
-                    self?.showAlertToUser(error: error)
+                    self.showAlertToUser(error: error)
                 }
+            } receiveValue: { [unowned self] result in
+                self.shareTrips = result
             }
-        }
+            .store(in: &cancelBags)
     }
 
     private func updateSnapshot() {
@@ -126,7 +132,7 @@ extension HomeViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         let trip = shareTrips[indexPath.item]
-        let editVC = EditTripViewController(trip: trip, isEditMode: false)
+        let editVC = EditTripViewController(trip: trip, isEditMode: false, fsManager: fsManager)
         navigationController?.pushViewController(editVC, animated: true)
     }
 }

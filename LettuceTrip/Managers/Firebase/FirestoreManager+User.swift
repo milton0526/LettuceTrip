@@ -85,7 +85,9 @@ extension FirestoreManager {
         return Future { promise in
             ref.getDocument { document, error in
                 guard error == nil else {
+                    // swiftlint: disable force_unwrapping
                     return promise(.failure(error!))
+                    // swiftlint: enable force_unwrapping
                 }
 
                 if let document = document, document.exists {

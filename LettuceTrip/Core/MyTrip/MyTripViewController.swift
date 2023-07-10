@@ -145,7 +145,7 @@ extension MyTripViewController: UITableViewDelegate {
         ? upcomingTrips[indexPath.row]
         : closedTrips[indexPath.row]
 
-        let editVC = EditTripViewController(trip: trip)
+        let editVC = EditTripViewController(trip: trip, fsManager: fsManager)
         navigationController?.pushViewController(editVC, animated: true)
     }
 

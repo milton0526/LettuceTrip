@@ -112,7 +112,7 @@ final class FirestoreManager {
         }
     }
 
-    func delete(_ tripId: String, and placeId: String? = nil) -> AnyPublisher<Void, Error> {
+    func delete(_ tripId: String, place placeId: String? = nil) -> AnyPublisher<Void, Error> {
         let ref: DocumentReference
 
         if let placeId = placeId {
@@ -132,39 +132,20 @@ final class FirestoreManager {
         }.eraseToAnyPublisher()
     }
 
-    func userTripsListener(completion: @escaping (Result<[Trip], Error>) -> Void) -> ListenerRegistration {
+    func tripListener(at tripId: String, isArrange: Bool = true) -> AnyPublisher<QuerySnapshot, Error> {
         let ref = FirestoreHelper.makeCollectionRef(database, at: .trips)
-        var allTrips: [Trip] = []
+        let subject = PassthroughSubject<QuerySnapshot, Error>()
 
-        let listener = ref.whereField("members", arrayContains: user)
-            .addSnapshotListener { snapshot, error in
-                guard error == nil else {
-                    completion(.failure(FirebaseError.listenerError("UserTrips")))
-                    return
+        let listener = ref.whereField("isArrange", isEqualTo: isArrange)
+            .addSnapshotListener { querySnapshot, error in
+                guard let querySnapshot = querySnapshot, error == nil else {
+                    // swiftlint: disable force_unwrapping
+                    return subject.send(completion: .failure(error!))
+                    // swiftlint: enable force_unwrapping
                 }
-                snapshot?.documentChanges.forEach { diff in
-
-                    do {
-                        let trip = try diff.document.data(as: Trip.self)
-
-                        switch diff.type {
-                        case .added:
-                            allTrips.append(trip)
-                        case .modified:
-                            if let index = allTrips.firstIndex(where: { $0.id == trip.id }) {
-                                allTrips[index].image = trip.image
-                            }
-                        case .removed:
-                            if let index = allTrips.firstIndex(where: { $0.id == trip.id }) {
-                                allTrips.remove(at: index)
-                            }
-                        }
-                    } catch {
-                        completion(.failure(error))
-                    }
-                }
-                completion(.success(allTrips))
+                subject.send(querySnapshot)
             }
-        return listener
+
+        return subject.handleEvents(receiveCancel: listener.remove).eraseToAnyPublisher()
     }
 }

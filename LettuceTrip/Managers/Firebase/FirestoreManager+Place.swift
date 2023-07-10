@@ -141,8 +141,10 @@ extension FirestoreManager {
 
         let listener = ref.whereField("isArrange", isEqualTo: isArrange)
             .addSnapshotListener { querySnapshot, error in
-                guard let querySnapshot = querySnapshot else {
+                guard let querySnapshot = querySnapshot, error == nil else {
+                    // swiftlint: disable force_unwrapping
                     return subject.send(completion: .failure(error!))
+                    // swiftlint: enable force_unwrapping
                 }
                 subject.send(querySnapshot)
             }

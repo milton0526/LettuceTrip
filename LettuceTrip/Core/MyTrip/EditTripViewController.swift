@@ -18,10 +18,12 @@ class EditTripViewController: UIViewController {
 
     private var trip: Trip
     private let isEditMode: Bool
+    private let fsManager: FirestoreManager
 
-    init(trip: Trip, isEditMode: Bool = true) {
+    init(trip: Trip, isEditMode: Bool = true, fsManager: FirestoreManager) {
         self.trip = trip
         self.isEditMode = isEditMode
+        self.fsManager = fsManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -53,7 +55,6 @@ class EditTripViewController: UIViewController {
         return tableView
     }()
 
-    private var listener: ListenerRegistration?
     private var dataSource: UITableViewDiffableDataSource<Section, Place>!
     private var places: [Place] = []
     private var sortedPlaces: [Place] = [] {
@@ -70,6 +71,7 @@ class EditTripViewController: UIViewController {
         }
     }
     private lazy var currentSelectedDate = trip.startDate
+    private var cancelBags: Set<AnyCancellable> = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,12 +88,6 @@ class EditTripViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchPlaces()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        listener?.remove()
-        listener = nil
     }
 
     private func setupUI() {
@@ -131,22 +127,44 @@ class EditTripViewController: UIViewController {
         guard let tripID = trip.id else { return }
         places.removeAll(keepingCapacity: true)
 
-        listener = FireStoreService.shared.addListenerInTripPlaces(tripId: tripID, isArrange: true) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let place):
-                self.places = place
-                self.filterPlace(by: self.currentSelectedDate)
-
-                if !isEditMode {
-                    listener?.remove()
-                    listener = nil
+        fsManager.placeListener(at: tripID, isArrange: true)
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    self.showAlertToUser(error: error)
                 }
-            case .failure(let error):
-                self.showAlertToUser(error: error)
+            } receiveValue: { [unowned self] snapshot in
+                if places.isEmpty {
+                    let firstResult = snapshot.documents.compactMap { try? $0.data(as: Place.self) }
+                    places = firstResult
+                    filterPlace(by: currentSelectedDate)
+                    return
+                }
+
+                snapshot.documentChanges.forEach { diff in
+                    guard
+                        let modifiedPlace = try? diff.document.data(as: Place.self),
+                        let index = places.firstIndex(where: { $0.id == modifiedPlace.id })
+                    else {
+                        return
+                    }
+
+                    switch diff.type {
+                    case .added:
+                        places.append(modifiedPlace)
+                    case .modified:
+                        places[index].arrangedTime = modifiedPlace.arrangedTime
+                    case .removed:
+                        places.remove(at: index)
+                    }
+                }
+
+                filterPlace(by: currentSelectedDate)
             }
-        }
+            .store(in: &cancelBags)
     }
 
     private func customNavBar() {
@@ -182,13 +200,17 @@ class EditTripViewController: UIViewController {
             var trip = self.trip
             trip.isPublic = true
 
-            FireStoreService.shared.updateTrip(trip: trip) { error in
-                if error == nil {
-                    JGHudIndicator.shared.showHud(type: .success)
-                } else {
-                    JGHudIndicator.shared.showHud(type: .failure)
-                }
-            }
+            fsManager.update(trip)
+                .receive(on: DispatchQueue.main)
+                .sink { completion in
+                    switch completion {
+                    case .finished:
+                        JGHudIndicator.shared.showHud(type: .success)
+                    case .failure:
+                        JGHudIndicator.shared.showHud(type: .failure)
+                    }
+                } receiveValue: { _ in }
+                .store(in: &cancelBags)
         }
 
         let shareLinkToFriend = UIAlertAction(title: String(localized: "Invite your friends"), style: .default) { [weak self] _ in
@@ -236,7 +258,7 @@ class EditTripViewController: UIViewController {
                 let picker = PHPickerViewController(configuration: config)
                 picker.delegate = self
                 self.present(picker, animated: true)
-        }
+            }
 
         let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
 
@@ -372,8 +394,24 @@ extension EditTripViewController: UITableViewDelegate {
         guard isEditMode else { return nil }
         guard let place = dataSource.itemIdentifier(for: indexPath) else { return nil }
         let deleteAction = UIContextualAction(style: .destructive, title: String(localized: "Delete")) { [unowned self] _, _, completion in
-            FireStoreService.shared.deletePlace(at: self.trip, place: place)
-            completion(true)
+            guard
+                let tripId = trip.id,
+                let placeId = place.id
+            else {
+                return
+            }
+
+            fsManager.delete(tripId, place: placeId)
+                .receive(on: DispatchQueue.main)
+                .sink { [unowned self] result in
+                    switch result {
+                    case .finished:
+                        completion(true)
+                    case .failure(let error):
+                        self.showAlertToUser(error: error)
+                    }
+                } receiveValue: { _ in }
+                .store(in: &cancelBags)
         }
 
         return UISwipeActionsConfiguration(actions: [deleteAction])
@@ -437,9 +475,17 @@ extension EditTripViewController: UITableViewDropDelegate {
                         sourceItem.arrangedTime = destinationItem.arrangedTime
                         destinationItem.arrangedTime = date
 
-                        FireStoreService.shared.batchUpdateInOrder(at: trip, from: sourceItem, to: destinationItem) { _ in
-                            // Maybe do nothing
-                        }
+                        fsManager.batchUpdatePlaces(at: trip, from: sourceItem, to: destinationItem)
+                            .receive(on: DispatchQueue.main)
+                            .sink { [unowned self] result in
+                                switch result {
+                                case .finished:
+                                    break
+                                case .failure(let error):
+                                    self.showAlertToUser(error: error)
+                                }
+                            } receiveValue: { _ in }
+                            .store(in: &cancelBags)
                     }
                 }
             }
@@ -477,11 +523,17 @@ extension EditTripViewController: PHPickerViewControllerDelegate {
                     self.imageView.image = image
                     self.trip.image = imageData
 
-                    FireStoreService.shared.updateTrip(trip: self.trip) { error in
-                        if let error = error {
-                            self.showAlertToUser(error: error)
-                        }
-                    }
+                    self.fsManager.update(self.trip)
+                        .receive(on: DispatchQueue.main)
+                        .sink { result in
+                            switch result {
+                            case .finished:
+                                break
+                            case .failure(let error):
+                                self.showAlertToUser(error: error)
+                            }
+                        } receiveValue: { _ in }
+                        .store(in: &self.cancelBags)
                 }
             }
         }
@@ -492,14 +544,22 @@ extension EditTripViewController: UnsplashPhotoPickerDelegate {
 
     func unsplashPhotoPicker(_ photoPicker: UnsplashPhotoPicker, didSelectPhotos photos: [UnsplashPhoto]) {
         guard let photo = photos.first?.urls[.regular] else { return }
-        imageView.sd_setImage(with: photo) { image, error, _, _ in
+        imageView.sd_setImage(with: photo) { [weak self] image, error, _, _ in
+            guard let self = self else { return }
             if let image = image, let imageData = image.jpegData(compressionQuality: 0.3) {
                 self.trip.image = imageData
-                FireStoreService.shared.updateTrip(trip: self.trip) { error in
-                    if let error = error {
-                        self.showAlertToUser(error: error)
-                    }
-                }
+
+                self.fsManager.update(self.trip)
+                    .receive(on: DispatchQueue.main)
+                    .sink { result in
+                        switch result {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            self.showAlertToUser(error: error)
+                        }
+                    } receiveValue: { _ in }
+                    .store(in: &self.cancelBags)
             }
         }
     }

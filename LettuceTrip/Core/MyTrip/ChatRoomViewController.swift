@@ -65,8 +65,7 @@ class ChatRoomViewController: UIViewController {
         setupUI()
         configBackButton()
         configureDataSource()
-        //fetchUser()
-        fetchMessages2()
+        fetchMessages()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -223,23 +222,6 @@ class ChatRoomViewController: UIViewController {
     private func fetchMessages() {
         guard let tripID = trip?.id else { return }
 
-        messageListener = fsManager.chatRoomListener(tripID) { [unowned self] result in
-            switch result {
-            case .success(let messages):
-                self.chatMessages = messages
-
-                if members.isEmpty {
-                    self.fetchUser()
-                }
-            case .failure(let error):
-                self.showAlertToUser(error: error)
-            }
-        }
-    }
-
-    private func fetchMessages2() {
-        guard let tripID = trip?.id else { return }
-
         fsManager.chatRoomListener(tripID)
             .receive(on: DispatchQueue.main)
 
@@ -251,18 +233,20 @@ class ChatRoomViewController: UIViewController {
                     self.showAlertToUser(error: error)
                 }
             } receiveValue: { [unowned self] snapshot in
+                if self.chatMessages.isEmpty {
+                    let firstResult = snapshot.documents.compactMap { try? $0.data(as: Message.self) }
+                    self.chatMessages = firstResult
+                    self.updateSnapshot()
+                    return
+                }
+
                 snapshot.documentChanges.forEach { diff in
                     do {
                         let message = try diff.document.data(as: Message.self)
                         switch diff.type {
-                        case .added:
+                        case .modified:
                             self.chatMessages.append(message)
                             self.updateSnapshot()
-                        case .modified:
-                            if let index = self.chatMessages.firstIndex(where: { $0.id == message.id }) {
-                                self.chatMessages[index].sendTime = message.sendTime
-                                self.updateSnapshot()
-                            }
                         default:
                             break
                         }
