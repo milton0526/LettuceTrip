@@ -12,7 +12,18 @@ import TinyConstraints
 
 class ChatRoomViewController: UIViewController {
 
-    var trip: Trip?
+    let trip: Trip
+    let fsManager: FirestoreManager
+
+    init(trip: Trip, fsManager: FirestoreManager) {
+        self.trip = trip
+        self.fsManager = fsManager
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     enum Section {
         case main
@@ -45,7 +56,7 @@ class ChatRoomViewController: UIViewController {
 
     private var members: [LTUser] = [] {
         didSet {
-            if members.count == trip?.members.count {
+            if members.count == trip.members.count {
                 userView.members = members
                 DispatchQueue.main.async { [weak self] in
                     self?.updateSnapshot()
@@ -54,9 +65,7 @@ class ChatRoomViewController: UIViewController {
         }
     }
     private var chatMessages: [Message] = []
-    private var messageListener: ListenerRegistration?
     private var cancelBags: Set<AnyCancellable> = []
-    private let fsManager = FirestoreManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,12 +75,6 @@ class ChatRoomViewController: UIViewController {
         configBackButton()
         configureDataSource()
         fetchMessages()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        messageListener?.remove()
-        messageListener = nil
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -95,7 +98,7 @@ class ChatRoomViewController: UIViewController {
     @objc func sendMessage(_ sender: UIButton) {
         // send message to firebase and listen to update view
         guard
-            let tripID = trip?.id,
+            let tripID = trip.id,
             let text = inputTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
             !text.isEmpty
         else {
@@ -206,9 +209,7 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func fetchUser() {
-        guard let members = trip?.members else { return }
-
-        members.forEach { member in
+        trip.members.forEach { member in
             fsManager.getUserData(userId: member)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { _ in
@@ -220,7 +221,7 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func fetchMessages() {
-        guard let tripID = trip?.id else { return }
+        guard let tripID = trip.id else { return }
 
         fsManager.chatRoomListener(tripID)
             .receive(on: DispatchQueue.main)

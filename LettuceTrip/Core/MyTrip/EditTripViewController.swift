@@ -123,7 +123,7 @@ class EditTripViewController: UIViewController {
         guard let tripID = trip.id else { return }
         places.removeAll(keepingCapacity: true)
 
-        fsManager.placeListener(at: tripID, isArrange: true)
+        fsManager.placeListener(at: tripID)
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] completion in
                 switch completion {
@@ -176,7 +176,7 @@ class EditTripViewController: UIViewController {
     }
 
     @objc func openWishList(_ sender: UIBarButtonItem) {
-        let wishVC = WishListViewController(trip: trip)
+        let wishVC = WishListViewController(trip: trip, fsManager: fsManager)
         navigationController?.pushViewController(wishVC, animated: true)
     }
 

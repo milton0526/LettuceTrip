@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 import TinyConstraints
 import FirebaseFirestore
 
@@ -16,9 +17,11 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
     }
 
     let trip: Trip
+    let fsManager: FirestoreManager
 
-    init(trip: Trip) {
+    init(trip: Trip, fsManager: FirestoreManager) {
         self.trip = trip
+        self.fsManager = fsManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -29,6 +32,7 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
     private var dataSource: UICollectionViewDiffableDataSource<Section, Place>!
     private var listener: ListenerRegistration?
     private var places: [Place] = []
+    private var cancelBags: Set<AnyCancellable> = []
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -43,21 +47,11 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         title = String(localized: "Wish List")
         setupUI()
         configDataSource()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         fetchPlaces()
     }
 
-    deinit {
-        listener?.remove()
-        listener = nil
-    }
-
     @objc func openChatRoom(_ sender: UIBarButtonItem) {
-        let chatVC = ChatRoomViewController()
-        chatVC.trip = trip
+        let chatVC = ChatRoomViewController(trip: trip, fsManager: fsManager)
         let nav = UINavigationController(rootViewController: chatVC)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)
@@ -81,30 +75,70 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         guard let tripID = trip.id else { return }
         places.removeAll(keepingCapacity: true)
 
-        listener = FireStoreService.shared.addListenerInTripPlaces(tripId: tripID, isArrange: false) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let place):
-                self.placeHolder.isHidden = place.isEmpty ? false : true
-                self.places = place
-
-                DispatchQueue.main.async {
-                    self.updateSnapshot()
+        fsManager.placeListener(at: tripID, isArrange: false)
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    showAlertToUser(error: error)
                 }
-            case .failure(let error):
-                self.showAlertToUser(error: error)
+            } receiveValue: { [unowned self] snapshot in
+                if places.isEmpty {
+                    let firstResult = snapshot.documents.compactMap { try? $0.data(as: Place.self) }
+                    places = firstResult
+                    placeHolder.isHidden = places.isEmpty ? false : true
+                    updateSnapshot()
+                    return
+                }
+
+                snapshot.documentChanges.forEach { diff in
+                    guard let modifiedPlace = try? diff.document.data(as: Place.self) else { return }
+
+                    switch diff.type {
+                    case .added:
+                        places.append(modifiedPlace)
+                    case .modified:
+                        if let index = places.firstIndex(where: { $0.id == modifiedPlace.id }) {
+                            places[index].arrangedTime = modifiedPlace.arrangedTime
+                        }
+                    case .removed:
+                        if let index = places.firstIndex(where: { $0.id == modifiedPlace.id }) {
+                            places.remove(at: index)
+                        }
+                    }
+                }
+
+                placeHolder.isHidden = places.isEmpty ? false : true
+                updateSnapshot()
             }
-        }
+            .store(in: &cancelBags)
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
-            let deleteAction = UIContextualAction(style: .destructive, title: String(localized: "Delete")) { _, _, completion in
-                if let item = self.dataSource.itemIdentifier(for: indexPath) {
-                    FireStoreService.shared.deletePlace(at: self.trip, place: item)
-                    completion(true)
+            let deleteAction = UIContextualAction(style: .destructive, title: String(localized: "Delete")) { [weak self] _, _, completion in
+                guard
+                    let self = self,
+                    let tripId = trip.id
+                else {
+                    return
+                }
+
+                if let item = self.dataSource.itemIdentifier(for: indexPath)?.id {
+                    fsManager.delete(tripId, place: item)
+                        .receive(on: DispatchQueue.main)
+                        .sink { result in
+                            switch result {
+                            case .finished:
+                                completion(true)
+                            case .failure(let error):
+                                self.showAlertToUser(error: error)
+                            }
+                        } receiveValue: { _ in }
+                        .store(in: &cancelBags)
                 }
             }
             return .init(actions: [deleteAction])
