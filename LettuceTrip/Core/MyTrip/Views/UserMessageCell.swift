@@ -78,11 +78,8 @@ class UserMessageCell: UICollectionViewCell {
         timeLabel.bottom(to: stackView)
     }
 
-    func config(with message: Message, from user: LTUser?) {
+    func config(with message: Message) {
         textView.text = message.message
         timeLabel.text = message.sendTime?.formatted(date: .omitted, time: .shortened)
-        if let data = user?.image {
-            imageView.image = UIImage(data: data)
-        }
     }
 }

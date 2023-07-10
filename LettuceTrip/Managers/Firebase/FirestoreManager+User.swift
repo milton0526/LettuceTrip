@@ -46,8 +46,8 @@ extension FirestoreManager {
     }
 
     func updateUser(image: Data) -> AnyPublisher<Void, Error> {
-        guard let userId = user?.uid else {
-            return Fail(error: FirebaseError.wrongId(user?.uid)).eraseToAnyPublisher()
+        guard let userId = user else {
+            return Fail(error: FirebaseError.wrongId(user)).eraseToAnyPublisher()
         }
         let ref = FirestoreHelper.makeCollectionRef(database, at: .users)
 
@@ -64,8 +64,8 @@ extension FirestoreManager {
     }
 
     func deleteUser() -> AnyPublisher<Void, Error> {
-        guard let userId = user?.uid else {
-            return Fail(error: FirebaseError.wrongId(user?.uid)).eraseToAnyPublisher()
+        guard let userId = user else {
+            return Fail(error: FirebaseError.wrongId(user)).eraseToAnyPublisher()
         }
         let ref = FirestoreHelper.makeCollectionRef(database, at: .users)
 

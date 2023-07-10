@@ -14,8 +14,9 @@ final class FirestoreManager {
 
     let database = Firestore.firestore()
 
-    var user: User? {
-        Auth.auth().currentUser
+    var user: String? {
+        "LpDb7nvzvSZZcTtJZOld4OS3aEB3"
+        // Auth.auth().currentUser?.uid
     }
 
     // MARK: Trip Method

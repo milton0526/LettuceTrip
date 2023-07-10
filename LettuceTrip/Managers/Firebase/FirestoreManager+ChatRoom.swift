@@ -11,9 +11,15 @@ import FirebaseFirestore
 
 extension FirestoreManager {
 
+    enum ListenerType<T: Decodable> {
+        case add(T)
+        case modify(T)
+        case removed(T)
+    }
+
     func sendMessage(_ text: String, at tripId: String) -> AnyPublisher<Void, Error> {
-        guard let userId = user?.uid else {
-            return Fail(error: FirebaseError.wrongId(user?.uid)).eraseToAnyPublisher()
+        guard let userId = user else {
+            return Fail(error: FirebaseError.wrongId(user)).eraseToAnyPublisher()
         }
 
         let subDirectory = SubDirectory(documentId: tripId, collection: .chatRoom)
@@ -70,7 +76,7 @@ extension FirestoreManager {
     }
 
     func chatRoomListener(_ tripId: String) -> AnyPublisher<QuerySnapshot, Error> {
-        let subDirectory = SubDirectory(documentId: tripId, collection: .places)
+        let subDirectory = SubDirectory(documentId: tripId, collection: .chatRoom)
         let ref = FirestoreHelper.makeCollectionRef(database, at: .trips, inside: subDirectory)
         let subject = PassthroughSubject<QuerySnapshot, Error>()
 
