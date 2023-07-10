@@ -208,7 +208,7 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private func showAddNewTripVC() {
-        let addNewTripVC = AddNewTripViewController(isCopy: false)
+        let addNewTripVC = AddNewTripViewController(isCopy: false, fsManager: fsManager)
         let navVC = UINavigationController(rootViewController: addNewTripVC)
         let viewHeight = view.frame.height
         let detentsHeight = UISheetPresentationController.Detent.custom { _ in

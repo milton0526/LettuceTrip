@@ -263,7 +263,7 @@ class EditTripViewController: UIViewController {
     }
 
     @objc func copyItinerary(_ sender: UIBarButtonItem) {
-        let addTripVC = AddNewTripViewController(isCopy: true)
+        let addTripVC = AddNewTripViewController(isCopy: true, fsManager: fsManager)
         let placeMark = MKPlacemark(coordinate: trip.coordinate)
         let mapItem = MKMapItem(placemark: placeMark)
         mapItem.name = trip.destination

@@ -76,9 +76,12 @@ class AddNewTripViewController: UIViewController {
     var places: [Place] = []
     var copyFromTrip: Trip?
     private let isCopy: Bool
+    let fsManager: FirestoreManager
+    private var cancelBags: Set<AnyCancellable> = []
 
-    init(isCopy: Bool) {
+    init(isCopy: Bool, fsManager: FirestoreManager) {
         self.isCopy = isCopy
+        self.fsManager = fsManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -159,7 +162,7 @@ class AddNewTripViewController: UIViewController {
             let startDate = startDate,
             var endDate = Calendar.current.date(byAdding: .day, value: duration, to: startDate),
             let selectedCity = selectedCity,
-            let user = FireStoreService.shared.currentUser,
+            let user = fsManager.user,
             let imageData = UIImage(named: "placeholder")?.jpegData(compressionQuality: 0.1)
         else {
             return
@@ -182,29 +185,30 @@ class AddNewTripViewController: UIViewController {
             isPublic: false)
 
         // upload to firebase
-        FireStoreService.shared.addNewTrip(at: .trips, trip: trip) { [unowned self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let id):
-
-                    if self.isCopy {
-                        guard
-                            let copyDate = self.copyFromTrip?.startDate,
-                            let gap = Calendar.current.dateComponents([.day], from: copyDate, to: startDate).day
-                        else {
-                            return
-                        }
-                        self.copyPlaces(id, gap: gap)
-                    } else {
-                        JGHudIndicator.shared.showHud(type: .success)
-                        self.dismiss(animated: true)
-                    }
-
+        fsManager.createTrip(trip)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
                 case .failure:
                     JGHudIndicator.shared.showHud(type: .failure)
                 }
+            } receiveValue: { [unowned self] newTripID in
+                if isCopy {
+                    guard
+                        let copyDate = self.copyFromTrip?.startDate,
+                        let gap = Calendar.current.dateComponents([.day], from: copyDate, to: startDate).day
+                    else {
+                        return
+                    }
+                    self.copyPlaces(newTripID, gap: gap)
+                } else {
+                    JGHudIndicator.shared.showHud(type: .success)
+                    dismiss(animated: true)
+                }
             }
-        }
+            .store(in: &cancelBags)
     }
 
     private func copyPlaces(_ id: String, gap: Int) {
@@ -219,17 +223,18 @@ class AddNewTripViewController: UIViewController {
             results.append(place)
         }
 
-        FireStoreService.shared.copyPlaces(tripID: id, places: results) { [unowned self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success:
+        fsManager.copyPlaces(at: id, with: results)
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] completion in
+                switch completion {
+                case .finished:
                     JGHudIndicator.shared.showHud(type: .success)
-                    self.dismiss(animated: true)
+                    dismiss(animated: true)
                 case .failure:
                     JGHudIndicator.shared.showHud(type: .failure)
                 }
-            }
-        }
+            } receiveValue: { _ in }
+            .store(in: &cancelBags)
     }
 }
 
