@@ -10,7 +10,7 @@ import UIKit
 class FriendMessageCell: UICollectionViewCell {
 
     lazy var imageView: UIImageView = {
-        let imageView = UIImageView(image: .init(systemName: "figure.archery"))
+        let imageView = UIImageView(image: .person)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 10
@@ -79,8 +79,11 @@ class FriendMessageCell: UICollectionViewCell {
     func config(with message: Message, from user: LTUser?) {
         textView.text = message.message
         timeLabel.text = message.sendTime?.formatted(date: .omitted, time: .shortened)
-        if let url = URL(string: user?.image ?? "") {
-            imageView.setUserImage(url: url)
+
+        if user?.image != nil {
+            if let url = URL(string: user?.image ?? "") {
+                imageView.setUserImage(url: url)
+            }
         }
     }
 }

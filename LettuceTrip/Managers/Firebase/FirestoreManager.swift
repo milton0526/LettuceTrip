@@ -15,7 +15,6 @@ final class FirestoreManager {
     let database = Firestore.firestore()
 
     var user: String? {
-        // "LpDb7nvzvSZZcTtJZOld4OS3aEB3"
         Auth.auth().currentUser?.uid
     }
 

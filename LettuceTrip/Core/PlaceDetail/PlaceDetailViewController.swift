@@ -108,8 +108,14 @@ class PlaceDetailViewController: UIViewController {
             .findPlaceFromText(place.name, location: place.coordinate)
             .compactMap(\.candidates.first?.placeID)
             .flatMap(apiService.fetchPlace)
-            .sink(receiveCompletion: { _ in
-                print("Success get GMSPlace")
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure:
+                    JGHudIndicator.shared.dismissHUD()
+                    JGHudIndicator.shared.showHud(type: .failure)
+                }
             }, receiveValue: { [weak self] place in
                 self?.gmsPlace = place
             })
@@ -125,8 +131,14 @@ class PlaceDetailViewController: UIViewController {
             let attributions = String(describing: photos[0].attributions)
             apiService.fetchPhotos(metaData: photos[index])
                 .receive(on: DispatchQueue.main)
-                .sink { _ in
-                    print("Success get GMSImage")
+                .sink { completion in
+                    switch completion {
+                    case .finished:
+                        break
+                    case .failure:
+                        JGHudIndicator.shared.dismissHUD()
+                        JGHudIndicator.shared.showHud(type: .failure)
+                    }
                 } receiveValue: { [weak self] image in
                     let place = GPlacePhoto(attribution: attributions, image: image)
                     self?.placePhotos.append(place)
