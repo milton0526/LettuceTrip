@@ -176,7 +176,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
                 preferredStyle: .alert)
             let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
             let confirm = UIAlertAction(title: String(localized: "Confirm"), style: .destructive) { [weak self] _ in
-                self?.authManager.deleteAccount()
+                self?.authManager.signInWithApple(isDelete: true)
             }
 
             alert.addAction(cancel)

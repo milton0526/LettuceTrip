@@ -63,12 +63,31 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
                 return
             }
 
-            let credential = OAuthProvider.appleCredential(
-                withIDToken: idTokenString,
-                rawNonce: nonce,
-                fullName: appleIDCredential.fullName)
+            if isDelete {
+                guard let appleAuthCode = appleIDCredential.authorizationCode else {
+                    print("Unable to fetch authorization code")
+                    return
+                }
 
-            signIntoFirebase(credential: credential)
+                guard let authCodeString = String(data: appleAuthCode, encoding: .utf8) else {
+                    print("Unable to serialize auth code string from data: \(appleAuthCode.debugDescription)")
+                    return
+                }
+
+                let credential = OAuthProvider.credential(
+                    withProviderID: "apple.com",
+                    idToken: idTokenString,
+                    rawNonce: nonce)
+
+                deleteAccount(credential: credential, authCode: authCodeString)
+            } else {
+                let credential = OAuthProvider.appleCredential(
+                    withIDToken: idTokenString,
+                    rawNonce: nonce,
+                    fullName: appleIDCredential.fullName)
+
+                signIntoFirebase(credential: credential)
+            }
         }
     }
 
@@ -118,9 +137,7 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
             }
 
             // User is signed in to Firebase with Apple.
-
             // Create user if first time...
-
             self.fsManager.checkUserExist(id: userID)
                 .sink { _ in
                 } receiveValue: { exist in
@@ -154,7 +171,7 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
         }
     }
 
-    func deleteAccount() {
+    func deleteAccount(credential: OAuthCredential, authCode: String) {
         guard
             let viewController = viewController,
             let user = Auth.auth().currentUser
@@ -162,29 +179,31 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
             return
         }
 
-        fsManager.deleteUser()
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                switch completion {
-                case .finished:
-                    let signInVC = SignInViewController()
-                    signInVC.modalPresentationStyle = .fullScreen
-                    viewController.present(signInVC, animated: true)
-                case .failure(let error):
-                    viewController.showAlertToUser(error: error)
-                }
-            } receiveValue: { _ in }
-            .store(in: &cancelBags)
-
-        user.delete { error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    print("Auth delete user error: \(error.localizedDescription)")
-                    viewController.showAlertToUser(error: error)
-                } else {
-
-                }
+        user.reauthenticate(with: credential) { [weak self] _, error in
+            guard
+                let self = self,
+                error == nil
+            else {
+                JGHudIndicator.shared.showHud(type: .failure)
+                return
             }
+
+            self.fsManager.deleteUser(userId: user.uid)
+                .receive(on: DispatchQueue.main)
+                .sink { completion in
+                    switch completion {
+                    case .finished:
+                        let signInVC = SignInViewController()
+                        signInVC.modalPresentationStyle = .fullScreen
+                        viewController.present(signInVC, animated: true)
+                    case .failure(let error):
+                        viewController.showAlertToUser(error: error)
+                    }
+                } receiveValue: { _ in }
+                .store(in: &self.cancelBags)
+
+            Auth.auth().revokeToken(withAuthorizationCode: authCode)
+            user.delete()
         }
     }
 }

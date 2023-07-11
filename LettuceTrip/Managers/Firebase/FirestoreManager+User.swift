@@ -79,10 +79,7 @@ extension FirestoreManager {
         }.eraseToAnyPublisher()
     }
 
-    func deleteUser() -> AnyPublisher<Void, Error> {
-        guard let userId = user else {
-            return Fail(error: FirebaseError.wrongId(user)).eraseToAnyPublisher()
-        }
+    func deleteUser(userId: String) -> AnyPublisher<Void, Error> {
         let ref = FirestoreHelper.makeCollectionRef(database, at: .users)
 
         return Future { promise in
