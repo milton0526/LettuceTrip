@@ -74,7 +74,7 @@ class ChatRoomViewController: UIViewController {
         setupUI()
         configBackButton()
         configureDataSource()
-        fetchMessages()
+        fetchData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -208,13 +208,21 @@ class ChatRoomViewController: UIViewController {
         }
     }
 
-    private func fetchUser() {
+    private func fetchData() {
         trip.members.forEach { member in
             fsManager.getUserData(userId: member)
                 .receive(on: DispatchQueue.main)
-                .sink(receiveCompletion: { _ in
-                }, receiveValue: { [weak self] user in
-                    self?.members.append(user)
+                .sink(receiveCompletion: { [unowned self] completion in
+                    switch completion {
+                    case .finished:
+                        if members.count == trip.members.count {
+                            fetchMessages()
+                        }
+                    case .failure(let error):
+                        showAlertToUser(error: error)
+                    }
+                }, receiveValue: { [unowned self] user in
+                    members.append(user)
                 })
                 .store(in: &cancelBags)
         }
@@ -231,13 +239,13 @@ class ChatRoomViewController: UIViewController {
                 case .finished:
                     break
                 case .failure(let error):
-                    self.showAlertToUser(error: error)
+                    showAlertToUser(error: error)
                 }
             } receiveValue: { [unowned self] snapshot in
-                if self.chatMessages.isEmpty {
+                if chatMessages.isEmpty {
                     let firstResult = snapshot.documents.compactMap { try? $0.data(as: Message.self) }
-                    self.chatMessages = firstResult
-                    self.updateSnapshot()
+                    chatMessages = firstResult
+                    updateSnapshot()
                     return
                 }
 
@@ -245,9 +253,13 @@ class ChatRoomViewController: UIViewController {
                     do {
                         let message = try diff.document.data(as: Message.self)
                         switch diff.type {
+                        case .added:
+                            chatMessages.append(message)
                         case .modified:
-                            self.chatMessages.append(message)
-                            self.updateSnapshot()
+                            if let index = chatMessages.firstIndex(where: { $0.id == message.id }) {
+                                chatMessages[index].sendTime = message.sendTime
+                            }
+
                         default:
                             break
                         }
@@ -255,6 +267,7 @@ class ChatRoomViewController: UIViewController {
                         print("Decode error...")
                     }
                 }
+                updateSnapshot()
             }
             .store(in: &cancelBags)
     }

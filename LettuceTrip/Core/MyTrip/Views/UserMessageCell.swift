@@ -11,15 +11,6 @@ import TinyConstraints
 
 class UserMessageCell: UICollectionViewCell {
 
-    lazy var imageView: UIImageView = {
-        let imageView = UIImageView(image: .init(systemName: "person.crop.circle"))
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 10
-        imageView.clipsToBounds = true
-        imageView.layer.masksToBounds = true
-        return imageView
-    }()
-
     lazy var textView: UITextView = {
         let textView = UITextView()
         textView.isScrollEnabled = false
@@ -30,15 +21,6 @@ class UserMessageCell: UICollectionViewCell {
         textView.layer.cornerRadius = 12
         textView.layer.masksToBounds = true
         return textView
-    }()
-
-    lazy var stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.alignment = .top
-        stackView.distribution = .fill
-        stackView.spacing = 10
-        return stackView
     }()
 
     lazy var timeLabel: UILabel = {
@@ -59,23 +41,16 @@ class UserMessageCell: UICollectionViewCell {
     }
 
     private func setupViews() {
-        imageView.size(.init(width: 20, height: 20))
-        imageView.aspectRatio(1.0)
-
+        contentView.addSubview(textView)
+        contentView.addSubview(timeLabel)
+        textView.verticalToSuperview(insets: .vertical(10))
+        textView.trailingToSuperview(offset: 12)
+        textView.widthToSuperview(multiplier: 0.6, relation: .equalOrLess)
         textView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
 
-        stackView.addArrangedSubview(textView)
-        stackView.addArrangedSubview(imageView)
-
-        contentView.addSubview(stackView)
-        contentView.addSubview(timeLabel)
-        stackView.verticalToSuperview(insets: .vertical(10))
-        stackView.trailingToSuperview(offset: 12)
-        stackView.widthToSuperview(multiplier: 0.6, relation: .equalOrLess)
-
-        timeLabel.trailingToLeading(of: stackView, offset: -8)
+        timeLabel.trailingToLeading(of: textView, offset: -8)
         timeLabel.height(14)
-        timeLabel.bottom(to: stackView)
+        timeLabel.bottom(to: textView)
     }
 
     func config(with message: Message) {
