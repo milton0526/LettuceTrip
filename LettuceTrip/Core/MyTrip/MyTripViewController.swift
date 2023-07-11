@@ -51,7 +51,7 @@ class MyTripViewController: UIViewController {
 
     private var listener: ListenerRegistration?
     private var allTrips: [Trip] = []
-    private var filterTrips: [Segment: [Trip]] = [:]
+    private var filterTrips: [Segment: [Trip]] = [.upcoming: [], .closed: []]
     private var currentSegment: Segment = .upcoming
     private lazy var placeHolder = makePlaceholder(text: String(localized: "Add new trip to start!"))
     private var cancelBags: Set<AnyCancellable> = []
@@ -132,7 +132,7 @@ class MyTripViewController: UIViewController {
     }
 
     private func filterByDate() {
-        filterTrips.removeAll(keepingCapacity: true)
+        filterTrips = [.upcoming: [], .closed: []]
         allTrips.forEach { trip in
             if trip.endDate > .now {
                 filterTrips[.upcoming, default: []].append(trip)
