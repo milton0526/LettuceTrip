@@ -45,6 +45,15 @@ class EditTripViewController: UIViewController {
         return imageView
     }()
 
+    lazy var messageButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .tertiarySystemBackground
+        button.setBackgroundImage(.init(systemName: "bubble.left.circle.fill"), for: .normal)
+        button.addTarget(self, action: #selector(openChatRoom), for: .touchUpInside)
+        button.isHidden = true
+        return button
+    }()
+
     lazy var scheduleView = ScheduleView()
 
     lazy var tableView: UITableView = {
@@ -100,9 +109,7 @@ class EditTripViewController: UIViewController {
     }
 
     private func setupUI() {
-        view.addSubview(imageView)
-        view.addSubview(scheduleView)
-        view.addSubview(tableView)
+        [imageView, scheduleView, tableView, messageButton].forEach { view.addSubview($0) }
 
         if let url = URL(string: trip.image ?? "") {
             imageView.setTripImage(url: url)
@@ -117,6 +124,17 @@ class EditTripViewController: UIViewController {
 
         tableView.topToBottom(of: scheduleView)
         tableView.edgesToSuperview(excluding: .top, usingSafeArea: true)
+
+        messageButton.size(CGSize(width: 50, height: 50))
+        messageButton.layer.cornerRadius = 25
+        messageButton.layer.masksToBounds = true
+        messageButton.layer.shadowColor = UIColor.gray.cgColor
+        messageButton.layer.shadowRadius = 5
+        messageButton.layer.shadowOpacity = 1
+        messageButton.layer.masksToBounds = false
+        messageButton.layer.shadowOffset = .zero
+        messageButton.trailingToSuperview(offset: 16)
+        messageButton.bottomToSuperview(offset: -32, usingSafeArea: true)
     }
 
     private func setEditMode() {
@@ -126,6 +144,7 @@ class EditTripViewController: UIViewController {
             imageView.addGestureRecognizer(tapGesture)
             tableView.dragDelegate = self
             tableView.dropDelegate = self
+            messageButton.isHidden = false
         } else {
             let copyButton = UIBarButtonItem(
                 image: UIImage(systemName: "square.and.arrow.down"),
@@ -194,6 +213,13 @@ class EditTripViewController: UIViewController {
     @objc func openWishList(_ sender: UIBarButtonItem) {
         let wishVC = WishListViewController(trip: trip, fsManager: fsManager)
         navigationController?.pushViewController(wishVC, animated: true)
+    }
+
+    @objc func openChatRoom(_ sender: UIButton) {
+        let chatVC = ChatRoomViewController(trip: trip, fsManager: fsManager)
+        let nav = UINavigationController(rootViewController: chatVC)
+//        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
     }
 
     @objc func shareTrip(_ sender: UIBarButtonItem) {

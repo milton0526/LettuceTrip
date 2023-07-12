@@ -50,25 +50,10 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         fetchPlaces()
     }
 
-    @objc func openChatRoom(_ sender: UIBarButtonItem) {
-        let chatVC = ChatRoomViewController(trip: trip, fsManager: fsManager)
-        let nav = UINavigationController(rootViewController: chatVC)
-        nav.modalPresentationStyle = .fullScreen
-        present(nav, animated: true)
-    }
-
     private func setupUI() {
         view.backgroundColor = .systemBackground
         view.addSubview(collectionView)
         collectionView.edgesToSuperview(usingSafeArea: true)
-
-        let chatRoomButton = UIBarButtonItem(
-            image: UIImage(systemName: "person.2"),
-            style: .plain,
-            target: self,
-            action: #selector(openChatRoom))
-
-        navigationItem.rightBarButtonItem = chatRoomButton
     }
 
     private func fetchPlaces() {

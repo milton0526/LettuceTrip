@@ -29,9 +29,6 @@ class ChatRoomMemberView: UIView, UICollectionViewDelegateFlowLayout, UICollecti
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        layer.cornerRadius = 34
-        layer.masksToBounds = true
-        layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         backgroundColor = .tintColor
         addSubview(collectionView)
         collectionView.edgesToSuperview(insets: .uniform(8))

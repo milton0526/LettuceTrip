@@ -122,7 +122,7 @@ class ChatRoomViewController: UIViewController {
     private func configBackButton() {
         let backButton = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(dismissView))
         backButton.tintColor = .systemTeal
-        navigationItem.leftBarButtonItem = backButton
+        navigationItem.rightBarButtonItem = backButton
     }
 
     @objc func dismissView(_ sender: UIBarButtonItem) {
