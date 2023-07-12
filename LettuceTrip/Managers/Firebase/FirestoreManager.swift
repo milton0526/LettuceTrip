@@ -15,7 +15,8 @@ final class FirestoreManager {
     let database = Firestore.firestore()
 
     var user: String? {
-        Auth.auth().currentUser?.uid
+        "DLdkuvuUAvWEGeYabd5CyCsf2kL2"
+        // Auth.auth().currentUser?.uid
     }
 
     enum TripField: String {

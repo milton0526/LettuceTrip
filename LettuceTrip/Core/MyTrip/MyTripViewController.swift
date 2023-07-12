@@ -118,7 +118,7 @@ class MyTripViewController: UIViewController {
                         allTrips.append(modifiedTrip)
                     case .modified:
                         if let index = allTrips.firstIndex(where: { $0.id == modifiedTrip.id }) {
-                            allTrips[index].image = modifiedTrip.image
+                            allTrips[index] = modifiedTrip
                         }
                     case .removed:
                         if let index = allTrips.firstIndex(where: { $0.id == modifiedTrip.id }) {

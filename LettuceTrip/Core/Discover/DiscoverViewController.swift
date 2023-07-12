@@ -15,7 +15,7 @@ class DiscoverViewController: UIViewController {
         case featureAnnotation
     }
 
-    lazy var mapView: MKMapView = {
+    private lazy var mapView: MKMapView = {
         let map = MKMapView()
         map.showsUserLocation = true
         map.delegate = self
@@ -24,9 +24,9 @@ class DiscoverViewController: UIViewController {
         return map
     }()
 
-    lazy var compass = MKCompassButton(mapView: mapView)
+    private lazy var compass = MKCompassButton(mapView: mapView)
 
-    lazy var searchTextField: RoundedTextField = {
+    private lazy var searchTextField: RoundedTextField = {
         let textField = RoundedTextField()
         textField.placeholder = String(localized: "Search places...")
         textField.leftViewMode = .always
@@ -36,7 +36,7 @@ class DiscoverViewController: UIViewController {
         return textField
     }()
 
-    lazy var locationService = LocationService()
+    private lazy var locationManager = LocationManager()
     private var locationObservation: NSKeyValueObservation?
     private var currentLocation: CLLocation? {
         didSet {
@@ -48,11 +48,13 @@ class DiscoverViewController: UIViewController {
         }
     }
 
-    lazy var searchResultController = SearchCityViewController()
+    private lazy var searchResultController = SearchCityViewController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        locationService.viewController = self
+        locationManager.errorHandler = { [weak self] in
+            self?.displayLocationServicesDeniedAlert()
+        }
         configMapView()
         setupUI()
     }
@@ -74,10 +76,10 @@ class DiscoverViewController: UIViewController {
         mapView.preferredConfiguration = mapConfiguration
 
         // Set a default location.
-        currentLocation = locationService.currentLocation
+        currentLocation = locationManager.currentLocation
 
         // Modify the location as updates come in.
-        locationObservation = locationService.observe(\.currentLocation, options: [.new]) { _, change in
+        locationObservation = locationManager.observe(\.currentLocation, options: [.new]) { _, change in
             guard
                 let value = change.newValue,
                 let location = value
@@ -163,6 +165,26 @@ class DiscoverViewController: UIViewController {
 
         return markerAnnotationView
     }
+
+    private func displayLocationServicesDeniedAlert() {
+        let message = String(localized: "Enable location service to give you better experience while using app.")
+        let alert = UIAlertController(
+            title: String(localized: "Location Service denied!"),
+            message: message,
+            preferredStyle: .alert)
+
+        let openSettings = UIAlertAction(title: String(localized: "Settings"), style: .default) { _ in
+            if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(settingsURL)
+            }
+        }
+
+        let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
+        alert.addAction(openSettings)
+        alert.addAction(cancel)
+
+        present(alert, animated: true)
+    }
 }
 
 // MARK: - TextField Delegate
@@ -183,7 +205,6 @@ extension DiscoverViewController: UITextFieldDelegate {
             let text = textField.text,
             !text.isEmpty
         else {
-            // show no result indicator view
             return
         }
 
@@ -193,7 +214,7 @@ extension DiscoverViewController: UITextFieldDelegate {
             guard let self = self else { return }
             self.searchTextField.text = city.name
             self.children.first?.view.isHidden = true
-            let cityRegion = MKCoordinateRegion(center: city.placemark.coordinate, latitudinalMeters: 8000, longitudinalMeters: 8000)
+            let cityRegion = MKCoordinateRegion(center: city.placemark.coordinate, latitudinalMeters: 6000, longitudinalMeters: 6000)
             let pointRegion = MKCoordinateRegion(center: city.placemark.coordinate, latitudinalMeters: 125, longitudinalMeters: 125)
             searchResultController.region = cityRegion
 
@@ -207,7 +228,6 @@ extension DiscoverViewController: UITextFieldDelegate {
 }
 
 // MARK: - MapView Delegate
-
 extension DiscoverViewController: MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {

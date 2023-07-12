@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C42F51B02A454D5F00023305 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51AF2A454D5F00023305 /* LocationService.swift */; };
+		C42F51B02A454D5F00023305 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51AF2A454D5F00023305 /* LocationManager.swift */; };
 		C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B72A45936800023305 /* EditTripViewController.swift */; };
 		C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */; };
 		C42F51C42A45B60C00023305 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51C32A45B60C00023305 /* CalendarCell.swift */; };
@@ -75,7 +75,6 @@
 		C4DBE8482A41B329002987CB /* ItineraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8472A41B329002987CB /* ItineraryCell.swift */; };
 		C4DBE84B2A41B350002987CB /* UICollectionView+Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE84A2A41B350002987CB /* UICollectionView+Identifier.swift */; };
 		C4DBE8822A41BC02002987CB /* RoundedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8812A41BC02002987CB /* RoundedTextField.swift */; };
-		C4DBE8852A41BC1B002987CB /* POILocationCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8842A41BC1B002987CB /* POILocationCardCell.swift */; };
 		C4DBE8882A41BC60002987CB /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8872A41BC60002987CB /* PlaceDetailViewController.swift */; };
 		C4DBE88A2A41BC7B002987CB /* PlaceInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8892A41BC7B002987CB /* PlaceInfoCell.swift */; };
 		C4DBE88C2A41BC8F002987CB /* PlaceInfoCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE88B2A41BC8F002987CB /* PlaceInfoCellViewModel.swift */; };
@@ -110,7 +109,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C42F51AF2A454D5F00023305 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		C42F51AF2A454D5F00023305 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C42F51B72A45936800023305 /* EditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
 		C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceCell.swift; sourceTree = "<group>"; };
 		C42F51C32A45B60C00023305 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
@@ -176,7 +175,6 @@
 		C4DBE8472A41B329002987CB /* ItineraryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryCell.swift; sourceTree = "<group>"; };
 		C4DBE84A2A41B350002987CB /* UICollectionView+Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Identifier.swift"; sourceTree = "<group>"; };
 		C4DBE8812A41BC02002987CB /* RoundedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedTextField.swift; sourceTree = "<group>"; };
-		C4DBE8842A41BC1B002987CB /* POILocationCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POILocationCardCell.swift; sourceTree = "<group>"; };
 		C4DBE8872A41BC60002987CB /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
 		C4DBE8892A41BC7B002987CB /* PlaceInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoCell.swift; sourceTree = "<group>"; };
 		C4DBE88B2A41BC8F002987CB /* PlaceInfoCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoCellViewModel.swift; sourceTree = "<group>"; };
@@ -369,7 +367,6 @@
 			children = (
 				C4DBE8832A41BC0E002987CB /* Views */,
 				C4DBE8342A41B18B002987CB /* DiscoverViewController.swift */,
-				C4DBE8812A41BC02002987CB /* RoundedTextField.swift */,
 			);
 			path = Discover;
 			sourceTree = "<group>";
@@ -444,7 +441,7 @@
 		C4DBE87E2A41BB9C002987CB /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				C42F51AF2A454D5F00023305 /* LocationService.swift */,
+				C42F51AF2A454D5F00023305 /* LocationManager.swift */,
 				C454134A2A4A8871000D0685 /* FirebaseAuthHelper.swift */,
 				C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */,
 			);
@@ -454,7 +451,7 @@
 		C4DBE8832A41BC0E002987CB /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				C4DBE8842A41BC1B002987CB /* POILocationCardCell.swift */,
+				C4DBE8812A41BC02002987CB /* RoundedTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -668,7 +665,6 @@
 				C4DBE88C2A41BC8F002987CB /* PlaceInfoCellViewModel.swift in Sources */,
 				C42F51CC2A46989600023305 /* UserMessageCell.swift in Sources */,
 				C4DBE8CE2A4306BB002987CB /* SearchCityViewController.swift in Sources */,
-				C4DBE8852A41BC1B002987CB /* POILocationCardCell.swift in Sources */,
 				C4DBE84B2A41B350002987CB /* UICollectionView+Identifier.swift in Sources */,
 				C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */,
 				C4DBE8942A41BCED002987CB /* PlaceInfoHeaderView.swift in Sources */,
@@ -732,7 +728,7 @@
 				C480BE322A5A59F500A1A7E5 /* UnsplashKey.swift in Sources */,
 				C4DBE8D22A43E116002987CB /* MKPlaceMark+Extension.swift in Sources */,
 				C4DBE8C82A42D446002987CB /* LTUser.swift in Sources */,
-				C42F51B02A454D5F00023305 /* LocationService.swift in Sources */,
+				C42F51B02A454D5F00023305 /* LocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

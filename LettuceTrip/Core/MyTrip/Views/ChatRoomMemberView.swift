@@ -32,6 +32,9 @@ class ChatRoomMemberView: UIView, UICollectionViewDelegateFlowLayout, UICollecti
         backgroundColor = .tintColor
         addSubview(collectionView)
         collectionView.edgesToSuperview(insets: .uniform(8))
+        layer.cornerRadius = 10
+        layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        layer.masksToBounds = true
     }
 
     required init?(coder: NSCoder) {
