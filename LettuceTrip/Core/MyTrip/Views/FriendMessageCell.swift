@@ -13,7 +13,7 @@ class FriendMessageCell: UICollectionViewCell {
         let imageView = UIImageView(image: .person)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 10
+        imageView.layer.cornerRadius = 15
         imageView.layer.masksToBounds = true
         return imageView
     }()
@@ -27,6 +27,7 @@ class FriendMessageCell: UICollectionViewCell {
         textView.textContainerInset = .init(top: 8, left: 8, bottom: 8, right: 8)
         textView.layer.cornerRadius = 12
         textView.layer.masksToBounds = true
+        textView.isEditable = false
         return textView
     }()
 
@@ -57,7 +58,7 @@ class FriendMessageCell: UICollectionViewCell {
     }
 
     private func setupViews() {
-        imageView.size(.init(width: 20, height: 20))
+        imageView.size(.init(width: 30, height: 30))
         imageView.aspectRatio(1.0)
 
         textView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
@@ -80,10 +81,12 @@ class FriendMessageCell: UICollectionViewCell {
         textView.text = message.message
         timeLabel.text = message.sendTime?.formatted(date: .omitted, time: .shortened)
 
-        if user?.image != nil {
-            if let url = URL(string: user?.image ?? "") {
-                imageView.setUserImage(url: url)
-            }
+        guard
+            let image = user?.image,
+            let url = URL(string: image)
+        else {
+            return
         }
+        imageView.setUserImage(url: url)
     }
 }

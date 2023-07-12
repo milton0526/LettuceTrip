@@ -1,5 +1,5 @@
 //
-//  CirclePlaceCell.swift
+//  MemberCircleCell.swift
 //  LettuceTrip
 //
 //  Created by Milton Liu on 2023/6/23.
@@ -8,10 +8,10 @@
 import UIKit
 import TinyConstraints
 
-class CirclePlaceCell: UICollectionViewCell {
+class MemberCircleCell: UICollectionViewCell {
 
-    lazy var iconImageView: UIImageView = {
-        let imageView = UIImageView(image: .init(systemName: "person.crop.circle"))
+    lazy var personImageView: UIImageView = {
+        let imageView = UIImageView(image: .person)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 16
@@ -23,8 +23,7 @@ class CirclePlaceCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.1
+        label.numberOfLines = 2
         label.sizeToFit()
         label.textColor = .white
         return label
@@ -41,23 +40,27 @@ class CirclePlaceCell: UICollectionViewCell {
     }
 
     private func setupViews() {
-        [iconImageView, titleLabel].forEach { contentView.addSubview($0) }
+        [personImageView, titleLabel].forEach { contentView.addSubview($0) }
 
-        iconImageView.size(.init(width: 32, height: 32))
-        iconImageView.centerXToSuperview()
-        iconImageView.topToSuperview(offset: 4)
+        personImageView.size(.init(width: 32, height: 32))
+        personImageView.centerXToSuperview()
+        personImageView.topToSuperview(offset: 4)
 
-        titleLabel.topToBottom(of: iconImageView, offset: 8)
+        titleLabel.topToBottom(of: personImageView, offset: 8)
         titleLabel.horizontalToSuperview(insets: .horizontal(8))
-        titleLabel.height(14)
+        titleLabel.height(30)
         titleLabel.bottomToSuperview(offset: -8, relation: .equalOrGreater)
     }
 
     func config(user: LTUser) {
-        if let imageString = user.image,
-            let url = URL(string: imageString) {
-            iconImageView.setUserImage(url: url)
-        }
         titleLabel.text = user.name
+
+        guard
+            let image = user.image,
+            let url = URL(string: image)
+        else {
+            return
+        }
+        personImageView.setUserImage(url: url)
     }
 }

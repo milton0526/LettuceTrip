@@ -73,7 +73,6 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
 
     private func fetchPlaces() {
         guard let tripID = trip.id else { return }
-//        places.removeAll(keepingCapacity: true)
 
         fsManager.placeListener(at: tripID, isArrange: false)
             .receive(on: DispatchQueue.main)

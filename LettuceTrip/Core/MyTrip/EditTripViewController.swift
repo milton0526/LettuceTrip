@@ -78,6 +78,7 @@ class EditTripViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = trip.tripName
+        navigationItem.backButtonDisplayMode = .minimal
         view.backgroundColor = .systemBackground
         setupUI()
         scheduleView.schedules = convertDateToDisplay()
@@ -87,8 +88,8 @@ class EditTripViewController: UIViewController {
         scheduleView.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .centeredVertically)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         fetchPlaces()
     }
 

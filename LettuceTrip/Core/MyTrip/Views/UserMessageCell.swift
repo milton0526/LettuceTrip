@@ -20,6 +20,7 @@ class UserMessageCell: UICollectionViewCell {
         textView.textContainerInset = .init(top: 8, left: 8, bottom: 8, right: 8)
         textView.layer.cornerRadius = 12
         textView.layer.masksToBounds = true
+        textView.isEditable = false
         return textView
     }()
 

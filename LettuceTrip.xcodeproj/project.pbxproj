@@ -12,7 +12,7 @@
 		C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */; };
 		C42F51C42A45B60C00023305 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51C32A45B60C00023305 /* CalendarCell.swift */; };
 		C42F51C62A45BD1D00023305 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51C52A45BD1D00023305 /* ChatRoomViewController.swift */; };
-		C42F51CA2A45E2AB00023305 /* CirclePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51C92A45E2AB00023305 /* CirclePlaceCell.swift */; };
+		C42F51CA2A45E2AB00023305 /* MemberCircleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51C92A45E2AB00023305 /* MemberCircleCell.swift */; };
 		C42F51CC2A46989600023305 /* UserMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51CB2A46989600023305 /* UserMessageCell.swift */; };
 		C42F51CE2A469E7200023305 /* FriendMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51CD2A469E7200023305 /* FriendMessageCell.swift */; };
 		C42F51D22A46ADDB00023305 /* UINavigationBar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */; };
@@ -54,7 +54,7 @@
 		C4CBD42F2A4FD122009108C6 /* GPlaceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */; };
 		C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */; };
 		C4CBD4432A4FECA2009108C6 /* GMSPlace+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CBD4422A4FECA2009108C6 /* GMSPlace+Combine.swift */; };
-		C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */; };
+		C4CC0BF32A46C51C00E03758 /* ChatRoomMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BF22A46C51C00E03758 /* ChatRoomMemberView.swift */; };
 		C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */; };
 		C4CC0BFE2A481E0100E03758 /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BFD2A481E0100E03758 /* ScheduleView.swift */; };
 		C4CC0C002A48255B00E03758 /* WishListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CC0BFF2A48255B00E03758 /* WishListViewController.swift */; };
@@ -115,7 +115,7 @@
 		C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceCell.swift; sourceTree = "<group>"; };
 		C42F51C32A45B60C00023305 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		C42F51C52A45BD1D00023305 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
-		C42F51C92A45E2AB00023305 /* CirclePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclePlaceCell.swift; sourceTree = "<group>"; };
+		C42F51C92A45E2AB00023305 /* MemberCircleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCircleCell.swift; sourceTree = "<group>"; };
 		C42F51CB2A46989600023305 /* UserMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageCell.swift; sourceTree = "<group>"; };
 		C42F51CD2A469E7200023305 /* FriendMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendMessageCell.swift; sourceTree = "<group>"; };
 		C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Extension.swift"; sourceTree = "<group>"; };
@@ -156,7 +156,7 @@
 		C4CBD42E2A4FD122009108C6 /* GPlaceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPlaceAPI.swift; sourceTree = "<group>"; };
 		C4CBD4302A4FD1BA009108C6 /* GPlaceAPIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = GPlaceAPIKey.plist; sourceTree = "<group>"; };
 		C4CBD4422A4FECA2009108C6 /* GMSPlace+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GMSPlace+Combine.swift"; sourceTree = "<group>"; };
-		C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomPlacesView.swift; sourceTree = "<group>"; };
+		C4CC0BF22A46C51C00E03758 /* ChatRoomMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomMemberView.swift; sourceTree = "<group>"; };
 		C4CC0BFD2A481E0100E03758 /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
 		C4CC0BFF2A48255B00E03758 /* WishListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListViewController.swift; sourceTree = "<group>"; };
 		C4CC0C032A48465300E03758 /* ArrangePlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceViewController.swift; sourceTree = "<group>"; };
@@ -488,10 +488,10 @@
 				C4DBE8B12A41DD83002987CB /* TripCell.swift */,
 				C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */,
 				C42F51C32A45B60C00023305 /* CalendarCell.swift */,
-				C42F51C92A45E2AB00023305 /* CirclePlaceCell.swift */,
+				C42F51C92A45E2AB00023305 /* MemberCircleCell.swift */,
 				C42F51CB2A46989600023305 /* UserMessageCell.swift */,
 				C42F51CD2A469E7200023305 /* FriendMessageCell.swift */,
-				C4CC0BF22A46C51C00E03758 /* ChatRoomPlacesView.swift */,
+				C4CC0BF22A46C51C00E03758 /* ChatRoomMemberView.swift */,
 				C4CC0BFD2A481E0100E03758 /* ScheduleView.swift */,
 			);
 			path = Views;
@@ -676,7 +676,7 @@
 				C4CBD4432A4FECA2009108C6 /* GMSPlace+Combine.swift in Sources */,
 				C4DBE8BD2A429921002987CB /* UILabel+Style.swift in Sources */,
 				C42F51CE2A469E7200023305 /* FriendMessageCell.swift in Sources */,
-				C4CC0BF32A46C51C00E03758 /* ChatRoomPlacesView.swift in Sources */,
+				C4CC0BF32A46C51C00E03758 /* ChatRoomMemberView.swift in Sources */,
 				C4DBE88E2A41BCAB002987CB /* PlaceAboutCell.swift in Sources */,
 				C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */,
 				C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */,
@@ -720,7 +720,7 @@
 				C4DBE8822A41BC02002987CB /* RoundedTextField.swift in Sources */,
 				C4DBE8962A41BD00002987CB /* UITableView+Identifier.swift in Sources */,
 				C4DBE8AF2A41D696002987CB /* SelectionViewDelegate.swift in Sources */,
-				C42F51CA2A45E2AB00023305 /* CirclePlaceCell.swift in Sources */,
+				C42F51CA2A45E2AB00023305 /* MemberCircleCell.swift in Sources */,
 				C480BDE82A56C3D100A1A7E5 /* BaseSettingViewController.swift in Sources */,
 				C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */,
 				C45413412A497145000D0685 /* Date+Extension.swift in Sources */,

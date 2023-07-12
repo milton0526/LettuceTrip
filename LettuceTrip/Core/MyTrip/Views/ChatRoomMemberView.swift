@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChatRoomPlacesView: UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+class ChatRoomMemberView: UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
     var members: [LTUser] = [] {
         didSet {
@@ -23,7 +23,7 @@ class ChatRoomPlacesView: UIView, UICollectionViewDelegateFlowLayout, UICollecti
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.register(CirclePlaceCell.self, forCellWithReuseIdentifier: CirclePlaceCell.identifier)
+        collectionView.register(MemberCircleCell.self, forCellWithReuseIdentifier: MemberCircleCell.identifier)
         return collectionView
     }()
 
@@ -42,12 +42,8 @@ class ChatRoomPlacesView: UIView, UICollectionViewDelegateFlowLayout, UICollecti
     }
 
     // MARK: - Delegate method
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let place = members[indexPath.item]
-    }
-
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 60, height: 60)
+        return CGSize(width: 60, height: 80)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -65,8 +61,8 @@ class ChatRoomPlacesView: UIView, UICollectionViewDelegateFlowLayout, UICollecti
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let userCell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: CirclePlaceCell.identifier,
-            for: indexPath) as? CirclePlaceCell
+            withReuseIdentifier: MemberCircleCell.identifier,
+            for: indexPath) as? MemberCircleCell
         else {
             fatalError("Failed to dequeue cityCell")
         }

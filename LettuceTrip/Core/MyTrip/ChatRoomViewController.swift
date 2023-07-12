@@ -29,7 +29,7 @@ class ChatRoomViewController: UIViewController {
         case main
     }
 
-    lazy var userView = ChatRoomPlacesView()
+    lazy var userView = ChatRoomMemberView()
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -133,7 +133,7 @@ class ChatRoomViewController: UIViewController {
         [userView, collectionView, inputTextField, sendButton].forEach { view.addSubview($0) }
 
         userView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
-        userView.height(80)
+        userView.height(100)
 
         collectionView.topToBottom(of: userView)
         collectionView.horizontalToSuperview()

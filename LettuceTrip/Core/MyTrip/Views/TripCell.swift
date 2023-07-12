@@ -49,6 +49,11 @@ class TripCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        photoImageView.image = UIImage(named: "placeholder")
+    }
+
     private func setupViews() {
         contentView.addSubview(photoImageView)
         photoImageView.addSubview(titleLabel)
