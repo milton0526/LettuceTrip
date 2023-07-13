@@ -12,22 +12,25 @@ import Combine
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    private var viewController: UIViewController?
-    private let fsManager = FirestoreManager()
+    let fsManager = FirestoreManager()
     private var subscription: AnyCancellable?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        window = UIWindow(windowScene: windowScene)
+
+        let authManager = AuthManager(fsManager: fsManager)
+        var viewController: UIViewController
 
         if fsManager.user == nil {
-            let signInVC = SignInViewController(authManager: AuthManager(fsManager: fsManager))
+            let signInVC = SignInViewController(authManager: authManager)
             viewController = signInVC
         } else {
-            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let mainVC = storyBoard.instantiateViewController(withIdentifier: "TabBarController")
-            viewController = mainVC
+            let tabBarVC = TabBarViewController(fsManager: fsManager, authManager: authManager)
+            viewController = tabBarVC
         }
 
         if let appTheme = UserDefaults.standard.string(forKey: AppTheme.key) {
@@ -41,9 +44,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.tintColor = .systemTeal
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()
-        // swiftlint: disable unused_optional_binding
-        guard let _ = (scene as? UIWindowScene) else { return }
-        // swiftlint: enable unused_optional_binding
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

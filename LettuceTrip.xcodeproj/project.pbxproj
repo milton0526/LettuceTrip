@@ -16,6 +16,10 @@
 		C42F51CC2A46989600023305 /* UserMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51CB2A46989600023305 /* UserMessageCell.swift */; };
 		C42F51CE2A469E7200023305 /* FriendMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51CD2A469E7200023305 /* FriendMessageCell.swift */; };
 		C42F51D22A46ADDB00023305 /* UINavigationBar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */; };
+		C44DEABD2A5FCA6700AFB8C6 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44DEABC2A5FCA6700AFB8C6 /* TabBarViewController.swift */; };
+		C44DEABF2A5FCB9900AFB8C6 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44DEABE2A5FCB9900AFB8C6 /* HomeViewModel.swift */; };
+		C44DEAC12A5FCEAE00AFB8C6 /* LocationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44DEAC02A5FCEAE00AFB8C6 /* LocationError.swift */; };
+		C44DEAC32A5FD00600AFB8C6 /* DiscoverViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44DEAC22A5FD00600AFB8C6 /* DiscoverViewModel.swift */; };
 		C454133E2A48920D000D0685 /* ArrangePlaceDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454133C2A48920D000D0685 /* ArrangePlaceDetailCell.swift */; };
 		C454133F2A48920D000D0685 /* ArrangePlaceDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C454133D2A48920D000D0685 /* ArrangePlaceDetailCell.xib */; };
 		C45413412A497145000D0685 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45413402A497145000D0685 /* Date+Extension.swift */; };
@@ -64,7 +68,6 @@
 		C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8202A41AF62002987CB /* AppDelegate.swift */; };
 		C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8222A41AF62002987CB /* SceneDelegate.swift */; };
 		C4DBE8252A41AF62002987CB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8242A41AF62002987CB /* HomeViewController.swift */; };
-		C4DBE8282A41AF62002987CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4DBE8262A41AF62002987CB /* Main.storyboard */; };
 		C4DBE82A2A41AF63002987CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4DBE8292A41AF63002987CB /* Assets.xcassets */; };
 		C4DBE82D2A41AF63002987CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4DBE82B2A41AF63002987CB /* LaunchScreen.storyboard */; };
 		C4DBE8352A41B18B002987CB /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBE8342A41B18B002987CB /* DiscoverViewController.swift */; };
@@ -118,6 +121,10 @@
 		C42F51CB2A46989600023305 /* UserMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageCell.swift; sourceTree = "<group>"; };
 		C42F51CD2A469E7200023305 /* FriendMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendMessageCell.swift; sourceTree = "<group>"; };
 		C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Extension.swift"; sourceTree = "<group>"; };
+		C44DEABC2A5FCA6700AFB8C6 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		C44DEABE2A5FCB9900AFB8C6 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		C44DEAC02A5FCEAE00AFB8C6 /* LocationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationError.swift; sourceTree = "<group>"; };
+		C44DEAC22A5FD00600AFB8C6 /* DiscoverViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewModel.swift; sourceTree = "<group>"; };
 		C454133C2A48920D000D0685 /* ArrangePlaceDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceDetailCell.swift; sourceTree = "<group>"; };
 		C454133D2A48920D000D0685 /* ArrangePlaceDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ArrangePlaceDetailCell.xib; sourceTree = "<group>"; };
 		C45413402A497145000D0685 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
@@ -128,7 +135,6 @@
 		C480BDE72A56C3D100A1A7E5 /* BaseSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSettingViewController.swift; sourceTree = "<group>"; };
 		C480BDE92A56C56E00A1A7E5 /* AppearanceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceVC.swift; sourceTree = "<group>"; };
 		C480BDF32A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JGProgressHUD+Wrapper.swift"; sourceTree = "<group>"; };
-		C480BDF92A581D1300A1A7E5 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
 		C480BDFA2A581D1300A1A7E5 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		C480BDFC2A58221C00A1A7E5 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		C480BDFF2A58221C00A1A7E5 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -164,7 +170,6 @@
 		C4DBE8202A41AF62002987CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4DBE8222A41AF62002987CB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		C4DBE8242A41AF62002987CB /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
-		C4DBE8272A41AF62002987CB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C4DBE8292A41AF63002987CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C4DBE82C2A41AF63002987CB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C4DBE82E2A41AF63002987CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -258,6 +263,7 @@
 			isa = PBXGroup;
 			children = (
 				C480BE0E2A591AFD00A1A7E5 /* FirebaseError.swift */,
+				C44DEAC02A5FCEAE00AFB8C6 /* LocationError.swift */,
 			);
 			path = Errors;
 			sourceTree = "<group>";
@@ -320,7 +326,6 @@
 				C45413422A4A7E4F000D0685 /* LettuceTrip.entitlements */,
 				C4DBE8202A41AF62002987CB /* AppDelegate.swift */,
 				C4DBE8222A41AF62002987CB /* SceneDelegate.swift */,
-				C4DBE8262A41AF62002987CB /* Main.storyboard */,
 				C4DBE8292A41AF63002987CB /* Assets.xcassets */,
 				C4DBE82B2A41AF63002987CB /* LaunchScreen.storyboard */,
 				C4DBE82E2A41AF63002987CB /* Info.plist */,
@@ -351,6 +356,7 @@
 				C4DBE83D2A41B1C7002987CB /* MyTrip */,
 				C4DBE83E2A41B1D5002987CB /* Profile */,
 				C45413432A4A7FF0000D0685 /* SignInViewController.swift */,
+				C44DEABC2A5FCA6700AFB8C6 /* TabBarViewController.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -359,6 +365,7 @@
 			isa = PBXGroup;
 			children = (
 				C4DBE8242A41AF62002987CB /* HomeViewController.swift */,
+				C44DEABE2A5FCB9900AFB8C6 /* HomeViewModel.swift */,
 				C4DBE8422A41B2DC002987CB /* Views */,
 			);
 			path = Home;
@@ -369,6 +376,7 @@
 			children = (
 				C4DBE8832A41BC0E002987CB /* Views */,
 				C4DBE8342A41B18B002987CB /* DiscoverViewController.swift */,
+				C44DEAC22A5FD00600AFB8C6 /* DiscoverViewModel.swift */,
 			);
 			path = Discover;
 			sourceTree = "<group>";
@@ -594,7 +602,6 @@
 				C480BDFD2A58221C00A1A7E5 /* InfoPlist.strings in Resources */,
 				C4DBE82A2A41AF63002987CB /* Assets.xcassets in Resources */,
 				C480BE302A5A588300A1A7E5 /* UnsplashKeys.plist in Resources */,
-				C4DBE8282A41AF62002987CB /* Main.storyboard in Resources */,
 				C480BE002A58221C00A1A7E5 /* Localizable.strings in Resources */,
 				C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */,
 				C4DBE89F2A41C0E3002987CB /* GoogleService-Info.plist in Resources */,
@@ -670,6 +677,7 @@
 				C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */,
 				C480BDF42A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift in Sources */,
 				C4DBE8D02A4355A2002987CB /* MKPointOfInterestCategory+Extension.swift in Sources */,
+				C44DEABF2A5FCB9900AFB8C6 /* HomeViewModel.swift in Sources */,
 				C4CBD42D2A4FD097009108C6 /* GPlaceResponse.swift in Sources */,
 				C4CBD42F2A4FD122009108C6 /* GPlaceAPIManager.swift in Sources */,
 				C480BDEA2A56C56E00A1A7E5 /* AppearanceVC.swift in Sources */,
@@ -693,6 +701,7 @@
 				C480BE1E2A5972C100A1A7E5 /* FirestoreManager+Place.swift in Sources */,
 				C4DBE8352A41B18B002987CB /* DiscoverViewController.swift in Sources */,
 				C480BE0F2A591AFD00A1A7E5 /* FirebaseError.swift in Sources */,
+				C44DEAC32A5FD00600AFB8C6 /* DiscoverViewModel.swift in Sources */,
 				C4DBE8B22A41DD83002987CB /* TripCell.swift in Sources */,
 				C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */,
 				C4DBE8902A41BCC3002987CB /* PlaceAboutCellViewModel.swift in Sources */,
@@ -702,6 +711,7 @@
 				C480BE232A5981CD00A1A7E5 /* ChatRoomVM.swift in Sources */,
 				C4DBE8882A41BC60002987CB /* PlaceDetailViewController.swift in Sources */,
 				C4CC0BFE2A481E0100E03758 /* ScheduleView.swift in Sources */,
+				C44DEABD2A5FCA6700AFB8C6 /* TabBarViewController.swift in Sources */,
 				C4DBE8232A41AF62002987CB /* SceneDelegate.swift in Sources */,
 				C4CC0C002A48255B00E03758 /* WishListViewController.swift in Sources */,
 				C480BE062A590B0100A1A7E5 /* FirestoreHelper.swift in Sources */,
@@ -709,6 +719,7 @@
 				C4DBE8962A41BD00002987CB /* UITableView+Identifier.swift in Sources */,
 				C4DBE8AF2A41D696002987CB /* SelectionViewDelegate.swift in Sources */,
 				C42F51CA2A45E2AB00023305 /* MemberCircleCell.swift in Sources */,
+				C44DEAC12A5FCEAE00AFB8C6 /* LocationError.swift in Sources */,
 				C480BDE82A56C3D100A1A7E5 /* BaseSettingViewController.swift in Sources */,
 				C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */,
 				C45413412A497145000D0685 /* Date+Extension.swift in Sources */,
@@ -741,15 +752,6 @@
 				C480BDFF2A58221C00A1A7E5 /* zh-Hant */,
 			);
 			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-		C4DBE8262A41AF62002987CB /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C4DBE8272A41AF62002987CB /* Base */,
-				C480BDF92A581D1300A1A7E5 /* zh-Hant */,
-			);
-			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 		C4DBE82B2A41AF63002987CB /* LaunchScreen.storyboard */ = {
@@ -900,7 +902,6 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Use device's location to bring you more nearby places information.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -935,7 +936,6 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Use device's location to bring you more nearby places information.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (

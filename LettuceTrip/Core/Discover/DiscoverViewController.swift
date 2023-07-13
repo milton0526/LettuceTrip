@@ -7,6 +7,7 @@
 
 import UIKit
 import MapKit
+import Combine
 import TinyConstraints
 
 class DiscoverViewController: UIViewController {
@@ -36,27 +37,30 @@ class DiscoverViewController: UIViewController {
         return textField
     }()
 
-    private lazy var locationManager = LocationManager()
-    private var locationObservation: NSKeyValueObservation?
-    private var currentLocation: CLLocation? {
-        didSet {
-            guard let currentLocation else { return }
+    private lazy var searchResultController = SearchCityViewController()
 
-            let mapRegion = MKCoordinateRegion(center: currentLocation.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
-            mapView.setRegion(mapRegion, animated: true)
-            searchResultController.region = mapRegion
-        }
+    private let viewModel: DiscoverViewModel
+    private var cancelBags: Set<AnyCancellable> = []
+
+    init(viewModel: DiscoverViewModel = DiscoverViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
     }
 
-    private lazy var searchResultController = SearchCityViewController()
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        locationManager.errorHandler = { [weak self] in
-            self?.displayLocationServicesDeniedAlert()
-        }
         configMapView()
         setupUI()
+        bind()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = true
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -67,31 +71,32 @@ class DiscoverViewController: UIViewController {
         }
     }
 
+    private func bind() {
+        viewModel.$currentLocation
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] location in
+                guard let location = location else { return }
+
+                let mapRegion = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+                mapView.setRegion(mapRegion, animated: true)
+                searchResultController.region = mapRegion
+            }
+            .store(in: &cancelBags)
+
+        viewModel.errorPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] error in
+                displayLocationServicesDeniedAlert(error)
+            }
+            .store(in: &cancelBags)
+    }
+
     private func configMapView() {
         mapView.selectableMapFeatures = [.pointsOfInterest]
 
         let mapConfiguration = MKStandardMapConfiguration()
         mapConfiguration.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
-
         mapView.preferredConfiguration = mapConfiguration
-
-        // Set a default location.
-        currentLocation = locationManager.currentLocation
-
-        // Modify the location as updates come in.
-        locationObservation = locationManager.observe(\.currentLocation, options: [.new]) { _, change in
-            guard
-                let value = change.newValue,
-                let location = value
-            else { return }
-
-            self.currentLocation = location
-        }
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
     }
 
     private func setupUI() {
@@ -166,10 +171,10 @@ class DiscoverViewController: UIViewController {
         return markerAnnotationView
     }
 
-    private func displayLocationServicesDeniedAlert() {
+    private func displayLocationServicesDeniedAlert(_ error: LocationError) {
         let message = String(localized: "Enable location service to give you better experience while using app.")
         let alert = UIAlertController(
-            title: String(localized: "Location Service denied!"),
+            title: error.errorDescription,
             message: message,
             preferredStyle: .alert)
 

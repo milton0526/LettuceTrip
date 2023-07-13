@@ -8,11 +8,19 @@
 import Foundation
 import CoreLocation
 
+protocol LocationManagerDelegate: AnyObject {
+
+    func getCurrentLocation(_ manager: LocationManager, location: CLLocation?)
+
+    func updateLocationFailed(_ manager: LocationManager, error: LocationError)
+
+    func authorizationFailed(_ manager: LocationManager, error: LocationError)
+}
+
 class LocationManager: NSObject {
 
     private let coreLocationManager = CLLocationManager()
-    @objc dynamic var currentLocation: CLLocation?
-    var errorHandler: (() -> Void)?
+    weak var delegate: LocationManagerDelegate?
 
     override init() {
         super.init()
@@ -29,25 +37,22 @@ extension LocationManager: CLLocationManagerDelegate {
         switch status {
         case .notDetermined:
             coreLocationManager.requestWhenInUseAuthorization()
-        case .restricted, .denied:
-            errorHandler?()
+        case .restricted:
+            delegate?.authorizationFailed(self, error: .restrict)
+        case .denied:
+            delegate?.authorizationFailed(self, error: .denied)
         case .authorizedWhenInUse:
             coreLocationManager.requestLocation()
-            JGHudIndicator.shared.showHud(type: .loading())
         default:
-            print("Unknown location service status.")
+            delegate?.authorizationFailed(self, error: .unknown)
         }
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        currentLocation = locations.last
-        JGHudIndicator.shared.dismissHUD()
+        delegate?.getCurrentLocation(self, location: locations.last)
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        // Handle any errors that `CLLocationManager` returns.
-        JGHudIndicator.shared.dismissHUD()
-        JGHudIndicator.shared.showHud(type: .failure)
-        print("locationManager error: \(error.localizedDescription)")
+        delegate?.updateLocationFailed(self, error: .update)
     }
 }
