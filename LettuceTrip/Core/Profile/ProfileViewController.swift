@@ -31,7 +31,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
     }()
 
     lazy var profileHeaderView = ProfileHeaderView()
-    private let authManager = AuthManager()
+    private lazy var authManager = AuthManager(fsManager: fsManager)
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, SettingModel>!
 
@@ -56,7 +56,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         updateSnapshot()
         fetchData()
 
-        authManager.viewController = self
+        authManager.delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -117,6 +117,12 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         dataSource.apply(snapshot)
     }
 
+    private func showSignOutVC() {
+        let signInVC = SignInViewController(authManager: authManager)
+        signInVC.modalPresentationStyle = .fullScreen
+        present(signInVC, animated: true)
+    }
+
     private func fetchData() {
         guard let userId = fsManager.user else { return }
 
@@ -139,16 +145,12 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
     private func confirmSignOut() {
         let alert = UIAlertController(title: String(localized: "Are you sure want to sign out?"), message: nil, preferredStyle: .alert)
         let sure = UIAlertAction(title: String(localized: "Sure"), style: .default) { [weak self] _ in
-            self?.authManager.signOut { error in
-                DispatchQueue.main.async {
-                    if let error = error {
-                        self?.showAlertToUser(error: error)
-                    } else {
-                        let signInVC = SignInViewController()
-                        signInVC.modalPresentationStyle = .fullScreen
-                        self?.present(signInVC, animated: true)
-                    }
-                }
+            guard let self = self else { return }
+            do {
+                try self.authManager.signOut()
+                self.showSignOutVC()
+            } catch {
+                self.showAlertToUser(error: error)
             }
         }
         let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
@@ -157,9 +159,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         present(alert, animated: true)
     }
 
-
     // MARK: CollectionView Delegate
-
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
@@ -176,7 +176,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
                 preferredStyle: .alert)
             let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
             let confirm = UIAlertAction(title: String(localized: "Confirm"), style: .destructive) { [weak self] _ in
-                self?.authManager.signInWithApple(isDelete: true)
+                self?.authManager.signInFlow(isDelete: true)
             }
 
             alert.addAction(cancel)
@@ -231,5 +231,20 @@ extension ProfileViewController: PHPickerViewControllerDelegate {
                     .store(in: &cancelBags)
             }
         }
+    }
+}
+
+// MARK: AuthManagerDelegate
+extension ProfileViewController: AuthManagerDelegate {
+    func presentAnchor(_ manager: AuthManager) -> UIWindow {
+        return view.window!
+    }
+
+    func authorizationSuccess(_ manager: AuthManager) {
+        showSignOutVC()
+    }
+
+    func authorizationFailed(_ manager: AuthManager, error: Error) {
+        showAlertToUser(error: error)
     }
 }

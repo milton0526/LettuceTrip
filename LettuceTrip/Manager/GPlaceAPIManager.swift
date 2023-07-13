@@ -1,5 +1,5 @@
 //
-//  GPlaceAPI.swift
+//  GPlaceAPIManager.swift
 //  LettuceTrip
 //
 //  Created by Milton Liu on 2023/7/1.
@@ -10,7 +10,7 @@ import Combine
 import CoreLocation
 import GooglePlaces
 
-class GPlaceAPI {
+class GPlaceAPIManager {
 
     private var languageCode: String? {
         Locale.current.language.languageCode?.identifier

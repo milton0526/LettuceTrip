@@ -71,7 +71,7 @@ class PlaceDetailViewController: UIViewController {
         return button
     }()
 
-    private let apiService = GPlaceAPI()
+    private let apiService = GPlaceAPIManager()
 
     init(place: Place) {
         self.place = place

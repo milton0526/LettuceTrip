@@ -8,6 +8,7 @@
 import UIKit
 
 extension UIStackView {
+    
     @discardableResult
     func removeAllArrangedSubviews() -> [UIView] {
         let removedSubviews = arrangedSubviews.reduce([]) { removedSubviews, subview -> [UIView] in

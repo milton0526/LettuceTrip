@@ -12,7 +12,7 @@ import Combine
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    var viewController: UIViewController?
+    private var viewController: UIViewController?
     private let fsManager = FirestoreManager()
     private var subscription: AnyCancellable?
 
@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         if fsManager.user == nil {
-            let signInVC = SignInViewController()
+            let signInVC = SignInViewController(authManager: AuthManager(fsManager: fsManager))
             viewController = signInVC
         } else {
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)

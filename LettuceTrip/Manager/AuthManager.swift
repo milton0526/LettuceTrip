@@ -9,15 +9,30 @@ import AuthenticationServices
 import FirebaseAuth
 import Combine
 
+protocol AuthManagerDelegate: AnyObject {
+
+    func presentAnchor(_ manager: AuthManager) -> UIWindow
+
+    func authorizationSuccess(_ manager: AuthManager)
+
+    func authorizationFailed(_ manager: AuthManager, error: Error)
+}
+
 class AuthManager: NSObject {
 
     private var currentNonce: String?
-    weak var viewController: UIViewController?
     private var isDelete = false
     private var cancelBags: Set<AnyCancellable> = []
-    private let fsManager = FirestoreManager()
+    private let fsManager: FirestoreManager
 
-    func signInWithApple(isDelete: Bool = false) {
+    weak var delegate: AuthManagerDelegate?
+
+    init(fsManager: FirestoreManager) {
+        self.fsManager = fsManager
+        super.init()
+    }
+
+    func signInFlow(isDelete: Bool = false) {
         self.isDelete = isDelete
 
         let nonce = FirebaseAuthHelper.randomNonceString()
@@ -33,14 +48,8 @@ class AuthManager: NSObject {
         authorizationController.performRequests()
     }
 
-    func signOut(completion: @escaping (Error?) -> Void) {
-        let firebaseAuth = Auth.auth()
-        do {
-            try firebaseAuth.signOut()
-            completion(nil)
-        } catch {
-            completion(error)
-        }
+    func signOut() throws {
+        try Auth.auth().signOut()
     }
 }
 
@@ -49,28 +58,19 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
 
-            guard let nonce = currentNonce else {
-                fatalError("Invalid state: A login callback was received, but no login request was sent.")
-            }
-
-            guard let appleIDToken = appleIDCredential.identityToken else {
-                print("Unable to fetch identity token")
-                return
-            }
-
-            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+            guard
+                let nonce = currentNonce,
+                let appleIDToken = appleIDCredential.identityToken,
+                let idTokenString = String(data: appleIDToken, encoding: .utf8)
+            else {
                 return
             }
 
             if isDelete {
-                guard let appleAuthCode = appleIDCredential.authorizationCode else {
-                    print("Unable to fetch authorization code")
-                    return
-                }
-
-                guard let authCodeString = String(data: appleAuthCode, encoding: .utf8) else {
-                    print("Unable to serialize auth code string from data: \(appleAuthCode.debugDescription)")
+                guard
+                    let appleAuthCode = appleIDCredential.authorizationCode,
+                    let authCodeString = String(data: appleAuthCode, encoding: .utf8)
+                else {
                     return
                 }
 
@@ -92,18 +92,12 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        // Handle error.
-        if let viewController = viewController {
-            viewController.showAlertToUser(error: error)
-        }
-        print("Sign in with Apple errored: \(error)")
+        delegate?.authorizationFailed(self, error: error)
     }
 
 
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        if let window = viewController?.view.window {
-            return window
-        } else {
+        guard let window = delegate?.presentAnchor(self) else {
             let keyWindow = UIApplication.shared.connectedScenes
                 .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
                 .last { $0.isKeyWindow }
@@ -111,24 +105,21 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
             return keyWindow!
             // swiftlint: enable force_unwrapping
         }
+        return window
     }
 
     private func signIntoFirebase(credential: OAuthCredential) {
-        guard let viewController = viewController else { return }
-
         Auth.auth().signIn(with: credential) { [weak self] authResults, error in
+            guard let self = self else { return }
+
             if let error = error {
-                print("Error sign in with Firebase" + error.localizedDescription)
-
                 DispatchQueue.main.async {
-                    viewController.showAlertToUser(error: error)
+                    self.delegate?.authorizationFailed(self, error: error)
                 }
-
                 return
             }
 
             guard
-                let self = self,
                 let userID = authResults?.user.uid,
                 let userName = authResults?.user.displayName,
                 let email = authResults?.user.email
@@ -136,8 +127,7 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
                 return
             }
 
-            // User is signed in to Firebase with Apple.
-            // Create user if first time...
+            // Create user if first time
             self.fsManager.checkUserExist(id: userID)
                 .sink { _ in
                 } receiveValue: { exist in
@@ -149,22 +139,14 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
                             .sink { completion in
                                 switch completion {
                                 case .finished:
-                                    let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                                    let mainVC = storyBoard.instantiateViewController(withIdentifier: "TabBarController")
-                                    mainVC.modalPresentationStyle = .fullScreen
-                                    viewController.present(mainVC, animated: true)
+                                    self.delegate?.authorizationSuccess(self)
                                 case .failure(let error):
-                                    viewController.showAlertToUser(error: error)
+                                    self.delegate?.authorizationFailed(self, error: error)
                                 }
                             } receiveValue: { _ in }
                             .store(in: &self.cancelBags)
                     } else {
-                        DispatchQueue.main.async {
-                            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                            let mainVC = storyBoard.instantiateViewController(withIdentifier: "TabBarController")
-                            mainVC.modalPresentationStyle = .fullScreen
-                            viewController.present(mainVC, animated: true)
-                        }
+                        self.delegate?.authorizationSuccess(self)
                     }
                 }
                 .store(in: &cancelBags)
@@ -172,12 +154,7 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
     }
 
     func deleteAccount(credential: OAuthCredential, authCode: String) {
-        guard
-            let viewController = viewController,
-            let user = Auth.auth().currentUser
-        else {
-            return
-        }
+        guard let user = Auth.auth().currentUser else { return }
 
         user.reauthenticate(with: credential) { [weak self] _, error in
             guard
@@ -193,11 +170,9 @@ extension AuthManager: ASAuthorizationControllerDelegate, ASAuthorizationControl
                 .sink { completion in
                     switch completion {
                     case .finished:
-                        let signInVC = SignInViewController()
-                        signInVC.modalPresentationStyle = .fullScreen
-                        viewController.present(signInVC, animated: true)
+                        self.delegate?.authorizationSuccess(self)
                     case .failure(let error):
-                        viewController.showAlertToUser(error: error)
+                        self.delegate?.authorizationFailed(self, error: error)
                     }
                 } receiveValue: { _ in }
                 .store(in: &self.cancelBags)
