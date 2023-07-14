@@ -16,6 +16,7 @@
 		C42F51CC2A46989600023305 /* UserMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51CB2A46989600023305 /* UserMessageCell.swift */; };
 		C42F51CE2A469E7200023305 /* FriendMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51CD2A469E7200023305 /* FriendMessageCell.swift */; };
 		C42F51D22A46ADDB00023305 /* UINavigationBar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */; };
+		C437575F2A6156DC009225E7 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C437575E2A6156DC009225E7 /* ProfileViewModel.swift */; };
 		C44DEABD2A5FCA6700AFB8C6 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44DEABC2A5FCA6700AFB8C6 /* TabBarViewController.swift */; };
 		C44DEABF2A5FCB9900AFB8C6 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44DEABE2A5FCB9900AFB8C6 /* HomeViewModel.swift */; };
 		C44DEAC12A5FCEAE00AFB8C6 /* LocationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44DEAC02A5FCEAE00AFB8C6 /* LocationError.swift */; };
@@ -121,6 +122,7 @@
 		C42F51CB2A46989600023305 /* UserMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageCell.swift; sourceTree = "<group>"; };
 		C42F51CD2A469E7200023305 /* FriendMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendMessageCell.swift; sourceTree = "<group>"; };
 		C42F51D12A46ADDB00023305 /* UINavigationBar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Extension.swift"; sourceTree = "<group>"; };
+		C437575E2A6156DC009225E7 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		C44DEABC2A5FCA6700AFB8C6 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		C44DEABE2A5FCB9900AFB8C6 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		C44DEAC02A5FCEAE00AFB8C6 /* LocationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationError.swift; sourceTree = "<group>"; };
@@ -399,6 +401,7 @@
 			isa = PBXGroup;
 			children = (
 				C4DBE8382A41B19B002987CB /* ProfileViewController.swift */,
+				C437575E2A6156DC009225E7 /* ProfileViewModel.swift */,
 				C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */,
 				C480BDE72A56C3D100A1A7E5 /* BaseSettingViewController.swift */,
 				C480BDE92A56C56E00A1A7E5 /* AppearanceVC.swift */,
@@ -697,6 +700,7 @@
 				C480BE212A59734000A1A7E5 /* FirestoreManager+ChatRoom.swift in Sources */,
 				C480BE1C2A596CA500A1A7E5 /* FirestoreManager+User.swift in Sources */,
 				C42F51D22A46ADDB00023305 /* UINavigationBar+Extension.swift in Sources */,
+				C437575F2A6156DC009225E7 /* ProfileViewModel.swift in Sources */,
 				C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */,
 				C480BE1E2A5972C100A1A7E5 /* FirestoreManager+Place.swift in Sources */,
 				C4DBE8352A41B18B002987CB /* DiscoverViewController.swift in Sources */,

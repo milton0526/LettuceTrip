@@ -77,22 +77,18 @@ class DiscoverViewController: UIViewController {
     private func bind() {
         viewModel.locationPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] location in
-                guard let location = location else { return }
-
-                let mapRegion = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
-                mapView.setRegion(mapRegion, animated: true)
-                searchResultController.region = mapRegion
-            }
-            .store(in: &cancelBags)
-
-        viewModel.errorPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] completion in
-                if case .failure(let error) = completion {
+            .compactMap(\.?.coordinate)
+            .sink(receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .finished: break
+                case .failure(let error):
                     self?.showAlertToUser(error: error)
                 }
-            } receiveValue: { _ in }
+            }, receiveValue: { [weak self] location in
+                let mapRegion = MKCoordinateRegion(center: location, latitudinalMeters: 1000, longitudinalMeters: 1000)
+                self?.mapView.setRegion(mapRegion, animated: true)
+                self?.searchResultController.region = mapRegion
+            })
             .store(in: &cancelBags)
     }
 

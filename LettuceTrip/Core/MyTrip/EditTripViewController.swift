@@ -127,7 +127,6 @@ class EditTripViewController: UIViewController {
 
         messageButton.size(CGSize(width: 50, height: 50))
         messageButton.layer.cornerRadius = 25
-        messageButton.layer.masksToBounds = true
         messageButton.layer.shadowColor = UIColor.gray.cgColor
         messageButton.layer.shadowRadius = 5
         messageButton.layer.shadowOpacity = 1

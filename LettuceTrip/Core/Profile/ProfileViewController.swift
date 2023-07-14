@@ -237,7 +237,9 @@ extension ProfileViewController: PHPickerViewControllerDelegate {
 // MARK: AuthManagerDelegate
 extension ProfileViewController: AuthManagerDelegate {
     func presentAnchor(_ manager: AuthManager) -> UIWindow {
+        // swiftlint: disable force_unwrapping
         return view.window!
+        // swiftlint: enable force_unwrapping
     }
 
     func authorizationSuccess(_ manager: AuthManager) {

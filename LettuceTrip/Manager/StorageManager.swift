@@ -9,12 +9,19 @@ import Foundation
 import Combine
 import FirebaseStorage
 
-final class StorageManager {
+enum StoragePath: String {
+    case users
+    case trips
+}
 
-    enum StoragePath: String {
-        case users
-        case trips
-    }
+protocol StorageManagerServiceType {
+
+    func uploadImage(_ imageData: Data, at path: StoragePath, with id: String) -> AnyPublisher<Void, Error>
+
+    func downloadRef(at path: StoragePath, with id: String) -> AnyPublisher<URL, Error>
+}
+
+final class StorageManager {
 
     private let storage = Storage.storage()
 

@@ -95,43 +95,6 @@ extension FirestoreManager {
         }.eraseToAnyPublisher()
     }
 
-    func placeListener(at tripId: String, isArrange: Bool = true, completion: @escaping (Result<[Place], Error>) -> Void) -> ListenerRegistration {
-        let subDirectory = SubDirectory(documentId: tripId, collection: .places)
-        let ref = FirestoreHelper.makeCollectionRef(database, at: .trips, inside: subDirectory)
-        var allPlaces: [Place] = []
-
-        let listener = ref.whereField("isArrange", isEqualTo: isArrange)
-            .addSnapshotListener { snapshot, error in
-                guard error == nil else {
-                    completion(.failure(FirebaseError.listenerError("Place")))
-                    return
-                }
-
-                snapshot?.documentChanges.forEach { diff in
-                    do {
-                        let place = try diff.document.data(as: Place.self)
-
-                        switch diff.type {
-                        case .added:
-                            allPlaces.append(place)
-                        case .modified:
-                            if let index = allPlaces.firstIndex(where: { $0.id == place.id }) {
-                                allPlaces[index].arrangedTime = place.arrangedTime
-                            }
-                        case .removed:
-                            if let index = allPlaces.firstIndex(where: { $0.id == place.id }) {
-                                allPlaces.remove(at: index)
-                            }
-                        }
-                    } catch {
-                        completion(.failure(error))
-                    }
-                    completion(.success(allPlaces))
-                }
-            }
-        return listener
-    }
-
     func placeListener(at tripId: String, isArrange: Bool = true) -> AnyPublisher<QuerySnapshot, Error> {
         let subDirectory = SubDirectory(documentId: tripId, collection: .places)
         let ref = FirestoreHelper.makeCollectionRef(database, at: .trips, inside: subDirectory)

@@ -18,7 +18,7 @@ class HomeViewController: UIViewController {
 
     // properties
     private let viewModel: HomeViewModelType
-    private let input: PassthroughSubject<HomeViewModelInput, Never> = .init()
+    private let eventSubject: PassthroughSubject<Void, Never> = .init()
     private var cancelBags: Set<AnyCancellable> = []
     private var dataSource: UICollectionViewDiffableDataSource<Section, Trip>!
 
@@ -54,7 +54,7 @@ class HomeViewController: UIViewController {
         configureDataSource()
         configureRefreshControl()
         bind()
-        input.send(.viewDidLoad)
+        eventSubject.send(())
     }
 
     private func setupUI() {
@@ -113,30 +113,29 @@ class HomeViewController: UIViewController {
 
     @objc func handleRefreshControl() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            self?.input.send(.pullToRefresh)
+            self?.eventSubject.send(())
         }
     }
 
     private func bind() {
-        let output = viewModel.transform(input: input.eraseToAnyPublisher())
+        viewModel.transform(input: eventSubject.eraseToAnyPublisher())
 
-        output.updateView
+        // Output
+        viewModel.updateViewPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
+            .dropFirst()
+            .sink { [weak self] completion in
+                switch completion {
+                case .finished: break
+                case .failure(let error):
+                    self?.showAlertToUser(error: error)
+                }
+            } receiveValue: { [weak self] _ in
                 guard let self = self else { return }
-                self.placeHolder.isHidden = viewModel.shareTrips.isEmpty ? false : true
+                self.placeHolder.isHidden = self.viewModel.shareTrips.isEmpty ? false : true
                 self.refreshControl.endRefreshing()
                 self.updateSnapshot()
             }
-            .store(in: &cancelBags)
-
-        output.displayError
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] completion in
-                if case .failure(let error) = completion {
-                    self?.showAlertToUser(error: error)
-                }
-            } receiveValue: { _ in }
             .store(in: &cancelBags)
     }
 }

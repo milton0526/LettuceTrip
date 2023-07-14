@@ -11,24 +11,16 @@ import Combine
 
 protocol DiscoverViewModelType {
 
-    var locationPublisher: AnyPublisher<CLLocation?, Never> { get }
-
-    var errorPublisher: AnyPublisher<Void, LocationError> { get }
+    var locationPublisher: AnyPublisher<CLLocation?, LocationError> { get }
 }
 
 final class DiscoverViewModel: DiscoverViewModelType {
 
     private let locationManager: LocationManager
 
-    private let locationSubject: CurrentValueSubject<CLLocation?, Never> = .init(nil)
-    private let errorSubject: PassthroughSubject<Void, LocationError> = .init()
-
-    var locationPublisher: AnyPublisher<CLLocation?, Never> {
+    private let locationSubject: CurrentValueSubject<CLLocation?, LocationError> = .init(nil)
+    var locationPublisher: AnyPublisher<CLLocation?, LocationError> {
         locationSubject.eraseToAnyPublisher()
-    }
-
-    var errorPublisher: AnyPublisher<Void, LocationError> {
-        errorSubject.eraseToAnyPublisher()
     }
 
     init(locationManager: LocationManager) {
@@ -44,10 +36,10 @@ extension DiscoverViewModel: LocationManagerDelegate {
     }
 
     func updateLocationFailed(_ manager: LocationManager, error: LocationError) {
-        errorSubject.send(completion: .failure(error))
+        locationSubject.send(completion: .failure(error))
     }
 
     func authorizationFailed(_ manager: LocationManager, error: LocationError) {
-        errorSubject.send(completion: .failure(error))
+        locationSubject.send(completion: .failure(error))
     }
 }

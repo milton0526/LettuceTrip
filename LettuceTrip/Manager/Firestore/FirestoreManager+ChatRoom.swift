@@ -11,12 +11,6 @@ import FirebaseFirestore
 
 extension FirestoreManager {
 
-    enum ListenerType<T: Decodable> {
-        case add(T)
-        case modify(T)
-        case removed(T)
-    }
-
     func sendMessage(_ text: String, at tripId: String) -> AnyPublisher<Void, Error> {
         guard let userId = user else {
             return Fail(error: FirebaseError.wrongId(user)).eraseToAnyPublisher()
