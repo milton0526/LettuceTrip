@@ -10,7 +10,16 @@ import Combine
 import CoreLocation
 import GooglePlaces
 
-class GPlaceAPIManager {
+protocol GooglePlaceServiceType {
+
+    func findPlaceFromText(_ text: String, location: CLLocationCoordinate2D) -> AnyPublisher<GPlaceResponse, Error>
+
+    func fetchPlace(id: String) -> AnyPublisher<GMSPlace, Error>
+
+    func fetchPhotos(metaData: GMSPlacePhotoMetadata) -> AnyPublisher<UIImage, Error>
+}
+
+class GPlaceAPIManager: GooglePlaceServiceType {
 
     private var languageCode: String? {
         Locale.current.language.languageCode?.identifier

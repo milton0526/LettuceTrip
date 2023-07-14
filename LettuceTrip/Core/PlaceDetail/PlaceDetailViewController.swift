@@ -28,7 +28,9 @@ class PlaceDetailViewController: UIViewController {
         }
     }
 
-    let place: Place
+    private let place: Place
+    private let fsManager: FirestoreManager
+    private let apiService: GooglePlaceServiceType
 
     private var gmsPlace: GMSPlace? {
         didSet {
@@ -38,8 +40,19 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private var placePhotos: [GPlacePhoto] = []
-    private let fsManager = FirestoreManager()
     private var cancelBags: Set<AnyCancellable> = []
+
+
+    init(place: Place, fsManager: FirestoreManager, apiService: GooglePlaceServiceType) {
+        self.place = place
+        self.fsManager = fsManager
+        self.apiService = apiService
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -70,17 +83,6 @@ class PlaceDetailViewController: UIViewController {
         button.addTarget(self, action: #selector(addToTripButtonTapped), for: .touchUpInside)
         return button
     }()
-
-    private let apiService = GPlaceAPIManager()
-
-    init(place: Place) {
-        self.place = place
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

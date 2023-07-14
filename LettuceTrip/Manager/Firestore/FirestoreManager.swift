@@ -45,7 +45,7 @@ final class FirestoreManager {
         }.eraseToAnyPublisher()
     }
 
-    func getTrips(isPublic: Bool = false) -> AnyPublisher<[Trip], Error> {
+    func getTrips(isPublic: Bool = false) -> AnyPublisher<[Trip], FirebaseError> {
         let ref = FirestoreHelper.makeCollectionRef(database, at: .trips)
         var allTrips: [Trip] = []
 

@@ -141,7 +141,8 @@ class ArrangePlaceViewController: UIViewController {
     }
 
     @objc func showDetail(_ sender: UIBarButtonItem) {
-        let detailVC = PlaceDetailViewController(place: place)
+        let apiService = GPlaceAPIManager()
+        let detailVC = PlaceDetailViewController(place: place, fsManager: fsManager, apiService: apiService)
         detailVC.addToTripButton.isEnabled = false
         detailVC.addToTripButton.alpha = 0.8
         navigationController?.pushViewController(detailVC, animated: true)

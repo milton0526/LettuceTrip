@@ -16,6 +16,20 @@ class DiscoverViewController: UIViewController {
         case featureAnnotation
     }
 
+    private let viewModel: DiscoverViewModel
+    private let fsManager: FirestoreManager
+    private var cancelBags: Set<AnyCancellable> = []
+
+    init(viewModel: DiscoverViewModel = DiscoverViewModel(), fsManager: FirestoreManager) {
+        self.viewModel = viewModel
+        self.fsManager = fsManager
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     private lazy var mapView: MKMapView = {
         let map = MKMapView()
         map.showsUserLocation = true
@@ -38,18 +52,6 @@ class DiscoverViewController: UIViewController {
     }()
 
     private lazy var searchResultController = SearchCityViewController()
-
-    private let viewModel: DiscoverViewModel
-    private var cancelBags: Set<AnyCancellable> = []
-
-    init(viewModel: DiscoverViewModel = DiscoverViewModel()) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -269,7 +271,8 @@ extension DiscoverViewController: MKMapViewDelegate {
             iconImage: icon,
             isArrange: false)
 
-        let detailVC = PlaceDetailViewController(place: place)
+        let apiService = GPlaceAPIManager()
+        let detailVC = PlaceDetailViewController(place: place, fsManager: fsManager, apiService: apiService)
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }

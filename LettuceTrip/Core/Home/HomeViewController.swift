@@ -10,14 +10,12 @@ import MapKit
 import Combine
 import TinyConstraints
 
-// reload method
-
 class HomeViewController: UIViewController {
 
     enum Section {
         case main
     }
-
+    // View components
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.delegate = self
@@ -32,18 +30,30 @@ class HomeViewController: UIViewController {
     }()
 
     private let refreshControl = UIRefreshControl()
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Trip>!
-    private var shareTrips: [Trip] = []
     private lazy var placeHolder = makePlaceholder(text: String(localized: "Oops! No one share there trip!🥲"))
-    private let fsManager = FirestoreManager()
+
+    // properties
+    private let viewModel: HomeViewModelType
+    private let input: PassthroughSubject<HomeViewModelInput, Never> = .init()
     private var cancelBags: Set<AnyCancellable> = []
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Trip>!
+
+    init(viewModel: HomeViewModelType) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         configureDataSource()
         configureRefreshControl()
-        fetchData()
+        bind()
+        input.send(.viewDidLoad)
     }
 
     private func setupUI() {
@@ -92,37 +102,41 @@ class HomeViewController: UIViewController {
         }
     }
 
-    private func fetchData() {
-        fsManager.getTrips(isPublic: true)
-            .retry(1)
-            .receive(on: DispatchQueue.main)
-            .sink { [unowned self] completion in
-                switch completion {
-                case .finished:
-                    self.placeHolder.isHidden = self.shareTrips.isEmpty ? false : true
-                    self.refreshControl.endRefreshing()
-                    self.updateSnapshot()
-                case .failure(let error):
-                    self.showAlertToUser(error: error)
-                }
-            } receiveValue: { [unowned self] result in
-                self.shareTrips = result
-            }
-            .store(in: &cancelBags)
-    }
-
     private func updateSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Trip>()
 
         snapshot.appendSections([.main])
-        snapshot.appendItems(shareTrips)
+        snapshot.appendItems(viewModel.shareTrips)
         dataSource.apply(snapshot)
     }
 
     @objc func handleRefreshControl() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            self?.fetchData()
+            self?.input.send(.pullToRefresh)
         }
+    }
+
+    private func bind() {
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
+
+        output.updateView
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                self.placeHolder.isHidden = viewModel.shareTrips.isEmpty ? false : true
+                self.refreshControl.endRefreshing()
+                self.updateSnapshot()
+            }
+            .store(in: &cancelBags)
+
+        output.displayError
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.showAlertToUser(error: error)
+                }
+            } receiveValue: { _ in }
+            .store(in: &cancelBags)
     }
 }
 
@@ -131,9 +145,9 @@ extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        let trip = shareTrips[indexPath.item]
-        let editVC = EditTripViewController(trip: trip, isEditMode: false, fsManager: fsManager)
-        navigationController?.pushViewController(editVC, animated: true)
+        let trip = viewModel.shareTrips[indexPath.item]
+        // let editVC = EditTripViewController(trip: trip, isEditMode: false, fsManager: fsManager)
+        // navigationController?.pushViewController(editVC, animated: true)
     }
 }
 
