@@ -118,10 +118,9 @@ class HomeViewController: UIViewController {
     }
 
     private func bind() {
-        viewModel.transform(input: eventSubject.eraseToAnyPublisher())
+        let output = viewModel.transform(input: eventSubject.eraseToAnyPublisher())
 
-        // Output
-        viewModel.updateViewPublisher
+        output
             .receive(on: DispatchQueue.main)
             .dropFirst()
             .sink { [weak self] completion in

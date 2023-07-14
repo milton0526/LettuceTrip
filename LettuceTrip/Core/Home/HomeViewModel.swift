@@ -8,25 +8,20 @@
 import Foundation
 import Combine
 
+typealias HomeVMOutput = AnyPublisher<Void, FirebaseError>
+
 protocol HomeViewModelType {
 
     var shareTrips: [Trip] { get }
 
-    var updateViewPublisher: AnyPublisher<Void, FirebaseError> { get }
-
-    func transform(input: AnyPublisher<Void, Never>)
+    func transform(input: AnyPublisher<Void, Never>) -> HomeVMOutput
 }
 
 class HomeViewModel: HomeViewModelType {
 
     private let fsManager: FirestoreManager
     private var cancelBags: Set<AnyCancellable> = []
-
-    // Publisher
     private let tripSubject: CurrentValueSubject<[Trip], FirebaseError> = .init([])
-    var updateViewPublisher: AnyPublisher<Void, FirebaseError> {
-        tripSubject.map { _ in }.eraseToAnyPublisher()
-    }
 
     // Property
     var shareTrips: [Trip] {
@@ -37,12 +32,14 @@ class HomeViewModel: HomeViewModelType {
         self.fsManager = fsManager
     }
 
-    func transform(input: AnyPublisher<Void, Never>) {
+    func transform(input: AnyPublisher<Void, Never>) -> HomeVMOutput {
         input
             .sink { [weak self] _ in
                 self?.fetchTrips()
             }
             .store(in: &cancelBags)
+
+        return tripSubject.map { _ in }.eraseToAnyPublisher()
     }
 
     private func fetchTrips() {
