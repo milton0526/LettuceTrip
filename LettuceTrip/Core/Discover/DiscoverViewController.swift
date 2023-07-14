@@ -16,11 +16,13 @@ class DiscoverViewController: UIViewController {
         case featureAnnotation
     }
 
-    private let viewModel: DiscoverViewModel
+    // Properties
+    private lazy var searchResultController = SearchCityViewController()
+    private let viewModel: DiscoverViewModelType
     private let fsManager: FirestoreManager
     private var cancelBags: Set<AnyCancellable> = []
 
-    init(viewModel: DiscoverViewModel = DiscoverViewModel(), fsManager: FirestoreManager) {
+    init(viewModel: DiscoverViewModelType, fsManager: FirestoreManager) {
         self.viewModel = viewModel
         self.fsManager = fsManager
         super.init(nibName: nil, bundle: nil)
@@ -30,6 +32,7 @@ class DiscoverViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // View components
     private lazy var mapView: MKMapView = {
         let map = MKMapView()
         map.showsUserLocation = true
@@ -50,8 +53,6 @@ class DiscoverViewController: UIViewController {
         textField.returnKeyType = .search
         return textField
     }()
-
-    private lazy var searchResultController = SearchCityViewController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,7 +75,7 @@ class DiscoverViewController: UIViewController {
     }
 
     private func bind() {
-        viewModel.$currentLocation
+        viewModel.locationPublisher
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] location in
                 guard let location = location else { return }
@@ -87,9 +88,11 @@ class DiscoverViewController: UIViewController {
 
         viewModel.errorPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] error in
-                displayLocationServicesDeniedAlert(error)
-            }
+            .sink { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.showAlertToUser(error: error)
+                }
+            } receiveValue: { _ in }
             .store(in: &cancelBags)
     }
 

@@ -9,18 +9,29 @@ import Foundation
 import CoreLocation
 import Combine
 
-final class DiscoverViewModel {
+protocol DiscoverViewModelType {
+
+    var locationPublisher: AnyPublisher<CLLocation?, Never> { get }
+
+    var errorPublisher: AnyPublisher<Void, LocationError> { get }
+}
+
+final class DiscoverViewModel: DiscoverViewModelType {
 
     private let locationManager: LocationManager
 
-    @Published var currentLocation: CLLocation? = .none
+    private let locationSubject: CurrentValueSubject<CLLocation?, Never> = .init(nil)
+    private let errorSubject: PassthroughSubject<Void, LocationError> = .init()
 
-    private let errorSubject: PassthroughSubject<LocationError, Never> = .init()
-    var errorPublisher: AnyPublisher<LocationError, Never> {
+    var locationPublisher: AnyPublisher<CLLocation?, Never> {
+        locationSubject.eraseToAnyPublisher()
+    }
+
+    var errorPublisher: AnyPublisher<Void, LocationError> {
         errorSubject.eraseToAnyPublisher()
     }
 
-    init(locationManager: LocationManager = LocationManager()) {
+    init(locationManager: LocationManager) {
         self.locationManager = locationManager
         locationManager.delegate = self
     }
@@ -29,14 +40,14 @@ final class DiscoverViewModel {
 extension DiscoverViewModel: LocationManagerDelegate {
 
     func getCurrentLocation(_ manager: LocationManager, location: CLLocation?) {
-        currentLocation = location
+        locationSubject.send(location)
     }
 
     func updateLocationFailed(_ manager: LocationManager, error: LocationError) {
-        errorSubject.send(error)
+        errorSubject.send(completion: .failure(error))
     }
 
     func authorizationFailed(_ manager: LocationManager, error: LocationError) {
-        errorSubject.send(error)
+        errorSubject.send(completion: .failure(error))
     }
 }

@@ -15,6 +15,22 @@ class HomeViewController: UIViewController {
     enum Section {
         case main
     }
+
+    // properties
+    private let viewModel: HomeViewModelType
+    private let input: PassthroughSubject<HomeViewModelInput, Never> = .init()
+    private var cancelBags: Set<AnyCancellable> = []
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Trip>!
+
+    init(viewModel: HomeViewModelType) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // View components
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -31,21 +47,6 @@ class HomeViewController: UIViewController {
 
     private let refreshControl = UIRefreshControl()
     private lazy var placeHolder = makePlaceholder(text: String(localized: "Oops! No one share there trip!🥲"))
-
-    // properties
-    private let viewModel: HomeViewModelType
-    private let input: PassthroughSubject<HomeViewModelInput, Never> = .init()
-    private var cancelBags: Set<AnyCancellable> = []
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Trip>!
-
-    init(viewModel: HomeViewModelType) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
