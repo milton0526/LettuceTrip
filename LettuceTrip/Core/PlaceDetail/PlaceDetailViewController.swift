@@ -93,6 +93,11 @@ class PlaceDetailViewController: UIViewController {
         fetchDetails()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = false
+    }
+
     private func setupUI() {
         view.addSubview(tableView)
         view.addSubview(addToTripButton)
