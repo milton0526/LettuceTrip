@@ -131,9 +131,9 @@ class HomeViewController: UIViewController {
                 }
             } receiveValue: { [weak self] _ in
                 guard let self = self else { return }
-                self.placeHolder.isHidden = self.viewModel.shareTrips.isEmpty ? false : true
-                self.refreshControl.endRefreshing()
-                self.updateSnapshot()
+                placeHolder.isHidden = self.viewModel.shareTrips.isEmpty ? false : true
+                refreshControl.endRefreshing()
+                updateSnapshot()
             }
             .store(in: &cancelBags)
     }

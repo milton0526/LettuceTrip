@@ -104,10 +104,10 @@ class ArrangePlaceViewController: UIViewController {
         guard let tripId = trip.id else { return }
         fsManager.updatePlace(place, at: tripId, isUpdate: true)
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .finished:
-                    navigationController?.popViewController(animated: true)
+                    self?.navigationController?.popViewController(animated: true)
                 case .failure:
                     JGHudIndicator.shared.showHud(type: .failure)
                 }

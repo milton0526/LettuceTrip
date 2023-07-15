@@ -160,14 +160,15 @@ class EditTripViewController: UIViewController {
 
         listenerSubscription = fsManager.placeListener(at: tripID)
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .finished:
                     break
                 case .failure(let error):
-                    self.showAlertToUser(error: error)
+                    self?.showAlertToUser(error: error)
                 }
-            } receiveValue: { [unowned self] snapshot in
+            } receiveValue: { [weak self] snapshot in
+                guard let self = self else { return }
                 if places.isEmpty {
                     let firstResult = snapshot.documents.compactMap { try? $0.data(as: Place.self) }
                     places = firstResult
@@ -180,14 +181,14 @@ class EditTripViewController: UIViewController {
 
                     switch diff.type {
                     case .added:
-                        places.append(modifiedPlace)
+                        self.places.append(modifiedPlace)
                     case .modified:
-                        if let index = places.firstIndex(where: { $0.id == modifiedPlace.id }) {
-                            places[index].arrangedTime = modifiedPlace.arrangedTime
+                        if let index = self.places.firstIndex(where: { $0.id == modifiedPlace.id }) {
+                            self.places[index].arrangedTime = modifiedPlace.arrangedTime
                         }
                     case .removed:
-                        if let index = places.firstIndex(where: { $0.id == modifiedPlace.id }) {
-                            places.remove(at: index)
+                        if let index = self.places.firstIndex(where: { $0.id == modifiedPlace.id }) {
+                            self.places.remove(at: index)
                         }
                     }
                 }
@@ -266,7 +267,7 @@ class EditTripViewController: UIViewController {
             title: String(localized: "Choose image from"),
             message: nil,
             preferredStyle: .actionSheet)
-        let unSplashSource = UIAlertAction(title: "Unsplash", style: .default) { [unowned self] _ in
+        let unSplashSource = UIAlertAction(title: "Unsplash", style: .default) { [weak self] _ in
             guard let url = Bundle.main.url(forResource: "UnsplashKeys", withExtension: "plist") else {
                 return
             }
@@ -277,7 +278,7 @@ class EditTripViewController: UIViewController {
                 let config = UnsplashPhotoPickerConfiguration(accessKey: result.accessKey, secretKey: result.secretKey)
                 let photoPicker = UnsplashPhotoPicker(configuration: config)
                 photoPicker.photoPickerDelegate = self
-                self.present(photoPicker, animated: true)
+                self?.present(photoPicker, animated: true)
             } catch {
                 return
             }
@@ -285,12 +286,12 @@ class EditTripViewController: UIViewController {
 
         let photoLibrary = UIAlertAction(
             title: String(localized: "Photo Library"),
-            style: .default) { [unowned self] _ in
+            style: .default) { [weak self] _ in
                 var config = PHPickerConfiguration()
                 config.filter = .images
                 let picker = PHPickerViewController(configuration: config)
                 picker.delegate = self
-                self.present(picker, animated: true)
+                self?.present(picker, animated: true)
             }
 
         let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
@@ -341,7 +342,8 @@ class EditTripViewController: UIViewController {
     }
 
     private func configureDataSource() {
-        dataSource = UITableViewDiffableDataSource(tableView: tableView) { [unowned self] tableView, indexPath, item in
+        dataSource = UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, item in
+            guard let self = self else { return UITableViewCell () }
             guard let arrangeCell = tableView.dequeueReusableCell(
                 withIdentifier: ArrangePlaceCell.identifier,
                 for: indexPath) as? ArrangePlaceCell
@@ -427,8 +429,9 @@ extension EditTripViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         guard isEditMode else { return nil }
         guard let place = dataSource.itemIdentifier(for: indexPath) else { return nil }
-        let deleteAction = UIContextualAction(style: .destructive, title: String(localized: "Delete")) { [unowned self] _, _, completion in
+        let deleteAction = UIContextualAction(style: .destructive, title: String(localized: "Delete")) { [weak self] _, _, completion in
             guard
+                let self = self,
                 let tripId = trip.id,
                 let placeId = place.id
             else {
@@ -437,7 +440,7 @@ extension EditTripViewController: UITableViewDelegate {
 
             fsManager.deleteTrip(tripId, place: placeId)
                 .receive(on: DispatchQueue.main)
-                .sink { [unowned self] result in
+                .sink { result in
                     switch result {
                     case .finished:
                         completion(true)
@@ -511,12 +514,12 @@ extension EditTripViewController: UITableViewDropDelegate {
 
                         fsManager.batchUpdatePlaces(at: trip, from: sourceItem, to: destinationItem)
                             .receive(on: DispatchQueue.main)
-                            .sink { [unowned self] result in
+                            .sink { [weak self] result in
                                 switch result {
                                 case .finished:
                                     break
                                 case .failure(let error):
-                                    self.showAlertToUser(error: error)
+                                    self?.showAlertToUser(error: error)
                                 }
                             } receiveValue: { _ in }
                             .store(in: &cancelBags)
@@ -566,13 +569,13 @@ extension EditTripViewController: PHPickerViewControllerDelegate {
             .flatMap { url in
                 self.fsManager.updateTrip(tripId, field: .image, data: url.absoluteString)
             }
-            .sink { [unowned self] completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .finished:
-                    imageView.image = image
+                    self?.imageView.image = image
                     JGHudIndicator.shared.dismissHUD()
                 case .failure(let error):
-                    self.showAlertToUser(error: error)
+                    self?.showAlertToUser(error: error)
                 }
             } receiveValue: { _ in }
             .store(in: &cancelBags)

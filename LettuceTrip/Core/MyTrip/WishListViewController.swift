@@ -61,14 +61,15 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
 
         fsManager.placeListener(at: tripID, isArrange: false)
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .finished:
                     break
                 case .failure(let error):
-                    showAlertToUser(error: error)
+                    self?.showAlertToUser(error: error)
                 }
-            } receiveValue: { [unowned self] snapshot in
+            } receiveValue: { [weak self] snapshot in
+                guard let self = self else { return }
                 if places.isEmpty {
                     let firstResult = snapshot.documents.compactMap { try? $0.data(as: Place.self) }
                     places = firstResult
@@ -82,14 +83,14 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
 
                     switch diff.type {
                     case .added:
-                        places.append(modifiedPlace)
+                        self.places.append(modifiedPlace)
                     case .modified:
-                        if let index = places.firstIndex(where: { $0.id == modifiedPlace.id }) {
-                            places[index].arrangedTime = modifiedPlace.arrangedTime
+                        if let index = self.places.firstIndex(where: { $0.id == modifiedPlace.id }) {
+                            self.places[index].arrangedTime = modifiedPlace.arrangedTime
                         }
                     case .removed:
-                        if let index = places.firstIndex(where: { $0.id == modifiedPlace.id }) {
-                            places.remove(at: index)
+                        if let index = self.places.firstIndex(where: { $0.id == modifiedPlace.id }) {
+                            self.places.remove(at: index)
                         }
                     }
                 }
@@ -102,7 +103,7 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
-        config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
+        config.trailingSwipeActionsConfigurationProvider = { indexPath in
             let deleteAction = UIContextualAction(style: .destructive, title: String(localized: "Delete")) { [weak self] _, _, completion in
                 guard
                     let self = self,
@@ -111,7 +112,7 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
                     return
                 }
 
-                if let item = self.dataSource.itemIdentifier(for: indexPath)?.id {
+                if let item = dataSource.itemIdentifier(for: indexPath)?.id {
                     fsManager.deleteTrip(tripId, place: item)
                         .receive(on: DispatchQueue.main)
                         .sink { result in

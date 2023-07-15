@@ -95,14 +95,15 @@ class MyTripViewController: UIViewController {
     private func fetchUserTrips() {
         fsManager.tripListener()
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .finished:
                     break
                 case .failure(let error):
-                    self.showAlertToUser(error: error)
+                    self?.showAlertToUser(error: error)
                 }
-            } receiveValue: { [unowned self] snapshot in
+            } receiveValue: { [weak self] snapshot in
+                guard let self = self else { return }
                 if allTrips.isEmpty {
                     let firstResult = snapshot.documents.compactMap { try? $0.data(as: Trip.self) }
                     allTrips = firstResult
@@ -115,14 +116,14 @@ class MyTripViewController: UIViewController {
 
                     switch diff.type {
                     case .added:
-                        allTrips.append(modifiedTrip)
+                        self.allTrips.append(modifiedTrip)
                     case .modified:
-                        if let index = allTrips.firstIndex(where: { $0.id == modifiedTrip.id }) {
-                            allTrips[index] = modifiedTrip
+                        if let index = self.allTrips.firstIndex(where: { $0.id == modifiedTrip.id }) {
+                            self.allTrips[index] = modifiedTrip
                         }
                     case .removed:
-                        if let index = allTrips.firstIndex(where: { $0.id == modifiedTrip.id }) {
-                            allTrips.remove(at: index)
+                        if let index = self.allTrips.firstIndex(where: { $0.id == modifiedTrip.id }) {
+                            self.allTrips.remove(at: index)
                         }
                     }
                 }
@@ -165,8 +166,9 @@ extension MyTripViewController: UITableViewDelegate {
     // Delete action
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
-            let deleteAction = UIAction(title: String(localized: "Delete"), image: UIImage(systemName: "trash")) { [unowned self] _ in
+            let deleteAction = UIAction(title: String(localized: "Delete"), image: UIImage(systemName: "trash")) { [weak self] _ in
                 guard
+                    let self = self,
                     let trip = filterTrips[currentSegment]?[indexPath.row],
                     let tripID = trip.id,
                     let userId = fsManager.user
@@ -181,7 +183,7 @@ extension MyTripViewController: UITableViewDelegate {
                 let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
                 let delete = UIAlertAction(
                     title: String(localized: "Delete"),
-                    style: .destructive) { [unowned self] _ in
+                    style: .destructive) { _ in
                         self.fsManager.updateMember(userId: userId, atTrip: tripID, isRemove: true)
                             .receive(on: DispatchQueue.main)
                             .sink { completion in
@@ -191,7 +193,7 @@ extension MyTripViewController: UITableViewDelegate {
                                     self.showAlertToUser(error: error)
                                 }
                             } receiveValue: { _ in }
-                            .store(in: &cancelBags)
+                            .store(in: &self.cancelBags)
                 }
 
                 alertVC.addAction(cancel)

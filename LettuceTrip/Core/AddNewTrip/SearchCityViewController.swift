@@ -122,13 +122,13 @@ class SearchCityViewController: UIViewController {
         }
 
         localSearch = MKLocalSearch(request: searchRequest)
-        localSearch?.start { [unowned self] response, error in
+        localSearch?.start { [weak self] response, error in
             if let error = error {
-                self.showAlertToUser(error: error)
+                self?.showAlertToUser(error: error)
                 return
             }
 
-            self.searchResult = response?.mapItems
+            self?.searchResult = response?.mapItems
         }
     }
 }

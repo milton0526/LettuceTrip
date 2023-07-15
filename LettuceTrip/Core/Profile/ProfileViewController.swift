@@ -65,12 +65,12 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
     }
 
     private func bind() {
-        profileHeaderView.imageHandler = { [unowned self] in
+        profileHeaderView.imageHandler = { [weak self] in
             var config = PHPickerConfiguration()
             config.filter = .images
             let picker = PHPickerViewController(configuration: config)
             picker.delegate = self
-            self.present(picker, animated: true)
+            self?.present(picker, animated: true)
         }
     }
 
@@ -128,16 +128,16 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
 
         fsManager.getUserData(userId: userId)
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { [unowned self] completion in
+            .sink(receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .finished:
                     break
                 case .failure(let error):
-                    showAlertToUser(error: error)
+                    self?.showAlertToUser(error: error)
                 }
-            }, receiveValue: { [unowned self] user in
-                self.user = user
-                profileHeaderView.config(with: user)
+            }, receiveValue: { [weak self] user in
+                self?.user = user
+                self?.profileHeaderView.config(with: user)
             })
             .store(in: &cancelBags)
     }

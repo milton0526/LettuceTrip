@@ -147,10 +147,12 @@ class PlaceDetailViewController: UIViewController {
                         JGHudIndicator.shared.showHud(type: .failure)
                     }
                 } receiveValue: { [weak self] image in
+                    guard let self = self else { return }
+
                     let place = GPlacePhoto(attribution: attributions, image: image)
-                    self?.placePhotos.append(place)
+                    placePhotos.append(place)
                     if counter == photoIndices {
-                        self?.tableView.reloadData()
+                        tableView.reloadData()
                         JGHudIndicator.shared.dismissHUD()
                     } else {
                         counter += 1
@@ -164,15 +166,15 @@ class PlaceDetailViewController: UIViewController {
         // fetch firebase to check if user have trip list
         fsManager.getTrips()
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .finished:
                     break
                 case .failure(let error):
-                    showAlertToUser(error: error)
+                    self?.showAlertToUser(error: error)
                 }
-            } receiveValue: { [unowned self] trips in
-                showActionSheet(form: trips)
+            } receiveValue: { [weak self] trips in
+                self?.showActionSheet(form: trips)
             }
             .store(in: &cancelBags)
     }

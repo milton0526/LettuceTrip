@@ -192,15 +192,16 @@ class AddNewTripViewController: UIViewController {
                 case .failure:
                     JGHudIndicator.shared.showHud(type: .failure)
                 }
-            } receiveValue: { [unowned self] newTripID in
+            } receiveValue: { [weak self] newTripID in
+                guard let self = self else { return }
                 if isCopy {
                     guard
-                        let copyDate = self.copyFromTrip?.startDate,
+                        let copyDate = copyFromTrip?.startDate,
                         let gap = Calendar.current.dateComponents([.day], from: copyDate, to: startDate).day
                     else {
                         return
                     }
-                    self.copyPlaces(newTripID, gap: gap)
+                    copyPlaces(newTripID, gap: gap)
                 } else {
                     JGHudIndicator.shared.showHud(type: .success)
                     dismiss(animated: true)
@@ -223,11 +224,11 @@ class AddNewTripViewController: UIViewController {
 
         fsManager.copyPlaces(at: id, places: results)
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .finished:
                     JGHudIndicator.shared.showHud(type: .success)
-                    dismiss(animated: true)
+                    self?.dismiss(animated: true)
                 case .failure:
                     JGHudIndicator.shared.showHud(type: .failure)
                 }
@@ -243,8 +244,9 @@ extension AddNewTripViewController: UITextFieldDelegate {
         if textField == destinationTextField {
             let searchCityVC = SearchCityViewController()
             searchCityVC.userSelectedCity = { [weak self] city in
-                self?.selectedCity = city
-                self?.destinationTextField.text = city.name
+                guard let self = self else { return }
+                selectedCity = city
+                destinationTextField.text = city.name
                 textField.resignFirstResponder()
             }
             navigationController?.pushViewController(searchCityVC, animated: true)

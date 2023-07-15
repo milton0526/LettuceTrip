@@ -107,13 +107,13 @@ class ChatRoomViewController: UIViewController {
 
         fsManager.sendMessage(text, at: tripID)
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .finished:
-                    self.inputTextField.resignFirstResponder()
-                    self.inputTextField.text = ""
+                    self?.inputTextField.resignFirstResponder()
+                    self?.inputTextField.text = ""
                 case .failure(let error):
-                    self.showAlertToUser(error: error)
+                    self?.showAlertToUser(error: error)
                 }
             } receiveValue: { _ in }
             .store(in: &cancelBags)
@@ -212,7 +212,8 @@ class ChatRoomViewController: UIViewController {
         trip.members.forEach { member in
             fsManager.getUserData(userId: member)
                 .receive(on: DispatchQueue.main)
-                .sink(receiveCompletion: { [unowned self] completion in
+                .sink(receiveCompletion: { [weak self] completion in
+                    guard let self = self else { return }
                     switch completion {
                     case .finished:
                         if members.count == trip.members.count {
@@ -221,8 +222,8 @@ class ChatRoomViewController: UIViewController {
                     case .failure(let error):
                         showAlertToUser(error: error)
                     }
-                }, receiveValue: { [unowned self] user in
-                    members.append(user)
+                }, receiveValue: { [weak self] user in
+                    self?.members.append(user)
                 })
                 .store(in: &cancelBags)
         }
@@ -234,14 +235,15 @@ class ChatRoomViewController: UIViewController {
         fsManager.chatRoomListener(tripID)
             .receive(on: DispatchQueue.main)
 
-            .sink { [unowned self] completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .finished:
                     break
                 case .failure(let error):
-                    showAlertToUser(error: error)
+                    self?.showAlertToUser(error: error)
                 }
-            } receiveValue: { [unowned self] snapshot in
+            } receiveValue: { [weak self] snapshot in
+                guard let self = self else { return }
                 if chatMessages.isEmpty {
                     let firstResult = snapshot.documents.compactMap { try? $0.data(as: Message.self) }
                     chatMessages = firstResult
@@ -254,10 +256,10 @@ class ChatRoomViewController: UIViewController {
                         let message = try diff.document.data(as: Message.self)
                         switch diff.type {
                         case .added:
-                            chatMessages.append(message)
+                            self.chatMessages.append(message)
                         case .modified:
-                            if let index = chatMessages.firstIndex(where: { $0.id == message.id }) {
-                                chatMessages[index].sendTime = message.sendTime
+                            if let index = self.chatMessages.firstIndex(where: { $0.id == message.id }) {
+                                self.chatMessages[index].sendTime = message.sendTime
                             }
 
                         default:

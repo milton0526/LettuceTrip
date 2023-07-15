@@ -94,7 +94,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
             let accept = UIAlertAction(title: "Accept", style: .default) { [weak self] _ in
                 guard let self = self else { return }
-                subscription = self.fsManager.updateMember(userId: userID, atTrip: query)
+                subscription = fsManager.updateMember(userId: userID, atTrip: query)
                     .sink(receiveCompletion: { _ in
                     }, receiveValue: { _ in })
             }

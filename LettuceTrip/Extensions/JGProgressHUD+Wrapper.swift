@@ -42,8 +42,8 @@ final class JGHudIndicator {
 
     private func showSuccess() {
         if !Thread.isMainThread {
-            DispatchQueue.main.async { [unowned self] in
-                self.showSuccess()
+            DispatchQueue.main.async { [weak self] in
+                self?.showSuccess()
             }
             return
         }
@@ -55,8 +55,8 @@ final class JGHudIndicator {
 
     private func showFailure() {
         if !Thread.isMainThread {
-            DispatchQueue.main.async { [unowned self] in
-                self.showFailure()
+            DispatchQueue.main.async { [weak self] in
+                self?.showFailure()
             }
             return
         }
@@ -68,8 +68,8 @@ final class JGHudIndicator {
 
     private func showLoading(text: String) {
         if !Thread.isMainThread {
-            DispatchQueue.main.async { [unowned self] in
-                self.showLoading(text: text)
+            DispatchQueue.main.async { [weak self] in
+                self?.showLoading(text: text)
             }
             return
         }
@@ -80,8 +80,8 @@ final class JGHudIndicator {
 
     func dismissHUD() {
         if !Thread.isMainThread {
-            DispatchQueue.main.async { [unowned self] in
-                self.dismissHUD()
+            DispatchQueue.main.async { [weak self] in
+                self?.dismissHUD()
             }
             return
         }

@@ -218,16 +218,16 @@ extension DiscoverViewController: UITextFieldDelegate {
         searchResultController.search(for: text)
         searchResultController.userSelectedCity = { [weak self] city in
             guard let self = self else { return }
-            self.searchTextField.text = city.name
-            self.children.first?.view.isHidden = true
+            searchTextField.text = city.name
+            children.first?.view.isHidden = true
             let cityRegion = MKCoordinateRegion(center: city.placemark.coordinate, latitudinalMeters: 6000, longitudinalMeters: 6000)
             let pointRegion = MKCoordinateRegion(center: city.placemark.coordinate, latitudinalMeters: 125, longitudinalMeters: 125)
             searchResultController.region = cityRegion
 
             if city.pointOfInterestCategory != nil {
-                self.mapView.setRegion(pointRegion, animated: true)
+                mapView.setRegion(pointRegion, animated: true)
             } else {
-                self.mapView.setRegion(cityRegion, animated: true)
+                mapView.setRegion(cityRegion, animated: true)
             }
         }
     }
