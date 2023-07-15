@@ -216,7 +216,6 @@ class EditTripViewController: UIViewController {
     @objc func openChatRoom(_ sender: UIButton) {
         let chatVC = ChatRoomViewController(trip: trip, fsManager: fsManager)
         let nav = UINavigationController(rootViewController: chatVC)
-//        nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)
     }
 
@@ -341,7 +340,7 @@ class EditTripViewController: UIViewController {
 
     private func configureDataSource() {
         dataSource = UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, item in
-            guard let self = self else { return UITableViewCell () }
+            guard let self = self else { return UITableViewCell() }
             guard let arrangeCell = tableView.dequeueReusableCell(
                 withIdentifier: ArrangePlaceCell.identifier,
                 for: indexPath) as? ArrangePlaceCell
