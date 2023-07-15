@@ -79,9 +79,10 @@ extension SignInViewController: AuthManagerDelegate {
     }
 
     func authorizationSuccess(_ manager: AuthManager) {
-//        let tabBarVC = TabBarViewController(fsManager: <#T##FirestoreManager#>, authManager: <#T##AuthManager#>, storageManager: <#T##StorageManager#>)
-//        tabBarVC.modalPresentationStyle = .fullScreen
-//        present(tabBarVC, animated: true)
+        let fsManager = FirestoreManager()
+        let tabBarVC = TabBarViewController(fsManager: fsManager)
+        tabBarVC.modalPresentationStyle = .fullScreen
+        present(tabBarVC, animated: true)
     }
 
     func authorizationFailed(_ manager: AuthManager, error: Error) {

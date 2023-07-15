@@ -10,15 +10,13 @@ import UIKit
 class TabBarViewController: UITabBarController {
 
     private let fsManager: FirestoreManager
-    private let authManager: AuthManager
-    private let storageManager: StorageManager
+    private lazy var authManager = AuthManager(fsManager: fsManager)
+    private lazy var storageManager = StorageManager()
 
     private let icons: [Icon] = [.home, .discover, .trip, .profile]
 
-    init(fsManager: FirestoreManager, authManager: AuthManager, storageManager: StorageManager) {
+    init(fsManager: FirestoreManager) {
         self.fsManager = fsManager
-        self.authManager = authManager
-        self.storageManager = storageManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -39,7 +37,10 @@ class TabBarViewController: UITabBarController {
             viewModel: DiscoverViewModel(locationManager: LocationManager()),
             fsManager: fsManager)
         let tripVC = MyTripViewController()
-        let profileVC = ProfileViewController(viewModel: ProfileViewModel(fsManager: fsManager, authManager: AuthManager(fsManager: fsManager), storageManager: storageManager))
+        let profileVC = ProfileViewController(viewModel: ProfileViewModel(
+            fsManager: fsManager,
+            authManager: AuthManager(fsManager: fsManager),
+            storageManager: storageManager))
 
         let viewControllers = [homeVC, discoverVC, tripVC, profileVC]
         var navigationVCs: [UINavigationController] = []
