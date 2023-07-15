@@ -13,6 +13,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     let fsManager = FirestoreManager()
+    let storageManager = StorageManager()
     private var subscription: AnyCancellable?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -29,7 +30,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let signInVC = SignInViewController(authManager: authManager)
             viewController = signInVC
         } else {
-            let tabBarVC = TabBarViewController(fsManager: fsManager, authManager: authManager)
+            let tabBarVC = TabBarViewController(
+                fsManager: fsManager,
+                authManager: authManager,
+                storageManager: storageManager
+            )
             viewController = tabBarVC
         }
 

@@ -79,13 +79,12 @@ extension SignInViewController: AuthManagerDelegate {
     }
 
     func authorizationSuccess(_ manager: AuthManager) {
-        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let mainVC = storyBoard.instantiateViewController(withIdentifier: "TabBarController")
-        mainVC.modalPresentationStyle = .fullScreen
-        present(mainVC, animated: true)
+//        let tabBarVC = TabBarViewController(fsManager: <#T##FirestoreManager#>, authManager: <#T##AuthManager#>, storageManager: <#T##StorageManager#>)
+//        tabBarVC.modalPresentationStyle = .fullScreen
+//        present(tabBarVC, animated: true)
     }
 
     func authorizationFailed(_ manager: AuthManager, error: Error) {
-        showAlertToUser(error: error)
+        showAuthErrorAlert()
     }
 }

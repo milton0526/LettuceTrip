@@ -22,7 +22,16 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         case signOut
     }
 
-    private var settings = SettingModel.profileSettings
+    private let viewModel: ProfileViewModelType
+
+    init(viewModel: ProfileViewModelType) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -30,18 +39,27 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         return collectionView
     }()
 
-    lazy var profileHeaderView = ProfileHeaderView()
-    private lazy var authManager = AuthManager(fsManager: fsManager)
-
+    private lazy var profileHeaderView = ProfileHeaderView()
     private var dataSource: UICollectionViewDiffableDataSource<Section, SettingModel>!
-
     private var cancelBags: Set<AnyCancellable> = []
-    private let fsManager = FirestoreManager()
-    private let storageManager = StorageManager()
-    private var user: LTUser?
+    private let input: PassthroughSubject<ProfileVMInput, Never> = .init()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.authManager.delegate = self
+        setupUI()
+        configDataSource()
+        updateSnapshot()
+        bind()
+        input.send(.fetchUserData)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.hideHairline()
+    }
+
+    private func setupUI() {
         view.addSubview(profileHeaderView)
         view.addSubview(collectionView)
         profileHeaderView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
@@ -50,18 +68,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         collectionView.topToBottom(of: profileHeaderView)
         collectionView.edgesToSuperview(excluding: .top, usingSafeArea: true)
 
-        bind()
         customNavBarStyle()
-        configDataSource()
-        updateSnapshot()
-        fetchData()
-
-        authManager.delegate = self
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.hideHairline()
     }
 
     private func bind() {
@@ -72,11 +79,29 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
             picker.delegate = self
             self?.present(picker, animated: true)
         }
+
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
+
+        output
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] event in
+                guard let self = self else { return }
+
+                switch event {
+                case .signOut:
+                    showSignInVC()
+                case .fetchUser(let user):
+                    profileHeaderView.config(with: user)
+                    JGHudIndicator.shared.dismissHUD()
+                case .operationFailed(let error):
+                    showAlertToUser(error: error)
+                }
+            }
+            .store(in: &cancelBags)
     }
 
     private func customNavBarStyle() {
         navigationItem.largeTitleDisplayMode = .never
-
         navigationItem.title = String(localized: "Settings")
 
         let appearance = UINavigationBarAppearance()
@@ -113,45 +138,20 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
     private func updateSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, SettingModel>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(settings)
+        snapshot.appendItems(SettingModel.profileSettings)
         dataSource.apply(snapshot)
     }
 
-    private func showSignOutVC() {
-        let signInVC = SignInViewController(authManager: authManager)
+    private func showSignInVC() {
+        let signInVC = SignInViewController(authManager: viewModel.authManager)
         signInVC.modalPresentationStyle = .fullScreen
         present(signInVC, animated: true)
-    }
-
-    private func fetchData() {
-        guard let userId = fsManager.user else { return }
-
-        fsManager.getUserData(userId: userId)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { [weak self] completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    self?.showAlertToUser(error: error)
-                }
-            }, receiveValue: { [weak self] user in
-                self?.user = user
-                self?.profileHeaderView.config(with: user)
-            })
-            .store(in: &cancelBags)
     }
 
     private func confirmSignOut() {
         let alert = UIAlertController(title: String(localized: "Are you sure want to sign out?"), message: nil, preferredStyle: .alert)
         let sure = UIAlertAction(title: String(localized: "Sure"), style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            do {
-                try self.authManager.signOut()
-                self.showSignOutVC()
-            } catch {
-                self.showAlertToUser(error: error)
-            }
+            self?.input.send(.signOut)
         }
         let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
         alert.addAction(sure)
@@ -176,7 +176,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
                 preferredStyle: .alert)
             let cancel = UIAlertAction(title: String(localized: "Cancel"), style: .cancel)
             let confirm = UIAlertAction(title: String(localized: "Confirm"), style: .destructive) { [weak self] _ in
-                self?.authManager.signInFlow(isDelete: true)
+                self?.input.send(.deleteAccount)
             }
 
             alert.addAction(cancel)
@@ -197,12 +197,11 @@ extension ProfileViewController: PHPickerViewControllerDelegate {
 
         let itemProviders = results.map(\.itemProvider)
         if let itemProvider = itemProviders.first, itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, _ in
                 guard
                     let self = self,
                     let image = image as? UIImage,
-                    let imageData = image.jpegData(compressionQuality: 0.3),
-                    let userID = user?.id
+                    let imageData = image.jpegData(compressionQuality: 0.3)
                 else {
                     return
                 }
@@ -211,24 +210,7 @@ extension ProfileViewController: PHPickerViewControllerDelegate {
                     JGHudIndicator.shared.showHud(type: .loading(text: "Updating"))
                 }
 
-                storageManager.uploadImage(imageData, at: .users, with: userID)
-                    .receive(on: DispatchQueue.main)
-                    .flatMap { _ in
-                        self.storageManager.downloadRef(at: .users, with: userID)
-                    }
-                    .flatMap { url in
-                        self.fsManager.updateUser(image: url.absoluteString)
-                    }
-                    .sink(receiveCompletion: { completion in
-                        switch completion {
-                        case .finished:
-                            self.fetchData()
-                            JGHudIndicator.shared.dismissHUD()
-                        case .failure(let error):
-                            self.showAlertToUser(error: error)
-                        }
-                    }, receiveValue: { _ in })
-                    .store(in: &cancelBags)
+                input.send(.updateImage(imageData))
             }
         }
     }
@@ -243,10 +225,10 @@ extension ProfileViewController: AuthManagerDelegate {
     }
 
     func authorizationSuccess(_ manager: AuthManager) {
-        showSignOutVC()
+        showSignInVC()
     }
 
     func authorizationFailed(_ manager: AuthManager, error: Error) {
-        showAlertToUser(error: error)
+        showAuthErrorAlert()
     }
 }

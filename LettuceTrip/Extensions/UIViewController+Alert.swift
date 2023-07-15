@@ -22,6 +22,18 @@ extension UIViewController {
         self.present(alert, animated: true)
     }
 
+    func showAuthErrorAlert() {
+        let alert = UIAlertController(
+            title: String(localized: "Operation cancel!"),
+            message: nil,
+            preferredStyle: .alert)
+        let action = UIAlertAction(
+            title: String(localized: "OK"),
+            style: .default)
+        alert.addAction(action)
+        self.present(alert, animated: true)
+    }
+
     func makePlaceholder(text: String) -> UILabel {
         let label = UILabel()
         label.text = text
