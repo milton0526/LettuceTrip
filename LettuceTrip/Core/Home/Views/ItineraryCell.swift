@@ -29,26 +29,17 @@ class ItineraryCell: UICollectionViewCell {
 
     lazy var imageView: UIImageView = {
         let imageView = UIImageView(image: .scene)
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 16
-        imageView.layer.masksToBounds = true
+        imageView.setContentMode()
+        imageView.makeCornerRadius(16)
         return imageView
     }()
 
     lazy var tripNameLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .medium)
-        label.textColor = .label
-        label.textAlignment = .center
-        return label
+        LabelFactory.build(text: nil, font: .headline, textAlignment: .center)
     }()
 
     lazy var timeLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .secondaryLabel
-        return label
+        LabelFactory.build(text: nil, font: .body, textColor: .secondaryLabel)
     }()
 
     override init(frame: CGRect) {

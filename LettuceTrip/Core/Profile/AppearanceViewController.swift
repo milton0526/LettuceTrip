@@ -26,7 +26,7 @@ enum AppTheme: Int {
     }
 }
 
-class AppearanceVC: BaseSettingViewController {
+class AppearanceViewController: BaseSettingViewController {
 
     private var themeModels = SettingModel.theme
 
@@ -46,6 +46,7 @@ class AppearanceVC: BaseSettingViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView.edgesToSuperview(usingSafeArea: true)
     }
 
     override func cellRegistration(_ cell: UICollectionViewListCell, indexPath: IndexPath, item: SettingModel) {

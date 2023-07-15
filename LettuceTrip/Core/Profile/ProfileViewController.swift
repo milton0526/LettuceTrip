@@ -10,11 +10,7 @@ import TinyConstraints
 import PhotosUI
 import Combine
 
-class ProfileViewController: UIViewController, UICollectionViewDelegate {
-
-    enum Section {
-        case main
-    }
+class ProfileViewController: BaseSettingViewController {
 
     enum Item: Int {
         case appearance
@@ -33,14 +29,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
-    lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        collectionView.delegate = self
-        return collectionView
-    }()
 
     private lazy var profileHeaderView = ProfileHeaderView()
-    private var dataSource: UICollectionViewDiffableDataSource<Section, SettingModel>!
     private var cancelBags: Set<AnyCancellable> = []
     private let input: PassthroughSubject<ProfileVMInput, Never> = .init()
 
@@ -48,8 +38,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         super.viewDidLoad()
         viewModel.authManager.delegate = self
         setupUI()
-        configDataSource()
-        updateSnapshot()
         bind()
         input.send(.fetchUserData)
     }
@@ -61,7 +49,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
 
     private func setupUI() {
         view.addSubview(profileHeaderView)
-        view.addSubview(collectionView)
         profileHeaderView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
         profileHeaderView.height(100)
 
@@ -113,12 +100,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         navigationItem.compactAppearance = appearance
     }
 
-    private func createLayout() -> UICollectionViewCompositionalLayout {
-        let config = UICollectionLayoutListConfiguration(appearance: .plain)
-        return UICollectionViewCompositionalLayout.list(using: config)
-    }
-
-    private func cellRegistration(_ cell: UICollectionViewListCell, indexPath: IndexPath, item: SettingModel) {
+    override func cellRegistration(_ cell: UICollectionViewListCell, indexPath: IndexPath, item: SettingModel) {
         var config = cell.defaultContentConfiguration()
         config.text = item.title
         config.image = item.image?.withTintColor(.tintColor)
@@ -126,16 +108,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
         cell.contentConfiguration = config
     }
 
-    private func configDataSource() {
-        let cellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, SettingModel>(handler: cellRegistration)
-
-        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, item in
-            let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: item)
-            return cell
-        }
-    }
-
-    private func updateSnapshot() {
+    override func updateSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, SettingModel>()
         snapshot.appendSections([.main])
         snapshot.appendItems(SettingModel.profileSettings)
@@ -160,14 +133,14 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate {
     }
 
     // MARK: CollectionView Delegate
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         guard let item = Item(rawValue: indexPath.item) else { return }
 
         switch item {
         case .appearance:
-            let appearanceVC = AppearanceVC()
+            let appearanceVC = AppearanceViewController()
             navigationController?.pushViewController(appearanceVC, animated: true)
         case .deleteAccount:
             let alert = UIAlertController(

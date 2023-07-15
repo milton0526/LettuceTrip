@@ -11,35 +11,19 @@ import TinyConstraints
 class PlaceAboutCell: UITableViewCell {
 
     lazy var statusLabel: UILabel = {
-        let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 18)
-        label.sizeToFit()
-        return label
+        LabelFactory.build(text: nil, font: .subtitle)
     }()
 
     lazy var openingHourLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .light)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        label.sizeToFit()
-        return label
+        LabelFactory.build(text: nil, font: .body, textColor: .secondaryLabel, numberOfLines: 0)
     }()
 
     lazy var websiteLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .label
-        label.font = .boldSystemFont(ofSize: 18)
-        label.sizeToFit()
-        label.text = String(localized: "Website")
-        return label
+        LabelFactory.build(text: "Website", font: .subtitle)
     }()
 
     lazy var linkLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .systemBlue
-        label.font = .systemFont(ofSize: 14)
-        label.sizeToFit()
+        let label = LabelFactory.build(text: nil, font: .body, textColor: .systemBlue)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openWebsite))
         label.addGestureRecognizer(tapGesture)
         label.isUserInteractionEnabled = true

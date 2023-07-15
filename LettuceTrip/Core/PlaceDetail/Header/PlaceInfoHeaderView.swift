@@ -11,10 +11,7 @@ import TinyConstraints
 class PlaceInfoHeaderView: UITableViewHeaderFooterView {
 
     lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.textColor = .label
-        return label
+        LabelFactory.build(text: nil, font: .title)
     }()
 
     override init(reuseIdentifier: String?) {

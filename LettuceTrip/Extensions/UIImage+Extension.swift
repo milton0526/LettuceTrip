@@ -11,3 +11,16 @@ extension UIImage {
     static let person = UIImage(systemName: "person.crop.circle")
     static let scene = UIImage(named: "placeholder")
 }
+
+extension UIImageView {
+
+    func setContentMode(contentMode: UIView.ContentMode = .scaleAspectFill) {
+        self.contentMode = contentMode
+        self.clipsToBounds = true
+    }
+
+    func makeCornerRadius(_ radius: CGFloat) {
+        self.layer.cornerRadius = radius
+        self.layer.masksToBounds = true
+    }
+}

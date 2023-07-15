@@ -53,9 +53,20 @@ class MyTripViewController: UIViewController {
     private var allTrips: [Trip] = []
     private var filterTrips: [Segment: [Trip]] = [.upcoming: [], .closed: []]
     private var currentSegment: Segment = .upcoming
-    private lazy var placeHolder = makePlaceholder(text: String(localized: "Add new trip to start!"))
+    private let placeHolder: UILabel = {
+        LabelFactory.build(text: "Add new trip to start!", font: .title, textColor: .secondaryLabel)
+    }()
     private var cancelBags: Set<AnyCancellable> = []
-    private let fsManager = FirestoreManager()
+    private let fsManager: FirestoreManager
+
+    init(fsManager: FirestoreManager) {
+        self.fsManager = fsManager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,7 +77,7 @@ class MyTripViewController: UIViewController {
     }
 
     private func setupUI() {
-        [selectionView, tableView, addTripButton].forEach { view.addSubview($0) }
+        [selectionView, tableView, addTripButton, placeHolder].forEach { view.addSubview($0) }
         selectionView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
 
         tableView.topToBottom(of: selectionView)
@@ -75,6 +86,9 @@ class MyTripViewController: UIViewController {
         addTripButton.size(CGSize(width: 60, height: 60))
         addTripButton.trailingToSuperview(offset: 12)
         addTripButton.bottomToSuperview(offset: -16, usingSafeArea: true)
+
+        placeHolder.isHidden = true
+        placeHolder.centerInSuperview()
     }
 
     @objc func addTripButtonTapped(_ sender: UIButton) {

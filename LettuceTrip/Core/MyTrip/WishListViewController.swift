@@ -40,7 +40,9 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         return collectionView
     }()
 
-    private lazy var placeHolder = makePlaceholder(text: String(localized: "There's nothing here!"))
+    private let placeHolder: UILabel = {
+        LabelFactory.build(text: "There's nothing here!", font: .title, textColor: .secondaryLabel)
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +55,9 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
     private func setupUI() {
         view.backgroundColor = .systemBackground
         view.addSubview(collectionView)
+        view.addSubview(placeHolder)
+        placeHolder.isHidden = true
+        placeHolder.centerInSuperview()
         collectionView.edgesToSuperview(usingSafeArea: true)
     }
 

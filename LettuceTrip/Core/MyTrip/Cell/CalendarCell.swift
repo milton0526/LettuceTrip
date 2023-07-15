@@ -27,15 +27,11 @@ class CalendarCell: UICollectionViewCell {
     }()
 
     lazy var weekLabel: UILabel = {
-        let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 14)
-        return label
+        LabelFactory.build(text: nil, font: .body)
     }()
 
     lazy var dayLabel: UILabel = {
-        let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 14)
-        return label
+        LabelFactory.build(text: nil, font: .body)
     }()
 
     override init(frame: CGRect) {

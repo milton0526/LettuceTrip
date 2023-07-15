@@ -13,10 +13,8 @@ class ProfileHeaderView: UIView {
     lazy var imageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "person.crop.circle"))
         imageView.tintColor = .white
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 30
-        imageView.layer.masksToBounds = true
+        imageView.setContentMode()
+        imageView.makeCornerRadius(30)
         imageView.isUserInteractionEnabled = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeUserImage))
         imageView.addGestureRecognizer(tapGesture)
@@ -24,17 +22,11 @@ class ProfileHeaderView: UIView {
     }()
 
     lazy var nameLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .bold)
-        label.textColor = .white
-        return label
+        LabelFactory.build(text: nil, font: .headline, textColor: .white)
     }()
 
     lazy var emailLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .medium)
-        label.textColor = .white
-        return label
+        LabelFactory.build(text: nil, font: .headline, textColor: .white)
     }()
 
     var imageHandler: (() -> Void)?

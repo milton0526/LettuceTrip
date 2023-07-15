@@ -1,5 +1,5 @@
 //
-//  SearchCityViewController.swift
+//  SearchViewController.swift
 //  LettuceTrip
 //
 //  Created by Milton Liu on 2023/6/21.
@@ -9,7 +9,7 @@ import UIKit
 import TinyConstraints
 import MapKit
 
-class SearchCityViewController: UIViewController {
+class SearchViewController: UIViewController {
 
     enum Section {
         case main
@@ -134,7 +134,7 @@ class SearchCityViewController: UIViewController {
 }
 
 // MARK: - UICollectionView Delegate
-extension SearchCityViewController: UICollectionViewDelegate {
+extension SearchViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
@@ -147,7 +147,7 @@ extension SearchCityViewController: UICollectionViewDelegate {
 }
 
 // MARK: - UISearchBarDelegate
-extension SearchCityViewController: UISearchBarDelegate {
+extension SearchViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }

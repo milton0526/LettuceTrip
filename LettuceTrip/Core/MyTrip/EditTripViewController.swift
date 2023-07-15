@@ -37,10 +37,8 @@ class EditTripViewController: UIViewController {
 
     lazy var imageView: UIImageView = {
         let imageView = UIImageView(image: .scene)
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 34
-        imageView.layer.masksToBounds = true
+        imageView.setContentMode()
+        imageView.makeCornerRadius(34)
         imageView.isUserInteractionEnabled = true
         return imageView
     }()

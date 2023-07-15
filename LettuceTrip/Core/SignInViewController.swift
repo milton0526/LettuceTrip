@@ -22,13 +22,11 @@ class SignInViewController: UIViewController {
     }()
 
     lazy var welcomeLabel: UILabel = {
-        let label = UILabel()
-        label.text = String(localized: "Discover best places to go on vacation and make itinerary with friends😍")
-        label.font = .systemFont(ofSize: 22, weight: .heavy)
-        label.textColor = .label
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        return label
+        LabelFactory.build(
+            text: "Discover best places to go on vacation and make itinerary with friends😍",
+            font: .title,
+            numberOfLines: 0,
+            textAlignment: .center)
     }()
 
     private lazy var appleSignInButton = ASAuthorizationAppleIDButton(authorizationButtonType: .signIn, authorizationButtonStyle: currentStyle)

@@ -25,7 +25,6 @@ class BaseSettingViewController: UIViewController, UICollectionViewDelegate {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         view.addSubview(collectionView)
-        collectionView.edgesToSuperview(usingSafeArea: true)
         configDataSource()
         updateSnapshot()
     }

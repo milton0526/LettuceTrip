@@ -11,25 +11,15 @@ import TinyConstraints
 class ArrangePlaceCell: UITableViewCell {
 
     lazy var fromTimeLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .label
-        return label
+        LabelFactory.build(text: nil, font: .caption)
     }()
 
     lazy var toTimeLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .label
-        return label
+        LabelFactory.build(text: nil, font: .caption)
     }()
 
     lazy var placeLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .semibold)
-        label.textColor = .label
-        label.numberOfLines = 2
-        return label
+        LabelFactory.build(text: nil, font: .headline, numberOfLines: 2)
     }()
 
     lazy var iconImageView: UIImageView = {
@@ -52,9 +42,7 @@ class ArrangePlaceCell: UITableViewCell {
     }()
 
     lazy var estimatedTimeLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
-        return label
+        LabelFactory.build(text: nil, font: .body)
     }()
 
     lazy var timeVStack: UIStackView = {

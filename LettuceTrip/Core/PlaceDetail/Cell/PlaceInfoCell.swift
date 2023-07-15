@@ -18,27 +18,18 @@ class PlaceInfoCell: UITableViewCell {
     }()
 
     lazy var addressLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .semibold)
-        label.textColor = .label
+        let label = LabelFactory.build(text: nil, font: .body)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.1
         return label
     }()
 
     lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 22, weight: .bold)
-        label.textColor = .label
-        label.numberOfLines = 2
-        return label
+        LabelFactory.build(text: nil, font: .title, numberOfLines: 2)
     }()
 
     lazy var totalRatingLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .medium)
-        label.textColor = .secondaryLabel
-        return label
+        LabelFactory.build(text: nil, font: .body, textColor: .secondaryLabel)
     }()
 
     lazy var ratingView: RatingStarView = {

@@ -25,11 +25,7 @@ class UserMessageCell: UICollectionViewCell {
     }()
 
     lazy var timeLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 10, weight: .light)
-        label.textColor = .label
-        label.sizeToFit()
-        return label
+        LabelFactory.build(text: nil, font: .caption)
     }()
 
     override init(frame: CGRect) {

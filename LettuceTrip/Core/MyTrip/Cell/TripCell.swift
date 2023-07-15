@@ -12,30 +12,22 @@ class TripCell: UITableViewCell {
 
     lazy var photoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "placeholder"))
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-        imageView.layer.masksToBounds = true
+        imageView.setContentMode()
+        imageView.makeCornerRadius(20)
         return imageView
     }()
 
     lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .heavy)
-        label.textColor = .white
+        let label = LabelFactory.build(text: nil, font: .title, textColor: .white)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.1
-        label.sizeToFit()
         return label
     }()
 
     lazy var subtitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .bold)
-        label.textColor = .white
+        let label = LabelFactory.build(text: nil, font: .subtitle, textColor: .white)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.1
-        label.sizeToFit()
         return label
     }()
 

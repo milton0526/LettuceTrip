@@ -46,7 +46,9 @@ class HomeViewController: UIViewController {
     }()
 
     private let refreshControl = UIRefreshControl()
-    private lazy var placeHolder = makePlaceholder(text: String(localized: "Oops! No one share there trip!🥲"))
+    private let placeHolder: UILabel = {
+        LabelFactory.build(text: "Oops! No one share there trip!🥲", font: .title, textColor: .secondaryLabel)
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +62,9 @@ class HomeViewController: UIViewController {
     private func setupUI() {
         navigationItem.title = String(localized: "Community")
         view.addSubview(collectionView)
+        view.addSubview(placeHolder)
+        placeHolder.isHidden = true
+        placeHolder.centerInSuperview()
         collectionView.edgesToSuperview(usingSafeArea: true)
     }
 
@@ -145,8 +150,9 @@ extension HomeViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         let trip = viewModel.shareTrips[indexPath.item]
-        // let editVC = EditTripViewController(trip: trip, isEditMode: false, fsManager: fsManager)
-        // navigationController?.pushViewController(editVC, animated: true)
+        let fsManager = FirestoreManager()
+        let editVC = EditTripViewController(trip: trip, isEditMode: false, fsManager: fsManager)
+        navigationController?.pushViewController(editVC, animated: true)
     }
 }
 

@@ -14,31 +14,19 @@ import FirebaseFirestore
 class AddNewTripViewController: UIViewController {
 
     lazy var tripNameLabel: UILabel = {
-        let label = UILabel()
-        label.text = String(localized: "Trip name")
-        label.subtitleStyle()
-        return label
+        LabelFactory.build(text: "Trip name", font: .subtitle)
     }()
 
     lazy var destinationLabel: UILabel = {
-        let label = UILabel()
-        label.text = String(localized: "Destination")
-        label.subtitleStyle()
-        return label
+        LabelFactory.build(text: "Destination", font: .subtitle)
     }()
 
     lazy var startTimeLabel: UILabel = {
-        let label = UILabel()
-        label.text = String(localized: "Start time")
-        label.subtitleStyle()
-        return label
+        LabelFactory.build(text: "Start time", font: .subtitle)
     }()
 
     lazy var durationLabel: UILabel = {
-        let label = UILabel()
-        label.text = String(localized: "Duration")
-        label.subtitleStyle()
-        return label
+        LabelFactory.build(text: "Duration", font: .subtitle)
     }()
 
     lazy var tripNameTextField: RoundedTextField = {
@@ -242,7 +230,7 @@ extension AddNewTripViewController: UITextFieldDelegate {
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField == destinationTextField {
-            let searchCityVC = SearchCityViewController()
+            let searchCityVC = SearchViewController()
             searchCityVC.userSelectedCity = { [weak self] city in
                 guard let self = self else { return }
                 selectedCity = city

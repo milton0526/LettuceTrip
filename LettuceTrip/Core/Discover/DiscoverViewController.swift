@@ -17,7 +17,7 @@ class DiscoverViewController: UIViewController {
     }
 
     // Properties
-    private lazy var searchResultController = SearchCityViewController()
+    private lazy var searchResultController = SearchViewController()
     private let viewModel: DiscoverViewModelType
     private let fsManager: FirestoreManager
     private var cancelBags: Set<AnyCancellable> = []

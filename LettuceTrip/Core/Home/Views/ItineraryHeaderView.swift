@@ -12,10 +12,7 @@ class ItineraryHeaderView: UICollectionReusableView {
     static let identifier = String(describing: ItineraryHeaderView.self)
 
     lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .label
-        label.font = .systemFont(ofSize: 20, weight: .heavy)
-        return label
+        LabelFactory.build(text: nil, font: .title)
     }()
 
     override init(frame: CGRect) {

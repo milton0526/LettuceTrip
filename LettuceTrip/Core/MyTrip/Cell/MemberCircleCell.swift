@@ -12,21 +12,18 @@ class MemberCircleCell: UICollectionViewCell {
 
     lazy var personImageView: UIImageView = {
         let imageView = UIImageView(image: .person)
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 16
-        imageView.layer.masksToBounds = true
+        imageView.setContentMode()
+        imageView.makeCornerRadius(16)
         return imageView
     }()
 
     lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.textAlignment = .center
-        label.numberOfLines = 2
-        label.sizeToFit()
-        label.textColor = .white
-        return label
+        LabelFactory.build(
+            text: nil,
+            font: .caption,
+            textColor: .white,
+            numberOfLines: 2,
+            textAlignment: .center)
     }()
 
     override init(frame: CGRect) {
