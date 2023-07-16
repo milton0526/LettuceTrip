@@ -214,7 +214,7 @@ class EditTripViewController: UIViewController {
     }
 
     @objc func openChatRoom(_ sender: UIButton) {
-        let chatVC = ChatRoomViewController(trip: trip, fsManager: fsManager)
+        let chatVC = ChatRoomViewController(viewModel: ChatRoomViewModel(trip: trip, fsManager: fsManager))
         let nav = UINavigationController(rootViewController: chatVC)
         present(nav, animated: true)
     }
@@ -382,7 +382,7 @@ class EditTripViewController: UIViewController {
             return
         }
 
-        JGHudIndicator.shared.showHud(type: .loading(text: String(localized: "Calculate...")))
+        JGHudIndicator.shared.showHud(type: .loading())
         estimatedTimes = [:]
         for i in 1..<sortedPlaces.count {
             let source = sortedPlaces[i - 1]

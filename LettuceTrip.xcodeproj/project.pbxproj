@@ -47,6 +47,9 @@
 		C480BE382A5A805000A1A7E5 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = C480BE372A5A805000A1A7E5 /* CombineCocoa */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
+		C48E6FF62A62EEE400087B06 /* PlaceDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E6FF52A62EEE400087B06 /* PlaceDetailViewModel.swift */; };
+		C48E6FF82A62F59C00087B06 /* GooglePlaceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E6FF72A62F59C00087B06 /* GooglePlaceError.swift */; };
+		C48E6FFA2A63AAB800087B06 /* ChatRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E6FF92A63AAB800087B06 /* ChatRoomViewModel.swift */; };
 		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
 		C4C0F0552A512158002F59B3 /* GooglePlaces.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */; };
 		C4C0F0582A512182002F59B3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0572A512182002F59B3 /* CoreGraphics.framework */; };
@@ -150,6 +153,9 @@
 		C480BE312A5A59F500A1A7E5 /* UnsplashKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashKey.swift; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
+		C48E6FF52A62EEE400087B06 /* PlaceDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewModel.swift; sourceTree = "<group>"; };
+		C48E6FF72A62F59C00087B06 /* GooglePlaceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlaceError.swift; sourceTree = "<group>"; };
+		C48E6FF92A63AAB800087B06 /* ChatRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewModel.swift; sourceTree = "<group>"; };
 		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
 		C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlaces.bundle; path = "GooglePlaces.xcframework/ios-arm64/GooglePlaces.framework/Resources/GooglePlaces.bundle"; sourceTree = "<group>"; };
 		C4C0F0572A512182002F59B3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -286,6 +292,7 @@
 			children = (
 				C480BE0E2A591AFD00A1A7E5 /* FirebaseError.swift */,
 				C44DEAC02A5FCEAE00AFB8C6 /* LocationError.swift */,
+				C48E6FF72A62F59C00087B06 /* GooglePlaceError.swift */,
 			);
 			path = Errors;
 			sourceTree = "<group>";
@@ -299,6 +306,15 @@
 				C480BE1B2A596CA500A1A7E5 /* FirestoreManager+User.swift */,
 			);
 			path = Firestore;
+			sourceTree = "<group>";
+		};
+		C48E6FFB2A63BCCC00087B06 /* ChatRoom */ = {
+			isa = PBXGroup;
+			children = (
+				C42F51C52A45BD1D00023305 /* ChatRoomViewController.swift */,
+				C48E6FF92A63AAB800087B06 /* ChatRoomViewModel.swift */,
+			);
+			path = ChatRoom;
 			sourceTree = "<group>";
 		};
 		C4C0F0562A512182002F59B3 /* Frameworks */ = {
@@ -395,9 +411,9 @@
 		C4DBE83D2A41B1C7002987CB /* MyTrip */ = {
 			isa = PBXGroup;
 			children = (
+				C48E6FFB2A63BCCC00087B06 /* ChatRoom */,
 				C4DBE8362A41B194002987CB /* MyTripViewController.swift */,
 				C42F51B72A45936800023305 /* EditTripViewController.swift */,
-				C42F51C52A45BD1D00023305 /* ChatRoomViewController.swift */,
 				C4CC0BFF2A48255B00E03758 /* WishListViewController.swift */,
 				C4CC0C032A48465300E03758 /* ArrangePlaceViewController.swift */,
 				C4DBE8A72A41D639002987CB /* Cell */,
@@ -462,6 +478,7 @@
 			isa = PBXGroup;
 			children = (
 				C4DBE8872A41BC60002987CB /* PlaceDetailViewController.swift */,
+				C48E6FF52A62EEE400087B06 /* PlaceDetailViewModel.swift */,
 				C43757632A6282F4009225E7 /* Header */,
 				C4DBE8A62A41D4D7002987CB /* Cell */,
 			);
@@ -663,6 +680,7 @@
 				C4CBD4432A4FECA2009108C6 /* GMSPlace+Combine.swift in Sources */,
 				C42F51CE2A469E7200023305 /* FriendMessageCell.swift in Sources */,
 				C4CC0BF32A46C51C00E03758 /* ChatRoomMemberView.swift in Sources */,
+				C48E6FF82A62F59C00087B06 /* GooglePlaceError.swift in Sources */,
 				C4DBE88E2A41BCAB002987CB /* PlaceAboutCell.swift in Sources */,
 				C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */,
 				C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */,
@@ -692,10 +710,12 @@
 				C437575F2A6156DC009225E7 /* ProfileViewModel.swift in Sources */,
 				C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */,
 				C480BE1E2A5972C100A1A7E5 /* FirestoreManager+Place.swift in Sources */,
+				C48E6FF62A62EEE400087B06 /* PlaceDetailViewModel.swift in Sources */,
 				C4DBE8352A41B18B002987CB /* DiscoverViewController.swift in Sources */,
 				C480BE0F2A591AFD00A1A7E5 /* FirebaseError.swift in Sources */,
 				C44DEAC32A5FD00600AFB8C6 /* DiscoverViewModel.swift in Sources */,
 				C4DBE8B22A41DD83002987CB /* TripCell.swift in Sources */,
+				C48E6FFA2A63AAB800087B06 /* ChatRoomViewModel.swift in Sources */,
 				C4DBE8212A41AF62002987CB /* AppDelegate.swift in Sources */,
 				C4DBE8902A41BCC3002987CB /* PlaceAboutCellViewModel.swift in Sources */,
 				C4EF99F72A5C04F300B1C4BC /* StorageManager.swift in Sources */,

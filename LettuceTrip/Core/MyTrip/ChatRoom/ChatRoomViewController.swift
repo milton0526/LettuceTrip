@@ -7,17 +7,14 @@
 
 import UIKit
 import Combine
-import FirebaseFirestore
 import TinyConstraints
 
 class ChatRoomViewController: UIViewController {
 
-    let trip: Trip
-    let fsManager: FirestoreManager
+    let viewModel: ChatRoomViewModelType
 
-    init(trip: Trip, fsManager: FirestoreManager) {
-        self.trip = trip
-        self.fsManager = fsManager
+    init(viewModel: ChatRoomViewModelType) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -29,6 +26,7 @@ class ChatRoomViewController: UIViewController {
         case main
     }
 
+    // UI Elements
     lazy var userView = ChatRoomMemberView()
 
     lazy var collectionView: UICollectionView = {
@@ -52,20 +50,10 @@ class ChatRoomViewController: UIViewController {
         return button
     }()
 
+    // Properties
     private var dataSource: UICollectionViewDiffableDataSource<Section, Message>!
-
-    private var members: [LTUser] = [] {
-        didSet {
-            if members.count == trip.members.count {
-                userView.members = members
-                DispatchQueue.main.async { [weak self] in
-                    self?.updateSnapshot()
-                }
-            }
-        }
-    }
-    private var chatMessages: [Message] = []
     private var cancelBags: Set<AnyCancellable> = []
+    private let input: PassthroughSubject<ChatRoomVMInput, Never> = .init()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,7 +62,8 @@ class ChatRoomViewController: UIViewController {
         setupUI()
         configBackButton()
         configureDataSource()
-        fetchData()
+        bind()
+        input.send(.fetchData)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -96,27 +85,13 @@ class ChatRoomViewController: UIViewController {
     }
 
     @objc func sendMessage(_ sender: UIButton) {
-        // send message to firebase and listen to update view
         guard
-            let tripID = trip.id,
             let text = inputTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
             !text.isEmpty
         else {
             return
         }
-
-        fsManager.sendMessage(text, at: tripID)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] completion in
-                switch completion {
-                case .finished:
-                    self?.inputTextField.resignFirstResponder()
-                    self?.inputTextField.text = ""
-                case .failure(let error):
-                    self?.showAlertToUser(error: error)
-                }
-            } receiveValue: { _ in }
-            .store(in: &cancelBags)
+        input.send(.sendMessage(text: text))
     }
 
     private func configBackButton() {
@@ -181,7 +156,7 @@ class ChatRoomViewController: UIViewController {
                 fatalError("Failed to dequeue cityCell")
             }
 
-            guard let currentUser = self.fsManager.user else {
+            guard let currentUser = viewModel.currentUser else {
                 fatalError("No user login.")
             }
 
@@ -189,7 +164,7 @@ class ChatRoomViewController: UIViewController {
                 userMSGCell.config(with: message)
                 return userMSGCell
             } else {
-                let friend = members.first { $0.id == message.userID }
+                let friend = viewModel.members.first { $0.id == message.userID }
                 friendMSGCell.config(with: message, from: friend)
                 return friendMSGCell
             }
@@ -199,77 +174,30 @@ class ChatRoomViewController: UIViewController {
     private func updateSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Message>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(chatMessages)
+        snapshot.appendItems(viewModel.chatMessages)
         dataSource.apply(snapshot, animatingDifferences: false)
 
-        if !chatMessages.isEmpty {
-            let indexPath = IndexPath(item: chatMessages.count - 1, section: 0)
+        if !viewModel.chatMessages.isEmpty {
+            let indexPath = IndexPath(item: viewModel.chatMessages.count - 1, section: 0)
             collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
         }
     }
 
-    private func fetchData() {
-        trip.members.forEach { member in
-            fsManager.getUserData(userId: member)
-                .receive(on: DispatchQueue.main)
-                .sink(receiveCompletion: { [weak self] completion in
-                    guard let self = self else { return }
-                    switch completion {
-                    case .finished:
-                        if members.count == trip.members.count {
-                            fetchMessages()
-                        }
-                    case .failure(let error):
-                        showAlertToUser(error: error)
-                    }
-                }, receiveValue: { [weak self] user in
-                    self?.members.append(user)
-                })
-                .store(in: &cancelBags)
-        }
-    }
+    private func bind() {
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
 
-    private func fetchMessages() {
-        guard let tripID = trip.id else { return }
-
-        fsManager.chatRoomListener(tripID)
+        output
             .receive(on: DispatchQueue.main)
-
-            .sink { [weak self] completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    self?.showAlertToUser(error: error)
-                }
-            } receiveValue: { [weak self] snapshot in
+            .sink { [weak self] event in
                 guard let self = self else { return }
-                if chatMessages.isEmpty {
-                    let firstResult = snapshot.documents.compactMap { try? $0.data(as: Message.self) }
-                    chatMessages = firstResult
+                switch event {
+                case .updateMembers(let members):
+                    userView.members = members
+                case .updateChatRoom:
                     updateSnapshot()
-                    return
+                case .displayError(let error):
+                    showAlertToUser(error: error)
                 }
-
-                snapshot.documentChanges.forEach { diff in
-                    do {
-                        let message = try diff.document.data(as: Message.self)
-                        switch diff.type {
-                        case .added:
-                            self.chatMessages.append(message)
-                        case .modified:
-                            if let index = self.chatMessages.firstIndex(where: { $0.id == message.id }) {
-                                self.chatMessages[index].sendTime = message.sendTime
-                            }
-
-                        default:
-                            break
-                        }
-                    } catch {
-                        print("Decode error...")
-                    }
-                }
-                updateSnapshot()
             }
             .store(in: &cancelBags)
     }
