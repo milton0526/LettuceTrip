@@ -49,7 +49,7 @@ final class ChatRoomViewModel: ChatRoomViewModelType {
         self.fsManager = fsManager
     }
 
-    func transform(input: AnyPublisher<ChatRoomVMInput, Never>) ->  AnyPublisher<ChatRoomVMOutput, Never> {
+    func transform(input: AnyPublisher<ChatRoomVMInput, Never>) -> AnyPublisher<ChatRoomVMOutput, Never> {
         input.sink { [weak self] event in
             switch event {
             case .fetchData:

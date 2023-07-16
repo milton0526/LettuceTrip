@@ -16,12 +16,10 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         case main
     }
 
-    let trip: Trip
-    let fsManager: FirestoreManager
+    let viewModel: WishListViewModelType
 
-    init(trip: Trip, fsManager: FirestoreManager) {
-        self.trip = trip
-        self.fsManager = fsManager
+    init(viewModel: WishListViewModelType) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -30,9 +28,8 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
     }
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, Place>!
-    private var listener: ListenerRegistration?
-    private var places: [Place] = []
     private var cancelBags: Set<AnyCancellable> = []
+    private let input: PassthroughSubject<WishListVMInput, Never> = .init()
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -49,7 +46,26 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         title = String(localized: "Wish List")
         setupUI()
         configDataSource()
-        fetchPlaces()
+        bind()
+        input.send(.fetchPlace)
+    }
+
+    private func bind() {
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
+
+        output
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] event in
+                guard let self = self else { return }
+                switch event {
+                case .success:
+                    placeHolder.isHidden = viewModel.places.isEmpty ? false : true
+                    updateSnapshot()
+                case .anyError(let error):
+                    showAlertToUser(error: error)
+                }
+            }
+            .store(in: &cancelBags)
     }
 
     private func setupUI() {
@@ -61,74 +77,14 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         collectionView.edgesToSuperview(usingSafeArea: true)
     }
 
-    private func fetchPlaces() {
-        guard let tripID = trip.id else { return }
-
-        fsManager.placeListener(at: tripID, isArrange: false)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    self?.showAlertToUser(error: error)
-                }
-            } receiveValue: { [weak self] snapshot in
-                guard let self = self else { return }
-                if places.isEmpty {
-                    let firstResult = snapshot.documents.compactMap { try? $0.data(as: Place.self) }
-                    places = firstResult
-                    placeHolder.isHidden = places.isEmpty ? false : true
-                    updateSnapshot()
-                    return
-                }
-
-                snapshot.documentChanges.forEach { diff in
-                    guard let modifiedPlace = try? diff.document.data(as: Place.self) else { return }
-
-                    switch diff.type {
-                    case .added:
-                        self.places.append(modifiedPlace)
-                    case .modified:
-                        if let index = self.places.firstIndex(where: { $0.id == modifiedPlace.id }) {
-                            self.places[index].arrangedTime = modifiedPlace.arrangedTime
-                        }
-                    case .removed:
-                        if let index = self.places.firstIndex(where: { $0.id == modifiedPlace.id }) {
-                            self.places.remove(at: index)
-                        }
-                    }
-                }
-
-                placeHolder.isHidden = places.isEmpty ? false : true
-                updateSnapshot()
-            }
-            .store(in: &cancelBags)
-    }
-
     private func createLayout() -> UICollectionViewCompositionalLayout {
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.trailingSwipeActionsConfigurationProvider = { indexPath in
             let deleteAction = UIContextualAction(style: .destructive, title: String(localized: "Delete")) { [weak self] _, _, completion in
-                guard
-                    let self = self,
-                    let tripId = trip.id
-                else {
-                    return
-                }
-
+                guard let self = self else { return }
                 if let item = dataSource.itemIdentifier(for: indexPath)?.id {
-                    fsManager.deleteTrip(tripId, place: item)
-                        .receive(on: DispatchQueue.main)
-                        .sink { result in
-                            switch result {
-                            case .finished:
-                                completion(true)
-                            case .failure(let error):
-                                self.showAlertToUser(error: error)
-                            }
-                        } receiveValue: { _ in }
-                        .store(in: &cancelBags)
+                    input.send(.deletePlace(item: item))
+                    completion(true)
                 }
             }
             return .init(actions: [deleteAction])
@@ -157,19 +113,17 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
     private func updateSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Place>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(places)
+        snapshot.appendItems(viewModel.places)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-
     // MARK: CollectionView Delegate
-
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        let place = places[indexPath.item]
-
-        let arrangeVC = ArrangePlaceViewController(trip: trip, place: place, fsManager: fsManager)
+        let place = viewModel.places[indexPath.item]
+        let fsManager = FirestoreManager()
+        let arrangeVC = ArrangePlaceViewController(trip: viewModel.trip, place: place, fsManager: fsManager)
         navigationController?.pushViewController(arrangeVC, animated: true)
     }
 }

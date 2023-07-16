@@ -209,7 +209,7 @@ class EditTripViewController: UIViewController {
     }
 
     @objc func openWishList(_ sender: UIBarButtonItem) {
-        let wishVC = WishListViewController(trip: trip, fsManager: fsManager)
+        let wishVC = WishListViewController(viewModel: WishListViewModel(trip: trip, fsManager: fsManager))
         navigationController?.pushViewController(wishVC, animated: true)
     }
 

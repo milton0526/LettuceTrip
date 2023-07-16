@@ -50,6 +50,7 @@
 		C48E6FF62A62EEE400087B06 /* PlaceDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E6FF52A62EEE400087B06 /* PlaceDetailViewModel.swift */; };
 		C48E6FF82A62F59C00087B06 /* GooglePlaceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E6FF72A62F59C00087B06 /* GooglePlaceError.swift */; };
 		C48E6FFA2A63AAB800087B06 /* ChatRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E6FF92A63AAB800087B06 /* ChatRoomViewModel.swift */; };
+		C48E6FFE2A63BEE100087B06 /* WishListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E6FFD2A63BEE100087B06 /* WishListViewModel.swift */; };
 		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
 		C4C0F0552A512158002F59B3 /* GooglePlaces.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */; };
 		C4C0F0582A512182002F59B3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0572A512182002F59B3 /* CoreGraphics.framework */; };
@@ -156,6 +157,7 @@
 		C48E6FF52A62EEE400087B06 /* PlaceDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewModel.swift; sourceTree = "<group>"; };
 		C48E6FF72A62F59C00087B06 /* GooglePlaceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlaceError.swift; sourceTree = "<group>"; };
 		C48E6FF92A63AAB800087B06 /* ChatRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewModel.swift; sourceTree = "<group>"; };
+		C48E6FFD2A63BEE100087B06 /* WishListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListViewModel.swift; sourceTree = "<group>"; };
 		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
 		C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlaces.bundle; path = "GooglePlaces.xcframework/ios-arm64/GooglePlaces.framework/Resources/GooglePlaces.bundle"; sourceTree = "<group>"; };
 		C4C0F0572A512182002F59B3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -317,6 +319,15 @@
 			path = ChatRoom;
 			sourceTree = "<group>";
 		};
+		C48E6FFC2A63BECF00087B06 /* WishList */ = {
+			isa = PBXGroup;
+			children = (
+				C4CC0BFF2A48255B00E03758 /* WishListViewController.swift */,
+				C48E6FFD2A63BEE100087B06 /* WishListViewModel.swift */,
+			);
+			path = WishList;
+			sourceTree = "<group>";
+		};
 		C4C0F0562A512182002F59B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -411,10 +422,10 @@
 		C4DBE83D2A41B1C7002987CB /* MyTrip */ = {
 			isa = PBXGroup;
 			children = (
-				C48E6FFB2A63BCCC00087B06 /* ChatRoom */,
 				C4DBE8362A41B194002987CB /* MyTripViewController.swift */,
+				C48E6FFB2A63BCCC00087B06 /* ChatRoom */,
+				C48E6FFC2A63BECF00087B06 /* WishList */,
 				C42F51B72A45936800023305 /* EditTripViewController.swift */,
-				C4CC0BFF2A48255B00E03758 /* WishListViewController.swift */,
 				C4CC0C032A48465300E03758 /* ArrangePlaceViewController.swift */,
 				C4DBE8A72A41D639002987CB /* Cell */,
 			);
@@ -682,6 +693,7 @@
 				C4CC0BF32A46C51C00E03758 /* ChatRoomMemberView.swift in Sources */,
 				C48E6FF82A62F59C00087B06 /* GooglePlaceError.swift in Sources */,
 				C4DBE88E2A41BCAB002987CB /* PlaceAboutCell.swift in Sources */,
+				C48E6FFE2A63BEE100087B06 /* WishListViewModel.swift in Sources */,
 				C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */,
 				C4DBE8AD2A41D696002987CB /* UIStackView+Extension.swift in Sources */,
 				C480BDF42A57F0D200A1A7E5 /* JGProgressHUD+Wrapper.swift in Sources */,
