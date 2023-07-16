@@ -51,6 +51,7 @@
 		C48E6FF82A62F59C00087B06 /* GooglePlaceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E6FF72A62F59C00087B06 /* GooglePlaceError.swift */; };
 		C48E6FFA2A63AAB800087B06 /* ChatRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E6FF92A63AAB800087B06 /* ChatRoomViewModel.swift */; };
 		C48E6FFE2A63BEE100087B06 /* WishListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E6FFD2A63BEE100087B06 /* WishListViewModel.swift */; };
+		C48E70012A64372700087B06 /* ArrangePlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E70002A64372700087B06 /* ArrangePlaceViewModel.swift */; };
 		C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */; };
 		C4C0F0552A512158002F59B3 /* GooglePlaces.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */; };
 		C4C0F0582A512182002F59B3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C0F0572A512182002F59B3 /* CoreGraphics.framework */; };
@@ -158,6 +159,7 @@
 		C48E6FF72A62F59C00087B06 /* GooglePlaceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlaceError.swift; sourceTree = "<group>"; };
 		C48E6FF92A63AAB800087B06 /* ChatRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewModel.swift; sourceTree = "<group>"; };
 		C48E6FFD2A63BEE100087B06 /* WishListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListViewModel.swift; sourceTree = "<group>"; };
+		C48E70002A64372700087B06 /* ArrangePlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceViewModel.swift; sourceTree = "<group>"; };
 		C4C0F0522A512142002F59B3 /* GooglePlaces.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GooglePlaces.xcframework; sourceTree = "<group>"; };
 		C4C0F0542A512158002F59B3 /* GooglePlaces.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlaces.bundle; path = "GooglePlaces.xcframework/ios-arm64/GooglePlaces.framework/Resources/GooglePlaces.bundle"; sourceTree = "<group>"; };
 		C4C0F0572A512182002F59B3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -328,6 +330,15 @@
 			path = WishList;
 			sourceTree = "<group>";
 		};
+		C48E6FFF2A64370E00087B06 /* ArrangePlace */ = {
+			isa = PBXGroup;
+			children = (
+				C4CC0C032A48465300E03758 /* ArrangePlaceViewController.swift */,
+				C48E70002A64372700087B06 /* ArrangePlaceViewModel.swift */,
+			);
+			path = ArrangePlace;
+			sourceTree = "<group>";
+		};
 		C4C0F0562A512182002F59B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -426,7 +437,7 @@
 				C48E6FFB2A63BCCC00087B06 /* ChatRoom */,
 				C48E6FFC2A63BECF00087B06 /* WishList */,
 				C42F51B72A45936800023305 /* EditTripViewController.swift */,
-				C4CC0C032A48465300E03758 /* ArrangePlaceViewController.swift */,
+				C48E6FFF2A64370E00087B06 /* ArrangePlace */,
 				C4DBE8A72A41D639002987CB /* Cell */,
 			);
 			path = MyTrip;
@@ -701,6 +712,7 @@
 				C44DEABF2A5FCB9900AFB8C6 /* HomeViewModel.swift in Sources */,
 				C4CBD42D2A4FD097009108C6 /* GPlaceResponse.swift in Sources */,
 				C4CBD42F2A4FD122009108C6 /* GPlaceAPIManager.swift in Sources */,
+				C48E70012A64372700087B06 /* ArrangePlaceViewModel.swift in Sources */,
 				C480BDEA2A56C56E00A1A7E5 /* AppearanceViewController.swift in Sources */,
 				C43757652A628402009225E7 /* LabelFactory.swift in Sources */,
 				C42F51C42A45B60C00023305 /* CalendarCell.swift in Sources */,

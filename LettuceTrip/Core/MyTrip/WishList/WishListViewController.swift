@@ -8,7 +8,6 @@
 import UIKit
 import Combine
 import TinyConstraints
-import FirebaseFirestore
 
 class WishListViewController: UIViewController, UICollectionViewDelegate {
 
@@ -123,7 +122,8 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
 
         let place = viewModel.places[indexPath.item]
         let fsManager = FirestoreManager()
-        let arrangeVC = ArrangePlaceViewController(trip: viewModel.trip, place: place, fsManager: fsManager)
+        let arrangeVC = ArrangePlaceViewController(
+            viewModel: ArrangePlaceViewModel(trip: viewModel.trip, place: place, fsManager: fsManager))
         navigationController?.pushViewController(arrangeVC, animated: true)
     }
 }

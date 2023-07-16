@@ -12,17 +12,13 @@ import Combine
 
 class ArrangePlaceViewController: UIViewController {
 
-    private var trip: Trip
-    private var place: Place
+    private let viewModel: ArrangePlaceViewModelType
     private var isEditMode = true
-    private let fsManager: FirestoreManager
     private var cancelBags: Set<AnyCancellable> = []
 
-    init(trip: Trip, place: Place, isEditMode: Bool = true, fsManager: FirestoreManager) {
-        self.trip = trip
-        self.place = place
+    init(viewModel: ArrangePlaceViewModelType, isEditMode: Bool = true) {
+        self.viewModel = viewModel
         self.isEditMode = isEditMode
-        self.fsManager = fsManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -79,7 +75,7 @@ class ArrangePlaceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = place.name
+        title = viewModel.place.name
 
         let detailButton = UIBarButtonItem(
             image: UIImage(systemName: "info.circle"),
@@ -88,6 +84,7 @@ class ArrangePlaceViewController: UIViewController {
             action: #selector(showDetail))
         navigationItem.rightBarButtonItem = detailButton
         setupUI()
+        bind()
     }
 
     @objc func savePlace(_ sender: UIButton) {
@@ -95,24 +92,7 @@ class ArrangePlaceViewController: UIViewController {
 
         guard let cell = tableView.cellForRow(at: indexPath) as? ArrangePlaceDetailCell else { return }
         let arrangement = cell.passData()
-        place.isArrange = true
-        place.arrangedTime = arrangement.arrangedTime
-        place.duration = arrangement.duration
-        place.memo = arrangement.memo
-
-        // Update fireStore document
-        guard let tripId = trip.id else { return }
-        fsManager.updatePlace(place, at: tripId, isUpdate: true)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] completion in
-                switch completion {
-                case .finished:
-                    self?.navigationController?.popViewController(animated: true)
-                case .failure:
-                    JGHudIndicator.shared.showHud(type: .failure)
-                }
-            } receiveValue: { _ in }
-            .store(in: &cancelBags)
+        viewModel.savePlace(arrangement: arrangement)
     }
 
     private func setupUI() {
@@ -134,18 +114,33 @@ class ArrangePlaceViewController: UIViewController {
     }
 
     @objc func openAppleMap(_ sender: UIButton) {
-        let placeMark = MKPlacemark(coordinate: place.coordinate)
+        let placeMark = MKPlacemark(coordinate: viewModel.place.coordinate)
         let mapItem = MKMapItem(placemark: placeMark)
-        mapItem.name = place.name
+        mapItem.name = viewModel.place.name
         mapItem.openInMaps()
     }
 
     @objc func showDetail(_ sender: UIBarButtonItem) {
         let apiService = GPlaceAPIManager()
-        let detailVC = PlaceDetailViewController(place: place, fsManager: fsManager, apiService: apiService)
+        let fsManager = FirestoreManager()
+        let detailVC = PlaceDetailViewController(place: viewModel.place, fsManager: fsManager, apiService: apiService)
         detailVC.addToTripButton.isEnabled = false
         detailVC.addToTripButton.alpha = 0.8
         navigationController?.pushViewController(detailVC, animated: true)
+    }
+
+    private func bind() {
+        viewModel.popViewPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                switch completion {
+                case .finished:
+                    self?.navigationController?.popViewController(animated: true)
+                case .failure(let error):
+                    self?.showAlertToUser(error: error)
+                }
+            } receiveValue: { _ in }
+            .store(in: &cancelBags)
     }
 }
 
@@ -167,7 +162,7 @@ extension ArrangePlaceViewController: UITableViewDataSource {
                 fatalError("Failed to dequeue map cell.")
             }
 
-            mapCell.config(with: place)
+            mapCell.config(with: viewModel.place)
             return mapCell
 
         default:
@@ -179,9 +174,9 @@ extension ArrangePlaceViewController: UITableViewDataSource {
             }
 
             if isEditMode {
-                detailCell.config(with: trip, place: place)
+                detailCell.config(with: viewModel.trip, place: viewModel.place)
             } else {
-                detailCell.config(with: trip, place: place, isArrange: true)
+                detailCell.config(with: viewModel.trip, place: viewModel.place, isArrange: true)
             }
             return detailCell
         }

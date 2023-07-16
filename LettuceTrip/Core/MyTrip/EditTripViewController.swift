@@ -415,7 +415,8 @@ extension EditTripViewController: UITableViewDelegate {
         let viewController: UIViewController
 
         if isEditMode {
-            viewController = ArrangePlaceViewController(trip: trip, place: place, isEditMode: false, fsManager: fsManager)
+            viewController = ArrangePlaceViewController(
+                viewModel: ArrangePlaceViewModel(trip: trip, place: place, fsManager: fsManager), isEditMode: false)
         } else {
             let apiService = GPlaceAPIManager()
             viewController = PlaceDetailViewController(place: place, fsManager: fsManager, apiService: apiService)
