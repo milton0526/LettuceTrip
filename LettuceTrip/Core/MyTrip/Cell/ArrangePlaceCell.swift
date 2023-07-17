@@ -113,7 +113,7 @@ class ArrangePlaceCell: UITableViewCell {
         estimatedHStack.bottomToSuperview()
     }
 
-    func config(with place: Place, travelTime: String? = nil) {
+    func config(with place: Place, isEditMode: Bool, travelTime: String? = nil) {
         let toTime = place.endTime
 
         fromTimeLabel.text = place.arrangedTime?.formatted(date: .omitted, time: .shortened)
@@ -121,7 +121,7 @@ class ArrangePlaceCell: UITableViewCell {
         placeLabel.text = place.name
         iconImageView.image = UIImage(data: place.iconImage)?.withTintColor(.tintColor)
 
-        if let lastEditor = place.lastEditor {
+        if let lastEditor = place.lastEditor, isEditMode {
             lastEditorLabel.text = String(localized: "Last edited: \(lastEditor)")
         }
 

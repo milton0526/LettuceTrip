@@ -66,6 +66,10 @@ class EditTripViewController: UIViewController {
     private var places: [Place] = []
     private var sortedPlaces: [Place] = [] {
         didSet {
+            guard isEditMode else {
+                updateSnapshot()
+                return
+            }
             estimateTravelTime()
         }
     }
@@ -350,9 +354,9 @@ class EditTripViewController: UIViewController {
             }
 
             if indexPath.item < estimatedTimes.count {
-                arrangeCell.config(with: item, travelTime: estimatedTimes[indexPath.item] ?? "")
+                arrangeCell.config(with: item, isEditMode: isEditMode, travelTime: estimatedTimes[indexPath.item] ?? "")
             } else {
-                arrangeCell.config(with: item)
+                arrangeCell.config(with: item, isEditMode: isEditMode)
             }
             return arrangeCell
         }
