@@ -22,6 +22,10 @@ class ArrangePlaceCell: UITableViewCell {
         LabelFactory.build(text: nil, font: .headline, numberOfLines: 2)
     }()
 
+    lazy var lastEditorLabel: UILabel = {
+        LabelFactory.build(text: nil, font: .caption, textColor: .secondaryLabel, textAlignment: .right)
+    }()
+
     lazy var iconImageView: UIImageView = {
         let imageView = UIImageView(image: .init(systemName: "mappin.and.ellipse")?.withTintColor(.tintColor))
         imageView.contentMode = .scaleAspectFit
@@ -63,7 +67,7 @@ class ArrangePlaceCell: UITableViewCell {
     }()
 
     lazy var estimatedHStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [hareImageView, estimatedTimeLabel, UIView()])
+        let stackView = UIStackView(arrangedSubviews: [hareImageView, estimatedTimeLabel, UIView(), lastEditorLabel])
         stackView.axis = .horizontal
         stackView.spacing = 8
         stackView.alignment = .center
@@ -83,7 +87,9 @@ class ArrangePlaceCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        estimatedHStack.isHidden = false
+        hareImageView.isHidden = false
+        estimatedTimeLabel.isHidden = false
+        lastEditorLabel.text = nil
     }
 
     private func setupViews() {
@@ -115,10 +121,15 @@ class ArrangePlaceCell: UITableViewCell {
         placeLabel.text = place.name
         iconImageView.image = UIImage(data: place.iconImage)?.withTintColor(.tintColor)
 
+        if let lastEditor = place.lastEditor {
+            lastEditorLabel.text = String(localized: "Last edited: \(lastEditor)")
+        }
+
         if let travelTime = travelTime {
             estimatedTimeLabel.text = travelTime == String(localized: "Not available") ? travelTime : String(localized: "\(travelTime) minutes")
         } else {
-            estimatedHStack.isHidden = true
+            hareImageView.isHidden = true
+            estimatedTimeLabel.isHidden = true
         }
     }
 }

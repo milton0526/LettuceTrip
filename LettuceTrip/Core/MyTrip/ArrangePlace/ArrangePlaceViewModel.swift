@@ -39,6 +39,7 @@ final class ArrangePlaceViewModel: ArrangePlaceViewModelType {
         place.arrangedTime = arrangement.arrangedTime
         place.duration = arrangement.duration
         place.memo = arrangement.memo
+        place.lastEditor = fsManager.userName
 
         fsManager.updatePlace(place, at: tripId, isUpdate: true)
             .receive(on: DispatchQueue.main)

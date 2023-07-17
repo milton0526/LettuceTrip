@@ -43,6 +43,7 @@ struct Place: Codable, Hashable {
     var arrangedTime: Date?
     var duration: Double?
     var memo: String?
+    var lastEditor: String?
 
     var coordinate: CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)

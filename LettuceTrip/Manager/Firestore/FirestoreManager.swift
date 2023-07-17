@@ -18,6 +18,10 @@ final class FirestoreManager {
         Auth.auth().currentUser?.uid
     }
 
+    var userName: String? {
+        Auth.auth().currentUser?.displayName
+    }
+
     enum TripField: String {
         case image
         case isPublic

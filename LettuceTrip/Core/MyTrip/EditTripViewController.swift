@@ -183,6 +183,7 @@ class EditTripViewController: UIViewController {
                     case .modified:
                         if let index = self.places.firstIndex(where: { $0.id == modifiedPlace.id }) {
                             self.places[index].arrangedTime = modifiedPlace.arrangedTime
+                            self.places[index].lastEditor = modifiedPlace.lastEditor
                         }
                     case .removed:
                         if let index = self.places.firstIndex(where: { $0.id == modifiedPlace.id }) {
@@ -509,7 +510,9 @@ extension EditTripViewController: UITableViewDropDelegate {
                         var destinationItem = sortedPlaces[destinationIndexPath.item]
 
                         sourceItem.arrangedTime = destinationItem.arrangedTime
+                        sourceItem.lastEditor = fsManager.userName
                         destinationItem.arrangedTime = date
+                        destinationItem.lastEditor = fsManager.userName
 
                         fsManager.batchUpdatePlaces(at: trip, from: sourceItem, to: destinationItem)
                             .receive(on: DispatchQueue.main)
