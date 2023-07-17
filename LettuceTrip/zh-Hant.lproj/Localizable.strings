@@ -5,9 +5,6 @@
 "About" = "關於";
 
 /* No comment provided by engineer. */
-"Add new trip to start!" = "開始新增行程吧！";
-
-/* No comment provided by engineer. */
 "Add this place into trip" = "新增地點至行程";
 
 /* No comment provided by engineer. */
@@ -65,12 +62,6 @@
 "Destination" = "目的地";
 
 /* No comment provided by engineer. */
-"Discover best places to go on vacation and make itinerary with friends😍" = "探索旅遊目的地，並且和朋友共同安排行程😍";
-
-/* No comment provided by engineer. */
-"Duration" = "天數";
-
-/* No comment provided by engineer. */
 "Enable location service to give you better experience while using app." = "啟用GPS來帶給您更棒的使用體驗";
 
 /* No comment provided by engineer. */
@@ -89,10 +80,19 @@
 "Failed to get data." = "取得資料失敗";
 
 /* No comment provided by engineer. */
+"Failed to get google place details." = "取得地點資訊失敗";
+
+/* No comment provided by engineer. */
+"Failed to get photos from google." = "取得地點相片失敗";
+
+/* No comment provided by engineer. */
 "Failed to send message." = "傳送訊息失敗";
 
 /* No comment provided by engineer. */
 "Failed to update %@." = "無法更新 %@.";
+
+/* No comment provided by engineer. */
+"Failed to update location." = "無法更新目前位置";
 
 /* No comment provided by engineer. */
 "Failure" = "錯誤";
@@ -104,13 +104,19 @@
 "Invite your friends" = "邀請朋友";
 
 /* No comment provided by engineer. */
+"Last edited: %@" = "最後編輯: %@";
+
+/* No comment provided by engineer. */
 "Light mode" = "淺色模式";
 
 /* No comment provided by engineer. */
 "Loading..." = "讀取中...";
 
 /* No comment provided by engineer. */
-"Location Service denied!" = "存取定位被拒！";
+"Location Service denied." = "定位服務被拒";
+
+/* No comment provided by engineer. */
+"Location Service restrict." = "定位服務受限";
 
 /* No comment provided by engineer. */
 "My trips" = "我的旅行";
@@ -125,7 +131,7 @@
 "OK" = "好";
 
 /* No comment provided by engineer. */
-"Oops! No one share there trip!🥲" = "糟糕！沒有人分享行程🥲";
+"Operation cancel!" = "操作取消！";
 
 /* No comment provided by engineer. */
 "Our team will check ASAP, Thanks!" = "我們會盡快確認此回報，謝謝";
@@ -164,22 +170,16 @@
 "Something went wrong!" = "發生未知的錯誤！";
 
 /* No comment provided by engineer. */
-"Start time" = "開始日";
-
-/* No comment provided by engineer. */
 "Success" = "成功";
 
 /* No comment provided by engineer. */
 "Sure" = "好";
 
 /* No comment provided by engineer. */
-"There's nothing here!" = "目前是空的哦！";
-
-/* No comment provided by engineer. */
 "This action can not be undo!" = "此動作無法回朔！";
 
 /* No comment provided by engineer. */
-"Trip name" = "旅行名稱";
+"Unknown Location Service state." = "未知的錯誤";
 
 /* No comment provided by engineer. */
 "Upcoming" = "進行中";
@@ -188,8 +188,4 @@
 "We received your report!" = "已收到您的檢舉！";
 
 /* No comment provided by engineer. */
-"Website" = "網站";
-
-/* No comment provided by engineer. */
 "Wish List" = "待安排清單";
-

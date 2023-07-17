@@ -1,0 +1,9 @@
+
+/* Class = "UILabel"; text = "From"; ObjectID = "Ctl-nT-irH"; */
+"Ctl-nT-irH.text" = "開始";
+
+/* Class = "UILabel"; text = "To"; ObjectID = "Rhl-dQ-dgI"; */
+"Rhl-dQ-dgI.text" = "結束";
+
+/* Class = "UILabel"; text = "Memo"; ObjectID = "WVG-UB-x6W"; */
+"WVG-UB-x6W.text" = "備註";
