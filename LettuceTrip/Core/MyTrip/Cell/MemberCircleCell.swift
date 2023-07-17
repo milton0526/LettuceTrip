@@ -12,6 +12,7 @@ class MemberCircleCell: UICollectionViewCell {
 
     lazy var personImageView: UIImageView = {
         let imageView = UIImageView(image: .person)
+        imageView.tintColor = .white
         imageView.setContentMode()
         imageView.makeCornerRadius(16)
         return imageView

@@ -11,10 +11,8 @@ class FriendMessageCell: UICollectionViewCell {
 
     lazy var imageView: UIImageView = {
         let imageView = UIImageView(image: .person)
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 15
-        imageView.layer.masksToBounds = true
+        imageView.setContentMode()
+        imageView.makeCornerRadius(15)
         return imageView
     }()
 
