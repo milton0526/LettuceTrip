@@ -437,9 +437,9 @@
 			isa = PBXGroup;
 			children = (
 				C4DBE8362A41B194002987CB /* MyTripViewController.swift */,
+				C42F51B72A45936800023305 /* EditTripViewController.swift */,
 				C48E6FFB2A63BCCC00087B06 /* ChatRoom */,
 				C48E6FFC2A63BECF00087B06 /* WishList */,
-				C42F51B72A45936800023305 /* EditTripViewController.swift */,
 				C48E6FFF2A64370E00087B06 /* ArrangePlace */,
 				C4DBE8A72A41D639002987CB /* Cell */,
 			);
