@@ -47,7 +47,9 @@ final class StorageManager {
                 guard
                     let url = url,
                     error == nil else {
+                    // swiftlint: disable force_unwrapping
                     return promise(.failure(error!))
+                    // swiftlint: enable force_unwrapping
                 }
                 promise(.success(url))
             }

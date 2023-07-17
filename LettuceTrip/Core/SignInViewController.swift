@@ -73,7 +73,9 @@ class SignInViewController: UIViewController {
 // MARK: AuthManager Delegate
 extension SignInViewController: AuthManagerDelegate {
     func presentAnchor(_ manager: AuthManager) -> UIWindow {
+        // swiftlint: disable force_unwrapping
         return view.window!
+        // swiftlint: enable force_unwrapping
     }
 
     func authorizationSuccess(_ manager: AuthManager) {
