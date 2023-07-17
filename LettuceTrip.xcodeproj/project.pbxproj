@@ -44,7 +44,6 @@
 		C480BE302A5A588300A1A7E5 /* UnsplashKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = C480BE2F2A5A588300A1A7E5 /* UnsplashKeys.plist */; };
 		C480BE322A5A59F500A1A7E5 /* UnsplashKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE312A5A59F500A1A7E5 /* UnsplashKey.swift */; };
 		C480BE352A5A5FDD00A1A7E5 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C480BE342A5A5FDD00A1A7E5 /* SDWebImage */; };
-		C480BE382A5A805000A1A7E5 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = C480BE372A5A805000A1A7E5 /* CombineCocoa */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
 		C48E6FF62A62EEE400087B06 /* PlaceDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E6FF52A62EEE400087B06 /* PlaceDetailViewModel.swift */; };
@@ -239,7 +238,6 @@
 				C4DBE8A22A41C158002987CB /* FirebaseFirestore in Frameworks */,
 				C4DBE8412A41B288002987CB /* TinyConstraints in Frameworks */,
 				C4C0F0532A512142002F59B3 /* GooglePlaces.xcframework in Frameworks */,
-				C480BE382A5A805000A1A7E5 /* CombineCocoa in Frameworks */,
 				C4CC0BF62A46FA3E00E03758 /* JGProgressHUD in Frameworks */,
 				C4DAD9102A551EFB003D7A13 /* FirebaseCrashlytics in Frameworks */,
 				C45413472A4A803E000D0685 /* FirebaseAuth in Frameworks */,
@@ -576,7 +574,6 @@
 				C4DAD90F2A551EFB003D7A13 /* FirebaseCrashlytics */,
 				C480BE2D2A5A581000A1A7E5 /* UnsplashPhotoPicker */,
 				C480BE342A5A5FDD00A1A7E5 /* SDWebImage */,
-				C480BE372A5A805000A1A7E5 /* CombineCocoa */,
 				C4EF99F82A5C051A00B1C4BC /* FirebaseStorage */,
 			);
 			productName = LettuceTrip;
@@ -616,7 +613,6 @@
 				C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 				C480BE2C2A5A581000A1A7E5 /* XCRemoteSwiftPackageReference "unsplash-photopicker-ios" */,
 				C480BE332A5A5FDD00A1A7E5 /* XCRemoteSwiftPackageReference "SDWebImage" */,
-				C480BE362A5A805000A1A7E5 /* XCRemoteSwiftPackageReference "CombineCocoa" */,
 			);
 			productRefGroup = C4DBE81E2A41AF62002987CB /* Products */;
 			projectDirPath = "";
@@ -1034,14 +1030,6 @@
 				minimumVersion = 5.0.0;
 			};
 		};
-		C480BE362A5A805000A1A7E5 /* XCRemoteSwiftPackageReference "CombineCocoa" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/CombineCommunity/CombineCocoa.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.4.1;
-			};
-		};
 		C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JonasGessner/JGProgressHUD.git";
@@ -1099,11 +1087,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C480BE332A5A5FDD00A1A7E5 /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
-		};
-		C480BE372A5A805000A1A7E5 /* CombineCocoa */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C480BE362A5A805000A1A7E5 /* XCRemoteSwiftPackageReference "CombineCocoa" */;
-			productName = CombineCocoa;
 		};
 		C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
