@@ -419,7 +419,8 @@ extension EditTripViewController: UITableViewDelegate {
                 viewModel: ArrangePlaceViewModel(trip: trip, place: place, fsManager: fsManager), isEditMode: false)
         } else {
             let apiService = GPlaceAPIManager()
-            viewController = PlaceDetailViewController(place: place, fsManager: fsManager, apiService: apiService)
+            let fsManager = FirestoreManager()
+            viewController = PlaceDetailViewController(viewModel: PlaceDetailViewModel(place: place, fsManager: fsManager, apiService: apiService))
         }
         navigationController?.pushViewController(viewController, animated: true)
     }

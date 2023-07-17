@@ -34,8 +34,7 @@ class TabBarViewController: UITabBarController {
     private func setupViewControllers() {
         let homeVC = HomeViewController(viewModel: HomeViewModel(fsManager: fsManager))
         let discoverVC = DiscoverViewController(
-            viewModel: DiscoverViewModel(locationManager: LocationManager()),
-            fsManager: fsManager)
+            viewModel: DiscoverViewModel(locationManager: LocationManager()))
         let tripVC = MyTripViewController(fsManager: fsManager)
         let profileVC = ProfileViewController(viewModel: ProfileViewModel(
             fsManager: fsManager,

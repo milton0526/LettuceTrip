@@ -19,12 +19,10 @@ class DiscoverViewController: UIViewController {
     // Properties
     private lazy var searchResultController = SearchViewController()
     private let viewModel: DiscoverViewModelType
-    private let fsManager: FirestoreManager
     private var cancelBags: Set<AnyCancellable> = []
 
-    init(viewModel: DiscoverViewModelType, fsManager: FirestoreManager) {
+    init(viewModel: DiscoverViewModelType) {
         self.viewModel = viewModel
-        self.fsManager = fsManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -271,7 +269,8 @@ extension DiscoverViewController: MKMapViewDelegate {
             isArrange: false)
 
         let apiService = GPlaceAPIManager()
-        let detailVC = PlaceDetailViewController(place: place, fsManager: fsManager, apiService: apiService)
+        let fsManager = FirestoreManager()
+        let detailVC = PlaceDetailViewController(viewModel: PlaceDetailViewModel(place: place, fsManager: fsManager, apiService: apiService))
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }

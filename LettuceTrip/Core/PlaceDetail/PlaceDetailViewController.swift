@@ -9,7 +9,6 @@ import UIKit
 import MapKit
 import TinyConstraints
 import Combine
-import GooglePlaces
 import SafariServices
 
 class PlaceDetailViewController: UIViewController {
@@ -28,25 +27,12 @@ class PlaceDetailViewController: UIViewController {
         }
     }
 
-    private let place: Place
-    private let fsManager: FirestoreManager
-    private let apiService: GooglePlaceServiceType
-
-    private var gmsPlace: GMSPlace? {
-        didSet {
-            guard let photos = gmsPlace?.photos else { return }
-            fetchPhotos(photos: photos)
-        }
-    }
-
-    private var placePhotos: [GPlacePhoto] = []
+    private let viewModel: PlaceDetailViewModelType
     private var cancelBags: Set<AnyCancellable> = []
+    private let input: PassthroughSubject<PlaceDetailVMInput, Never> = .init()
 
-
-    init(place: Place, fsManager: FirestoreManager, apiService: GooglePlaceServiceType) {
-        self.place = place
-        self.fsManager = fsManager
-        self.apiService = apiService
+    init(viewModel: PlaceDetailViewModelType) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -87,15 +73,41 @@ class PlaceDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = false
-        title = place.name
+        title = viewModel.place.name
         view.backgroundColor = .systemBackground
         setupUI()
+        bind()
         fetchDetails()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = false
+    }
+
+    private func bind() {
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
+
+        output
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] event in
+                guard let self = self else { return }
+                switch event {
+                case .updateView(let showIndicator):
+                    if showIndicator {
+                        JGHudIndicator.shared.showHud(type: .success)
+                    } else {
+                        tableView.reloadData()
+                        JGHudIndicator.shared.dismissHUD()
+                    }
+                case .userTrips(let trips):
+                    showActionSheet(form: trips)
+                case .displayError(let error):
+                    JGHudIndicator.shared.dismissHUD()
+                    showAlertToUser(error: error)
+                }
+            }
+            .store(in: &cancelBags)
     }
 
     private func setupUI() {
@@ -111,72 +123,11 @@ class PlaceDetailViewController: UIViewController {
 
     private func fetchDetails() {
         JGHudIndicator.shared.showHud(type: .loading())
-        apiService
-            .findPlaceFromText(place.name, location: place.coordinate)
-            .compactMap(\.candidates.first?.placeID)
-            .flatMap(apiService.fetchPlace)
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure:
-                    JGHudIndicator.shared.dismissHUD()
-                    JGHudIndicator.shared.showHud(type: .failure)
-                }
-            }, receiveValue: { [weak self] place in
-                self?.gmsPlace = place
-            })
-            .store(in: &cancelBags)
-    }
-
-    private func fetchPhotos(photos: [GMSPlacePhotoMetadata]) {
-        let photoIndices = photos.count > 3 ? 3 : photos.count
-
-        var counter = 1
-
-        for index in 0..<photoIndices {
-            let attributions = String(describing: photos[0].attributions)
-            apiService.fetchPhotos(metaData: photos[index])
-                .receive(on: DispatchQueue.main)
-                .sink { completion in
-                    switch completion {
-                    case .finished:
-                        break
-                    case .failure:
-                        JGHudIndicator.shared.dismissHUD()
-                        JGHudIndicator.shared.showHud(type: .failure)
-                    }
-                } receiveValue: { [weak self] image in
-                    guard let self = self else { return }
-
-                    let place = GPlacePhoto(attribution: attributions, image: image)
-                    placePhotos.append(place)
-                    if counter == photoIndices {
-                        tableView.reloadData()
-                        JGHudIndicator.shared.dismissHUD()
-                    } else {
-                        counter += 1
-                    }
-                }
-                .store(in: &cancelBags)
-        }
+        input.send(.fetchDetail)
     }
 
     @objc func addToTripButtonTapped(_ sender: UIButton) {
-        // fetch firebase to check if user have trip list
-        fsManager.getTrips()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    self?.showAlertToUser(error: error)
-                }
-            } receiveValue: { [weak self] trips in
-                self?.showActionSheet(form: trips)
-            }
-            .store(in: &cancelBags)
+        input.send(.fetchUserTrips)
     }
 
     private func showActionSheet(form trips: [Trip]) {
@@ -200,17 +151,7 @@ class PlaceDetailViewController: UIViewController {
                             return
                         }
 
-                        self.fsManager.updatePlace(self.place, at: tripId)
-                            .receive(on: DispatchQueue.main)
-                            .sink { completion in
-                                switch completion {
-                                case .finished:
-                                    JGHudIndicator.shared.showHud(type: .success)
-                                case .failure:
-                                    JGHudIndicator.shared.showHud(type: .failure)
-                                }
-                            } receiveValue: { _ in }
-                            .store(in: &cancelBags)
+                        self.input.send(.updatePlace(tripId: tripId))
                 }
                 actionSheet.addAction(updateAction)
             }
@@ -229,6 +170,7 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private func showAddNewTripVC() {
+        let fsManager = FirestoreManager()
         let addNewTripVC = AddNewTripViewController(isCopy: false, fsManager: fsManager)
         let navVC = UINavigationController(rootViewController: addNewTripVC)
         let viewHeight = view.frame.height
@@ -270,7 +212,7 @@ extension PlaceDetailViewController: UITableViewDelegate {
                 print("Photo header view dequeue failed")
                 return nil
             }
-            photoHeaderView.photos = placePhotos
+            photoHeaderView.photos = viewModel.allPhotos
             return photoHeaderView
         default:
             if let title = sectionType.title {
@@ -299,7 +241,7 @@ extension PlaceDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
             let section = Section(rawValue: indexPath.section),
-            let gmsPlace = gmsPlace
+            let gmsPlace = viewModel.gmsPlace
         else {
             return UITableViewCell()
         }

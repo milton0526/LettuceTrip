@@ -123,7 +123,8 @@ class ArrangePlaceViewController: UIViewController {
     @objc func showDetail(_ sender: UIBarButtonItem) {
         let apiService = GPlaceAPIManager()
         let fsManager = FirestoreManager()
-        let detailVC = PlaceDetailViewController(place: viewModel.place, fsManager: fsManager, apiService: apiService)
+        let detailVC = PlaceDetailViewController(
+            viewModel: PlaceDetailViewModel(place: viewModel.place, fsManager: fsManager, apiService: apiService))
         detailVC.addToTripButton.isEnabled = false
         detailVC.addToTripButton.alpha = 0.8
         navigationController?.pushViewController(detailVC, animated: true)
