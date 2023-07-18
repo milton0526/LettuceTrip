@@ -194,6 +194,7 @@ class ChatRoomViewController: UIViewController {
                 case .updateMembers(let members):
                     userView.members = members
                 case .updateChatRoom:
+                    inputTextField.text = ""
                     updateSnapshot()
                 case .displayError(let error):
                     showAlertToUser(error: error)
