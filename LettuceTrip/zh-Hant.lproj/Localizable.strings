@@ -62,6 +62,15 @@
 "Destination" = "目的地";
 
 /* No comment provided by engineer. */
+"Trip name" = "行程名稱";
+
+/* No comment provided by engineer. */
+"Duration" = "天數";
+
+/* No comment provided by engineer. */
+"Start time" = "開始日期";
+
+/* No comment provided by engineer. */
 "Enable location service to give you better experience while using app." = "啟用GPS來帶給您更棒的使用體驗";
 
 /* No comment provided by engineer. */
@@ -189,3 +198,12 @@
 
 /* No comment provided by engineer. */
 "Wish List" = "待安排清單";
+
+/* No comment provided by engineer. */
+"There's nothing here!" = "目前是空的哦！";
+
+/* No comment provided by engineer. */
+"Oops! No one share there trip!🥲" = "目前沒有人分享行程！🥲";
+
+/* No comment provided by engineer. */
+"Add new trip to start!" = "開始建立行程吧！"
