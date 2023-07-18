@@ -156,7 +156,7 @@ class MyTripViewController: UIViewController {
             }
         }
 
-        filterTrips[.upcoming]?.sort { $0.startDate > $1.startDate }
+        filterTrips[.upcoming]?.sort { $0.startDate < $1.startDate }
         filterTrips[.closed]?.sort { $0.startDate < $1.startDate }
 
         DispatchQueue.main.async { [weak self] in

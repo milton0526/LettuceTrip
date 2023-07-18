@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseCore
+import FirebaseAuth
 import IQKeyboardManagerSwift
 import GooglePlaces
 
@@ -16,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
+        try? Auth.auth().useUserAccessGroup("C5NNGG4J5Q.com.miltonliu.LettuceTrip")
         IQKeyboardManager.shared.enable = true
 
         if let key = apiKey {

@@ -44,6 +44,16 @@
 		C480BE322A5A59F500A1A7E5 /* UnsplashKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480BE312A5A59F500A1A7E5 /* UnsplashKey.swift */; };
 		C480BE352A5A5FDD00A1A7E5 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C480BE342A5A5FDD00A1A7E5 /* SDWebImage */; };
 		C488C1622A6570CB006853CC /* ArrangePlaceDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C488C1642A6570CB006853CC /* ArrangePlaceDetailCell.xib */; };
+		C488C1762A6671AD006853CC /* TripWidgetViewBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C488C1752A6671AD006853CC /* TripWidgetViewBundle.swift */; };
+		C488C1782A6671AD006853CC /* TripWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C488C1772A6671AD006853CC /* TripWidgetView.swift */; };
+		C488C17A2A6671AE006853CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C488C1792A6671AE006853CC /* Assets.xcassets */; };
+		C488C17E2A6671AE006853CC /* TripWidgetViewExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C488C16F2A6671AD006853CC /* TripWidgetViewExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C488C1842A669F40006853CC /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C488C1832A669F40006853CC /* FirebaseAuth */; };
+		C488C1862A669F45006853CC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = C488C1852A669F45006853CC /* FirebaseFirestore */; };
+		C488C1882A66AF33006853CC /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C488C1872A66AF33006853CC /* FirebaseFirestoreSwift */; };
+		C488C1892A66B22F006853CC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4DBE89E2A41C0E3002987CB /* GoogleService-Info.plist */; };
+		C488C1A12A66BA29006853CC /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C488C1702A6671AD006853CC /* WidgetKit.framework */; };
+		C488C1A42A66BA2A006853CC /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C488C1722A6671AD006853CC /* SwiftUI.framework */; };
 		C48E48902A4C2A3D00949E08 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E488F2A4C2A3D00949E08 /* SettingModel.swift */; };
 		C48E48922A4C330A00949E08 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */; };
 		C48E6FF62A62EEE400087B06 /* PlaceDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E6FF52A62EEE400087B06 /* PlaceDetailViewModel.swift */; };
@@ -115,6 +125,30 @@
 		C4EF99FD2A5C309500B1C4BC /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EF99FC2A5C309500B1C4BC /* UIImage+Extension.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C488C17C2A6671AE006853CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C4DBE8152A41AF62002987CB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C488C16E2A6671AD006853CC;
+			remoteInfo = TripWidgetViewExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C488C17F2A6671AE006853CC /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C488C17E2A6671AE006853CC /* TripWidgetViewExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		C42F51AF2A454D5F00023305 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C42F51B72A45936800023305 /* EditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
@@ -153,6 +187,14 @@
 		C480BE312A5A59F500A1A7E5 /* UnsplashKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashKey.swift; sourceTree = "<group>"; };
 		C488C1652A6570D7006853CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ArrangePlaceDetailCell.xib; sourceTree = "<group>"; };
 		C488C1662A6571FA006853CC /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/ArrangePlaceDetailCell.strings"; sourceTree = "<group>"; };
+		C488C16F2A6671AD006853CC /* TripWidgetViewExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TripWidgetViewExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		C488C1702A6671AD006853CC /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		C488C1722A6671AD006853CC /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		C488C1752A6671AD006853CC /* TripWidgetViewBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripWidgetViewBundle.swift; sourceTree = "<group>"; };
+		C488C1772A6671AD006853CC /* TripWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripWidgetView.swift; sourceTree = "<group>"; };
+		C488C1792A6671AE006853CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C488C17B2A6671AE006853CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C488C1C72A66D17B006853CC /* TripWidgetViewExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TripWidgetViewExtension.entitlements; sourceTree = "<group>"; };
 		C48E488F2A4C2A3D00949E08 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		C48E48912A4C330A00949E08 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C48E6FF52A62EEE400087B06 /* PlaceDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewModel.swift; sourceTree = "<group>"; };
@@ -219,6 +261,18 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C488C16C2A6671AD006853CC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C488C1A42A66BA2A006853CC /* SwiftUI.framework in Frameworks */,
+				C488C1882A66AF33006853CC /* FirebaseFirestoreSwift in Frameworks */,
+				C488C1A12A66BA29006853CC /* WidgetKit.framework in Frameworks */,
+				C488C1862A669F45006853CC /* FirebaseFirestore in Frameworks */,
+				C488C1842A669F40006853CC /* FirebaseAuth in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C4DBE81A2A41AF62002987CB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -311,6 +365,17 @@
 			path = Firestore;
 			sourceTree = "<group>";
 		};
+		C488C1742A6671AD006853CC /* TripWidgetView */ = {
+			isa = PBXGroup;
+			children = (
+				C488C1752A6671AD006853CC /* TripWidgetViewBundle.swift */,
+				C488C1772A6671AD006853CC /* TripWidgetView.swift */,
+				C488C1792A6671AE006853CC /* Assets.xcassets */,
+				C488C17B2A6671AE006853CC /* Info.plist */,
+			);
+			path = TripWidgetView;
+			sourceTree = "<group>";
+		};
 		C48E6FFB2A63BCCC00087B06 /* ChatRoom */ = {
 			isa = PBXGroup;
 			children = (
@@ -347,6 +412,8 @@
 				C4C0F05B2A512196002F59B3 /* libc++.tbd */,
 				C4C0F0592A51218B002F59B3 /* CoreLocation.framework */,
 				C4C0F0572A512182002F59B3 /* CoreGraphics.framework */,
+				C488C1702A6671AD006853CC /* WidgetKit.framework */,
+				C488C1722A6671AD006853CC /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -354,7 +421,9 @@
 		C4DBE8142A41AF62002987CB = {
 			isa = PBXGroup;
 			children = (
+				C488C1C72A66D17B006853CC /* TripWidgetViewExtension.entitlements */,
 				C4DBE81F2A41AF62002987CB /* LettuceTrip */,
+				C488C1742A6671AD006853CC /* TripWidgetView */,
 				C4DBE81E2A41AF62002987CB /* Products */,
 				C4C0F0562A512182002F59B3 /* Frameworks */,
 			);
@@ -364,6 +433,7 @@
 			isa = PBXGroup;
 			children = (
 				C4DBE81D2A41AF62002987CB /* LettuceTrip.app */,
+				C488C16F2A6671AD006853CC /* TripWidgetViewExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -546,6 +616,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		C488C16E2A6671AD006853CC /* TripWidgetViewExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C488C1822A6671AE006853CC /* Build configuration list for PBXNativeTarget "TripWidgetViewExtension" */;
+			buildPhases = (
+				C488C16B2A6671AD006853CC /* Sources */,
+				C488C16C2A6671AD006853CC /* Frameworks */,
+				C488C16D2A6671AD006853CC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TripWidgetViewExtension;
+			packageProductDependencies = (
+				C488C1832A669F40006853CC /* FirebaseAuth */,
+				C488C1852A669F45006853CC /* FirebaseFirestore */,
+				C488C1872A66AF33006853CC /* FirebaseFirestoreSwift */,
+			);
+			productName = TripWidgetViewExtension;
+			productReference = C488C16F2A6671AD006853CC /* TripWidgetViewExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		C4DBE81C2A41AF62002987CB /* LettuceTrip */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C4DBE8312A41AF63002987CB /* Build configuration list for PBXNativeTarget "LettuceTrip" */;
@@ -555,10 +647,12 @@
 				C4DBE81B2A41AF62002987CB /* Resources */,
 				C4DBE8A52A41D2B3002987CB /* ShellScript */,
 				C4DAD9112A551F76003D7A13 /* ShellScript */,
+				C488C17F2A6671AE006853CC /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C488C17D2A6671AE006853CC /* PBXTargetDependency */,
 			);
 			name = LettuceTrip;
 			packageProductDependencies = (
@@ -588,6 +682,9 @@
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					C488C16E2A6671AD006853CC = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
 					C4DBE81C2A41AF62002987CB = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
@@ -617,11 +714,21 @@
 			projectRoot = "";
 			targets = (
 				C4DBE81C2A41AF62002987CB /* LettuceTrip */,
+				C488C16E2A6671AD006853CC /* TripWidgetViewExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C488C16D2A6671AD006853CC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C488C17A2A6671AE006853CC /* Assets.xcassets in Resources */,
+				C488C1892A66B22F006853CC /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C4DBE81B2A41AF62002987CB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -682,6 +789,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C488C16B2A6671AD006853CC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C488C1762A6671AD006853CC /* TripWidgetViewBundle.swift in Sources */,
+				C488C1782A6671AD006853CC /* TripWidgetView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C4DBE8192A41AF62002987CB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -770,6 +886,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		C488C17D2A6671AE006853CC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C488C16E2A6671AD006853CC /* TripWidgetViewExtension */;
+			targetProxy = C488C17C2A6671AE006853CC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		C480BDFB2A58221C00A1A7E5 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
@@ -808,6 +932,64 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		C488C1802A6671AE006853CC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = TripWidgetViewExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C5NNGG4J5Q;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TripWidgetView/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TripWidgetView;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.miltonliu.LettuceTrip.TripWidgetView;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		C488C1812A6671AE006853CC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = TripWidgetViewExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C5NNGG4J5Q;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TripWidgetView/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TripWidgetView;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.miltonliu.LettuceTrip.TripWidgetView;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 		C4DBE82F2A41AF63002987CB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -930,6 +1112,7 @@
 		C4DBE8322A41AF63002987CB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = LettuceTrip/LettuceTrip.entitlements;
@@ -965,6 +1148,7 @@
 		C4DBE8332A41AF63002987CB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = LettuceTrip/LettuceTrip.entitlements;
@@ -999,6 +1183,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C488C1822A6671AE006853CC /* Build configuration list for PBXNativeTarget "TripWidgetViewExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C488C1802A6671AE006853CC /* Debug */,
+				C488C1812A6671AE006853CC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C4DBE8182A41AF62002987CB /* Build configuration list for PBXProject "LettuceTrip" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1093,6 +1286,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C480BE332A5A5FDD00A1A7E5 /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
+		};
+		C488C1832A669F40006853CC /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		C488C1852A669F45006853CC /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		C488C1872A66AF33006853CC /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
 		};
 		C4CC0BF52A46FA3E00E03758 /* JGProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
