@@ -207,6 +207,7 @@ class AddNewTripViewController: UIViewController {
             let newDate = calendar.date(byAdding: .day, value: gap, to: place.arrangedTime!)
             // swiftlint: enable force_unwrapping
             place.arrangedTime = newDate
+            place.lastEditor = nil
             results.append(place)
         }
 

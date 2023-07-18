@@ -186,8 +186,7 @@ class EditTripViewController: UIViewController {
                         self.places.append(modifiedPlace)
                     case .modified:
                         if let index = self.places.firstIndex(where: { $0.id == modifiedPlace.id }) {
-                            self.places[index].arrangedTime = modifiedPlace.arrangedTime
-                            self.places[index].lastEditor = modifiedPlace.lastEditor
+                            self.places[index] = modifiedPlace
                         }
                     case .removed:
                         if let index = self.places.firstIndex(where: { $0.id == modifiedPlace.id }) {
@@ -502,34 +501,32 @@ extension EditTripViewController: UITableViewDropDelegate {
         if let dragItem = coordinator.items.first,
             let sourceIndexPath = dragItem.sourceIndexPath {
 
-            tableView.performBatchUpdates {
-                for item in coordinator.items {
-                    let placeTime = item.dragItem.localObject as? String
-                    let formatter = ISO8601DateFormatter()
+            for item in coordinator.items {
+                let placeTime = item.dragItem.localObject as? String
+                let formatter = ISO8601DateFormatter()
 
-                    if let dateString = placeTime,
-                        let date = formatter.date(from: dateString) {
+                if let dateString = placeTime,
+                    let date = formatter.date(from: dateString) {
 
-                        var sourceItem = sortedPlaces[sourceIndexPath.item]
-                        var destinationItem = sortedPlaces[destinationIndexPath.item]
+                    var sourceItem = sortedPlaces[sourceIndexPath.item]
+                    var destinationItem = sortedPlaces[destinationIndexPath.item]
 
-                        sourceItem.arrangedTime = destinationItem.arrangedTime
-                        sourceItem.lastEditor = fsManager.userName
-                        destinationItem.arrangedTime = date
-                        destinationItem.lastEditor = fsManager.userName
+                    sourceItem.arrangedTime = destinationItem.arrangedTime
+                    sourceItem.lastEditor = fsManager.userName
+                    destinationItem.arrangedTime = date
+                    destinationItem.lastEditor = fsManager.userName
 
-                        fsManager.batchUpdatePlaces(at: trip, from: sourceItem, to: destinationItem)
-                            .receive(on: DispatchQueue.main)
-                            .sink { [weak self] result in
-                                switch result {
-                                case .finished:
-                                    break
-                                case .failure(let error):
-                                    self?.showAlertToUser(error: error)
-                                }
-                            } receiveValue: { _ in }
-                            .store(in: &cancelBags)
-                    }
+                    fsManager.batchUpdatePlaces(at: trip, from: sourceItem, to: destinationItem)
+                        .receive(on: DispatchQueue.main)
+                        .sink { [weak self] result in
+                            switch result {
+                            case .finished:
+                                break
+                            case .failure(let error):
+                                self?.showAlertToUser(error: error)
+                            }
+                        } receiveValue: { _ in }
+                        .store(in: &cancelBags)
                 }
             }
         }
