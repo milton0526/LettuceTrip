@@ -74,13 +74,12 @@ struct TripWidgetViewEntryView: View {
                         .padding()
 
                     Text(trip.tripName)
-                        .font(.headline)
-                        .bold()
-
+                        .font(.title3)
+                        .fontWeight(.heavy)
 
                     Spacer()
                     Text(trip.startDate.formatted(date: .abbreviated, time: .omitted))
-                        .font(.subheadline)
+                        .font(.headline)
                     Spacer()
                 }
             } else {
