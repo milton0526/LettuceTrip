@@ -68,17 +68,19 @@ struct TripWidgetViewEntryView: View {
             if let trip = entry.trip {
                 VStack {
                     Spacer()
-                    Spacer()
+
+                    Image(systemName: "suitcase.fill")
+                        .foregroundColor(.teal)
+                        .padding()
+
                     Text(trip.tripName)
-                        .font(.title3)
+                        .font(.headline)
                         .bold()
+
+
                     Spacer()
-                    HStack {
-                        Text(trip.startDate.formatted(date: .abbreviated, time: .omitted))
-                        Text("~")
-                        Text(trip.endDate.formatted(date: .abbreviated, time: .omitted))
-                    }
-                    .font(.headline)
+                    Text(trip.startDate.formatted(date: .abbreviated, time: .omitted))
+                        .font(.subheadline)
                     Spacer()
                 }
             } else {
@@ -86,7 +88,7 @@ struct TripWidgetViewEntryView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.teal.gradient)
+        .background(.background)
     }
 }
 
