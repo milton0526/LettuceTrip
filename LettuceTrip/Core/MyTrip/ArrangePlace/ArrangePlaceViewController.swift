@@ -124,6 +124,7 @@ class ArrangePlaceViewController: UIViewController {
         let apiService = GPlaceAPIManager()
         let fsManager = FirestoreManager()
         let detailVC = PlaceDetailViewController(
+            isNewPlace: true,
             viewModel: PlaceDetailViewModel(place: viewModel.place, fsManager: fsManager, apiService: apiService))
         detailVC.addToTripButton.isEnabled = false
         detailVC.addToTripButton.alpha = 0.8

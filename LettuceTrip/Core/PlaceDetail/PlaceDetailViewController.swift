@@ -27,10 +27,12 @@ class PlaceDetailViewController: UIViewController {
         }
     }
 
+    private let isNewPlace: Bool
     private let viewModel: PlaceDetailViewModelType
     private var cancelBags: Set<AnyCancellable> = []
 
-    init(viewModel: PlaceDetailViewModelType) {
+    init(isNewPlace: Bool, viewModel: PlaceDetailViewModelType) {
+        self.isNewPlace = isNewPlace
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -148,7 +150,7 @@ class PlaceDetailViewController: UIViewController {
                             return
                         }
 
-                        viewModel.updatePlace(tripId: tripId)
+                        viewModel.updatePlace(tripId: tripId, isNewPlace: isNewPlace)
                 }
                 actionSheet.addAction(updateAction)
             }

@@ -23,12 +23,12 @@ protocol PlaceDetailViewModelType {
 
     func fetchDetails()
     func fetchUserTrips()
-    func updatePlace(tripId: String)
+    func updatePlace(tripId: String, isNewPlace: Bool)
 }
 
 class PlaceDetailViewModel: PlaceDetailViewModelType {
 
-    let place: Place
+    var place: Place
     private let fsManager: FirestoreManager
     private let apiService: GooglePlaceServiceType
 
@@ -115,7 +115,14 @@ class PlaceDetailViewModel: PlaceDetailViewModelType {
             .store(in: &cancelBags)
     }
 
-    func updatePlace(tripId: String) {
+    func updatePlace(tripId: String, isNewPlace: Bool = true) {
+        if isNewPlace == false {
+            place.isArrange = false
+            place.arrangedTime = nil
+            place.duration = nil
+            place.lastEditor = nil
+        }
+
         fsManager.updatePlace(place, at: tripId)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in

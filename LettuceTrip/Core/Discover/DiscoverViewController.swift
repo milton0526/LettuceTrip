@@ -270,7 +270,9 @@ extension DiscoverViewController: MKMapViewDelegate {
 
         let apiService = GPlaceAPIManager()
         let fsManager = FirestoreManager()
-        let detailVC = PlaceDetailViewController(viewModel: PlaceDetailViewModel(place: place, fsManager: fsManager, apiService: apiService))
+        let detailVC = PlaceDetailViewController(
+            isNewPlace: true,
+            viewModel: PlaceDetailViewModel(place: place, fsManager: fsManager, apiService: apiService))
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }
