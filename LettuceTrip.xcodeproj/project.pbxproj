@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C4164CEB2A6A29EC007B87E8 /* LettuceTripTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4164CEA2A6A29EC007B87E8 /* LettuceTripTests.swift */; };
+		C4164CFA2A6A34AD007B87E8 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = C4164CF92A6A34AD007B87E8 /* FirebaseAppCheck */; };
+		C4164CFC2A6A34AD007B87E8 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C4164CFB2A6A34AD007B87E8 /* FirebaseAuth */; };
+		C4164CFE2A6A34AD007B87E8 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = C4164CFD2A6A34AD007B87E8 /* FirebaseCrashlytics */; };
+		C4164D002A6A34AD007B87E8 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = C4164CFF2A6A34AD007B87E8 /* FirebaseFirestore */; };
+		C4164D022A6A34AD007B87E8 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = C4164D012A6A34AD007B87E8 /* FirebaseStorage */; };
+		C4164D042A6A3513007B87E8 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = C4164D032A6A3513007B87E8 /* JGProgressHUD */; };
+		C4164D062A6A3513007B87E8 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C4164D052A6A3513007B87E8 /* SDWebImage */; };
 		C42F51B02A454D5F00023305 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51AF2A454D5F00023305 /* LocationManager.swift */; };
 		C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B72A45936800023305 /* EditTripViewController.swift */; };
 		C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */; };
@@ -126,6 +134,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		C4164CEC2A6A29EC007B87E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C4DBE8152A41AF62002987CB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C4DBE81C2A41AF62002987CB;
+			remoteInfo = LettuceTrip;
+		};
 		C488C17C2A6671AE006853CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C4DBE8152A41AF62002987CB /* Project object */;
@@ -150,6 +165,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C4164CE82A6A29EC007B87E8 /* LettuceTripTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LettuceTripTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4164CEA2A6A29EC007B87E8 /* LettuceTripTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LettuceTripTests.swift; sourceTree = "<group>"; };
 		C42F51AF2A454D5F00023305 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C42F51B72A45936800023305 /* EditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
 		C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceCell.swift; sourceTree = "<group>"; };
@@ -261,6 +278,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C4164CE52A6A29EC007B87E8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4164CFE2A6A34AD007B87E8 /* FirebaseCrashlytics in Frameworks */,
+				C4164D002A6A34AD007B87E8 /* FirebaseFirestore in Frameworks */,
+				C4164CFA2A6A34AD007B87E8 /* FirebaseAppCheck in Frameworks */,
+				C4164D062A6A3513007B87E8 /* SDWebImage in Frameworks */,
+				C4164D022A6A34AD007B87E8 /* FirebaseStorage in Frameworks */,
+				C4164D042A6A3513007B87E8 /* JGProgressHUD in Frameworks */,
+				C4164CFC2A6A34AD007B87E8 /* FirebaseAuth in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C488C16C2A6671AD006853CC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -301,6 +332,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C4164CE92A6A29EC007B87E8 /* LettuceTripTests */ = {
+			isa = PBXGroup;
+			children = (
+				C4164CEA2A6A29EC007B87E8 /* LettuceTripTests.swift */,
+			);
+			path = LettuceTripTests;
+			sourceTree = "<group>";
+		};
 		C43757622A6280B5009225E7 /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -424,6 +463,7 @@
 				C488C1C72A66D17B006853CC /* TripWidgetViewExtension.entitlements */,
 				C4DBE81F2A41AF62002987CB /* LettuceTrip */,
 				C488C1742A6671AD006853CC /* TripWidgetView */,
+				C4164CE92A6A29EC007B87E8 /* LettuceTripTests */,
 				C4DBE81E2A41AF62002987CB /* Products */,
 				C4C0F0562A512182002F59B3 /* Frameworks */,
 			);
@@ -434,6 +474,7 @@
 			children = (
 				C4DBE81D2A41AF62002987CB /* LettuceTrip.app */,
 				C488C16F2A6671AD006853CC /* TripWidgetViewExtension.appex */,
+				C4164CE82A6A29EC007B87E8 /* LettuceTripTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -616,6 +657,33 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		C4164CE72A6A29EC007B87E8 /* LettuceTripTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C4164CF02A6A29EC007B87E8 /* Build configuration list for PBXNativeTarget "LettuceTripTests" */;
+			buildPhases = (
+				C4164CE42A6A29EC007B87E8 /* Sources */,
+				C4164CE52A6A29EC007B87E8 /* Frameworks */,
+				C4164CE62A6A29EC007B87E8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C4164CED2A6A29EC007B87E8 /* PBXTargetDependency */,
+			);
+			name = LettuceTripTests;
+			packageProductDependencies = (
+				C4164CF92A6A34AD007B87E8 /* FirebaseAppCheck */,
+				C4164CFB2A6A34AD007B87E8 /* FirebaseAuth */,
+				C4164CFD2A6A34AD007B87E8 /* FirebaseCrashlytics */,
+				C4164CFF2A6A34AD007B87E8 /* FirebaseFirestore */,
+				C4164D012A6A34AD007B87E8 /* FirebaseStorage */,
+				C4164D032A6A3513007B87E8 /* JGProgressHUD */,
+				C4164D052A6A3513007B87E8 /* SDWebImage */,
+			);
+			productName = LettuceTripTests;
+			productReference = C4164CE82A6A29EC007B87E8 /* LettuceTripTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		C488C16E2A6671AD006853CC /* TripWidgetViewExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C488C1822A6671AE006853CC /* Build configuration list for PBXNativeTarget "TripWidgetViewExtension" */;
@@ -682,6 +750,10 @@
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					C4164CE72A6A29EC007B87E8 = {
+						CreatedOnToolsVersion = 14.3.1;
+						TestTargetID = C4DBE81C2A41AF62002987CB;
+					};
 					C488C16E2A6671AD006853CC = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
@@ -715,11 +787,19 @@
 			targets = (
 				C4DBE81C2A41AF62002987CB /* LettuceTrip */,
 				C488C16E2A6671AD006853CC /* TripWidgetViewExtension */,
+				C4164CE72A6A29EC007B87E8 /* LettuceTripTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C4164CE62A6A29EC007B87E8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C488C16D2A6671AD006853CC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -789,6 +869,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C4164CE42A6A29EC007B87E8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4164CEB2A6A29EC007B87E8 /* LettuceTripTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C488C16B2A6671AD006853CC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -887,6 +975,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		C4164CED2A6A29EC007B87E8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C4DBE81C2A41AF62002987CB /* LettuceTrip */;
+			targetProxy = C4164CEC2A6A29EC007B87E8 /* PBXContainerItemProxy */;
+		};
 		C488C17D2A6671AE006853CC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C488C16E2A6671AD006853CC /* TripWidgetViewExtension */;
@@ -932,6 +1025,44 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		C4164CEE2A6A29EC007B87E8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C5NNGG4J5Q;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.miltonliu.LettuceTripTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LettuceTrip.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LettuceTrip";
+			};
+			name = Debug;
+		};
+		C4164CEF2A6A29EC007B87E8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C5NNGG4J5Q;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.miltonliu.LettuceTripTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LettuceTrip.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LettuceTrip";
+			};
+			name = Release;
+		};
 		C488C1802A6671AE006853CC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1183,6 +1314,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C4164CF02A6A29EC007B87E8 /* Build configuration list for PBXNativeTarget "LettuceTripTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C4164CEE2A6A29EC007B87E8 /* Debug */,
+				C4164CEF2A6A29EC007B87E8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C488C1822A6671AE006853CC /* Build configuration list for PBXNativeTarget "TripWidgetViewExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1272,6 +1412,41 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C4164CF92A6A34AD007B87E8 /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAppCheck;
+		};
+		C4164CFB2A6A34AD007B87E8 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		C4164CFD2A6A34AD007B87E8 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		C4164CFF2A6A34AD007B87E8 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		C4164D012A6A34AD007B87E8 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		C4164D032A6A3513007B87E8 /* JGProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4CC0BF42A46FA3E00E03758 /* XCRemoteSwiftPackageReference "JGProgressHUD" */;
+			productName = JGProgressHUD;
+		};
+		C4164D052A6A3513007B87E8 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C480BE332A5A5FDD00A1A7E5 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
 		C45413462A4A803E000D0685 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C4DBE8A02A41C158002987CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

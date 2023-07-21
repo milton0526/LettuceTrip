@@ -8,13 +8,11 @@
 import Foundation
 import Combine
 
-typealias HomeVMOutput = AnyPublisher<Void, FirebaseError>
-
 protocol HomeViewModelType {
-
     var shareTrips: [Trip] { get }
-
-    func transform(input: AnyPublisher<Void, Never>) -> HomeVMOutput
+    var updateViewPublisher: AnyPublisher<Void, FirebaseError> { get }
+    
+    func fetchTrips()
 }
 
 class HomeViewModel: HomeViewModelType {
@@ -28,21 +26,16 @@ class HomeViewModel: HomeViewModelType {
         tripSubject.value
     }
 
+    // Publisher for View controller to subscribe
+    var updateViewPublisher: AnyPublisher<Void, FirebaseError> {
+        tripSubject.map { _ in }.eraseToAnyPublisher()
+    }
+
     init(fsManager: FirestoreManager) {
         self.fsManager = fsManager
     }
 
-    func transform(input: AnyPublisher<Void, Never>) -> HomeVMOutput {
-        input
-            .sink { [weak self] _ in
-                self?.fetchTrips()
-            }
-            .store(in: &cancelBags)
-
-        return tripSubject.map { _ in }.eraseToAnyPublisher()
-    }
-
-    private func fetchTrips() {
+    func fetchTrips() {
         fsManager.getTrips(isPublic: true)
             .sink { [weak self] completion in
                 switch completion {

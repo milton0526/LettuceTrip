@@ -18,7 +18,6 @@ class HomeViewController: UIViewController {
 
     // properties
     private let viewModel: HomeViewModelType
-    private let eventSubject: PassthroughSubject<Void, Never> = .init()
     private var cancelBags: Set<AnyCancellable> = []
     private var dataSource: UICollectionViewDiffableDataSource<Section, Trip>!
 
@@ -56,7 +55,7 @@ class HomeViewController: UIViewController {
         configureDataSource()
         configureRefreshControl()
         bind()
-        eventSubject.send(())
+        viewModel.fetchTrips()
     }
 
     private func setupUI() {
@@ -118,14 +117,12 @@ class HomeViewController: UIViewController {
 
     @objc func handleRefreshControl() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            self?.eventSubject.send(())
+            self?.viewModel.fetchTrips()
         }
     }
 
     private func bind() {
-        let output = viewModel.transform(input: eventSubject.eraseToAnyPublisher())
-
-        output
+        viewModel.updateViewPublisher
             .receive(on: DispatchQueue.main)
             .dropFirst()
             .sink { [weak self] completion in

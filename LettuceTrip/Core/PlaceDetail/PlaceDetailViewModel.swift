@@ -9,12 +9,6 @@ import Foundation
 import Combine
 import GooglePlaces
 
-enum PlaceDetailVMInput {
-    case fetchDetail
-    case fetchUserTrips
-    case updatePlace(tripId: String)
-}
-
 enum PlaceDetailVMOutput {
     case updateView(showIndicator: Bool)
     case userTrips(trips: [Trip])
@@ -25,8 +19,11 @@ protocol PlaceDetailViewModelType {
     var place: Place { get }
     var gmsPlace: GMSPlace? { get }
     var allPhotos: [GPlacePhoto] { get }
+    var outputPublisher: AnyPublisher<PlaceDetailVMOutput, Never> { get }
 
-    func transform(input: AnyPublisher<PlaceDetailVMInput, Never>) -> AnyPublisher<PlaceDetailVMOutput, Never>
+    func fetchDetails()
+    func fetchUserTrips()
+    func updatePlace(tripId: String)
 }
 
 class PlaceDetailViewModel: PlaceDetailViewModelType {
@@ -37,6 +34,9 @@ class PlaceDetailViewModel: PlaceDetailViewModelType {
 
     private var cancelBags: Set<AnyCancellable> = []
     private let output: PassthroughSubject<PlaceDetailVMOutput, Never> = .init()
+    var outputPublisher: AnyPublisher<PlaceDetailVMOutput, Never> {
+        output.eraseToAnyPublisher()
+    }
 
     var gmsPlace: GMSPlace?
     var allPhotos: [GPlacePhoto] = []
@@ -47,25 +47,7 @@ class PlaceDetailViewModel: PlaceDetailViewModelType {
         self.apiService = apiService
     }
 
-    func transform(input: AnyPublisher<PlaceDetailVMInput, Never>) -> AnyPublisher<PlaceDetailVMOutput, Never> {
-        input
-            .sink { [weak self] event in
-                guard let self = self else { return }
-                switch event {
-                case .fetchDetail:
-                    fetchDetails()
-                case .fetchUserTrips:
-                    fetchUserTrips()
-                case .updatePlace(let tripId):
-                    updatePlace(tripId: tripId)
-                }
-            }
-            .store(in: &cancelBags)
-
-        return output.eraseToAnyPublisher()
-    }
-
-    private func fetchDetails() {
+    func fetchDetails() {
         apiService
             .findPlaceFromText(place.name, location: place.coordinate)
             .compactMap(\.candidates.first?.placeID)
@@ -117,7 +99,7 @@ class PlaceDetailViewModel: PlaceDetailViewModelType {
         }
     }
 
-    private func fetchUserTrips() {
+    func fetchUserTrips() {
         fsManager.getTrips()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
@@ -133,7 +115,7 @@ class PlaceDetailViewModel: PlaceDetailViewModelType {
             .store(in: &cancelBags)
     }
 
-    private func updatePlace(tripId: String) {
+    func updatePlace(tripId: String) {
         fsManager.updatePlace(place, at: tripId)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in

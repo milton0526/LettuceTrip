@@ -29,7 +29,6 @@ class PlaceDetailViewController: UIViewController {
 
     private let viewModel: PlaceDetailViewModelType
     private var cancelBags: Set<AnyCancellable> = []
-    private let input: PassthroughSubject<PlaceDetailVMInput, Never> = .init()
 
     init(viewModel: PlaceDetailViewModelType) {
         self.viewModel = viewModel
@@ -86,9 +85,7 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private func bind() {
-        let output = viewModel.transform(input: input.eraseToAnyPublisher())
-
-        output
+        viewModel.outputPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] event in
                 guard let self = self else { return }
@@ -123,11 +120,11 @@ class PlaceDetailViewController: UIViewController {
 
     private func fetchDetails() {
         JGHudIndicator.shared.showHud(type: .loading())
-        input.send(.fetchDetail)
+        viewModel.fetchDetails()
     }
 
     @objc func addToTripButtonTapped(_ sender: UIButton) {
-        input.send(.fetchUserTrips)
+        viewModel.fetchUserTrips()
     }
 
     private func showActionSheet(form trips: [Trip]) {
@@ -151,7 +148,7 @@ class PlaceDetailViewController: UIViewController {
                             return
                         }
 
-                        self.input.send(.updatePlace(tripId: tripId))
+                        viewModel.updatePlace(tripId: tripId)
                 }
                 actionSheet.addAction(updateAction)
             }

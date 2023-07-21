@@ -53,7 +53,6 @@ class ChatRoomViewController: UIViewController {
     // Properties
     private var dataSource: UICollectionViewDiffableDataSource<Section, Message>!
     private var cancelBags: Set<AnyCancellable> = []
-    private let input: PassthroughSubject<ChatRoomVMInput, Never> = .init()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,7 +62,7 @@ class ChatRoomViewController: UIViewController {
         configBackButton()
         configureDataSource()
         bind()
-        input.send(.fetchData)
+        viewModel.fetchData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -91,7 +90,7 @@ class ChatRoomViewController: UIViewController {
         else {
             return
         }
-        input.send(.sendMessage(text: text))
+        viewModel.sendMessage(text)
     }
 
     private func configBackButton() {
@@ -184,9 +183,7 @@ class ChatRoomViewController: UIViewController {
     }
 
     private func bind() {
-        let output = viewModel.transform(input: input.eraseToAnyPublisher())
-
-        output
+        viewModel.outputPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] event in
                 guard let self = self else { return }

@@ -8,11 +8,6 @@
 import Foundation
 import Combine
 
-enum ChatRoomVMInput {
-    case fetchData
-    case sendMessage(text: String)
-}
-
 enum ChatRoomVMOutput {
     case updateMembers([LTUser])
     case updateChatRoom
@@ -20,14 +15,13 @@ enum ChatRoomVMOutput {
 }
 
 protocol ChatRoomViewModelType {
-
     var currentUser: String? { get }
-
     var members: [LTUser] { get }
-
     var chatMessages: [Message] { get }
+    var outputPublisher: AnyPublisher<ChatRoomVMOutput, Never> { get }
 
-    func transform(input: AnyPublisher<ChatRoomVMInput, Never>) -> AnyPublisher<ChatRoomVMOutput, Never>
+    func fetchData()
+    func sendMessage(_ text: String)
 }
 
 final class ChatRoomViewModel: ChatRoomViewModelType {
@@ -37,6 +31,10 @@ final class ChatRoomViewModel: ChatRoomViewModelType {
 
     private var cancelBags: Set<AnyCancellable> = []
     private let output: PassthroughSubject<ChatRoomVMOutput, Never> = .init()
+
+    var outputPublisher: AnyPublisher<ChatRoomVMOutput, Never> {
+        output.eraseToAnyPublisher()
+    }
 
     var members: [LTUser] = []
     var chatMessages: [Message] = []
@@ -49,21 +47,7 @@ final class ChatRoomViewModel: ChatRoomViewModelType {
         self.fsManager = fsManager
     }
 
-    func transform(input: AnyPublisher<ChatRoomVMInput, Never>) -> AnyPublisher<ChatRoomVMOutput, Never> {
-        input.sink { [weak self] event in
-            switch event {
-            case .fetchData:
-                self?.fetchData()
-            case .sendMessage(let text):
-                self?.sendMessage(text)
-            }
-        }
-        .store(in: &cancelBags)
-
-        return output.eraseToAnyPublisher()
-    }
-
-    private func fetchData() {
+    func fetchData() {
         trip.members.forEach { member in
             fsManager.getUserData(userId: member)
                 .receive(on: DispatchQueue.main)
@@ -90,7 +74,6 @@ final class ChatRoomViewModel: ChatRoomViewModelType {
 
         fsManager.chatRoomListener(tripID)
             .receive(on: DispatchQueue.main)
-
             .sink { [weak self] completion in
                 switch completion {
                 case .finished:
@@ -130,7 +113,7 @@ final class ChatRoomViewModel: ChatRoomViewModelType {
             .store(in: &cancelBags)
     }
 
-    private func sendMessage(_ text: String) {
+    func sendMessage(_ text: String) {
         guard let tripId = trip.id else { return }
         fsManager.sendMessage(text, at: tripId)
             .receive(on: DispatchQueue.main)

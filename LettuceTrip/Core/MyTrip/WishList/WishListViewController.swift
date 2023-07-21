@@ -28,7 +28,6 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, Place>!
     private var cancelBags: Set<AnyCancellable> = []
-    private let input: PassthroughSubject<WishListVMInput, Never> = .init()
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -46,13 +45,11 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
         setupUI()
         configDataSource()
         bind()
-        input.send(.fetchPlace)
+        viewModel.fetchPlaces()
     }
 
     private func bind() {
-        let output = viewModel.transform(input: input.eraseToAnyPublisher())
-
-        output
+        viewModel.outputPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] event in
                 guard let self = self else { return }
@@ -82,7 +79,7 @@ class WishListViewController: UIViewController, UICollectionViewDelegate {
             let deleteAction = UIContextualAction(style: .destructive, title: String(localized: "Delete")) { [weak self] _, _, completion in
                 guard let self = self else { return }
                 if let item = dataSource.itemIdentifier(for: indexPath)?.id {
-                    input.send(.deletePlace(item: item))
+                    viewModel.deletePlace(item: item)
                     completion(true)
                 }
             }

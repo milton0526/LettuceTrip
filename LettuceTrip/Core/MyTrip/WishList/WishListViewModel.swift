@@ -8,11 +8,6 @@
 import Foundation
 import Combine
 
-enum WishListVMInput {
-    case fetchPlace
-    case deletePlace(item: String)
-}
-
 enum WishListVMOutput {
     case success
     case anyError(Error)
@@ -21,10 +16,11 @@ enum WishListVMOutput {
 protocol WishListViewModelType {
 
     var trip: Trip { get }
-
     var places: [Place] { get }
+    var outputPublisher: AnyPublisher<WishListVMOutput, Never> { get }
 
-    func transform(input: AnyPublisher<WishListVMInput, Never>) -> AnyPublisher<WishListVMOutput, Never>
+    func fetchPlaces()
+    func deletePlace(item: String)
 }
 
 final class WishListViewModel: WishListViewModelType {
@@ -34,6 +30,10 @@ final class WishListViewModel: WishListViewModelType {
     private var cancelBags: Set<AnyCancellable> = []
     private let output: PassthroughSubject<WishListVMOutput, Never> = .init()
 
+    var outputPublisher: AnyPublisher<WishListVMOutput, Never> {
+        output.eraseToAnyPublisher()
+    }
+
     var places: [Place] = []
 
     init(trip: Trip, fsManager: FirestoreManager) {
@@ -41,23 +41,7 @@ final class WishListViewModel: WishListViewModelType {
         self.fsManager = fsManager
     }
 
-    func transform(input: AnyPublisher<WishListVMInput, Never>) -> AnyPublisher<WishListVMOutput, Never> {
-        input
-            .sink { [weak self] event in
-                switch event {
-                case .fetchPlace:
-                    self?.fetchPlaces()
-                case .deletePlace(let item):
-                    self?.deletePlace(item: item)
-                }
-            }
-            .store(in: &cancelBags)
-
-        return output.eraseToAnyPublisher()
-    }
-
-
-    private func fetchPlaces() {
+    func fetchPlaces() {
         guard let tripID = trip.id else { return }
 
         fsManager.placeListener(at: tripID, isArrange: false)
@@ -100,7 +84,7 @@ final class WishListViewModel: WishListViewModelType {
             .store(in: &cancelBags)
     }
 
-    private func deletePlace(item: String) {
+    func deletePlace(item: String) {
         guard let tripId = trip.id else { return }
 
         fsManager.deleteTrip(tripId, place: item)
