@@ -26,8 +26,8 @@ struct Provider: TimelineProvider {
 
         fetchUserTrip { allTrip in
             let upcoming = allTrip
-                .filter({ $0.endDate > .now })
-                .sorted(by: { $0.startDate < $1.startDate })
+                .filter { $0.endDate > .now }
+                .sorted { $0.startDate < $1.startDate }
                 .first
 
             let entry = TripEntry(date: .now, trip: upcoming)
@@ -62,7 +62,7 @@ struct TripEntry: TimelineEntry {
 
 struct TripWidgetViewEntryView: View {
     var entry: Provider.Entry
-    
+
     var body: some View {
         ZStack {
             if let trip = entry.trip {

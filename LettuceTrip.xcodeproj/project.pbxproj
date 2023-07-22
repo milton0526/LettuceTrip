@@ -342,6 +342,15 @@
 			path = LettuceTripTests;
 			sourceTree = "<group>";
 		};
+		C4164D092A6C202F007B87E8 /* EditTrip */ = {
+			isa = PBXGroup;
+			children = (
+				C42F51B72A45936800023305 /* EditTripViewController.swift */,
+				C4164D072A6C0A80007B87E8 /* EditTripViewModel.swift */,
+			);
+			path = EditTrip;
+			sourceTree = "<group>";
+		};
 		C43757622A6280B5009225E7 /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -546,12 +555,11 @@
 			isa = PBXGroup;
 			children = (
 				C4DBE8362A41B194002987CB /* MyTripViewController.swift */,
-				C42F51B72A45936800023305 /* EditTripViewController.swift */,
+				C4164D092A6C202F007B87E8 /* EditTrip */,
 				C48E6FFB2A63BCCC00087B06 /* ChatRoom */,
 				C48E6FFC2A63BECF00087B06 /* WishList */,
 				C48E6FFF2A64370E00087B06 /* ArrangePlace */,
 				C4DBE8A72A41D639002987CB /* Cell */,
-				C4164D072A6C0A80007B87E8 /* EditTripViewModel.swift */,
 			);
 			path = MyTrip;
 			sourceTree = "<group>";

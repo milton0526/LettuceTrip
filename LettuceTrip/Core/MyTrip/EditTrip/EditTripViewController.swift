@@ -15,7 +15,6 @@ import UnsplashPhotoPicker
 import SDWebImage
 
 class EditTripViewController: UIViewController {
-
     var viewModel: EditTripViewModel
 
     init(viewModel: EditTripViewModel) {
