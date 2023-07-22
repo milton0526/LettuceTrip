@@ -15,6 +15,7 @@
 		C4164D022A6A34AD007B87E8 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = C4164D012A6A34AD007B87E8 /* FirebaseStorage */; };
 		C4164D042A6A3513007B87E8 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = C4164D032A6A3513007B87E8 /* JGProgressHUD */; };
 		C4164D062A6A3513007B87E8 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C4164D052A6A3513007B87E8 /* SDWebImage */; };
+		C4164D082A6C0A80007B87E8 /* EditTripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4164D072A6C0A80007B87E8 /* EditTripViewModel.swift */; };
 		C42F51B02A454D5F00023305 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51AF2A454D5F00023305 /* LocationManager.swift */; };
 		C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B72A45936800023305 /* EditTripViewController.swift */; };
 		C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */; };
@@ -167,6 +168,7 @@
 /* Begin PBXFileReference section */
 		C4164CE82A6A29EC007B87E8 /* LettuceTripTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LettuceTripTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4164CEA2A6A29EC007B87E8 /* LettuceTripTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LettuceTripTests.swift; sourceTree = "<group>"; };
+		C4164D072A6C0A80007B87E8 /* EditTripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewModel.swift; sourceTree = "<group>"; };
 		C42F51AF2A454D5F00023305 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C42F51B72A45936800023305 /* EditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
 		C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceCell.swift; sourceTree = "<group>"; };
@@ -549,6 +551,7 @@
 				C48E6FFC2A63BECF00087B06 /* WishList */,
 				C48E6FFF2A64370E00087B06 /* ArrangePlace */,
 				C4DBE8A72A41D639002987CB /* Cell */,
+				C4164D072A6C0A80007B87E8 /* EditTripViewModel.swift */,
 			);
 			path = MyTrip;
 			sourceTree = "<group>";
@@ -925,6 +928,7 @@
 				C454134D2A4A9937000D0685 /* AuthManager.swift in Sources */,
 				C4CC0C082A48499200E03758 /* LocationMapCell.swift in Sources */,
 				C4EF99FD2A5C309500B1C4BC /* UIImage+Extension.swift in Sources */,
+				C4164D082A6C0A80007B87E8 /* EditTripViewModel.swift in Sources */,
 				C4DBE8982A41BD10002987CB /* UIViewController+Alert.swift in Sources */,
 				C4DBE8AE2A41D696002987CB /* SelectionView.swift in Sources */,
 				C45413442A4A7FF0000D0685 /* SignInViewController.swift in Sources */,
