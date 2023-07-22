@@ -11,7 +11,7 @@ import Combine
 protocol HomeViewModelType {
     var shareTrips: [Trip] { get }
     var updateViewPublisher: AnyPublisher<Void, FirebaseError> { get }
-    
+
     func fetchTrips()
 }
 

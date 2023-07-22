@@ -16,14 +16,10 @@ import SDWebImage
 
 class EditTripViewController: UIViewController {
 
-    private var trip: Trip
-    private let isEditMode: Bool
-    private let fsManager: FirestoreManager
+    var viewModel: EditTripViewModel
 
-    init(trip: Trip, isEditMode: Bool = true, fsManager: FirestoreManager) {
-        self.trip = trip
-        self.isEditMode = isEditMode
-        self.fsManager = fsManager
+    init(viewModel: EditTripViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -63,57 +59,37 @@ class EditTripViewController: UIViewController {
     }()
 
     private var dataSource: UITableViewDiffableDataSource<Section, Place>!
-    private var places: [Place] = []
-    private var sortedPlaces: [Place] = [] {
-        didSet {
-            guard isEditMode else {
-                updateSnapshot()
-                return
-            }
-            estimateTravelTime()
-        }
-    }
-
-    @MainActor private var estimatedTimes: [Int: String] = [:] {
-        didSet {
-            if estimatedTimes.count == sortedPlaces.count - 1 {
-                updateSnapshot()
-            }
-        }
-    }
-    private let storageManager = StorageManager()
-    private lazy var currentSelectedDate = trip.startDate
-    private var listenerSubscription: AnyCancellable?
     private var cancelBags: Set<AnyCancellable> = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = trip.tripName
+        title = viewModel.trip.tripName
         navigationItem.backButtonDisplayMode = .minimal
         view.backgroundColor = .systemBackground
         setupUI()
-        scheduleView.schedules = convertDateToDisplay()
+        scheduleView.schedules = viewModel.convertDateToDisplay()
         scheduleView.delegate = self
         configureDataSource()
         setEditMode()
         scheduleView.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .centeredVertically)
+        bind()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        fetchPlaces()
+        viewModel.fetchPlaces()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        listenerSubscription?.cancel()
-        listenerSubscription = nil
+        viewModel.listenerSubscription?.cancel()
+        viewModel.listenerSubscription = nil
     }
 
     private func setupUI() {
         [imageView, scheduleView, tableView, messageButton].forEach { view.addSubview($0) }
 
-        if let url = URL(string: trip.image ?? "") {
+        if let url = URL(string: viewModel.trip.image ?? "") {
             imageView.setTripImage(url: url)
         }
 
@@ -139,7 +115,7 @@ class EditTripViewController: UIViewController {
     }
 
     private func setEditMode() {
-        if isEditMode {
+        if viewModel.isEditMode {
             customNavBar()
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(pickImage))
             imageView.addGestureRecognizer(tapGesture)
@@ -156,46 +132,27 @@ class EditTripViewController: UIViewController {
         }
     }
 
-    private func fetchPlaces() {
-        guard let tripID = trip.id else { return }
-        places.removeAll(keepingCapacity: true)
-
-        listenerSubscription = fsManager.placeListener(at: tripID)
+    private func bind() {
+        viewModel.outputPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    self?.showAlertToUser(error: error)
-                }
-            } receiveValue: { [weak self] snapshot in
+            .sink { [weak self] result in
                 guard let self = self else { return }
-                if places.isEmpty {
-                    let firstResult = snapshot.documents.compactMap { try? $0.data(as: Place.self) }
-                    places = firstResult
-                    filterPlace(by: currentSelectedDate)
-                    return
-                }
-
-                snapshot.documentChanges.forEach { diff in
-                    guard let modifiedPlace = try? diff.document.data(as: Place.self) else { return }
-
-                    switch diff.type {
-                    case .added:
-                        self.places.append(modifiedPlace)
-                    case .modified:
-                        if let index = self.places.firstIndex(where: { $0.id == modifiedPlace.id }) {
-                            self.places[index] = modifiedPlace
-                        }
-                    case .removed:
-                        if let index = self.places.firstIndex(where: { $0.id == modifiedPlace.id }) {
-                            self.places.remove(at: index)
-                        }
+                switch result {
+                case .updateView:
+                    updateSnapshot()
+                case .showIndicator(let loading):
+                    if loading {
+                        JGHudIndicator.shared.showHud(type: .loading())
+                    } else {
+                        JGHudIndicator.shared.showHud(type: .success)
                     }
+                case .dismissHud:
+                    JGHudIndicator.shared.dismissHUD()
+                case .displayError(let error):
+                    showAlertToUser(error: error)
                 }
-                filterPlace(by: currentSelectedDate)
             }
+            .store(in: &cancelBags)
     }
 
     private func customNavBar() {
@@ -213,18 +170,20 @@ class EditTripViewController: UIViewController {
     }
 
     @objc func openWishList(_ sender: UIBarButtonItem) {
-        let wishVC = WishListViewController(viewModel: WishListViewModel(trip: trip, fsManager: fsManager))
+        let fsManager = FirestoreManager()
+        let wishVC = WishListViewController(viewModel: WishListViewModel(trip: viewModel.trip, fsManager: fsManager))
         navigationController?.pushViewController(wishVC, animated: true)
     }
 
     @objc func openChatRoom(_ sender: UIButton) {
-        let chatVC = ChatRoomViewController(viewModel: ChatRoomViewModel(trip: trip, fsManager: fsManager))
+        let fsManager = FirestoreManager()
+        let chatVC = ChatRoomViewController(viewModel: ChatRoomViewModel(trip: viewModel.trip, fsManager: fsManager))
         let nav = UINavigationController(rootViewController: chatVC)
         present(nav, animated: true)
     }
 
     @objc func shareTrip(_ sender: UIBarButtonItem) {
-        guard let tripID = trip.id else { return }
+        guard let tripID = viewModel.trip.id else { return }
 
         let actionSheet = UIAlertController(
             title: String(localized: "Share this trip to..."),
@@ -234,18 +193,7 @@ class EditTripViewController: UIViewController {
         let shareToCommunity = UIAlertAction(title: String(localized: "Community"), style: .default) { [weak self] _ in
             // share to home page
             guard let self = self else { return }
-
-            fsManager.updateTrip(tripID, field: .isPublic, data: true)
-                .receive(on: DispatchQueue.main)
-                .sink { completion in
-                    switch completion {
-                    case .finished:
-                        JGHudIndicator.shared.showHud(type: .success)
-                    case .failure:
-                        JGHudIndicator.shared.showHud(type: .failure)
-                    }
-                } receiveValue: { _ in }
-                .store(in: &cancelBags)
+            viewModel.updateTrip()
         }
 
         let shareLinkToFriend = UIAlertAction(title: String(localized: "Invite your friends"), style: .default) { [weak self] _ in
@@ -304,13 +252,15 @@ class EditTripViewController: UIViewController {
     }
 
     @objc func copyItinerary(_ sender: UIBarButtonItem) {
+        var trip = viewModel.trip
+        let fsManager = FirestoreManager()
         let addTripVC = AddNewTripViewController(isCopy: true, fsManager: fsManager)
         let placeMark = MKPlacemark(coordinate: trip.coordinate)
         let mapItem = MKMapItem(placemark: placeMark)
         mapItem.name = trip.destination
         addTripVC.selectedCity = mapItem
         addTripVC.copyFromTrip = trip
-        addTripVC.places = places
+        addTripVC.places = viewModel.allPlaces
         addTripVC.destinationTextField.text = trip.destination
         addTripVC.destinationTextField.textColor = .systemGray
         addTripVC.durationTextField.text = String(trip.duration + 1)
@@ -329,19 +279,6 @@ class EditTripViewController: UIViewController {
         }
     }
 
-    private func convertDateToDisplay() -> [Date] {
-        let dayRange = 0...trip.duration
-        let travelDays = dayRange.map { range -> Date in
-            if let components = Calendar.current.date(byAdding: .day, value: range, to: trip.startDate)?.resetHourAndMinute() {
-                return components
-            } else {
-                return Date()
-            }
-        }
-
-        return travelDays
-    }
-
     private func configureDataSource() {
         dataSource = UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, item in
             guard let self = self else { return UITableViewCell() }
@@ -352,10 +289,10 @@ class EditTripViewController: UIViewController {
                 fatalError("Failed to dequeue cityCell")
             }
 
-            if indexPath.item < estimatedTimes.count {
-                arrangeCell.config(with: item, isEditMode: isEditMode, travelTime: estimatedTimes[indexPath.item] ?? "")
+            if indexPath.item < viewModel.estimatedTimes.count {
+                arrangeCell.config(with: item, isEditMode: viewModel.isEditMode, travelTime: viewModel.estimatedTimes[indexPath.item] ?? "")
             } else {
-                arrangeCell.config(with: item, isEditMode: isEditMode)
+                arrangeCell.config(with: item, isEditMode: viewModel.isEditMode)
             }
             return arrangeCell
         }
@@ -364,50 +301,10 @@ class EditTripViewController: UIViewController {
     private func updateSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Place>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(sortedPlaces)
+        snapshot.appendItems(viewModel.sortedPlaces)
         // use snapshot reload method to avoid weird animation
         dataSource.applySnapshotUsingReloadData(snapshot) {
             JGHudIndicator.shared.dismissHUD()
-        }
-    }
-
-    private func filterPlace(by date: Date) {
-        let filterResults = places.filter { $0.arrangedTime?.resetHourAndMinute() == date.resetHourAndMinute() }
-        // swiftlint: disable force_unwrapping
-        let sortedResults = filterResults.sorted { $0.arrangedTime! < $1.arrangedTime! }
-        sortedPlaces = sortedResults
-        // swiftlint: enable force_unwrapping
-    }
-
-    // Estimated time
-    private func estimateTravelTime() {
-        guard !sortedPlaces.isEmpty else {
-            updateSnapshot()
-            return
-        }
-
-        JGHudIndicator.shared.showHud(type: .loading())
-        estimatedTimes = [:]
-        for i in 1..<sortedPlaces.count {
-            let source = sortedPlaces[i - 1]
-            let destination = sortedPlaces[i]
-            let request = MKDirections.Request()
-            request.source = MKMapItem(placemark: MKPlacemark(coordinate: source.coordinate))
-            request.destination = MKMapItem(placemark: MKPlacemark(coordinate: destination.coordinate))
-            request.departureDate = source.endTime
-            request.transportType = [.automobile, .transit]
-
-            let directions = MKDirections(request: request)
-            directions.calculateETA { response, error in
-                if error != nil {
-                    self.estimatedTimes.updateValue(String(localized: "Not available"), forKey: i - 1)
-                    return
-                }
-                guard let response = response else { return }
-                let minutes = response.expectedTravelTime / 60
-                let formattedMins = (String(format: "%.0f", minutes))
-                self.estimatedTimes.updateValue(formattedMins, forKey: i - 1)
-            }
         }
     }
 }
@@ -415,45 +312,36 @@ class EditTripViewController: UIViewController {
 // MARK: - CollectionView Delegate
 extension EditTripViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let place = sortedPlaces[indexPath.item]
+        let place = viewModel.sortedPlaces[indexPath.item]
         let viewController: UIViewController
+        let fsManager = FirestoreManager()
 
-        if isEditMode {
+        if viewModel.isEditMode {
             viewController = ArrangePlaceViewController(
-                viewModel: ArrangePlaceViewModel(trip: trip, place: place, fsManager: fsManager), isEditMode: false)
+                viewModel: ArrangePlaceViewModel(trip: viewModel.trip, place: place, fsManager: fsManager), isEditMode: false)
         } else {
             let apiService = GPlaceAPIManager()
             let fsManager = FirestoreManager()
             viewController = PlaceDetailViewController(
-                isNewPlace: isEditMode,
+                isNewPlace: viewModel.isEditMode,
                 viewModel: PlaceDetailViewModel(place: place, fsManager: fsManager, apiService: apiService))
         }
         navigationController?.pushViewController(viewController, animated: true)
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard isEditMode else { return nil }
+        guard viewModel.isEditMode else { return nil }
         guard let place = dataSource.itemIdentifier(for: indexPath) else { return nil }
         let deleteAction = UIContextualAction(style: .destructive, title: String(localized: "Delete")) { [weak self] _, _, completion in
             guard
                 let self = self,
-                let tripId = trip.id,
                 let placeId = place.id
             else {
                 return
             }
 
-            fsManager.deleteTrip(tripId, place: placeId)
-                .receive(on: DispatchQueue.main)
-                .sink { result in
-                    switch result {
-                    case .finished:
-                        completion(true)
-                    case .failure(let error):
-                        self.showAlertToUser(error: error)
-                    }
-                } receiveValue: { _ in }
-                .store(in: &cancelBags)
+            viewModel.deletePlace(placeId)
+            completion(true)
         }
 
         return UISwipeActionsConfiguration(actions: [deleteAction])
@@ -465,7 +353,7 @@ extension EditTripViewController: UITableViewDelegate {
 extension EditTripViewController: UITableViewDragDelegate {
 
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        let placeItem = String(sortedPlaces[indexPath.item].arrangedTime?.ISO8601Format() ?? "")
+        let placeItem = String(viewModel.sortedPlaces[indexPath.item].arrangedTime?.ISO8601Format() ?? "")
         let itemProvider = NSItemProvider(object: placeItem as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = placeItem
@@ -505,31 +393,7 @@ extension EditTripViewController: UITableViewDropDelegate {
 
             for item in coordinator.items {
                 let placeTime = item.dragItem.localObject as? String
-                let formatter = ISO8601DateFormatter()
-
-                if let dateString = placeTime,
-                    let date = formatter.date(from: dateString) {
-
-                    var sourceItem = sortedPlaces[sourceIndexPath.item]
-                    var destinationItem = sortedPlaces[destinationIndexPath.item]
-
-                    sourceItem.arrangedTime = destinationItem.arrangedTime
-                    sourceItem.lastEditor = fsManager.userName
-                    destinationItem.arrangedTime = date
-                    destinationItem.lastEditor = fsManager.userName
-
-                    fsManager.batchUpdatePlaces(at: trip, from: sourceItem, to: destinationItem)
-                        .receive(on: DispatchQueue.main)
-                        .sink { [weak self] result in
-                            switch result {
-                            case .finished:
-                                break
-                            case .failure(let error):
-                                self?.showAlertToUser(error: error)
-                            }
-                        } receiveValue: { _ in }
-                        .store(in: &cancelBags)
-                }
+                viewModel.dragAndDropItem(placeTime: placeTime, fromIndex: sourceIndexPath.row, toIndex: destinationIndexPath.row)
             }
         }
     }
@@ -538,8 +402,8 @@ extension EditTripViewController: UITableViewDropDelegate {
 // MARK: - ScheduleView Delegate
 extension EditTripViewController: ScheduleViewDelegate {
     func didSelectedDate(_ view: ScheduleView, selectedDate: Date) {
-        currentSelectedDate = selectedDate
-        filterPlace(by: selectedDate)
+        viewModel.currentSelectedDate = selectedDate
+        viewModel.filterPlace(by: selectedDate)
     }
 }
 
@@ -560,30 +424,10 @@ extension EditTripViewController: PHPickerViewControllerDelegate {
     }
 
     private func updateTripImage(image: UIImage) {
-        guard
-            let tripId = trip.id,
-            let imageData = image.jpegData(compressionQuality: 0.3)
-        else {
-            return
-        }
+        guard let imageData = image.jpegData(compressionQuality: 0.3) else { return }
 
-        storageManager.uploadImage(imageData, at: .trips, with: tripId)
-            .flatMap { _ in
-                self.storageManager.downloadRef(at: .trips, with: tripId)
-            }
-            .flatMap { url in
-                self.fsManager.updateTrip(tripId, field: .image, data: url.absoluteString)
-            }
-            .sink { [weak self] completion in
-                switch completion {
-                case .finished:
-                    self?.imageView.image = image
-                    JGHudIndicator.shared.dismissHUD()
-                case .failure(let error):
-                    self?.showAlertToUser(error: error)
-                }
-            } receiveValue: { _ in }
-            .store(in: &cancelBags)
+        imageView.image = image
+        viewModel.updateTripImage(data: imageData)
     }
 }
 

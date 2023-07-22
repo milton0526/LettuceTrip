@@ -11,6 +11,8 @@ import MapKit
 
 enum EditTripVMOutput {
     case updateView
+    case showIndicator(loading: Bool)
+    case dismissHud
     case displayError(Error)
 }
 
@@ -18,14 +20,16 @@ final class EditTripViewModel {
     var trip: Trip
     let isEditMode: Bool
     var listenerSubscription: AnyCancellable?
+    lazy var currentSelectedDate = trip.startDate
+
     private let fsManager: FirestoreManager
     private let storageManager: StorageManager
     private var cancelBags: Set<AnyCancellable> = []
 
-    private var allPlaces: [Place] = []
+    private(set) var allPlaces: [Place] = []
     private(set) var sortedPlaces: [Place] = []
     private(set) var estimatedTimes: [Int: String] = [:]
-    private lazy var currentSelectedDate = trip.startDate
+
 
     private let outputSubject: PassthroughSubject<EditTripVMOutput, Never> = .init()
     var outputPublisher: AnyPublisher<EditTripVMOutput, Never> {
@@ -100,9 +104,20 @@ final class EditTripViewModel {
         let sortedResults = filterResults.sorted { $0.arrangedTime! < $1.arrangedTime! }
         sortedPlaces = sortedResults
         // swiftlint: enable force_unwrapping
+
+        if isEditMode {
+            outputSubject.send(.showIndicator(loading: true))
+            calculateEstimatedTravelTime()
+        } else {
+            outputSubject.send(.updateView)
+        }
     }
 
-    func calculateEstimatedTravelTime() {
+    private func calculateEstimatedTravelTime() {
+        guard !sortedPlaces.isEmpty else {
+            outputSubject.send(.updateView)
+            return
+        }
         estimatedTimes.removeAll(keepingCapacity: true)
         let group = DispatchGroup()
 
@@ -147,7 +162,7 @@ final class EditTripViewModel {
             .sink { [weak self] completion in
                 switch completion {
                 case .finished:
-                    self?.outputSubject.send(.updateView)
+                    self?.outputSubject.send(.showIndicator(loading: false))
                 case .failure(let error):
                     self?.outputSubject.send(.displayError(error))
                 }
@@ -198,7 +213,6 @@ final class EditTripViewModel {
                 }
             } receiveValue: { _ in }
             .store(in: &cancelBags)
-
     }
 
     func updateTripImage(data: Data) {
@@ -214,12 +228,11 @@ final class EditTripViewModel {
             .sink { [weak self] completion in
                 switch completion {
                 case .finished:
-                    self?.outputSubject.send(.updateView)
+                    self?.outputSubject.send(.dismissHud)
                 case .failure(let error):
                     self?.outputSubject.send(.displayError(error))
                 }
             } receiveValue: { _ in }
             .store(in: &cancelBags)
     }
-
 }

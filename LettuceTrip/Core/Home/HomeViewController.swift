@@ -148,7 +148,13 @@ extension HomeViewController: UICollectionViewDelegate {
 
         let trip = viewModel.shareTrips[indexPath.item]
         let fsManager = FirestoreManager()
-        let editVC = EditTripViewController(trip: trip, isEditMode: false, fsManager: fsManager)
+        let storageManager = StorageManager()
+        let editVC = EditTripViewController(
+            viewModel: EditTripViewModel(
+                trip: trip,
+                isEditMode: false,
+                fsManager: fsManager,
+                storageManager: storageManager))
         navigationController?.pushViewController(editVC, animated: true)
     }
 }
