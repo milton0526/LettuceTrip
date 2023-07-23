@@ -10,7 +10,12 @@ import Combine
 import FirebaseFirestore
 import FirebaseAuth
 
-final class FirestoreManager {
+// For unit test
+protocol FirestoreService {
+    func getTrips(isPublic: Bool) -> AnyPublisher<[Trip], FirebaseError>
+}
+
+final class FirestoreManager: FirestoreService {
 
     let database = Firestore.firestore()
 

@@ -351,8 +351,8 @@
 			isa = PBXGroup;
 			children = (
 				C42F51B72A45936800023305 /* EditTripViewController.swift */,
-				C4164D072A6C0A80007B87E8 /* EditTripViewModel.swift */,
 				C4164D0A2A6CC540007B87E8 /* EditTripViewController+Delegate.swift */,
+				C4164D072A6C0A80007B87E8 /* EditTripViewModel.swift */,
 			);
 			path = EditTrip;
 			sourceTree = "<group>";

@@ -104,7 +104,7 @@ final class EditTripViewModel {
         sortedPlaces = sortedResults
         // swiftlint: enable force_unwrapping
 
-        if isEditMode {
+        if isEditMode && !sortedPlaces.isEmpty {
             outputSubject.send(.showIndicator(loading: true))
             calculateEstimatedTravelTime()
         } else {
@@ -113,10 +113,6 @@ final class EditTripViewModel {
     }
 
     private func calculateEstimatedTravelTime() {
-        guard !sortedPlaces.isEmpty else {
-            outputSubject.send(.updateView)
-            return
-        }
         estimatedTimes.removeAll(keepingCapacity: true)
         let group = DispatchGroup()
 

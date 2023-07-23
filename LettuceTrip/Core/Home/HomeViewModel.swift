@@ -17,7 +17,7 @@ protocol HomeViewModelType {
 
 class HomeViewModel: HomeViewModelType {
 
-    private let fsManager: FirestoreManager
+    private let fsManager: FirestoreService
     private var cancelBags: Set<AnyCancellable> = []
     private let tripSubject: CurrentValueSubject<[Trip], FirebaseError> = .init([])
 
@@ -31,7 +31,7 @@ class HomeViewModel: HomeViewModelType {
         tripSubject.map { _ in }.eraseToAnyPublisher()
     }
 
-    init(fsManager: FirestoreManager) {
+    init(fsManager: FirestoreService) {
         self.fsManager = fsManager
     }
 
