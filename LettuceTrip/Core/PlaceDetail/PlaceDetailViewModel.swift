@@ -38,8 +38,8 @@ class PlaceDetailViewModel: PlaceDetailViewModelType {
         output.eraseToAnyPublisher()
     }
 
-    var gmsPlace: GMSPlace?
-    var allPhotos: [GPlacePhoto] = []
+    private(set) var gmsPlace: GMSPlace?
+    private(set) var allPhotos: [GPlacePhoto] = []
 
     init(place: Place, fsManager: FirestoreManager, apiService: GooglePlaceServiceType) {
         self.place = place

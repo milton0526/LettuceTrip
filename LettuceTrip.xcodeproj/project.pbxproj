@@ -17,6 +17,7 @@
 		C4164D062A6A3513007B87E8 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C4164D052A6A3513007B87E8 /* SDWebImage */; };
 		C4164D082A6C0A80007B87E8 /* EditTripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4164D072A6C0A80007B87E8 /* EditTripViewModel.swift */; };
 		C4164D0B2A6CC540007B87E8 /* EditTripViewController+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4164D0A2A6CC540007B87E8 /* EditTripViewController+Delegate.swift */; };
+		C4164D112A6CD5B5007B87E8 /* HomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4164D102A6CD5B5007B87E8 /* HomeViewModelTests.swift */; };
 		C42F51B02A454D5F00023305 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51AF2A454D5F00023305 /* LocationManager.swift */; };
 		C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B72A45936800023305 /* EditTripViewController.swift */; };
 		C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */; };
@@ -171,6 +172,7 @@
 		C4164CEA2A6A29EC007B87E8 /* LettuceTripTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LettuceTripTests.swift; sourceTree = "<group>"; };
 		C4164D072A6C0A80007B87E8 /* EditTripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewModel.swift; sourceTree = "<group>"; };
 		C4164D0A2A6CC540007B87E8 /* EditTripViewController+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditTripViewController+Delegate.swift"; sourceTree = "<group>"; };
+		C4164D102A6CD5B5007B87E8 /* HomeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelTests.swift; sourceTree = "<group>"; };
 		C42F51AF2A454D5F00023305 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C42F51B72A45936800023305 /* EditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
 		C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceCell.swift; sourceTree = "<group>"; };
@@ -340,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				C4164CEA2A6A29EC007B87E8 /* LettuceTripTests.swift */,
+				C4164D102A6CD5B5007B87E8 /* HomeViewModelTests.swift */,
 			);
 			path = LettuceTripTests;
 			sourceTree = "<group>";
@@ -888,6 +891,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4164CEB2A6A29EC007B87E8 /* LettuceTripTests.swift in Sources */,
+				C4164D112A6CD5B5007B87E8 /* HomeViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

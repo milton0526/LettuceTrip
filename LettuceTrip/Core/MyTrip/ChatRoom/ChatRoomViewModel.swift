@@ -36,8 +36,8 @@ final class ChatRoomViewModel: ChatRoomViewModelType {
         output.eraseToAnyPublisher()
     }
 
-    var members: [LTUser] = []
-    var chatMessages: [Message] = []
+    private(set) var members: [LTUser] = []
+    private(set) var chatMessages: [Message] = []
     var currentUser: String? {
         fsManager.user
     }

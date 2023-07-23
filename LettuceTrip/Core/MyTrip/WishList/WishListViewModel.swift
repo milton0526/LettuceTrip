@@ -34,7 +34,7 @@ final class WishListViewModel: WishListViewModelType {
         output.eraseToAnyPublisher()
     }
 
-    var places: [Place] = []
+    private(set) var places: [Place] = []
 
     init(trip: Trip, fsManager: FirestoreManager) {
         self.trip = trip
