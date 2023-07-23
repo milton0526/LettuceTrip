@@ -12,6 +12,8 @@ disabled_rules:
   - vertical_whitespace_opening_braces
   - implicitly_unwrapped_optional
   - closure_end_indentation
+  - type_body_length
+  - cyclomatic_complexity
 
 analyzer_rules:
   - unused_import

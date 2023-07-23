@@ -70,7 +70,7 @@ final class FirestoreManager {
             }.eraseToAnyPublisher()
         } else {
             return Future { [weak self] promise in
-                ref.whereField("members", arrayContains: self?.user)
+                ref.whereField("members", arrayContains: self?.user ?? "")
                     .getDocuments { snapshot, error in
                         guard error == nil else {
                             return promise(.failure(FirebaseError.get))

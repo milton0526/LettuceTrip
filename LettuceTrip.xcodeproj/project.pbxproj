@@ -16,6 +16,7 @@
 		C4164D042A6A3513007B87E8 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = C4164D032A6A3513007B87E8 /* JGProgressHUD */; };
 		C4164D062A6A3513007B87E8 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C4164D052A6A3513007B87E8 /* SDWebImage */; };
 		C4164D082A6C0A80007B87E8 /* EditTripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4164D072A6C0A80007B87E8 /* EditTripViewModel.swift */; };
+		C4164D0B2A6CC540007B87E8 /* EditTripViewController+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4164D0A2A6CC540007B87E8 /* EditTripViewController+Delegate.swift */; };
 		C42F51B02A454D5F00023305 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51AF2A454D5F00023305 /* LocationManager.swift */; };
 		C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B72A45936800023305 /* EditTripViewController.swift */; };
 		C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */; };
@@ -169,6 +170,7 @@
 		C4164CE82A6A29EC007B87E8 /* LettuceTripTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LettuceTripTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4164CEA2A6A29EC007B87E8 /* LettuceTripTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LettuceTripTests.swift; sourceTree = "<group>"; };
 		C4164D072A6C0A80007B87E8 /* EditTripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewModel.swift; sourceTree = "<group>"; };
+		C4164D0A2A6CC540007B87E8 /* EditTripViewController+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditTripViewController+Delegate.swift"; sourceTree = "<group>"; };
 		C42F51AF2A454D5F00023305 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C42F51B72A45936800023305 /* EditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
 		C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceCell.swift; sourceTree = "<group>"; };
@@ -347,6 +349,7 @@
 			children = (
 				C42F51B72A45936800023305 /* EditTripViewController.swift */,
 				C4164D072A6C0A80007B87E8 /* EditTripViewModel.swift */,
+				C4164D0A2A6CC540007B87E8 /* EditTripViewController+Delegate.swift */,
 			);
 			path = EditTrip;
 			sourceTree = "<group>";
@@ -979,6 +982,7 @@
 				C4EF99FB2A5C09E900B1C4BC /* SDWebImage+Wrapper.swift in Sources */,
 				C480BE322A5A59F500A1A7E5 /* UnsplashKey.swift in Sources */,
 				C4DBE8D22A43E116002987CB /* MKPlaceMark+Extension.swift in Sources */,
+				C4164D0B2A6CC540007B87E8 /* EditTripViewController+Delegate.swift in Sources */,
 				C4DBE8C82A42D446002987CB /* LTUser.swift in Sources */,
 				C42F51B02A454D5F00023305 /* LocationManager.swift in Sources */,
 			);
@@ -1045,13 +1049,16 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C5NNGG4J5Q;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.miltonliu.LettuceTripTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LettuceTrip.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LettuceTrip";
 			};
 			name = Debug;
@@ -1064,13 +1071,16 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C5NNGG4J5Q;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.miltonliu.LettuceTripTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LettuceTrip.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LettuceTrip";
 			};
 			name = Release;
@@ -1094,7 +1104,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.miltonliu.LettuceTrip.TripWidgetView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1123,7 +1133,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.miltonliu.LettuceTrip.TripWidgetView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

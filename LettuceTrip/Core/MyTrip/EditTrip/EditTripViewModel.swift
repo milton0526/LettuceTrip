@@ -61,7 +61,6 @@ final class EditTripViewModel {
         allPlaces.removeAll(keepingCapacity: true)
 
         listenerSubscription = fsManager.placeListener(at: tripID)
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 switch completion {
                 case .finished:
@@ -158,7 +157,6 @@ final class EditTripViewModel {
     func updateTrip() {
         guard let tripId = trip.id else { return }
         fsManager.updateTrip(tripId, field: .isPublic, data: true)
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 switch completion {
                 case .finished:
@@ -173,7 +171,6 @@ final class EditTripViewModel {
     func deletePlace(_ placeId: String) {
         guard let tripId = trip.id else { return }
         fsManager.deleteTrip(tripId, place: placeId)
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 switch result {
                 case .finished:
@@ -203,7 +200,6 @@ final class EditTripViewModel {
         destinationItem.lastEditor = fsManager.userName
 
         fsManager.batchUpdatePlaces(at: trip, from: sourceItem, to: destinationItem)
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 switch result {
                 case .finished:
