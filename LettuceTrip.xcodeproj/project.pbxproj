@@ -482,6 +482,7 @@
 			isa = PBXGroup;
 			children = (
 				C488C1C72A66D17B006853CC /* TripWidgetViewExtension.entitlements */,
+				C4207B522A6E592A009B3CC8 /* README.md */,
 				C4DBE81F2A41AF62002987CB /* LettuceTrip */,
 				C488C1742A6671AD006853CC /* TripWidgetView */,
 				C4164CE92A6A29EC007B87E8 /* LettuceTripTests */,
@@ -507,7 +508,6 @@
 				C4DBE8202A41AF62002987CB /* AppDelegate.swift */,
 				C4DBE8222A41AF62002987CB /* SceneDelegate.swift */,
 				C4DBE8292A41AF63002987CB /* Assets.xcassets */,
-				C4207B522A6E592A009B3CC8 /* README.md */,
 				C4DBE82B2A41AF63002987CB /* LaunchScreen.storyboard */,
 				C4DBE82E2A41AF63002987CB /* Info.plist */,
 				C480BDFE2A58221C00A1A7E5 /* Localizable.strings */,
