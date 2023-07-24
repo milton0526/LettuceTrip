@@ -105,7 +105,7 @@ final class ChatRoomViewModel: ChatRoomViewModelType {
                             break
                         }
                     } catch {
-                        print("Decode error...")
+                        self.output.send(.displayError(error))
                     }
                 }
                 output.send(.updateChatRoom)

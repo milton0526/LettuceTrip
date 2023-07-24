@@ -208,7 +208,6 @@ extension PlaceDetailViewController: UITableViewDelegate {
             guard let photoHeaderView = tableView.dequeueReusableHeaderFooterView(
                 withIdentifier: PlacePhotoHeaderView.identifier) as? PlacePhotoHeaderView
             else {
-                print("Photo header view dequeue failed")
                 return nil
             }
             photoHeaderView.photos = viewModel.allPhotos

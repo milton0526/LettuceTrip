@@ -15,12 +15,6 @@ extension UINavigationController {
         }
     }
 
-    func restoreHairline() {
-        if let hairline = findHairlineImageViewUnder(navigationBar) {
-            hairline.isHidden = false
-        }
-    }
-
     func findHairlineImageViewUnder(_ view: UIView) -> UIImageView? {
         if view is UIImageView && view.bounds.size.height <= 1.0 {
             return view as? UIImageView

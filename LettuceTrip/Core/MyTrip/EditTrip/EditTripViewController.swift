@@ -300,7 +300,7 @@ class EditTripViewController: UIViewController {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Place>()
         snapshot.appendSections([.main])
         snapshot.appendItems(viewModel.sortedPlaces)
-        // use snapshot reload method to avoid weird animation
+
         dataSource.applySnapshotUsingReloadData(snapshot) {
             JGHudIndicator.shared.dismissHUD()
         }

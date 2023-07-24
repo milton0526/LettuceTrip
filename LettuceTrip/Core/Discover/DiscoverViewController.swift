@@ -246,7 +246,6 @@ extension DiscoverViewController: MKMapViewDelegate {
             let annotation = view.annotation,
             let featureAnnotation = annotation as? MKMapFeatureAnnotation
         else {
-            print("Failed to cast as MKMapFeatureAnnotation")
             return
         }
 

@@ -50,7 +50,7 @@ extension FirestoreManager {
                 do {
                     try batch.setData(from: place, forDocument: baseRef.document(placeID))
                 } catch {
-                    print("Error set batch update copy places: \(error.localizedDescription)")
+                    return
                 }
             }
         }
@@ -82,7 +82,7 @@ extension FirestoreManager {
             try batch.setData(from: source, forDocument: baseRef.document(sourceId), merge: true)
             try batch.setData(from: destination, forDocument: baseRef.document(destinationId), merge: true)
         } catch {
-            print("Error set batch update items: \(error.localizedDescription)")
+            return Fail(error: FirebaseError.update("Batch update place.")).eraseToAnyPublisher()
         }
 
         return Future { promise in
