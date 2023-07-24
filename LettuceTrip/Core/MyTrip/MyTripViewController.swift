@@ -49,18 +49,15 @@ class MyTripViewController: UIViewController {
         return button
     }()
 
-    private var listener: ListenerRegistration?
-    private var allTrips: [Trip] = []
-    private var filterTrips: [Segment: [Trip]] = [.upcoming: [], .closed: []]
+    private let viewModel: MyTripViewModelType
     private var currentSegment: Segment = .upcoming
     private let placeHolder: UILabel = {
         LabelFactory.build(text: "Add new trip to start!", font: .title, textColor: .secondaryLabel)
     }()
     private var cancelBags: Set<AnyCancellable> = []
-    private let fsManager: FirestoreManager
 
-    init(fsManager: FirestoreManager) {
-        self.fsManager = fsManager
+    init(viewModel: MyTripViewModelType) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -73,7 +70,8 @@ class MyTripViewController: UIViewController {
         navigationItem.title = String(localized: "My trips")
         navigationItem.backButtonDisplayMode = .minimal
         setupUI()
-        fetchUserTrips()
+        bind()
+        viewModel.fetchUserTrips()
     }
 
     private func setupUI() {
@@ -92,6 +90,7 @@ class MyTripViewController: UIViewController {
     }
 
     @objc func addTripButtonTapped(_ sender: UIButton) {
+        let fsManager = FirestoreManager()
         let addNewTripVC = AddNewTripViewController(isCopy: false, fsManager: fsManager)
         let navVC = UINavigationController(rootViewController: addNewTripVC)
         let viewHeight = view.frame.height
@@ -106,62 +105,18 @@ class MyTripViewController: UIViewController {
         }
     }
 
-    private func fetchUserTrips() {
-        fsManager.tripListener()
+    func bind() {
+        viewModel.outputPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
+            .sink { [weak self] event in
+                switch event {
+                case .reloadData:
+                    self?.tableView.reloadData()
+                case .displayError(let error):
                     self?.showAlertToUser(error: error)
                 }
-            } receiveValue: { [weak self] snapshot in
-                guard let self = self else { return }
-                if allTrips.isEmpty {
-                    let firstResult = snapshot.documents.compactMap { try? $0.data(as: Trip.self) }
-                    allTrips = firstResult
-                    filterByDate()
-                    return
-                }
-
-                snapshot.documentChanges.forEach { diff in
-                    guard let modifiedTrip = try? diff.document.data(as: Trip.self) else { return }
-
-                    switch diff.type {
-                    case .added:
-                        self.allTrips.append(modifiedTrip)
-                    case .modified:
-                        if let index = self.allTrips.firstIndex(where: { $0.id == modifiedTrip.id }) {
-                            self.allTrips[index] = modifiedTrip
-                        }
-                    case .removed:
-                        if let index = self.allTrips.firstIndex(where: { $0.id == modifiedTrip.id }) {
-                            self.allTrips.remove(at: index)
-                        }
-                    }
-                }
-                filterByDate()
             }
             .store(in: &cancelBags)
-    }
-
-    private func filterByDate() {
-        filterTrips = [.upcoming: [], .closed: []]
-        allTrips.forEach { trip in
-            if trip.endDate > .now {
-                filterTrips[.upcoming, default: []].append(trip)
-            } else {
-                filterTrips[.closed, default: []].append(trip)
-            }
-        }
-
-        filterTrips[.upcoming]?.sort { $0.startDate < $1.startDate }
-        filterTrips[.closed]?.sort { $0.startDate < $1.startDate }
-
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadData()
-        }
     }
 }
 
@@ -172,8 +127,9 @@ extension MyTripViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let trip = filterTrips[currentSegment]?[indexPath.row] else { return }
+        guard let trip = viewModel.filterTrips[currentSegment]?[indexPath.row] else { return }
         let storageManager = StorageManager()
+        let fsManager = FirestoreManager()
         let editVC = EditTripViewController(
             viewModel: EditTripViewModel(
                 trip: trip,
@@ -189,9 +145,8 @@ extension MyTripViewController: UITableViewDelegate {
             let deleteAction = UIAction(title: String(localized: "Delete"), image: UIImage(systemName: "trash")) { [weak self] _ in
                 guard
                     let self = self,
-                    let trip = filterTrips[currentSegment]?[indexPath.row],
-                    let tripID = trip.id,
-                    let userId = fsManager.user
+                    let trip = viewModel.filterTrips[currentSegment]?[indexPath.row],
+                    let tripID = trip.id
                 else {
                     return
                 }
@@ -204,16 +159,7 @@ extension MyTripViewController: UITableViewDelegate {
                 let delete = UIAlertAction(
                     title: String(localized: "Delete"),
                     style: .destructive) { _ in
-                        self.fsManager.updateMember(userId: userId, atTrip: tripID, isRemove: true)
-                            .receive(on: DispatchQueue.main)
-                            .sink { completion in
-                                switch completion {
-                                case .finished: break
-                                case .failure(let error):
-                                    self.showAlertToUser(error: error)
-                                }
-                            } receiveValue: { _ in }
-                            .store(in: &self.cancelBags)
+                        self.viewModel.updateMember(tripId: tripID)
                 }
 
                 alertVC.addAction(cancel)
@@ -229,7 +175,7 @@ extension MyTripViewController: UITableViewDelegate {
 // MARK: - UITableView DataSource
 extension MyTripViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let trips = filterTrips[currentSegment] else { return 0 }
+        guard let trips = viewModel.filterTrips[currentSegment] else { return 0 }
         placeHolder.isHidden = trips.isEmpty ? false : true
         return trips.count
     }
@@ -239,7 +185,7 @@ extension MyTripViewController: UITableViewDataSource {
             fatalError("Failed to dequeue trip cell")
         }
 
-        if let trip = filterTrips[currentSegment]?[indexPath.row] {
+        if let trip = viewModel.filterTrips[currentSegment]?[indexPath.row] {
             tripCell.config(with: trip)
         }
         return tripCell

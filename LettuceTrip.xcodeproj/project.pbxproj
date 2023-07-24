@@ -18,6 +18,7 @@
 		C4164D082A6C0A80007B87E8 /* EditTripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4164D072A6C0A80007B87E8 /* EditTripViewModel.swift */; };
 		C4164D0B2A6CC540007B87E8 /* EditTripViewController+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4164D0A2A6CC540007B87E8 /* EditTripViewController+Delegate.swift */; };
 		C4164D112A6CD5B5007B87E8 /* HomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4164D102A6CD5B5007B87E8 /* HomeViewModelTests.swift */; };
+		C4207B512A6E2EAC009B3CC8 /* MyTripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4207B502A6E2EAC009B3CC8 /* MyTripViewModel.swift */; };
 		C42F51B02A454D5F00023305 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51AF2A454D5F00023305 /* LocationManager.swift */; };
 		C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B72A45936800023305 /* EditTripViewController.swift */; };
 		C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */; };
@@ -173,6 +174,7 @@
 		C4164D072A6C0A80007B87E8 /* EditTripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewModel.swift; sourceTree = "<group>"; };
 		C4164D0A2A6CC540007B87E8 /* EditTripViewController+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditTripViewController+Delegate.swift"; sourceTree = "<group>"; };
 		C4164D102A6CD5B5007B87E8 /* HomeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelTests.swift; sourceTree = "<group>"; };
+		C4207B502A6E2EAC009B3CC8 /* MyTripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTripViewModel.swift; sourceTree = "<group>"; };
 		C42F51AF2A454D5F00023305 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C42F51B72A45936800023305 /* EditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
 		C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceCell.swift; sourceTree = "<group>"; };
@@ -561,6 +563,7 @@
 			isa = PBXGroup;
 			children = (
 				C4DBE8362A41B194002987CB /* MyTripViewController.swift */,
+				C4207B502A6E2EAC009B3CC8 /* MyTripViewModel.swift */,
 				C4164D092A6C202F007B87E8 /* EditTrip */,
 				C48E6FFB2A63BCCC00087B06 /* ChatRoom */,
 				C48E6FFC2A63BECF00087B06 /* WishList */,
@@ -977,6 +980,7 @@
 				C42F51CA2A45E2AB00023305 /* MemberCircleCell.swift in Sources */,
 				C44DEAC12A5FCEAE00AFB8C6 /* LocationError.swift in Sources */,
 				C480BDE82A56C3D100A1A7E5 /* BaseSettingViewController.swift in Sources */,
+				C4207B512A6E2EAC009B3CC8 /* MyTripViewModel.swift in Sources */,
 				C4DBE8B52A428797002987CB /* AddNewTripViewController.swift in Sources */,
 				C45413412A497145000D0685 /* Date+Extension.swift in Sources */,
 				C42F51C62A45BD1D00023305 /* ChatRoomViewController.swift in Sources */,

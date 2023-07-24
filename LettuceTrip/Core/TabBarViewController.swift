@@ -35,7 +35,7 @@ class TabBarViewController: UITabBarController {
         let homeVC = HomeViewController(viewModel: HomeViewModel(fsManager: fsManager))
         let discoverVC = DiscoverViewController(
             viewModel: DiscoverViewModel(locationManager: LocationManager()))
-        let tripVC = MyTripViewController(fsManager: fsManager)
+        let tripVC = MyTripViewController(viewModel: MyTripViewModel(fsManager: fsManager))
         let profileVC = ProfileViewController(viewModel: ProfileViewModel(
             fsManager: fsManager,
             authManager: AuthManager(fsManager: fsManager),
