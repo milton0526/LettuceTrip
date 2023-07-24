@@ -8,7 +8,6 @@
 import UIKit
 import Combine
 import TinyConstraints
-import FirebaseFirestore
 
 class MyTripViewController: UIViewController {
 

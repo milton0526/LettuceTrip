@@ -19,6 +19,7 @@
 		C4164D0B2A6CC540007B87E8 /* EditTripViewController+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4164D0A2A6CC540007B87E8 /* EditTripViewController+Delegate.swift */; };
 		C4164D112A6CD5B5007B87E8 /* HomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4164D102A6CD5B5007B87E8 /* HomeViewModelTests.swift */; };
 		C4207B512A6E2EAC009B3CC8 /* MyTripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4207B502A6E2EAC009B3CC8 /* MyTripViewModel.swift */; };
+		C4207B532A6E592A009B3CC8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C4207B522A6E592A009B3CC8 /* README.md */; };
 		C42F51B02A454D5F00023305 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51AF2A454D5F00023305 /* LocationManager.swift */; };
 		C42F51B82A45936800023305 /* EditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51B72A45936800023305 /* EditTripViewController.swift */; };
 		C42F51C02A4598CB00023305 /* ArrangePlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */; };
@@ -175,6 +176,7 @@
 		C4164D0A2A6CC540007B87E8 /* EditTripViewController+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditTripViewController+Delegate.swift"; sourceTree = "<group>"; };
 		C4164D102A6CD5B5007B87E8 /* HomeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelTests.swift; sourceTree = "<group>"; };
 		C4207B502A6E2EAC009B3CC8 /* MyTripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTripViewModel.swift; sourceTree = "<group>"; };
+		C4207B522A6E592A009B3CC8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C42F51AF2A454D5F00023305 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C42F51B72A45936800023305 /* EditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTripViewController.swift; sourceTree = "<group>"; };
 		C42F51BF2A4598CB00023305 /* ArrangePlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangePlaceCell.swift; sourceTree = "<group>"; };
@@ -505,6 +507,7 @@
 				C4DBE8202A41AF62002987CB /* AppDelegate.swift */,
 				C4DBE8222A41AF62002987CB /* SceneDelegate.swift */,
 				C4DBE8292A41AF63002987CB /* Assets.xcassets */,
+				C4207B522A6E592A009B3CC8 /* README.md */,
 				C4DBE82B2A41AF63002987CB /* LaunchScreen.storyboard */,
 				C4DBE82E2A41AF63002987CB /* Info.plist */,
 				C480BDFE2A58221C00A1A7E5 /* Localizable.strings */,
@@ -835,6 +838,7 @@
 			files = (
 				C4DBE82D2A41AF63002987CB /* LaunchScreen.storyboard in Resources */,
 				C480BDFD2A58221C00A1A7E5 /* InfoPlist.strings in Resources */,
+				C4207B532A6E592A009B3CC8 /* README.md in Resources */,
 				C4DBE82A2A41AF63002987CB /* Assets.xcassets in Resources */,
 				C480BE302A5A588300A1A7E5 /* UnsplashKeys.plist in Resources */,
 				C480BE002A58221C00A1A7E5 /* Localizable.strings in Resources */,
