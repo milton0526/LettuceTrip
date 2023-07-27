@@ -13,28 +13,28 @@ By integrating all these functionalities to simplify the process and achieve a o
 - Real-time chat
 - Widget
 
-## Gettinng Started
-1. Clone this repo
-2. Make sure xcode version 14.0 or above
-3. Supported device only iphone
-4. Supported lauguage: Engilsh and Chinese(Tranditional)
-5. Choose ios 16.0 or above to run the simulator
+## Requirements
+1. Xcode version 14.0 or above
+2. Supported device only iPhone
+3. iOS version 16.0 or above
+4. Supported languages: English and Chinese(Traditional)
 
-Once you successfully run the project, you have to sign in with apple to contiunte.
+Once you successfully run the project, you have to sign in with apple to continue.
 The project will not collect personal data except for the user's name and email address. Also you can delete account in anytime.
 
 ## Usage
-For more detail about how to use this app, please watch the video(3mins).
+For more detail about how to use this app, please watch the video(4mins).
+- Link: https://drive.google.com/file/d/12I6GaCSehw7YaclzPBqK-60szy3455-w/view?usp=share_link
 
 ## Architecture
 - This project is using MVVM architecture to separate business logic from view controller.
-- Use "Combine" framworks to make API call, also pass data between view controller and view model.
+- Use "Combine" framework to process API response data, also pass data between view model and view controller.
 - Apple MapKit
 - SwiftUI for building widget
 
 ## Folder Structure
 - "Core": The main folder of this project, contains all view controllers and view models in it.
-- "Model": Files are share for view models and API resoponse.
+- "Model": Files are share for view models and API response.
 - "Manager": Utilities for whole project that can reuse such as authentication, location, and Firebase related functions.
 - "Helper" & "Extensions": Files that help to reduce writing redundant code.
 

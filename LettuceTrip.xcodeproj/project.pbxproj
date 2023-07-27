@@ -136,6 +136,8 @@
 		C4EF99F92A5C051A00B1C4BC /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = C4EF99F82A5C051A00B1C4BC /* FirebaseStorage */; };
 		C4EF99FB2A5C09E900B1C4BC /* SDWebImage+Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EF99FA2A5C09E900B1C4BC /* SDWebImage+Wrapper.swift */; };
 		C4EF99FD2A5C309500B1C4BC /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EF99FC2A5C309500B1C4BC /* UIImage+Extension.swift */; };
+		C4FF5E3F2A72756D00721F50 /* Editing.png in Resources */ = {isa = PBXBuildFile; fileRef = C4FF5E3D2A72756C00721F50 /* Editing.png */; };
+		C4FF5E402A72756D00721F50 /* Discover.png in Resources */ = {isa = PBXBuildFile; fileRef = C4FF5E3E2A72756D00721F50 /* Discover.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -285,6 +287,8 @@
 		C4EF99F62A5C04F300B1C4BC /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		C4EF99FA2A5C09E900B1C4BC /* SDWebImage+Wrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SDWebImage+Wrapper.swift"; sourceTree = "<group>"; };
 		C4EF99FC2A5C309500B1C4BC /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		C4FF5E3D2A72756C00721F50 /* Editing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Editing.png; sourceTree = "<group>"; };
+		C4FF5E3E2A72756D00721F50 /* Discover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Discover.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -483,6 +487,7 @@
 			children = (
 				C488C1C72A66D17B006853CC /* TripWidgetViewExtension.entitlements */,
 				C4207B522A6E592A009B3CC8 /* README.md */,
+				C4FF5E3C2A72754500721F50 /* CoverImages */,
 				C4DBE81F2A41AF62002987CB /* LettuceTrip */,
 				C488C1742A6671AD006853CC /* TripWidgetView */,
 				C4164CE92A6A29EC007B87E8 /* LettuceTripTests */,
@@ -677,6 +682,15 @@
 			path = SelectionView;
 			sourceTree = "<group>";
 		};
+		C4FF5E3C2A72754500721F50 /* CoverImages */ = {
+			isa = PBXGroup;
+			children = (
+				C4FF5E3E2A72756D00721F50 /* Discover.png */,
+				C4FF5E3D2A72756C00721F50 /* Editing.png */,
+			);
+			path = CoverImages;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -838,11 +852,13 @@
 			files = (
 				C4DBE82D2A41AF63002987CB /* LaunchScreen.storyboard in Resources */,
 				C480BDFD2A58221C00A1A7E5 /* InfoPlist.strings in Resources */,
+				C4FF5E402A72756D00721F50 /* Discover.png in Resources */,
 				C4207B532A6E592A009B3CC8 /* README.md in Resources */,
 				C4DBE82A2A41AF63002987CB /* Assets.xcassets in Resources */,
 				C480BE302A5A588300A1A7E5 /* UnsplashKeys.plist in Resources */,
 				C480BE002A58221C00A1A7E5 /* Localizable.strings in Resources */,
 				C4CBD4312A4FD1BA009108C6 /* GPlaceAPIKey.plist in Resources */,
+				C4FF5E3F2A72756D00721F50 /* Editing.png in Resources */,
 				C4DBE89F2A41C0E3002987CB /* GoogleService-Info.plist in Resources */,
 				C488C1622A6570CB006853CC /* ArrangePlaceDetailCell.xib in Resources */,
 				C4C0F0552A512158002F59B3 /* GooglePlaces.bundle in Resources */,
