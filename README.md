@@ -1,6 +1,8 @@
 # Lettuce Trip
 An app let you explore the world and plan your journey together with friends in real-time.
 > Lettuce Trip. ***Let us trip!***
+<img src="https://github.com/milton0526/LettuceTrip/blob/main/CoverImages/Discover.png">
+<img src="https://github.com/milton0526/LettuceTrip/blob/main/CoverImages/Editing.png">
 
 ## Description
 The purpose of this project is to address the inconvenience in planning travel itineraries, where travelers often find themselves using multiple software simultaneously, such as maps, web browser, and communication application.   
