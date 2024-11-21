@@ -25,10 +25,6 @@ By integrating all these functionalities to simplify the process and achieve a o
 Once you successfully run the project, you have to sign in with apple to continue.
 The project will not collect personal data except for the user's name and email address. Also you can delete account in anytime.
 
-## Usage
-For more detail about how to use this app, please watch the video(4mins).
-- Link: https://drive.google.com/file/d/12I6GaCSehw7YaclzPBqK-60szy3455-w/view?usp=share_link
-
 ## Architecture
 - This project is using MVVM architecture to separate business logic from view controller.
 - Use "Combine" framework to process API response data, also pass data between view model and view controller.
