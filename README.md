@@ -1,7 +1,6 @@
 # Lettuce Trip
 An app let you explore the world and plan your journey together with friends in real-time.
 > Lettuce Trip. ***Let us trip!***
-- Download link: https://apps.apple.com/tw/app/lettuce-trip/id6450455580
 
 <img src="https://github.com/milton0526/LettuceTrip/blob/main/CoverImages/Discover.png">
 <img src="https://github.com/milton0526/LettuceTrip/blob/main/CoverImages/Editing.png">
